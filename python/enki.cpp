@@ -40,6 +40,7 @@
 #include "../enki/PhysicalEngine.h"
 #include "../enki/robots/e-puck/EPuck.h"
 #include "../enki/robots/thymio2/Thymio2.h"
+#include "../enki/robots/marxbot/Marxbot.h"
 #include "../viewer/Viewer.h"
 #include <QApplication>
 #include <QImage>
@@ -256,6 +257,22 @@ struct RectangularPhysicalObject: public PhysicalObject
 
 // wrappers for robots
 
+struct MarxbotWrap: Marxbot, wrapper<Marxbot>
+{
+	MarxbotWrap():
+		Marxbot()
+	{}
+
+	virtual void controlStep(double dt)
+	{
+		if (override controlStep = this->get_override("controlStep"))
+			controlStep(dt);
+
+		Marxbot::controlStep(dt);
+	}
+
+};
+
 struct EPuckWrap: EPuck, wrapper<EPuck>
 {
 	EPuckWrap():
@@ -394,6 +411,8 @@ struct PythonViewer: public ViewerWidget
 		wallsHeight = _wallsHeight;
 
 		managedObjectsAliases[&typeid(EPuckWrap)] = &typeid(EPuck);
+		managedObjectsAliases[&typeid(MarxbotWrap)] = &typeid(Marxbot);
+		managedObjectsAliases[&typeid(Thymio2Wrap)] = &typeid(Thymio2);
 	}
 
 	void timerEvent(QTimerEvent * event)
@@ -534,6 +553,10 @@ BOOST_PYTHON_MODULE(pyenki)
 		.def_readonly("leftOdometry", &DifferentialWheeled::leftOdometry)
 		.def_readonly("rightOdometry", &DifferentialWheeled::rightOdometry)
 		.def("resetEncoders", &DifferentialWheeled::resetEncoders)
+	;
+
+	class_<MarxbotWrap, bases<DifferentialWheeled>, boost::noncopyable>("Marxbot")
+		.def("controlStep", &EPuckWrap::controlStep)
 	;
 
 	class_<EPuckWrap, bases<DifferentialWheeled>, boost::noncopyable>("EPuck")
