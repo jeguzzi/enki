@@ -7,8 +7,8 @@
     Copyright (C) 2006-2008 Laboratory of Robotics Systems, EPFL, Lausanne
     See AUTHORS for details
 
-    This program is free software; the authors of any publication 
-    arising from research using this software are asked to add the 
+    This program is free software; the authors of any publication
+    arising from research using this software are asked to add the
     following reference:
     Enki - a fast 2D robot simulator
     http://home.gna.org/enki
@@ -45,7 +45,21 @@
 namespace Enki
 {
 	using namespace std;
-	
+
+	void IRSensor::setSearchRange(double value)
+	{
+		// cout << "Set search range to " << value << "\n";
+		assert(value > 0);
+		search_range = value;
+		// calculate interaction radius, which is measured from center of robot
+		r = sqrt(pos.norm2()+search_range*search_range-2*pos.norm()*search_range*cos(M_PI-orientation+pos.angle()));
+		// calculate the smartRadius
+		smartRadius = search_range*sqrt(1.25-cos(aperture));
+		// calculate relative position for center of central ray
+		smartPos = Point (search_range/2*cos(orientation), search_range/2*sin(orientation));
+		// no activation until first loop
+	}
+
 	IRSensor::IRSensor(Robot *owner, Vector pos, double height, double orientation, double range, double m, double x0, double c, double noiseSd):
 		pos(pos),
 		height(height),
@@ -65,7 +79,7 @@ namespace Enki
 		assert(c-x0*x0 > 0);
 		// maximum must be positive
 		assert(m > 0);
-		
+
 		rayDists.resize(rayCount);
 		rayValues.resize(rayCount);
 		rayAngles.resize(rayCount);
@@ -73,13 +87,7 @@ namespace Enki
 		// compute ray orientation
 		for (size_t i = 0; i<rayCount; i++)
 			rayAngles[i] = - aperture + (i*2.0*aperture)/(rayCount-1.0);
-		// calculate interaction radius, which is measured from center of robot
-		this->r = sqrt(pos.norm2()+range*range-2*pos.norm()*range*cos(M_PI-orientation+pos.angle()));
-		// calculate the smartRadius
-		this->smartRadius = range*sqrt(1.25-cos(aperture));
-		// calculate relative position for center of central ray
-		this->smartPos = Point (range/2*cos(orientation), range/2*sin(orientation));
-		// no activation until first loop
+		setSearchRange(range);
 		finalValue = 0;
 		finalDist = range;
 	}
@@ -87,7 +95,8 @@ namespace Enki
 	void IRSensor::init(double dt, World* w)
 	{
 		// fill initial values with very large value; will be replaced if smaller distance is found
-		std::fill(rayDists.begin(), rayDists.end(), range);
+		std::fill(rayDists.begin(), rayDists.end(), search_range);
+		// cout << "Set rayDists to " << rayDists[0] << "\n";
 		std::fill(rayValues.end(), rayValues.end(), 0);
 
 		// compute absolute position and orientation
@@ -100,7 +109,7 @@ namespace Enki
 		// calculate current position of center of central ray
 		absSmartPos = rot * smartPos + absPos;
 	}
-	
+
 	// robot bounding circle overlaps with po
 	// each sensor is composed of n rays
 	// modified by yvan.bourquin@epfl.ch to take into account the exact bounding surface
@@ -109,7 +118,7 @@ namespace Enki
 		// if we see over the object get out of here
 		if (height > po->getHeight())
 			return;
-		
+
 		const double radius = po->getRadius();
 		const Color& color = po->getColor();
 
@@ -124,7 +133,7 @@ namespace Enki
 		// Radius squared of object
 		const double r2 = radius * radius;
 		// The number of rays
-		
+
 		if (po->isCylindric())
 		{
 			// Calculate distance for each ray...
@@ -136,7 +145,7 @@ namespace Enki
 				const double sine = sin(myAngle);
 				// normal distance of bounding circle center to sensor ray
 				const double distsc2 = v1.norm2() * (sine * sine);
-				
+
 				// if there is an intersection with the object's bounding circle
 				if (distsc2 <= r2)
 				{
@@ -158,7 +167,7 @@ namespace Enki
 				const double sine = sin(myAngle);
 				// normal distance of bounding circle center to sensor ray
 				const double distsc2 = v1.norm2() * (sine * sine);
-				
+
 				// if there is an intersection with the object's bounding circle
 				if (distsc2 < r2)
 				{
@@ -167,7 +176,7 @@ namespace Enki
 					{
 						if (height > it->getHeight())
 							continue;
-						
+
 						// check intersection with polygon
 						dist = distanceToPolygon(absRayAngles[i], it->getTransformedShape());
 						updateRay(i, dist);
@@ -186,7 +195,7 @@ namespace Enki
 				// if radius from center point of rays is not touching walls, don't bother
 				if ((absSmartPos.x-smartRadius>0) && (absSmartPos.y-smartRadius>0) && (absSmartPos.x+smartRadius<w->w) && (absSmartPos.y+smartRadius<w->h))
 					return;
-		
+
 				// if sensor is inside a wall distance is 0
 				if ((absPos.x<0) || (absPos.x>w->w) || (absPos.y<0) || (absPos.y>w->h))
 				{
@@ -194,16 +203,16 @@ namespace Enki
 					std::fill(rayValues.end(), rayValues.end(), 0);
 					return;
 				}
-		
+
 				for (size_t i = 0; i < rayCount; i++)
 				{
 					const Vector rayDir(cos(absRayAngles[i]), sin(absRayAngles[i]));
-					
+
 					// the absolute position of the sensor ray's end point
-					const Point absRayEndPoint = absPos+rayDir*range;
+					const Point absRayEndPoint = absPos+rayDir*search_range;
 					double candidate0 = HUGE_VAL;
 					double candidate1 = HUGE_VAL;
-					
+
 					// we have a candidate if our sensor sticks out into the left wall
 					if (absRayEndPoint.x < 0)
 						candidate0 = -absPos.x / (absRayEndPoint.x-absPos.x); 	// idea: a/b = c/d;
@@ -211,19 +220,19 @@ namespace Enki
 					else if (absRayEndPoint.x > w->w)
 						candidate0 = (w->w-absPos.x) / (absRayEndPoint.x-absPos.x);
 					// or the bottom wall
-					if (absRayEndPoint.y < 0) 
+					if (absRayEndPoint.y < 0)
 						candidate1 = -absPos.y / (absRayEndPoint.y-absPos.y);
 					// or the top wall
-					else if (absRayEndPoint.y > w->h) 
+					else if (absRayEndPoint.y > w->h)
 						candidate1 = (w->h-absPos.y) / (absRayEndPoint.y-absPos.y);
-					
+
 					double dist = std::min(candidate0, candidate1);
-					dist *= range;
+					dist *= search_range;
 					updateRay(i, dist);
 				}
 			}
 			break;
-			
+
 			case World::WALLS_CIRCULAR:
 			{
 				// if outside the world, ignore, walls are not seen from outside
@@ -233,7 +242,7 @@ namespace Enki
 				// if too far away from walls, return
 				if (absSmartPos.norm() + smartRadius < w->r)
 					return;
-				
+
 				for (size_t i = 0; i < rayCount; i++)
 				{
 					// inside the world
@@ -251,12 +260,12 @@ namespace Enki
 				}
 			}
 			break;
-			
+
 			default:
 			break;
 		}
 	}
-	
+
 	// we combine all the sensor values
 	void IRSensor::finalize(double dt, World* w)
 	{
@@ -264,7 +273,7 @@ namespace Enki
 		finalValue = std::max(0., std::min(m, gaussianRand(finalValue, noiseSd)));
 		finalDist = inverseResponseFunction(finalValue);
 	}
-	
+
 	void IRSensor::updateRay(size_t i, double dist)
 	{
 		// if we have a smaller distance than the initial one, replace it
@@ -276,7 +285,7 @@ namespace Enki
 				rayValues[i] -= 2 * responseFunction(dist*alpha);
 		}
 	}
-	
+
 	double IRSensor::responseFunction(double x) const
 	{
 		const double numerator(m*(c-x0*x0));
@@ -288,7 +297,7 @@ namespace Enki
 		else
 			return numerator/denominator;
 	}
-	
+
 	double IRSensor::inverseResponseFunction(double v) const
 	{
 		assert(v >= 0);
@@ -309,7 +318,7 @@ namespace Enki
 			return 0;
 		return std::min(dist, range);
 	}
-	
+
 	// Detect collision with a physical object's bounding polygon
 	// Cyrus & Beck line/polygon intersection algorithm
 	//   adapted by yvan.bourquin@epfl.ch from the
@@ -320,10 +329,10 @@ namespace Enki
 	// This code does not check for and verify these conditions.
 	// Return: distance to shortest intersection point
 	//   or HUGE_VAL if there's no intersection
-	double IRSensor::distanceToPolygon(double rayAngle, const Polygon &p) const 
+	double IRSensor::distanceToPolygon(double rayAngle, const Polygon &p) const
 	{
 		// compute ray segment in global coordinates
-		Point absEnd = absPos + Vector(cos(rayAngle), sin(rayAngle)) * range;
+		Point absEnd = absPos + Vector(cos(rayAngle), sin(rayAngle)) * search_range;
 		Segment ray(absPos.x, absPos.y, absEnd.x, absEnd.y);
 
 		const int n = p.size();         // number of points in the polygon
@@ -332,12 +341,12 @@ namespace Enki
 		double t, N, D;           // intersect parameter t = N / D
 		Vector dS(ray.b - ray.a); // the segment direction vector
 
-		for (int i = 0; i < n; i++)     			// process polygon edge V[i]V[i+1] 
+		for (int i = 0; i < n; i++)     			// process polygon edge V[i]V[i+1]
 		{
 			Vector e(p[i == n-1 ? 0: i + 1] - p[i]);	// edge vector
 			N = e.cross(ray.a - p[i]);			// = -dot(ne, S.P0-V[i])
 			D = -e.cross(dS);				// = dot(ne, dS)
-			
+
 			// S is nearly parallel to this edge
 			if (fabs(D) < 0.00000001)
 			{
@@ -380,4 +389,3 @@ namespace Enki
   		return (dS * tE).norm();
 	}
 }
-

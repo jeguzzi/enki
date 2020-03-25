@@ -1,1 +1,10 @@
 *~
+Makefile
+*.a
+*.cmake
+*_autogen
+CMakeFiles
+CMakeCache.txt
+Doxyfile
+CMakeDoxyfile.in
+*.so

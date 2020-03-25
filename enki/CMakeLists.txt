@@ -9,6 +9,8 @@ add_library(enki
 	interactions/Bluetooth.cpp
 	interactions/ActiveSoundSource.cpp
 	interactions/Microphone.cpp
+	interactions/IRComm.cpp
+	interactions/Radio.cpp
 	robots/DifferentialWheeled.cpp
 	robots/khepera/Khepera.cpp
 	robots/e-puck/EPuck.cpp
@@ -24,7 +26,7 @@ set_target_properties(enki PROPERTIES VERSION ${LIB_VERSION_STRING}
 										SOVERSION ${LIB_VERSION_MAJOR}
 										POSITION_INDEPENDENT_CODE ON)
 
-install(DIRECTORY . 
+install(DIRECTORY .
 	DESTINATION include/enki/
 	FILES_MATCHING PATTERN "*.h"
 )

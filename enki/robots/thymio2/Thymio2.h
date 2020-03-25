@@ -7,8 +7,8 @@
 	Copyright (C) 2006 Laboratory of Robotics Systems, EPFL, Lausanne
 	See AUTHORS for details
 
-	This program is free software; the authors of any publication 
-	arising from research using this software are asked to add the 
+	This program is free software; the authors of any publication
+	arising from research using this software are asked to add the
 	following reference:
 	Enki - a fast 2D robot simulator
 	http://lis.epfl.ch/enki
@@ -35,13 +35,14 @@
 #define __ENKI_THYMIO2_H
 
 #include <enki/robots/DifferentialWheeled.h>
+#include <enki/interactions/IRComm.h>
 #include <enki/interactions/IRSensor.h>
 #include <enki/interactions/GroundSensor.h>
 
 /*!	\file Thymio2.h
 	\brief Header of the Thymio robot
 */
-	
+
 namespace Enki
 {
 	//! A simple model of the Thymio robot.
@@ -63,7 +64,9 @@ namespace Enki
 		IRSensor infraredSensor5;
 		//! The infrared sensor 6 (back-right)
 		IRSensor infraredSensor6;
-		
+
+		IRComm irComm;
+
 		//! The ground sensor 0 (left)
 		GroundSensor groundSensor0;
 		//! The ground sensor 1 (right)
@@ -92,7 +95,7 @@ namespace Enki
 
 			LED_COUNT
 		};
-		
+
 	public:
 		//! Create a Thymio II
 		Thymio2();
@@ -109,4 +112,3 @@ namespace Enki
 }
 
 #endif
-
