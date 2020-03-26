@@ -31,6 +31,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+// See https://www.boost.org/doc/libs/1_72_0/libs/python/doc/html/tutorial/tutorial/exposing.html
+
 #include <Python.h>
 #include <boost/python.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
@@ -389,10 +391,70 @@ struct Thymio2Wrap: Thymio2, wrapper<Thymio2>
 		irComm.set_tx(value);
 	}
 
-	void setTopLedColor(const Color& color)
+	void setTopBodyLedColor(const Color& color)
 	{
 		setLedColor(LedIndex::TOP, color);
 	}
+	void setBottomLeftBodyLedColor(const Color& color)
+	{
+		setLedColor(LedIndex::BOTTOM_LEFT, color);
+	}
+	void setBottomRightBodyLedColor(const Color& color)
+	{
+		setLedColor(LedIndex::BOTTOM_RIGHT, color);
+	}
+
+	void setButtonLedColor(unsigned int index, double value)
+	{
+		switch (index) {
+			case 0:
+				return setLedIntensity(LedIndex::BUTTON_UP, value);
+			case 1:
+				return setLedIntensity(LedIndex::BUTTON_RIGHT, value);
+			case 2:
+				return setLedIntensity(LedIndex::BUTTON_DOWN, value);
+			case 3:
+				return setLedIntensity(LedIndex::BUTTON_LEFT, value);
+		}
+	}
+
+	void setRingLedColor(unsigned int index, double value)
+	{
+		// Should replicate Asebaplayground and Thymio firmware.
+		if(index >=0  && index <= (LedIndex::RING_7 - LedIndex::RING_0))
+		{
+			return setLedIntensity(LedIndex(LedIndex::RING_0 + index), value);
+		}
+	}
+
+	void setLeftRedLed(double value)
+	{
+		return setLedIntensity(LedIndex::LEFT_RED, value);
+	}
+
+	void setLeftBlueLed(double value)
+	{
+		return setLedIntensity(LedIndex::LEFT_BLUE, value);
+	}
+
+	void setRightRedLed(double value)
+	{
+		return setLedIntensity(LedIndex::RIGHT_RED, value);
+	}
+
+	void setRightBlueLed(double value)
+	{
+		return setLedIntensity(LedIndex::RIGHT_BLUE, value);
+	}
+
+	void setIRLedColor(unsigned int index, double value)
+	{
+		if(index >=0  && index <= (LedIndex::IR_BACK_1 - LedIndex::IR_FRONT_0))
+		{
+			return setLedIntensity(LedIndex(LedIndex::IR_FRONT_0 + index), value);
+		}
+	}
+
 };
 
 struct PythonViewer: public ViewerWidget
@@ -569,12 +631,12 @@ BOOST_PYTHON_MODULE(pyenki)
 	typedef std::vector<int> MyList;
 
 	class_<MyList>("list")
-	        .def(vector_indexing_suite<MyList>() );
+		.def(vector_indexing_suite<MyList>() );
 
 	class_<IRCommEvent >("IRCommEvent", no_init)
-	.def_readonly("rx_value", &IRCommEvent::rx_value)
-	.def_readonly("intensities", &IRCommEvent::intensities)
-	.def_readonly("payloads", &IRCommEvent::payloads)
+		.def_readonly("rx_value", &IRCommEvent::rx_value)
+		.def_readonly("intensities", &IRCommEvent::intensities)
+		.def_readonly("payloads", &IRCommEvent::payloads)
 	;
 
 	class_<Thymio2Wrap, bases<DifferentialWheeled>, boost::noncopyable>("Thymio2")
@@ -585,7 +647,16 @@ BOOST_PYTHON_MODULE(pyenki)
 		.def_readonly("irCommEvents", &Thymio2Wrap::getIRCommEvents)
 		.def("irCommTx", &Thymio2Wrap::setIRCommTx)
 		.def("irCommEnable", &Thymio2Wrap::enableIRComm)
-		.def("setColor", &Thymio2Wrap::setTopLedColor)
+		.def("setTopBodyLed", &Thymio2Wrap::setTopBodyLedColor)
+		.def("setBottomLeftBodyLed", &Thymio2Wrap::setBottomLeftBodyLedColor)
+		.def("setBottomRightBodyLed", &Thymio2Wrap::setBottomRightBodyLedColor)
+		.def("setButtonLed", &Thymio2Wrap::setButtonLedColor)
+		.def("setRingLed", &Thymio2Wrap::setRingLedColor)
+		.def("setIRLed", &Thymio2Wrap::setIRLedColor)
+		.def("setLeftRedLed", &Thymio2Wrap::setLeftRedLed)
+		.def("setLeftBlueLed", &Thymio2Wrap::setLeftBlueLed)
+		.def("setRightRedLed", &Thymio2Wrap::setRightRedLed)
+		.def("setRightBlueLed", &Thymio2Wrap::setRightBlueLed)
 	;
 
 	// World
