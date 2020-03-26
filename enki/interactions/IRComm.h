@@ -65,6 +65,8 @@ namespace Enki
 
   std::ostream &operator<<(std::ostream &os, IRCommEvent const &event);
 
+  double responseFunction(double x, double range, double m, double c, double x0);
+
   class IRComm : public GlobalInteraction
   {
   private:
@@ -79,12 +81,25 @@ namespace Enki
     double time;
     const double period;
     const double receiver_aperture;
-    double responseFunction(double x, double m=4200, double c=275, double x0=0.02) const;
+
+    const double m;
+    //! Position of the maximum of response (might be negative, inside the robot), second parametere of response function
+    const double x0;
+    //! Third parameter of response function
+    const double c;
+    //! Standard deviation of Gaussian noise in the response space
+    const double noiseSd;
+
+    double min_intensity;
+
   public:
     // IRComm(Robot *owner, std::vector<IRSensor *> sensors) : enabled(false), sensors(sensors), tx_value(0) {};
-    IRComm(Robot *owner, double range=25) :
+    IRComm(Robot *owner, double range=25, double period=0.1, double aperture=0.644, double m=4200, double x0=0.02, double c=275, double noiseSd = 0.) :
     GlobalInteraction(owner), enabled(false), tx_value(0), range(range),
-    time(0), last_sent(-1), period(0.1), receiver_aperture(0.644) {}
+    time(0), last_sent(-1), period(period), receiver_aperture(aperture),
+    m(m), x0(x0), c(c), noiseSd(noiseSd) {
+      min_intensity = responseFunction(range, range, m, c, x0);
+    }
 
     void add_sensor(IRSensor * sensor) { sensor->setSearchRange(range); sensors.push_back(sensor); }
     void init(double dt, World* w);

@@ -16,6 +16,28 @@ a pulse from e to r is visible if:
 4) require to check collisions or to reuse the computation done by the IRSensors
 In this implementation we use ray distance computed by the emitter for {-15, 0, 15}
 This approximation assumes that obstacles are larger than 15 degree at 23 cm, i.e. 6 cm.
+
+We have now added another version enabled by the definition of SUM_INTENSITIES:
+the intensities of all emitters are summed up and then the response function is computed.
+This is relevant only if emitter sectors overlaps, which is the case if
+We assume that I = I_0/(x-x_0)^2 (where I_0 is unknown and not needed).
+Then the response function for a single emitter, i.e. aperture >= delta_angle / 2 ,
+which is the case [also] for the front facing thymio sensors (aperture ~ 0.268, delta_angle ~0.34906)
+R = m (c - x_0^2)/(x^2 - 2xx_0 +c) = m / (((x-x_0)^2)/(c-x_0^2) + 1)
+is the same as
+R  = m / ((I_0/I)/(c-x_0^2) + 1)
+so we assume that for many emitters I_tot = \sum I
+and R = m / ((I_0/I_tot)/(c-x_0^2) + 1) = m / (1/(\sum 1/((x-x_0)^2))/(c-x_0^2) + 1)
+If we actually ignore x_0 ~= 0.02 << sqrt(c) ~= 16.6:
+then:
+  R = m / 1/(\sum((x/c)^{-2})) + 1
+Moreover, we set to 0 all responses not large enough (i.e lower than the response caused by an emitter at distance = range.
+Note that this is still a simplification because we ignore that the real intensities depends also on the orientations.
+
+TODO(Jerome): add noise to both versions
+
+use prox model:
+response = std::max(0., std::min(m, gaussianRand(response, noiseSd)));
 */
 
 #include "IRComm.h"
@@ -28,6 +50,8 @@ This approximation assumes that obstacles are larger than 15 degree at 23 cm, i.
 /*!	\file IRSensor.cpp
   \brief Implementation of the generic infrared sensor
 */
+
+// #define SUM_INTENSITIES
 
 namespace Enki {
 
@@ -92,14 +116,36 @@ double received_ir_message_distance(IRSensor *sensor, IRMessage *message, double
   return 0;
 }
 
-// IRComm
 //Same response function but different params
-double IRComm::responseFunction(double x, double m, double c, double x0) const
+double responseFunction(double x, double range, double m, double c, double x0)
 {
   if (x < x0) return m;
   if (x > range) return 0;
   return m*(c - x0*x0)/(x*x - 2*x0*x + c);
 }
+
+// New version that sums the amplitude of the sectors
+double received_ir_message_intensity(IRSensor *sensor, IRMessage *message, double range, double receiver_aperture, double m, double c, double x0, double min_response) {
+  CircularSector s_sector = receiver_sector(sensor, range, receiver_aperture);
+  std::vector<CircularSector> *m_sectors = &(message->sectors);
+  double inverse_square_sum = 0;
+  for (std::vector<CircularSector>::iterator it = m_sectors->begin();
+       it != m_sectors->end(); it++) {
+    if (intersection(*it, s_sector))
+    {
+      double dx = (it->center - s_sector.center).norm() - x0;
+      inverse_square_sum += 1.0 / (dx * dx);
+    }
+  }
+  if(inverse_square_sum)
+  {
+    double response = m / (1.0 + 1.0 / inverse_square_sum / (c - x0*x0));
+    if(response < min_response) return 0.0;
+    else return response;
+  }
+  return 0.0;
+}
+
 
 void IRComm::receive_events() {
   std::map<int, IRMessage> *messages = radio->get_messages();
@@ -117,11 +163,16 @@ void IRComm::receive_events() {
          it != sensors.end(); it++) {
       // std::cout << "test sensor " << i <<"\n";
       i++;
+      #ifdef SUM_INTENSITIES
+      if (double intensity = received_ir_message_intensity(*it, &(mit->second), range, receiver_aperture, m, c, x0, min_intensity)) {
+      #else
       if (double distance = received_ir_message_distance(*it, &(mit->second), range, receiver_aperture)) {
+        double intensity = responseFunction(distance, range, m, c, x0);
+      #endif
         event.rx_value = mit->second.data;
         event.payloads.push_back(event.rx_value);
-        // TODO(Jerome)
-        event.intensities.push_back(responseFunction(distance));
+        intensity = std::max(0., std::min(4200.0, gaussianRand(intensity, noiseSd)));
+        event.intensities.push_back(intensity);
         received = true;
       } else {
         event.payloads.push_back(0);
