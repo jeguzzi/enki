@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Example &#8212; pyenki  documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Changelog" href="changelog.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="changelog.html" title="Changelog"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyenki  documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="example">
+<h1>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h1>
+<p>In the most common case, you want to subclass one or more robots adding the appropriate controller.
+Then, you setup up the world, adding as many objects as needed.
+Finally, you may either run the simulation in real time inside a Qt application,
+or write your own loop where to call <code class="docutils literal notranslate"><span class="pre">World.step</span></code>.</p>
+<p>In this example, a Thymio will advance as long as there is not a obstacle (a wall) in front of it,
+when it will stop and switch the LED color to red from green.</p>
+<blockquote>
+<div><div class="code Python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Union</span>
+
+
+<span class="c1"># We sublass `pyenki.Thymio2`. This way, the world update step will automatically call</span>
+<span class="c1"># also the Thymio `controlStep`.</span>
+<span class="k">class</span> <span class="nc">ControlledThymio2</span><span class="p">(</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">):</span>
+
+    <span class="c1"># This is the method we have to overwrite</span>
+    <span class="k">def</span> <span class="nf">controlStep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Check if there is an obstacle in front of us</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prox_values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">3000</span><span class="p">:</span>
+            <span class="c1"># A lot of light is reflected =&gt; there is an obstacle,</span>
+            <span class="c1"># so we stop and switch the LED to red</span>
+            <span class="n">speed</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_aseba_units</span><span class="p">:</span>
+                <span class="c1"># Aseba uses integers and</span>
+                <span class="c1"># encodes LED values between 0 and 32 (fully lit)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># The native enki interface uses instead float and</span>
+                <span class="c1"># encodes colors between 0 and 1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_aseba_units</span><span class="p">:</span>
+                <span class="c1"># Aseba uses integers and encodes speed between -500 and +500</span>
+                <span class="n">speed</span> <span class="o">=</span> <span class="mi">300</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="n">green</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># The native enki interface uses instead float and</span>
+                <span class="c1"># encodes speed in centimeter per second.</span>
+                <span class="n">speed</span> <span class="o">=</span> <span class="mf">10.0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="n">green</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">motor_left_target</span> <span class="o">=</span> <span class="n">speed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">motor_right_target</span> <span class="o">=</span> <span class="n">speed</span>
+
+
+<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="n">aseba</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">:</span>
+    <span class="c1"># We create an unbounded world</span>
+    <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
+    <span class="c1"># We add a Thymio at the origin,</span>
+    <span class="c1"># which can optionally use Aseba-like units and types.</span>
+    <span class="n">thymio</span> <span class="o">=</span> <span class="n">ControlledThymio2</span><span class="p">(</span><span class="n">use_aseba_units</span><span class="o">=</span><span class="n">aseba</span><span class="p">)</span>
+    <span class="n">thymio</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">thymio</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
+    <span class="c1"># and a wall a bit in forward, in front of the Thymio.</span>
+    <span class="n">wall</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">RectangularObject</span><span class="p">(</span><span class="n">l1</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">l2</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mass</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                    <span class="n">color</span><span class="o">=</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">))</span>
+    <span class="n">wall</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">world</span>
+
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">world</span><span class="p">:</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">,</span> <span class="n">gui</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="k">if</span> <span class="n">gui</span><span class="p">:</span>
+        <span class="c1"># We can either run a simulation [in real-time] inside a Qt application</span>
+        <span class="n">world</span><span class="o">.</span><span class="n">run_in_viewer</span><span class="p">(</span><span class="n">cam_position</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">cam_altitude</span><span class="o">=</span><span class="mf">70.0</span><span class="p">,</span> <span class="n">cam_yaw</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                            <span class="n">cam_pitch</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># or we can write our own loop that run the simulaion as fast as possible.</span>
+        <span class="n">steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">//</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+            <span class="n">world</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">world</span> <span class="o">=</span> <span class="n">setup</span><span class="p">(</span><span class="s1">&#39;--aseba&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">run</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="s1">&#39;--gui&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="changelog.html"
+                        title="previous chapter">Changelog</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="next chapter">API</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/examples.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="changelog.html" title="Changelog"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyenki  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Stéphane Magnenat and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>
