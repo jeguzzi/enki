@@ -183,7 +183,7 @@ class Thymio2(PhysicalObject):
             motor_{left,right}_odometry (number): The {left,right} wheel odometry intergrated from measured wheel speeds.
     """
 
-    prox_comm_tx: bool
+    prox_comm_tx: int
     prox_comm_enable: bool
     motor_left_target: float
     motor_right_target: float
