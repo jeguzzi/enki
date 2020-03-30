@@ -108,7 +108,9 @@ namespace Enki
     void receive_events();
     ~IRComm() { } ;
     void set_enable(bool value) { enabled=value; last_sent=time;}
+    bool get_enable() { return enabled;}
     void set_tx(int value) { tx_value=value; }
+    int get_tx() { return tx_value; }
     std::vector<IRCommEvent> get_events() { return events; }
 
   };
