@@ -1,0 +1,21 @@
+Changelog
+=========
+
+[Unreleased]
+------------
+
+Added
+~~~~~
+- Thymio2 proximity communication
+- Thymio2 LEDs
+- Thymio2 Aseba units/types support
+- Minimal Marxbot
+- Stubs file
+- Support for cmake > 3.11 and FindPython, which automatically binds to Python3 if available
+- Documentation
+- Examples
+
+
+Changed
+~~~~~~~
+- Changed most names to comply with PEP8

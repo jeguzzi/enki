@@ -1,0 +1,925 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>API &#8212; pyenki  documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Example" href="examples.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="examples.html" title="Example"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyenki  documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="color">
+<h2>Color<a class="headerlink" href="#color" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyenki.Color">
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">Color</code><span class="sig-paren">(</span><em class="sig-param">r: float = 0.0</em>, <em class="sig-param">g: float = 0.0</em>, <em class="sig-param">b: float = 0.0</em>, <em class="sig-param">a: float = 1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.Color" title="Permalink to this definition">¶</a></dt>
+<dd><p>An RGBA color with values between 0.0 and 1.0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>float</em>) – Red channel, in [0, 1], optional (default 0.0)</p></li>
+<li><p><strong>g</strong> (<em>float</em>) – Green channel, in [0, 1], optional (default 0.0)</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – Blue channel, in [0, 1], optional (default 0.0)</p></li>
+<li><p><strong>a</strong> (<em>float</em>) – Alpha channel, in [0, 1], optional (default 1.0)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="pyenki.Color.black">
+<code class="sig-name descname">black</code><a class="headerlink" href="#pyenki.Color.black" title="Permalink to this definition">¶</a></dt>
+<dd><p>Black color (<em>readonly</em>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Color.gray">
+<code class="sig-name descname">gray</code><a class="headerlink" href="#pyenki.Color.gray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gray color (<em>readonly</em>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Color.white">
+<code class="sig-name descname">white</code><a class="headerlink" href="#pyenki.Color.white" title="Permalink to this definition">¶</a></dt>
+<dd><p>White color (<em>readonly</em>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Color.red">
+<code class="sig-name descname">red</code><a class="headerlink" href="#pyenki.Color.red" title="Permalink to this definition">¶</a></dt>
+<dd><p>Red color (<em>readonly</em>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Color.green">
+<code class="sig-name descname">green</code><a class="headerlink" href="#pyenki.Color.green" title="Permalink to this definition">¶</a></dt>
+<dd><p>Green color (<em>readonly</em>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Color.blue">
+<code class="sig-name descname">blue</code><a class="headerlink" href="#pyenki.Color.blue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blue color (<em>readonly</em>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Color.r">
+<code class="sig-name descname">r</code><a class="headerlink" href="#pyenki.Color.r" title="Permalink to this definition">¶</a></dt>
+<dd><p>Red channel, in [0, 1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Color.g">
+<code class="sig-name descname">g</code><a class="headerlink" href="#pyenki.Color.g" title="Permalink to this definition">¶</a></dt>
+<dd><p>Green channel, in [0, 1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Color.b">
+<code class="sig-name descname">b</code><a class="headerlink" href="#pyenki.Color.b" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blue channel, in [0, 1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Color.a">
+<code class="sig-name descname">a</code><a class="headerlink" href="#pyenki.Color.a" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alpha channel, in [0, 1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Color.components">
+<code class="sig-name descname">components</code><a class="headerlink" href="#pyenki.Color.components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Components, in [0, 1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[float, float, float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="physicalobject">
+<h2>PhysicalObject<a class="headerlink" href="#physicalobject" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyenki.PhysicalObject">
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">PhysicalObject</code><a class="headerlink" href="#pyenki.PhysicalObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>The superclass of objects that can be simulated.</p>
+<dl class="attribute">
+<dt id="pyenki.PhysicalObject.position">
+<code class="sig-name descname">position</code><a class="headerlink" href="#pyenki.PhysicalObject.position" title="Permalink to this definition">¶</a></dt>
+<dd><p>The position in the world frame in centimeters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.PhysicalObject.angle">
+<code class="sig-name descname">angle</code><a class="headerlink" href="#pyenki.PhysicalObject.angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>The orientation in the world frame in radians</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.PhysicalObject.velocity">
+<code class="sig-name descname">velocity</code><a class="headerlink" href="#pyenki.PhysicalObject.velocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>The velocity in the world frame in centimeters per second</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.PhysicalObject.angular_speed">
+<code class="sig-name descname">angular_speed</code><a class="headerlink" href="#pyenki.PhysicalObject.angular_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>The angular speed in the world frame in radians per second</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.PhysicalObject.radius">
+<code class="sig-name descname">radius</code><a class="headerlink" href="#pyenki.PhysicalObject.radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>The radius of the object’s enclosing circle in centimeters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.PhysicalObject.height">
+<code class="sig-name descname">height</code><a class="headerlink" href="#pyenki.PhysicalObject.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>The object height in centimeters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.PhysicalObject.is_cylindric">
+<code class="sig-name descname">is_cylindric</code><a class="headerlink" href="#pyenki.PhysicalObject.is_cylindric" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if the object is cylindrical shaped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.PhysicalObject.mass">
+<code class="sig-name descname">mass</code><a class="headerlink" href="#pyenki.PhysicalObject.mass" title="Permalink to this definition">¶</a></dt>
+<dd><p>The object mass in kilograms. If below zero, the object can’t move (infinite mass).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.PhysicalObject.moment_of_inertia">
+<code class="sig-name descname">moment_of_inertia</code><a class="headerlink" href="#pyenki.PhysicalObject.moment_of_inertia" title="Permalink to this definition">¶</a></dt>
+<dd><p>The obejct moment of inertial [Note: this is a symmetrical simplification.]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.PhysicalObject.color">
+<code class="sig-name descname">color</code><a class="headerlink" href="#pyenki.PhysicalObject.color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The object color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.PhysicalObject.collision_elasticity">
+<code class="sig-name descname">collision_elasticity</code><a class="headerlink" href="#pyenki.PhysicalObject.collision_elasticity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Elasticity of collisions of this object. If 0, soft collision, 100% energy dissipation; if 1, elastic collision, 0% energy dissipation. Actual elasticity is the product of the elasticity of the two colliding objects. Walls are fully elastics</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.PhysicalObject.dry_friction_coefficient">
+<code class="sig-name descname">dry_friction_coefficient</code><a class="headerlink" href="#pyenki.PhysicalObject.dry_friction_coefficient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dry friction coefficient mu</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.PhysicalObject.viscous_friction_coefficient">
+<code class="sig-name descname">viscous_friction_coefficient</code><a class="headerlink" href="#pyenki.PhysicalObject.viscous_friction_coefficient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The viscous friction coefficient. Premultiplied by mass. A value of k applies a force of -k * speed * mass</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.PhysicalObject.viscous_moment_friction_coefficient">
+<code class="sig-name descname">viscous_moment_friction_coefficient</code><a class="headerlink" href="#pyenki.PhysicalObject.viscous_moment_friction_coefficient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="rectangularobject">
+<h2>RectangularObject<a class="headerlink" href="#rectangularobject" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyenki.RectangularObject">
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">RectangularObject</code><span class="sig-paren">(</span><em class="sig-param">l1: float</em>, <em class="sig-param">l2: float</em>, <em class="sig-param">height: float</em>, <em class="sig-param">mass: float</em>, <em class="sig-param">color: pyenki.Color = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.RectangularObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <cite>PhysicalObject</cite> box with a given mass and color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>l1</strong> (<em>float</em>) – Depth in centimeters</p></li>
+<li><p><strong>l2</strong> (<em>float</em>) – Width in centimeters</p></li>
+<li><p><strong>height</strong> (<em>float</em>) – Height in centimeters</p></li>
+<li><p><strong>mass</strong> (<em>float</em>) – Mass in kilograms</p></li>
+<li><p><strong>color</strong> (<a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – Color</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="circularobject">
+<h2>CircularObject<a class="headerlink" href="#circularobject" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyenki.CircularObject">
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">CircularObject</code><span class="sig-paren">(</span><em class="sig-param">radius: float</em>, <em class="sig-param">height: float</em>, <em class="sig-param">mass: float</em>, <em class="sig-param">color: pyenki.Color = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.CircularObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <cite>PhysicalObject</cite> cylinder with a given mass and color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> (<em>float</em>) – Radius in centimeters</p></li>
+<li><p><strong>height</strong> (<em>float</em>) – Height in centimeters</p></li>
+<li><p><strong>mass</strong> (<em>float</em>) – Mass in kilograms</p></li>
+<li><p><strong>color</strong> (<a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – Color</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="ircommevent">
+<h2>IRCommEvent<a class="headerlink" href="#ircommevent" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyenki.IRCommEvent">
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">IRCommEvent</code><a class="headerlink" href="#pyenki.IRCommEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>An <cite>IRCommEvent</cite> is returned each time a message is received by at least one proximity sensor.
+The sensors that do not receive the message, have the corresponding payloads and intensities set to zero.</p>
+<dl class="attribute">
+<dt id="pyenki.IRCommEvent.rx">
+<code class="sig-name descname">rx</code><a class="headerlink" href="#pyenki.IRCommEvent.rx" title="Permalink to this definition">¶</a></dt>
+<dd><p>The received message payload (<em>readonly</em>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.IRCommEvent.payloads">
+<code class="sig-name descname">payloads</code><a class="headerlink" href="#pyenki.IRCommEvent.payloads" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of 7 payloads, one for each sensors (<em>readonly</em>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.IRCommEvent.intensities">
+<code class="sig-name descname">intensities</code><a class="headerlink" href="#pyenki.IRCommEvent.intensities" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of 7 intensities, one for each sensors (<em>readonly</em>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="thymio2">
+<h2>Thymio2<a class="headerlink" href="#thymio2" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyenki.Thymio2">
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">Thymio2</code><span class="sig-paren">(</span><em class="sig-param">use_aseba_units: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.Thymio2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <cite>PhysicalObject</cite> Thymio2 robot.
+Attribute names mimic the aseba interface, see <a class="reference external" href="http://wiki.thymio.org/en:thymioapi">http://wiki.thymio.org/en:thymioapi</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>use_aseba_units</strong> (<em>bool</em>) – use the same units and type as Aseba (default <cite>False</cite>).</p>
+</dd>
+</dl>
+<p>Example (non aseba units):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">(</span><span class="n">use_aseba_units</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">5.6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="mf">1.3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Spin the robot on itself</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">motor_left_target</span> <span class="o">=</span> <span class="mf">10.2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">motor_right_target</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Switch the top LED yellow</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">prox_values</span>
+<span class="go">[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]</span>
+</pre></div>
+</div>
+<p>Example (equivalent with aseba units):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">(</span><span class="n">use_aseba_units</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">5.6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="mf">1.3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Spin the robot on itself</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">motor_left_target</span> <span class="o">=</span> <span class="mi">307</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">motor_right_target</span> <span class="o">=</span> <span class="o">-</span><span class="mi">307</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Switch the top LED yellow</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">prox_values</span>
+<span class="go">[0, 0, 0, 0, 0, 0, 0]</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="pyenki.Thymio2.use_aseba_units">
+<code class="sig-name descname">use_aseba_units</code><a class="headerlink" href="#pyenki.Thymio2.use_aseba_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>whenever the robot should use the same units and type as the Aseba interface.</p>
+<dl class="simple">
+<dt>When <code class="docutils literal notranslate"><span class="pre">use_aseba_units=False</span></code>, the robot</dt><dd><ul class="simple">
+<li><p>uses floating point numbers,</p></li>
+<li><p>measures the space in centimeters</p></li>
+<li><p>normalizes color values between 0.0 and 1.0.</p></li>
+</ul>
+</dd>
+<dt>Instead, when <code class="docutils literal notranslate"><span class="pre">use_aseba_units=True</span></code>, the robot</dt><dd><ul class="simple">
+<li><p>uses integers numbers,</p></li>
+<li><p>measures the space in discrete steps such that 500 steps ~= 16.6 cm,</p></li>
+<li><p>normalizes (LED) color values in between 0 and 31.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Thymio2.prox_values">
+<code class="sig-name descname">prox_values</code><a class="headerlink" href="#pyenki.Thymio2.prox_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of (7) proximity sensor readings, one for each sensors (<em>readonly</em>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[number]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Thymio2.prox_distances">
+<code class="sig-name descname">prox_distances</code><a class="headerlink" href="#pyenki.Thymio2.prox_distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of (7) distances between proximity sensor and nearest obstancle, one for each sensors;
+please note that this variable is directly accessible by the real robot (<em>readonly</em>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Thymio2.prox_comm_tx">
+<code class="sig-name descname">prox_comm_tx</code><a class="headerlink" href="#pyenki.Thymio2.prox_comm_tx" title="Permalink to this definition">¶</a></dt>
+<dd><p>The integer payload to be sent. The real robot can only send 11 bits,
+therefore to be compliant we should limit the value between 0 and 2047.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Thymio2.prox_comm_enable">
+<code class="sig-name descname">prox_comm_enable</code><a class="headerlink" href="#pyenki.Thymio2.prox_comm_enable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable/disable proximity communication.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Thymio2.prox_comm_events">
+<code class="sig-name descname">prox_comm_events</code><a class="headerlink" href="#pyenki.Thymio2.prox_comm_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of events, one for every received message during the last control step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="#pyenki.IRCommEvent" title="pyenki.IRCommEvent">IRCommEvent</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Thymio2.ground_values">
+<code class="sig-name descname">ground_values</code><a class="headerlink" href="#pyenki.Thymio2.ground_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of (2) ground sensor readings, one for each sensors (<em>readonly</em>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[number]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">motor_{left,right}_target</code></dt>
+<dd><p>The target {left,right} wheel speed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">motor_{left,right}_speed</code></dt>
+<dd><p>The {left,right} wheel speed measured by simulated wheel encoders (<em>readonly</em>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">motor_{left,right}_odometry</code></dt>
+<dd><p>The {left,right} wheel odometry intergrated from measured wheel speeds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.Thymio2.controlStep">
+<code class="sig-name descname">controlStep</code><span class="sig-paren">(</span><em class="sig-param">dt: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.Thymio2.controlStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform one control step.
+This method should be overwritten by any subclass to control the robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dt</strong> (<em>float</em>) – The control step duration.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.Thymio2.set_led_bottom_left">
+<code class="sig-name descname">set_led_bottom_left</code><span class="sig-paren">(</span><em class="sig-param">red: float = 0</em>, <em class="sig-param">green: float = 0</em>, <em class="sig-param">blue: float = 0</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.Thymio2.set_led_bottom_left" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control the bottom-left RGB LED color</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>red</strong> (<em>number</em>) – the value of the red channel</p></li>
+<li><p><strong>green</strong> (<em>number</em>) – the value of the green channel</p></li>
+<li><p><strong>blue</strong> (<em>number</em>) – the value of the blue channel</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.Thymio2.set_led_bottom_right">
+<code class="sig-name descname">set_led_bottom_right</code><span class="sig-paren">(</span><em class="sig-param">red: float = 0</em>, <em class="sig-param">green: float = 0</em>, <em class="sig-param">blue: float = 0</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.Thymio2.set_led_bottom_right" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control the bottom-right RGB LED color</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>red</strong> (<em>number</em>) – the value of the red channel</p></li>
+<li><p><strong>green</strong> (<em>number</em>) – the value of the green channel</p></li>
+<li><p><strong>blue</strong> (<em>number</em>) – the value of the blue channel</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.Thymio2.set_led_buttons">
+<code class="sig-name descname">set_led_buttons</code><span class="sig-paren">(</span><em class="sig-param">index: int</em>, <em class="sig-param">value: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.Thymio2.set_led_buttons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control one of the 4 red LED near to the arrow buttons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) – the index of the led (between 0 and 3)</p></li>
+<li><p><strong>value</strong> (<em>number</em>) – the intensity of the color.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.Thymio2.set_led_circle">
+<code class="sig-name descname">set_led_circle</code><span class="sig-paren">(</span><em class="sig-param">index: int</em>, <em class="sig-param">value: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.Thymio2.set_led_circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control one of the 8 yellow LED that forms a circle on top of the robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) – the index of the led (between 0 and 7)</p></li>
+<li><p><strong>value</strong> (<em>number</em>) – the intensity of the color.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.Thymio2.set_led_left_blue">
+<code class="sig-name descname">set_led_left_blue</code><span class="sig-paren">(</span><em class="sig-param">value: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.Thymio2.set_led_left_blue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control the blue LED on the left side.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>number</em>) – the intensity of the color.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.Thymio2.set_led_left_red">
+<code class="sig-name descname">set_led_left_red</code><span class="sig-paren">(</span><em class="sig-param">value: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.Thymio2.set_led_left_red" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control the red LED on the left side.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>number</em>) – the intensity of the color.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.Thymio2.set_led_prox">
+<code class="sig-name descname">set_led_prox</code><span class="sig-paren">(</span><em class="sig-param">index: int</em>, <em class="sig-param">value: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.Thymio2.set_led_prox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control one of the 8 red LED near to the proximity sensors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) – the index of the led (between 0 and 7)</p></li>
+<li><p><strong>value</strong> (<em>number</em>) – the intensity of the color.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.Thymio2.set_led_right_blue">
+<code class="sig-name descname">set_led_right_blue</code><span class="sig-paren">(</span><em class="sig-param">value: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.Thymio2.set_led_right_blue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control the blue LED on the right side.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>number</em>) – the intensity of the color.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.Thymio2.set_led_right_red">
+<code class="sig-name descname">set_led_right_red</code><span class="sig-paren">(</span><em class="sig-param">value: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.Thymio2.set_led_right_red" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control the red LED on the right side.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>number</em>) – the intensity of the color.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.Thymio2.set_led_top">
+<code class="sig-name descname">set_led_top</code><span class="sig-paren">(</span><em class="sig-param">red: float = 0</em>, <em class="sig-param">green: float = 0</em>, <em class="sig-param">blue: float = 0</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.Thymio2.set_led_top" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control the top RGB LED color</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>red</strong> (<em>number</em>) – the value of the red channel</p></li>
+<li><p><strong>green</strong> (<em>number</em>) – the value of the green channel</p></li>
+<li><p><strong>blue</strong> (<em>number</em>) – the value of the blue channel</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="world">
+<h2>World<a class="headerlink" href="#world" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyenki.World">
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">World</code><span class="sig-paren">(</span><em class="sig-param">**kwds</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.World" title="Permalink to this definition">¶</a></dt>
+<dd><p>The world is the container of all objects and robots.
+It is either</p>
+<blockquote>
+<div><ul>
+<li><p>a rectangular arena with walls at all sides:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">World</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">walls_color</span><span class="p">:</span> <span class="n">Color</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">gray</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>a circular area with walls:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">World</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">walls_color</span><span class="p">:</span> <span class="n">Color</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">gray</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>or an infinite surface:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">World</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>width</strong> (<em>float</em>) – The rectangular world width in centimeters</p></li>
+<li><p><strong>height</strong> (<em>float</em>) – The rectangular world height in centimeters</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – The circular world radius in centimeters</p></li>
+<li><p><strong>walls_color</strong> (<a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – Optional wall color, default is <code class="docutils literal notranslate"><span class="pre">Color.gray</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyenki</span>
+
+<span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
+<span class="n">thymio</span> <span class="o">=</span> <span class="n">Thymio2</span><span class="p">()</span>
+<span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
+<span class="n">wall</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">RectangularObject</span><span class="p">(</span><span class="n">l1</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">l2</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mass</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                <span class="n">color</span><span class="o">=</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">))</span>
+<span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span>
+<span class="c1"># Run 100 times a 0.1 s long simulation step</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="pyenki.World.add_object">
+<code class="sig-name descname">add_object</code><span class="sig-paren">(</span><em class="sig-param">item: pyenki.PhysicalObject</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.World.add_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a physical object to the simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> (<a class="reference internal" href="#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><em>PhysicalObject</em></a>) – the object to add.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.World.remove_object">
+<code class="sig-name descname">remove_object</code><span class="sig-paren">(</span><em class="sig-param">item: pyenki.PhysicalObject</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.World.remove_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a physical object from the simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> (<a class="reference internal" href="#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><em>PhysicalObject</em></a>) – the object to remove.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.World.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">steps: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.World.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run for a number of steps, using a step of 1/30 s and <cite>physics_oversampling</cite> of 3.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>steps</strong> (<em>int</em>) – The number of steps to perform</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.World.run_in_viewer">
+<code class="sig-name descname">run_in_viewer</code><span class="sig-paren">(</span><em class="sig-param">cam_position: Tuple[float</em>, <em class="sig-param">float] = (0</em>, <em class="sig-param">0)</em>, <em class="sig-param">cam_altitude: float = 0</em>, <em class="sig-param">cam_yaw: float = 0</em>, <em class="sig-param">cam_pitch: float = 0</em>, <em class="sig-param">walls_height: float = 10</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.World.run_in_viewer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Launch a QApplication to visualize the world from a (camera) viewpoint.
+The application run loop will keep real time while calling <cite>World.step</cite>
+at the appropriate time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cam_position</strong> (<em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – the position of the viewpoint in centimeters</p></li>
+<li><p><strong>cam_altitude</strong> (<em>float</em>) – the altitude of the viewpoint in centimeters</p></li>
+<li><p><strong>cam_yaw</strong> (<em>float</em>) – the yaw of the viewpoint in radians</p></li>
+<li><p><strong>cam_pitch</strong> (<em>float</em>) – the pitch of the viewpoint in radians</p></li>
+<li><p><strong>walls_height</strong> (<em>float</em>) – the height of (visualized) walls in centimeters</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.World.set_random_seed">
+<code class="sig-name descname">set_random_seed</code><span class="sig-paren">(</span><em class="sig-param">seed: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.World.set_random_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the random seed</p>
+<p>Note: Not sure that it is working as expected.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.World.step">
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">dt: float</em>, <em class="sig-param">physics_oversampling: int = 1</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.World.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate a timestep</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dt</strong> (<em>float</em>) – the update timestep in seconds, should be below 1 (typically .02-.1)</p></li>
+<li><p><strong>physics_oversampling</strong> (<em>int</em>) – the amount of time the physics is run per step,</p></li>
+<li><p><strong>usual collisions require a more precise simulation than the sensor-motor loop frequency</strong> (<em>as</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API</a><ul>
+<li><a class="reference internal" href="#color">Color</a></li>
+<li><a class="reference internal" href="#physicalobject">PhysicalObject</a></li>
+<li><a class="reference internal" href="#rectangularobject">RectangularObject</a></li>
+<li><a class="reference internal" href="#circularobject">CircularObject</a></li>
+<li><a class="reference internal" href="#ircommevent">IRCommEvent</a></li>
+<li><a class="reference internal" href="#thymio2">Thymio2</a></li>
+<li><a class="reference internal" href="#world">World</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="examples.html"
+                        title="previous chapter">Example</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/api.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="examples.html" title="Example"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyenki  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Stéphane Magnenat and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>
