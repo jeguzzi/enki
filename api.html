@@ -12,6 +12,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Example" href="examples.html" /> 
@@ -859,6 +860,104 @@ at the appropriate time.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="worldview">
+<h2>WorldView<a class="headerlink" href="#worldview" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyenki.WorldView">
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">WorldView</code><span class="sig-paren">(</span><em class="sig-param">world: pyenki.World</em>, <em class="sig-param">run_world_update: bool = False</em>, <em class="sig-param">cam_position: Tuple[float</em>, <em class="sig-param">float] = (0</em>, <em class="sig-param">0)</em>, <em class="sig-param">cam_altitude: float = 0</em>, <em class="sig-param">cam_yaw: float = 0</em>, <em class="sig-param">cam_pitch: float = 0</em>, <em class="sig-param">walls_height: float = 10</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.WorldView" title="Permalink to this definition">¶</a></dt>
+<dd><p>A QWidget subclass to display the world that automatically refreshes 30 times per second.
+It requires that a QApplication has already been instantiated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>world</strong> (<a class="reference internal" href="#pyenki.World" title="pyenki.World"><em>World</em></a>) – The world to be displayed</p></li>
+<li><p><strong>run_world_update</strong> (<em>bool</em>) – Whetever to run or not <code class="docutils literal notranslate"><span class="pre">world.step</span></code> at each view refresh (default <cite>False</cite>)</p></li>
+<li><p><strong>cam_position</strong> (<em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – the position of the viewpoint in centimeters (default <cite>(0, 0)</cite>)</p></li>
+<li><p><strong>cam_altitude</strong> (<em>float</em>) – the altitude of the viewpoint in centimeters (default <cite>0</cite>)</p></li>
+<li><p><strong>cam_yaw</strong> (<em>float</em>) – the yaw of the viewpoint in radians (default <cite>0</cite>)</p></li>
+<li><p><strong>cam_pitch</strong> (<em>float</em>) – the pitch of the viewpoint in radians (default <cite>0</cite>)</p></li>
+<li><p><strong>walls_height</strong> (<em>float</em>) – the height of world boundary walls in centimeters (default <cite>10</cite>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="pyenki.WorldView.run_world_update">
+<code class="sig-name descname">run_world_update</code><a class="headerlink" href="#pyenki.WorldView.run_world_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whetever to run or not <code class="docutils literal notranslate"><span class="pre">world.step</span></code> at each view refresh.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.WorldView.cam_position">
+<code class="sig-name descname">cam_position</code><a class="headerlink" href="#pyenki.WorldView.cam_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>the position of the viewpoint in centimeters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tuple[float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.WorldView.cam_altitude">
+<code class="sig-name descname">cam_altitude</code><a class="headerlink" href="#pyenki.WorldView.cam_altitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>the altitude of the viewpoint in centimeters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.WorldView.cam_yaw">
+<code class="sig-name descname">cam_yaw</code><a class="headerlink" href="#pyenki.WorldView.cam_yaw" title="Permalink to this definition">¶</a></dt>
+<dd><p>the yaw of the viewpoint in radians</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.WorldView.cam_pitch">
+<code class="sig-name descname">cam_pitch</code><a class="headerlink" href="#pyenki.WorldView.cam_pitch" title="Permalink to this definition">¶</a></dt>
+<dd><p>the pitch of the viewpoint in radians</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Example (in an IPython qtconsole/notebook):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">gui</span> <span class="n">qt5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">view</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">WorldView</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">view</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="pyenki.WorldView.hide">
+<code class="sig-name descname">hide</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.WorldView.hide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hide the view</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.WorldView.show">
+<code class="sig-name descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.WorldView.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the view</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -877,6 +976,7 @@ at the appropriate time.</p>
 <li><a class="reference internal" href="#ircommevent">IRCommEvent</a></li>
 <li><a class="reference internal" href="#thymio2">Thymio2</a></li>
 <li><a class="reference internal" href="#world">World</a></li>
+<li><a class="reference internal" href="#worldview">WorldView</a></li>
 </ul>
 </li>
 </ul>
