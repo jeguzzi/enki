@@ -477,3 +477,57 @@ class World:
                 walls_height (float): the height of (visualized) walls in centimeters
         """
         ...
+
+
+class WorldView:
+    """
+        A QWidget subclass to display the world that automatically refreshes 30 times per second.
+        It requires that a QApplication has already been instantiated.
+
+        Args:
+            world (World): The world to be displayed
+            run_world_update (bool): Whetever to run or not ``world.step`` at each view refresh (default `False`)
+            cam_position (Tuple[float, float]): the position of the viewpoint in centimeters (default `(0, 0)`)
+            cam_altitude (float): the altitude of the viewpoint in centimeters (default `0`)
+            cam_yaw (float): the yaw of the viewpoint in radians (default `0`)
+            cam_pitch (float): the pitch of the viewpoint in radians (default `0`)
+            walls_height (float): the height of world boundary walls in centimeters (default `10`)
+
+        Attributes:
+            run_world_update (bool): Whetever to run or not ``world.step`` at each view refresh.
+            cam_position (Tuple[float, float]): the position of the viewpoint in centimeters
+            cam_altitude (float): the altitude of the viewpoint in centimeters
+            cam_yaw (float): the yaw of the viewpoint in radians
+            cam_pitch (float): the pitch of the viewpoint in radians
+
+        Example (in an IPython qtconsole/notebook):
+        ::
+            >>> import pyenki
+            >>> world = pyenki.World()
+            >>> %gui qt5
+            >>> view = pyenki.WorldView()
+            >>> view.show()
+    """
+
+    run_world_update: bool
+    cam_position: Tuple[float, float]
+    cam_altitude: float
+    cam_yaw: float
+    cam_pitch: float
+
+    def __init__(self, world: World, run_world_update: bool = False,
+                 cam_position: Tuple[float, float] = (0, 0), cam_altitude: float = 0,
+                 cam_yaw: float = 0, cam_pitch: float = 0, walls_height: float = 10) -> None:
+        ...
+
+    def show(self) -> None:
+        """
+            Show the view
+        """
+        ...
+
+    def hide(self) -> None:
+        """
+            Hide the view
+        """
+        ...
