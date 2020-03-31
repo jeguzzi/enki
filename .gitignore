@@ -8,3 +8,4 @@ CMakeCache.txt
 Doxyfile
 CMakeDoxyfile.in
 *.so
+*cache*
