@@ -43,3 +43,10 @@ World
 
 .. autoclass:: World
   :members:
+
+
+WorldView
+----------
+
+.. autoclass:: WorldView
+  :members:

@@ -12,6 +12,7 @@ Welcome to pyenki's documentation!
 
    intro
    changelog
+   prox_comm
    examples
    api
 

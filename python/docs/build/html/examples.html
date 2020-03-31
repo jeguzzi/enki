@@ -12,10 +12,11 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API" href="api.html" />
-    <link rel="prev" title="Changelog" href="changelog.html" /> 
+    <link rel="prev" title="Proximity communication" href="prox_comm.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -27,7 +28,7 @@
           <a href="api.html" title="API"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="changelog.html" title="Changelog"
+          <a href="prox_comm.html" title="Proximity communication"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">pyenki  documentation</a> &#187;</li> 
       </ul>
@@ -40,7 +41,9 @@
             
   <div class="section" id="example">
 <h1>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h1>
-<p>In the most common case, you want to subclass one or more robots adding the appropriate controller.
+<div class="section" id="hello-thymio">
+<h2>Hello Thymio<a class="headerlink" href="#hello-thymio" title="Permalink to this headline">¶</a></h2>
+<p id="hello">In the most common case, you want to subclass one or more robots adding the appropriate controller.
 Then, you setup up the world, adding as many objects as needed.
 Finally, you may either run the simulation in real time inside a Qt application,
 or write your own loop where to call <code class="docutils literal notranslate"><span class="pre">World.step</span></code>.</p>
@@ -124,6 +127,76 @@ when it will stop and switch the LED color to red from green.</p>
 </div>
 </div></blockquote>
 </div>
+<div class="section" id="proximity-communication">
+<h2>Proximity Communication<a class="headerlink" href="#proximity-communication" title="Permalink to this headline">¶</a></h2>
+<p>In this example, two Thymios placed in front of each other, transmit messages using proximity communication.
+After each control step, we print the received messages.</p>
+<div class="code Python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="c1"># Create a world and place two thymios in front of themselves</span>
+<span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
+<span class="n">thymio1</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">()</span>
+<span class="n">thymio1</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio1</span><span class="p">)</span>
+<span class="n">thymio2</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">()</span>
+<span class="n">thymio2</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">thymio2</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>
+<span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio2</span><span class="p">)</span>
+
+<span class="c1"># Enable the communication and let them send different payloads</span>
+<span class="n">thymio1</span><span class="o">.</span><span class="n">prox_comm_enable</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">thymio2</span><span class="o">.</span><span class="n">prox_comm_enable</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">thymio1</span><span class="o">.</span><span class="n">prox_comm_tx</span> <span class="o">=</span> <span class="mi">111</span>
+<span class="n">thymio2</span><span class="o">.</span><span class="n">prox_comm_tx</span> <span class="o">=</span> <span class="mi">222</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="c1"># Check which messages they are receiving</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;thymio1: &#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\t\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Got message </span><span class="si">{e.rx}</span><span class="s1"> [</span><span class="si">{e.payloads}</span><span class="s1"> </span><span class="si">{e.intensities}</span><span class="s1">]&#39;</span>
+                                   <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">thymio1</span><span class="o">.</span><span class="n">prox_comm_events</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;thymio2: &#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\t\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Got message </span><span class="si">{e.rx}</span><span class="s1"> [</span><span class="si">{e.payloads}</span><span class="s1"> </span><span class="si">{e.intensities}</span><span class="s1">]&#39;</span>
+                                   <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">thymio2</span><span class="o">.</span><span class="n">prox_comm_events</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="interactive-gui">
+<h2>Interactive GUI<a class="headerlink" href="#interactive-gui" title="Permalink to this headline">¶</a></h2>
+<p>The QWidget that display the world can be run either two modes:
+- embedded in a standalone QtApplication, like in <a class="reference internal" href="#hello">hello</a>, that blocks until it terminates
+- or using an already running QtApplication, which does not block and allow to visualize the world
+while manipulating it in an interactive session (e.g., in a jupyter notebook or an IPython console)</p>
+<p>For instance, this example script</p>
+<div class="code Python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+
+<span class="kn">from</span> <span class="nn">PyQt5</span> <span class="k">import</span> <span class="n">QtCore</span>
+
+<span class="kn">import</span> <span class="nn">pyenki</span>
+
+<span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">thymio</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">()</span>
+<span class="n">thymio</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">thymio</span><span class="o">.</span><span class="n">motor_left_target</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>
+<span class="n">thymio</span><span class="o">.</span><span class="n">motor_right_target</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
+
+<span class="c1"># Check if a QtApplication is running</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No QtApplication active&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># Create a view --- which will also run ``world.step`` --- and display it</span>
+    <span class="n">view</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">WorldView</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">run_world_update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cam_position</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">140</span><span class="p">),</span>
+                            <span class="n">cam_altitude</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">cam_pitch</span><span class="o">=-</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">cam_yaw</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">view</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>will spawn a live world view when run inside an IPython console</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>$ ipython --gui qt5
+&gt;&gt;&gt; %run interactive_view
+</pre></div>
+</div>
+</div>
+</div>
 
 
           </div>
@@ -131,9 +204,19 @@ when it will stop and switch the LED color to red from green.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Example</a><ul>
+<li><a class="reference internal" href="#hello-thymio">Hello Thymio</a></li>
+<li><a class="reference internal" href="#proximity-communication">Proximity Communication</a></li>
+<li><a class="reference internal" href="#interactive-gui">Interactive GUI</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
-  <p class="topless"><a href="changelog.html"
-                        title="previous chapter">Changelog</a></p>
+  <p class="topless"><a href="prox_comm.html"
+                        title="previous chapter">Proximity communication</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="api.html"
                         title="next chapter">API</a></p>
@@ -168,7 +251,7 @@ when it will stop and switch the LED color to red from green.</p>
           <a href="api.html" title="API"
              >next</a> |</li>
         <li class="right" >
-          <a href="changelog.html" title="Changelog"
+          <a href="prox_comm.html" title="Proximity communication"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">pyenki  documentation</a> &#187;</li> 
       </ul>

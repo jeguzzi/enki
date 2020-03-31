@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Proximity communication &#8212; pyenki  documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Example" href="examples.html" />
+    <link rel="prev" title="Changelog" href="changelog.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="examples.html" title="Example"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="changelog.html" title="Changelog"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyenki  documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="proximity-communication">
+<h1>Proximity communication<a class="headerlink" href="#proximity-communication" title="Permalink to this headline">¶</a></h1>
+<p>A Thymio can enable proximity communication and transmits an integer payload each 0.1 s.
+The message is received by other Thymios if they have enabled proximity communication too and if at least one of their proximity sensors
+is visible by one of the emitter’s [proximity] LEDs.</p>
+<p>More precisely, given an emitting [proximity] LED at point <span class="math notranslate nohighlight">\(p_e\)</span> and angle <span class="math notranslate nohighlight">\(\alpha_e\)</span> and a receiving [proximity] sensor at point <span class="math notranslate nohighlight">\(p_r\)</span> and angle <span class="math notranslate nohighlight">\(\alpha_r\)</span>,
+a pulse from <cite>e</cite> to <cite>r</cite> is visible if the following criteria are met:</p>
+<ol class="arabic simple">
+<li><p>the distance between <span class="math notranslate nohighlight">\(p_e\)</span> and <span class="math notranslate nohighlight">\(p_r\)</span> is less then <cite>range</cite> ~ 23 cm,</p></li>
+<li><p><cite>p_r</cite> is inside the circular sector [<span class="math notranslate nohighlight">\(\alpha_e\)</span> - <span class="math notranslate nohighlight">\(\beta_e\)</span>, <span class="math notranslate nohighlight">\(\alpha_e\)</span> + <span class="math notranslate nohighlight">\(\beta_e\)</span>] centered at <span class="math notranslate nohighlight">\(p_e\)</span>, with <span class="math notranslate nohighlight">\(\beta_e\)</span> ~ 15 degrees (0.268 rad),</p></li>
+<li><p><cite>p_e</cite> is inside the circular sector [<span class="math notranslate nohighlight">\(\alpha_r\)</span> - <span class="math notranslate nohighlight">\(\beta_r\)</span>, <span class="math notranslate nohighlight">\(\alpha_r\)</span> + <span class="math notranslate nohighlight">\(\beta_r\)</span>] centered at <span class="math notranslate nohighlight">\(p_r\)</span>, with <span class="math notranslate nohighlight">\(\beta_r\)</span> ~ 36 degrees (0.644 rad),</p></li>
+<li><p>there are no obstacles along the segment <span class="math notranslate nohighlight">\(\overline{p_r p_e}\)</span>.</p></li>
+</ol>
+<p>The light intensities of all emitters are summed up and stimulate a noisy response <span class="math notranslate nohighlight">\(r\)</span> :</p>
+<div class="math notranslate nohighlight">
+\[r ~ \frac{m}{\frac{1}{\sum_e \frac{c-x_0^2}{(|p_r - p_e|-x_0)^2}} + 1}\]</div>
+<p>where <span class="math notranslate nohighlight">\(r\)</span> is a bias</p>
+<p>We set to 0 all responses not large enough (i.e., lower than the response caused by an emitter at distance <span class="math notranslate nohighlight">\(range\)</span>).
+Note that this is still a simplification because we ignore that the real intensities depends also on the orientations.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="changelog.html"
+                        title="previous chapter">Changelog</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="examples.html"
+                        title="next chapter">Example</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/prox_comm.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="examples.html" title="Example"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="changelog.html" title="Changelog"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyenki  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Stéphane Magnenat and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>
