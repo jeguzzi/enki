@@ -15,7 +15,7 @@
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Example" href="examples.html" />
+    <link rel="next" title="Examples" href="examples.html" />
     <link rel="prev" title="Changelog" href="changelog.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -25,7 +25,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="examples.html" title="Example"
+          <a href="examples.html" title="Examples"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="changelog.html" title="Changelog"
@@ -47,16 +47,16 @@ is visible by one of the emitter’s [proximity] LEDs.</p>
 <p>More precisely, given an emitting [proximity] LED at point <span class="math notranslate nohighlight">\(p_e\)</span> and angle <span class="math notranslate nohighlight">\(\alpha_e\)</span> and a receiving [proximity] sensor at point <span class="math notranslate nohighlight">\(p_r\)</span> and angle <span class="math notranslate nohighlight">\(\alpha_r\)</span>,
 a pulse from <cite>e</cite> to <cite>r</cite> is visible if the following criteria are met:</p>
 <ol class="arabic simple">
-<li><p>the distance between <span class="math notranslate nohighlight">\(p_e\)</span> and <span class="math notranslate nohighlight">\(p_r\)</span> is less then <cite>range</cite> ~ 23 cm,</p></li>
+<li><p>the distance between <span class="math notranslate nohighlight">\(p_e\)</span> and <span class="math notranslate nohighlight">\(p_r\)</span> is less then  <span class="math notranslate nohighlight">\(\rho\)</span> ~ 23 cm,</p></li>
 <li><p><cite>p_r</cite> is inside the circular sector [<span class="math notranslate nohighlight">\(\alpha_e\)</span> - <span class="math notranslate nohighlight">\(\beta_e\)</span>, <span class="math notranslate nohighlight">\(\alpha_e\)</span> + <span class="math notranslate nohighlight">\(\beta_e\)</span>] centered at <span class="math notranslate nohighlight">\(p_e\)</span>, with <span class="math notranslate nohighlight">\(\beta_e\)</span> ~ 15 degrees (0.268 rad),</p></li>
 <li><p><cite>p_e</cite> is inside the circular sector [<span class="math notranslate nohighlight">\(\alpha_r\)</span> - <span class="math notranslate nohighlight">\(\beta_r\)</span>, <span class="math notranslate nohighlight">\(\alpha_r\)</span> + <span class="math notranslate nohighlight">\(\beta_r\)</span>] centered at <span class="math notranslate nohighlight">\(p_r\)</span>, with <span class="math notranslate nohighlight">\(\beta_r\)</span> ~ 36 degrees (0.644 rad),</p></li>
 <li><p>there are no obstacles along the segment <span class="math notranslate nohighlight">\(\overline{p_r p_e}\)</span>.</p></li>
 </ol>
-<p>The light intensities of all emitters are summed up and stimulate a noisy response <span class="math notranslate nohighlight">\(r\)</span> :</p>
+<p>The light intensities of all emitters <span class="math notranslate nohighlight">\(e\)</span> are summed up and stimulate a noisy response <span class="math notranslate nohighlight">\(r\)</span> :</p>
 <div class="math notranslate nohighlight">
-\[r ~ \frac{m}{\frac{1}{\sum_e \frac{c-x_0^2}{(|p_r - p_e|-x_0)^2}} + 1}\]</div>
-<p>where <span class="math notranslate nohighlight">\(r\)</span> is a bias</p>
-<p>We set to 0 all responses not large enough (i.e., lower than the response caused by an emitter at distance <span class="math notranslate nohighlight">\(range\)</span>).
+\[r \approx \frac{m}{\frac{1}{\sum_e \frac{c-x_0^2}{(|p_r - p_e|-x_0)^2}} + 1}\]</div>
+<p>where <span class="math notranslate nohighlight">\(r\)</span> ~ 4200 is the maximal value, <span class="math notranslate nohighlight">\(x_0\)</span> ~ 0.02 cm is a small offset and <cite>c</cite> ~ 275 <span class="math notranslate nohighlight">\(\textrm{cm}^2\)</span> is a bias</p>
+<p>We set to 0 all responses not large enough (i.e., lower than the response caused by an emitter at distance <span class="math notranslate nohighlight">\(\rho\)</span>).
 Note that this is still a simplification because we ignore that the real intensities depends also on the orientations.</p>
 </div>
 
@@ -71,7 +71,7 @@ Note that this is still a simplification because we ignore that the real intensi
                         title="previous chapter">Changelog</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="examples.html"
-                        title="next chapter">Example</a></p>
+                        title="next chapter">Examples</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -100,7 +100,7 @@ Note that this is still a simplification because we ignore that the real intensi
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="examples.html" title="Example"
+          <a href="examples.html" title="Examples"
              >next</a> |</li>
         <li class="right" >
           <a href="changelog.html" title="Changelog"
