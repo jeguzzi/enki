@@ -29,6 +29,7 @@ author = 'Stéphane Magnenat and others'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinxcontrib.napoleon',
+    'sphinx.ext.autosectionlabel',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

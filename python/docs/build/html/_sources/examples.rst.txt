@@ -1,13 +1,8 @@
-Example
-=======
-
-
+Examples
+========
 
 Hello Thymio
 ------------
-
-.. _hello:
-
 
 In the most common case, you want to subclass one or more robots adding the appropriate controller.
 Then, you setup up the world, adding as many objects as needed.
@@ -38,11 +33,11 @@ Interactive GUI
 ---------------
 
 The QWidget that display the world can be run either two modes:
-- embedded in a standalone QtApplication, like in hello_, that blocks until it terminates
+- embedded in a standalone QtApplication, like in :ref:`Hello Thymio`, that blocks until it terminates
 - or using an already running QtApplication, which does not block and allow to visualize the world
 while manipulating it in an interactive session (e.g., in a jupyter notebook or an IPython console)
 
-For instance, this example script
+For instance, this script
 
 .. include:: ../../example/interactive_view.py
   :code: Python

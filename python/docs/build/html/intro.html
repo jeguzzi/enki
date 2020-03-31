@@ -12,6 +12,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Changelog" href="changelog.html" />
@@ -42,6 +43,8 @@
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p>This package provides Python bindings to the enki simulator
 using <a class="reference external" href="https://www.boost.org/doc/libs/1_72_0/libs/python/doc/html">Boost::Python</a>.</p>
+<p>This is a fork of <a class="reference external" href="https://github.com/enki-community/enki">https://github.com/enki-community/enki</a> with the changes listed in the <a class="reference internal" href="changelog.html#changelog"><span class="std std-ref">Changelog</span></a>.
+We thanks the authors of enki very much for their fantastic work.</p>
 <div class="section" id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <p>You need to have Python and Boost::Python installed.
@@ -51,8 +54,8 @@ For macOS, using homebrew, run:</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="compile-from-source">
-<h2>Compile from source<a class="headerlink" href="#compile-from-source" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="compiling-from-source">
+<h2>Compiling from source<a class="headerlink" href="#compiling-from-source" title="Permalink to this headline">¶</a></h2>
 <p>Clone and compile the code:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/jeguzzi/enki.git --branch ir_comm
 <span class="nb">cd</span> enki
@@ -74,7 +77,7 @@ make install
   <ul>
 <li><a class="reference internal" href="#">Installation</a><ul>
 <li><a class="reference internal" href="#requirements">Requirements</a></li>
-<li><a class="reference internal" href="#compile-from-source">Compile from source</a></li>
+<li><a class="reference internal" href="#compiling-from-source">Compiling from source</a></li>
 </ul>
 </li>
 </ul>
