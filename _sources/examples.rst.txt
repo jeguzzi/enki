@@ -47,4 +47,4 @@ will spawn a live world view when run inside an IPython console
 .. code-block:: Bash
 
   $ ipython --gui qt5
-  >>> %run interactive_view
+  >>> %run interactive_view.py
