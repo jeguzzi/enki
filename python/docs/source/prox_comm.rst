@@ -27,4 +27,4 @@ Note that this is still a simplification because we ignore that the real intensi
 
 Each received message in encoded as an :ref:`IRCommEvent` ``event``, where ``event.payloads`` and ``event.intensities`` contain the response of the seven proximity sensors:
 the first five entries are from frontal sensors ordered from left to right and the last two entries are from rear sensors ordered from left to right.
-When a sensor read no message (i.e., when the response is too weak), the corresponding payload and intensity are set to zero.
+When a sensor doesn't receive the message (i.e., when the response is too weak), the corresponding payload and intensity are set to zero.
