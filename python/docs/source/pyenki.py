@@ -463,7 +463,8 @@ class World:
         ...
 
     def run_in_viewer(self, cam_position: Vector = (0, 0), cam_altitude: float = 0,
-                      cam_yaw: float = 0, cam_pitch: float = 0, walls_height: float = 10) -> None:
+                      cam_yaw: float = 0, cam_pitch: float = 0, walls_height: float = 10,
+                      orthographic: bool = False) -> None:
         """
             Launch a QApplication to visualize the world from a (camera) viewpoint.
             The application run loop will keep real time while calling `World.step`
@@ -475,6 +476,7 @@ class World:
                 cam_yaw (float): the yaw of the viewpoint in radians
                 cam_pitch (float): the pitch of the viewpoint in radians
                 walls_height (float): the height of (visualized) walls in centimeters
+                orthographic (bool): whetever to use an down looking camera with ortographic projection (default `False`)
         """
         ...
 
@@ -485,20 +487,22 @@ class WorldView:
         It requires that a QApplication has already been instantiated.
 
         Args:
-            world (World): The world to be displayed
-            run_world_update (bool): Whetever to run or not ``world.step`` at each view refresh (default `False`)
+            world (World): the world to be displayed
+            run_world_update (bool): whetever to run or not ``world.step`` at each view refresh (default `False`)
             cam_position (Tuple[float, float]): the position of the viewpoint in centimeters (default `(0, 0)`)
             cam_altitude (float): the altitude of the viewpoint in centimeters (default `0`)
             cam_yaw (float): the yaw of the viewpoint in radians (default `0`)
             cam_pitch (float): the pitch of the viewpoint in radians (default `0`)
             walls_height (float): the height of world boundary walls in centimeters (default `10`)
+            orthographic (bool): whetever to use an down looking camera with ortographic projection (default `False`)
 
         Attributes:
-            run_world_update (bool): Whetever to run or not ``world.step`` at each view refresh.
+            run_world_update (bool): whetever to run or not ``world.step`` at each view refresh.
             cam_position (Tuple[float, float]): the position of the viewpoint in centimeters
             cam_altitude (float): the altitude of the viewpoint in centimeters
             cam_yaw (float): the yaw of the viewpoint in radians
             cam_pitch (float): the pitch of the viewpoint in radians
+            orthographic (bool): whetever to use an down looking camera with ortographic projection. If enabled, the `cam_pitch` is fixed to :math:`-\pi/2`.
 
         Example (in an IPython qtconsole/notebook):
         ::
@@ -514,10 +518,12 @@ class WorldView:
     cam_altitude: float
     cam_yaw: float
     cam_pitch: float
+    orthographic: bool
 
     def __init__(self, world: World, run_world_update: bool = False,
                  cam_position: Tuple[float, float] = (0, 0), cam_altitude: float = 0,
-                 cam_yaw: float = 0, cam_pitch: float = 0, walls_height: float = 10) -> None:
+                 cam_yaw: float = 0, cam_pitch: float = 0, walls_height: float = 10,
+                 orthographic: bool = False) -> None:
         ...
 
     def show(self) -> None:

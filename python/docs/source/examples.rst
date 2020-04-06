@@ -35,16 +35,17 @@ Interactive GUI
 The QWidget that display the world can be run either two modes:
 - embedded in a standalone QtApplication, like in :ref:`Hello Thymio`, that blocks until it terminates
 - or using an already running QtApplication, which does not block and allow to visualize the world
-while manipulating it in an interactive session (e.g., in a jupyter notebook or an IPython console)
+while manipulating it in an interactive session (e.g., in a jupyter notebook or console)
 
 For instance, this script
 
 .. include:: ../../example/interactive_view.py
   :code: Python
 
-will spawn a live world view when run inside an IPython console
+will spawn a live world view when run inside an jupyter console
 
 .. code-block:: Bash
 
-  $ ipython --gui qt5
+  $ jupyter console
+  >>> %gui qt5
   >>> %run interactive_view.py

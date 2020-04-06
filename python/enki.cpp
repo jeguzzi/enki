@@ -682,7 +682,7 @@ struct PythonViewer: public ViewerWidget
 
   // PythonViewer(World& world, bool _run_world_update=false, Vector camPos=Vector(0.0, 0.0), double camAltitude=0.0, double camYaw=0.0, double camPitch=0.0, double _wallsHeight=10.0);
 
-  PythonViewer(World& world, bool _run_world_update=false, Vector camPos=Vector(0.0, 0.0), double camAltitude=0.0, double camYaw=0.0, double camPitch=0.0, double _wallsHeight=10.0):
+  PythonViewer(World& world, bool _run_world_update=false, Vector camPos=Vector(0.0, 0.0), double camAltitude=0.0, double camYaw=0.0, double camPitch=0.0, double _wallsHeight=10.0, bool _ortho=false):
     ViewerWidget(&world, 0),
     pythonSavedState(0)
   {
@@ -696,6 +696,7 @@ struct PythonViewer: public ViewerWidget
     managedObjectsAliases[&typeid(EPuckWrap)] = &typeid(EPuck);
     managedObjectsAliases[&typeid(MarxbotWrap)] = &typeid(Marxbot);
     managedObjectsAliases[&typeid(Thymio2Wrap)] = &typeid(Thymio2);
+    ortho = _ortho;
     setWindowTitle("PyEnki Viewer");
   }
 
@@ -730,15 +731,15 @@ struct PythonViewer: public ViewerWidget
     camera.yaw = value;
   }
 
-  double get_camera_pitch()
-  {
-    return camera.pitch;
-  }
-
-  void set_camera_pitch(double value)
-  {
-    camera.pitch = value;
-  }
+  // double get_camera_pitch()
+  // {
+  //   return camera_pitch();
+  // }
+  //
+  // void set_camera_pitch(double value)
+  // {
+  //   camera.pitch = value;
+  // }
 
   void timerEvent(QTimerEvent * event)
   {
@@ -755,12 +756,12 @@ struct PythonViewer: public ViewerWidget
   }
 };
 
-void runInViewer(World& world, Vector camPos = Vector(0,0), double camAltitude = 0, double camYaw = 0, double camPitch = 0, double wallsHeight = 10)
+void runInViewer(World& world, Vector camPos = Vector(0,0), double camAltitude = 0, double camYaw = 0, double camPitch = 0, double wallsHeight = 10, bool orthographic = false)
 {
   int argc(1);
   char* argv[1] = {(char*)"dummy"}; // FIXME: recovery sys.argv
   QApplication app(argc, argv);
-  PythonViewer viewer(world, true, camPos, camAltitude, camYaw, camPitch, wallsHeight);
+  PythonViewer viewer(world, true, camPos, camAltitude, camYaw, camPitch, wallsHeight, orthographic);
   viewer.show();
   viewer.pythonSavedState = PyEval_SaveThread();
   app.exec();
@@ -780,7 +781,7 @@ double float_value(number const& value)
 }
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(step_overloads, step, 1, 2)
-BOOST_PYTHON_FUNCTION_OVERLOADS(runInViewer_overloads, runInViewer, 1, 6)
+BOOST_PYTHON_FUNCTION_OVERLOADS(runInViewer_overloads, runInViewer, 1, 7)
 
 BOOST_PYTHON_MODULE(pyenki)
 {
@@ -806,9 +807,9 @@ BOOST_PYTHON_MODULE(pyenki)
 
   class_<PythonViewer, boost::noncopyable>(
       "WorldView",
-      init<World&, bool, Vector, double, double, double, double>
+      init<World&, bool, Vector, double, double, double, double, bool>
       ((arg("world"), arg("run_world_update")=false, arg("cam_position")=Vector(0.0, 0.0), arg("cam_altitude")=0.0,
-       arg("cam_yaw")=0.0, arg("cam_pitch")=0.0, arg("walls_height")=10.0)))
+       arg("cam_yaw")=0.0, arg("cam_pitch")=0.0, arg("walls_height")=10.0, arg("orthographic")=false)))
       // (args("world", "run_world_update", "cam_position", "cam_altitude", "cam_yaw", "cam_pitch", "walls_height")))
   // .def("update", &PythonViewer::updateGL)
   .def("show", &PythonViewer::show)
@@ -818,6 +819,7 @@ BOOST_PYTHON_MODULE(pyenki)
   .add_property("cam_yaw", &PythonViewer::get_camera_yaw, &PythonViewer::set_camera_yaw)
   .add_property("cam_pitch", &PythonViewer::get_camera_pitch, &PythonViewer::set_camera_pitch)
   .def_readwrite("run_world_update", &PythonViewer::run_world_update)
+  .def_readwrite("orthographic", &PythonViewer::ortho)
   // .add_property("tracking", &PythonViewer::isTrackingActivated, &PythonViewer::setTracking)
   ;
 
@@ -999,7 +1001,7 @@ BOOST_PYTHON_MODULE(pyenki)
     .def("remove_object", &World::removeObject)
     .def("set_random_seed", &World::setRandomSeed)
     .def("run", run)
-    .def("run_in_viewer", runInViewer, runInViewer_overloads(args("self", "cam_position", "cam_altitude", "cam_yaw", "cam_pitch", "walls_height")))
+    .def("run_in_viewer", runInViewer, runInViewer_overloads(args("self", "cam_position", "cam_altitude", "cam_yaw", "cam_pitch", "walls_height", "orthographic")))
   ;
 
   class_<WorldWithTexturedGround, bases<WorldWithoutObjectsOwnership> >("WorldWithTexturedGround",

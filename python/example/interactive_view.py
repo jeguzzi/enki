@@ -16,6 +16,7 @@ if not QtCore.QCoreApplication.instance():
     print('No QtApplication active')
 else:
     # Create a view --- which will also run ``world.step`` --- and display it
-    view = pyenki.WorldView(world, run_world_update=True, cam_position=(0, -140),
-                            cam_altitude=80, cam_pitch=-0.6, cam_yaw=math.pi / 2)
+    view = pyenki.WorldView(world, run_world_update=True, cam_position=(0, 0),
+                            cam_altitude=80, cam_pitch=-math.pi / 2, cam_yaw=math.pi / 2,
+                            orthographic=True)
     view.show()

@@ -55,12 +55,13 @@ def setup(aseba: bool = False) -> pyenki.World:
     return world
 
 
-def run(world: pyenki.World, gui: bool = False, T: float = 10, dt: float = 0.1) -> None:
+def run(world: pyenki.World, gui: bool = False, T: float = 10, dt: float = 0.1,
+        orthographic: bool = False) -> None:
 
     if gui:
         # We can either run a simulation [in real-time] inside a Qt application
         world.run_in_viewer(cam_position=(0, 0), cam_altitude=70.0, cam_yaw=0.0,
-                            cam_pitch=-math.pi / 2)
+                            cam_pitch=-math.pi / 2, walls_height=10, orthographic=orthographic)
     else:
         # or we can write our own loop that run the simulaion as fast as possible.
         steps = int(T // dt)
@@ -70,4 +71,4 @@ def run(world: pyenki.World, gui: bool = False, T: float = 10, dt: float = 0.1) 
 
 if __name__ == '__main__':
     world = setup('--aseba' in sys.argv)
-    run(world, '--gui' in sys.argv)
+    run(world, gui='--gui' in sys.argv, orthographic='--orthographic' in sys.argv)

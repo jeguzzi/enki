@@ -9,9 +9,10 @@ message("We are using Cmake ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}")
 
 IF (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.11)
   find_package (Python COMPONENTS Interpreter Development)
+  message(STATUS "Python executable ${Python_EXECUTABLE}")
 	# make sure we have the right modules
 	if (Python_FOUND AND Qt5Widgets_FOUND AND Qt5OpenGL_FOUND)
-		message(STATUS "Python libs and executable found, looking for boost::python")
+		message(STATUS "Python libs and executable found looking for boost::python")
 		FIND_PACKAGE(Boost COMPONENTS system python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR})
 		if (Boost_FOUND)
 			message(STATUS "boost::python found, generating python bindings")
