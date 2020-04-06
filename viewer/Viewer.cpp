@@ -572,7 +572,7 @@ namespace Enki
 
 	void ViewerWidget::renderWorld()
 	{
-		const double infPlanSize = 30;
+		const double infPlanSize = 3000;
 
 		glNewList(worldList, GL_COMPILE);
 
@@ -724,7 +724,6 @@ namespace Enki
 			default:
 			{
 				glBegin(GL_QUADS);
-				glColor3f(0.3, 0.2, 0);
 				glVertex3d(-infPlanSize, -infPlanSize, 0);
 				glVertex3d(world->w+infPlanSize, -infPlanSize, 0);
 				glVertex3d(world->w+infPlanSize, world->h+infPlanSize, 0);
