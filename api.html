@@ -399,7 +399,9 @@ The sensors that do not receive the message, have the corresponding payloads and
 <dl class="attribute">
 <dt id="pyenki.IRCommEvent.payloads">
 <code class="sig-name descname">payloads</code><a class="headerlink" href="#pyenki.IRCommEvent.payloads" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of 7 payloads, one for each sensors (<em>readonly</em>)</p>
+<dd><p>A list of 7 payloads, one for each sensors (<em>readonly</em>).
+The first 5 entries are from frontal sensors ordered from left to right.
+The last two entries are from rear sensors  ordered from left to right.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>List[int]</p>
@@ -410,7 +412,9 @@ The sensors that do not receive the message, have the corresponding payloads and
 <dl class="attribute">
 <dt id="pyenki.IRCommEvent.intensities">
 <code class="sig-name descname">intensities</code><a class="headerlink" href="#pyenki.IRCommEvent.intensities" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of 7 intensities, one for each sensors (<em>readonly</em>)</p>
+<dd><p>A list of 7 intensities, one for each sensors (<em>readonly</em>).
+The first 5 entries are from frontal sensors ordered from left to right.
+The last two entries are from rear sensors  ordered from left to right.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>List[int]</p>
@@ -489,7 +493,9 @@ Attribute names mimic the aseba interface, see <a class="reference external" hre
 <dl class="attribute">
 <dt id="pyenki.Thymio2.prox_values">
 <code class="sig-name descname">prox_values</code><a class="headerlink" href="#pyenki.Thymio2.prox_values" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list of (7) proximity sensor readings, one for each sensors (<em>readonly</em>)</p>
+<dd><p>A list of (7) proximity sensor readings, one for each sensors (<em>readonly</em>).
+The first 5 entries are from frontal sensors ordered from left to right.
+The last two entries are from rear sensors  ordered from left to right.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>List[number]</p>
@@ -501,7 +507,9 @@ Attribute names mimic the aseba interface, see <a class="reference external" hre
 <dt id="pyenki.Thymio2.prox_distances">
 <code class="sig-name descname">prox_distances</code><a class="headerlink" href="#pyenki.Thymio2.prox_distances" title="Permalink to this definition">¶</a></dt>
 <dd><p>A list of (7) distances between proximity sensor and nearest obstancle, one for each sensors;
-please note that this variable is directly accessible by the real robot (<em>readonly</em>)</p>
+please note that this variable is directly accessible by the real robot (<em>readonly</em>).
+The first 5 entries are from frontal sensors ordered from left to right.
+The last two entries are from rear sensors  ordered from left to right.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>List[float]</p>
