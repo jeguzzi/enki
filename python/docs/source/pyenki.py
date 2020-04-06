@@ -106,8 +106,12 @@ class IRCommEvent:
 
         Attributes:
             rx (int): The received message payload (*readonly*)
-            payloads (List[int]): A list of 7 payloads, one for each sensors (*readonly*)
-            intensities (List[int]): A list of 7 intensities, one for each sensors (*readonly*)
+            payloads (List[int]): A list of 7 payloads, one for each sensors (*readonly*).
+                The first 5 entries are from frontal sensors ordered from left to right.
+                The last two entries are from rear sensors  ordered from left to right.
+            intensities (List[int]): A list of 7 intensities, one for each sensors (*readonly*).
+                The first 5 entries are from frontal sensors ordered from left to right.
+                The last two entries are from rear sensors  ordered from left to right.
     """
     @property
     def rx(self) -> int:
@@ -170,9 +174,13 @@ class Thymio2(PhysicalObject):
                     - measures the space in discrete steps such that 500 steps ~= 16.6 cm,
                     - normalizes (LED) color values in between 0 and 31.
 
-            prox_values (List[number]): A list of (7) proximity sensor readings, one for each sensors (*readonly*)
+            prox_values (List[number]): A list of (7) proximity sensor readings, one for each sensors (*readonly*).
+                The first 5 entries are from frontal sensors ordered from left to right.
+                The last two entries are from rear sensors  ordered from left to right.
             prox_distances (List[float]): A list of (7) distances between proximity sensor and nearest obstancle, one for each sensors;
-                please note that this variable is directly accessible by the real robot (*readonly*)
+                please note that this variable is directly accessible by the real robot (*readonly*).
+                The first 5 entries are from frontal sensors ordered from left to right.
+                The last two entries are from rear sensors  ordered from left to right.
             prox_comm_tx (int): The integer payload to be sent. The real robot can only send 11 bits,
                 therefore to be compliant we should limit the value between 0 and 2047.
             prox_comm_enable (bool): Enable/disable proximity communication.
