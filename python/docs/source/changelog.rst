@@ -17,7 +17,7 @@ Added
 - Support for cmake > 3.11 and FindPython, which automatically binds to Python3 if available
 - Documentation
 - Examples
-- Tow down camera view with orthographic projection
+- Down looking view with orthographic projection
 
 
 
