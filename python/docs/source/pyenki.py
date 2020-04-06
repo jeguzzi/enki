@@ -502,7 +502,7 @@ class WorldView:
             cam_altitude (float): the altitude of the viewpoint in centimeters
             cam_yaw (float): the yaw of the viewpoint in radians
             cam_pitch (float): the pitch of the viewpoint in radians
-            orthographic (bool): whetever to use a down looking camera with ortographic projection. If enabled, the `cam_pitch` is fixed to :math:`-\pi/2`.
+            orthographic (bool): whetever to use a down looking camera with ortographic projection. If enabled, `cam_pitch` is fixed to :math:`-\pi/2`.
 
         Example (in an IPython qtconsole/notebook):
         ::

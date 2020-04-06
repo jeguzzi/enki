@@ -24,7 +24,6 @@ Proximity Communication
 In this example, two Thymios placed in front of each other, transmit messages using proximity communication.
 After each control step, we print the received messages.
 
-
 .. include:: ../../example/two_thymios_comm.py
   :code: Python
 
