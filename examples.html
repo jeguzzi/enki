@@ -107,12 +107,13 @@ when it will stop and switch the LED color to red from green.</p>
     <span class="k">return</span> <span class="n">world</span>
 
 
-<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">world</span><span class="p">:</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">,</span> <span class="n">gui</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">world</span><span class="p">:</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">,</span> <span class="n">gui</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">T</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">orthographic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 
     <span class="k">if</span> <span class="n">gui</span><span class="p">:</span>
         <span class="c1"># We can either run a simulation [in real-time] inside a Qt application</span>
         <span class="n">world</span><span class="o">.</span><span class="n">run_in_viewer</span><span class="p">(</span><span class="n">cam_position</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">cam_altitude</span><span class="o">=</span><span class="mf">70.0</span><span class="p">,</span> <span class="n">cam_yaw</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-                            <span class="n">cam_pitch</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                            <span class="n">cam_pitch</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">walls_height</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">orthographic</span><span class="o">=</span><span class="n">orthographic</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># or we can write our own loop that run the simulaion as fast as possible.</span>
         <span class="n">steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">T</span> <span class="o">//</span> <span class="n">dt</span><span class="p">)</span>
@@ -122,7 +123,7 @@ when it will stop and switch the LED color to red from green.</p>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">world</span> <span class="o">=</span> <span class="n">setup</span><span class="p">(</span><span class="s1">&#39;--aseba&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
-    <span class="n">run</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="s1">&#39;--gui&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">run</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">gui</span><span class="o">=</span><span class="s1">&#39;--gui&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">,</span> <span class="n">orthographic</span><span class="o">=</span><span class="s1">&#39;--orthographic&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -165,7 +166,7 @@ After each control step, we print the received messages.</p>
 <p>The QWidget that display the world can be run either two modes:
 - embedded in a standalone QtApplication, like in <a class="reference internal" href="#hello-thymio"><span class="std std-ref">Hello Thymio</span></a>, that blocks until it terminates
 - or using an already running QtApplication, which does not block and allow to visualize the world
-while manipulating it in an interactive session (e.g., in a jupyter notebook or an IPython console)</p>
+while manipulating it in an interactive session (e.g., in a jupyter notebook or console)</p>
 <p>For instance, this script</p>
 <div class="code Python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
 
@@ -185,13 +186,15 @@ while manipulating it in an interactive session (e.g., in a jupyter notebook or 
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No QtApplication active&#39;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="c1"># Create a view --- which will also run ``world.step`` --- and display it</span>
-    <span class="n">view</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">WorldView</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">run_world_update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cam_position</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">140</span><span class="p">),</span>
-                            <span class="n">cam_altitude</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">cam_pitch</span><span class="o">=-</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">cam_yaw</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">view</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">WorldView</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">run_world_update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cam_position</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                            <span class="n">cam_altitude</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">cam_pitch</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">cam_yaw</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                            <span class="n">orthographic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">view</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>will spawn a live world view when run inside an IPython console</p>
-<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>$ ipython --gui qt5
+<p>will spawn a live world view when run inside an jupyter console</p>
+<div class="highlight-Bash notranslate"><div class="highlight"><pre><span></span>$ jupyter console
+&gt;&gt;&gt; %gui qt5
 &gt;&gt;&gt; %run interactive_view.py
 </pre></div>
 </div>

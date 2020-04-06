@@ -15,7 +15,7 @@
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Example" href="examples.html" /> 
+    <link rel="prev" title="Examples" href="examples.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -24,7 +24,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="examples.html" title="Example"
+          <a href="examples.html" title="Examples"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">pyenki  documentation</a> &#187;</li> 
       </ul>
@@ -818,7 +818,7 @@ It is either</p>
 
 <dl class="method">
 <dt id="pyenki.World.run_in_viewer">
-<code class="sig-name descname">run_in_viewer</code><span class="sig-paren">(</span><em class="sig-param">cam_position: Tuple[float</em>, <em class="sig-param">float] = (0</em>, <em class="sig-param">0)</em>, <em class="sig-param">cam_altitude: float = 0</em>, <em class="sig-param">cam_yaw: float = 0</em>, <em class="sig-param">cam_pitch: float = 0</em>, <em class="sig-param">walls_height: float = 10</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.World.run_in_viewer" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_in_viewer</code><span class="sig-paren">(</span><em class="sig-param">cam_position: Tuple[float</em>, <em class="sig-param">float] = (0</em>, <em class="sig-param">0)</em>, <em class="sig-param">cam_altitude: float = 0</em>, <em class="sig-param">cam_yaw: float = 0</em>, <em class="sig-param">cam_pitch: float = 0</em>, <em class="sig-param">walls_height: float = 10</em>, <em class="sig-param">orthographic: bool = False</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.World.run_in_viewer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Launch a QApplication to visualize the world from a (camera) viewpoint.
 The application run loop will keep real time while calling <cite>World.step</cite>
 at the appropriate time.</p>
@@ -830,6 +830,7 @@ at the appropriate time.</p>
 <li><p><strong>cam_yaw</strong> (<em>float</em>) – the yaw of the viewpoint in radians</p></li>
 <li><p><strong>cam_pitch</strong> (<em>float</em>) – the pitch of the viewpoint in radians</p></li>
 <li><p><strong>walls_height</strong> (<em>float</em>) – the height of (visualized) walls in centimeters</p></li>
+<li><p><strong>orthographic</strong> (<em>bool</em>) – whetever to use an down looking camera with ortographic projection (default <cite>False</cite>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -864,26 +865,27 @@ at the appropriate time.</p>
 <h2>WorldView<a class="headerlink" href="#worldview" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyenki.WorldView">
-<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">WorldView</code><span class="sig-paren">(</span><em class="sig-param">world: pyenki.World</em>, <em class="sig-param">run_world_update: bool = False</em>, <em class="sig-param">cam_position: Tuple[float</em>, <em class="sig-param">float] = (0</em>, <em class="sig-param">0)</em>, <em class="sig-param">cam_altitude: float = 0</em>, <em class="sig-param">cam_yaw: float = 0</em>, <em class="sig-param">cam_pitch: float = 0</em>, <em class="sig-param">walls_height: float = 10</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.WorldView" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">WorldView</code><span class="sig-paren">(</span><em class="sig-param">world: pyenki.World</em>, <em class="sig-param">run_world_update: bool = False</em>, <em class="sig-param">cam_position: Tuple[float</em>, <em class="sig-param">float] = (0</em>, <em class="sig-param">0)</em>, <em class="sig-param">cam_altitude: float = 0</em>, <em class="sig-param">cam_yaw: float = 0</em>, <em class="sig-param">cam_pitch: float = 0</em>, <em class="sig-param">walls_height: float = 10</em>, <em class="sig-param">orthographic: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.WorldView" title="Permalink to this definition">¶</a></dt>
 <dd><p>A QWidget subclass to display the world that automatically refreshes 30 times per second.
 It requires that a QApplication has already been instantiated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>world</strong> (<a class="reference internal" href="#pyenki.World" title="pyenki.World"><em>World</em></a>) – The world to be displayed</p></li>
-<li><p><strong>run_world_update</strong> (<em>bool</em>) – Whetever to run or not <code class="docutils literal notranslate"><span class="pre">world.step</span></code> at each view refresh (default <cite>False</cite>)</p></li>
+<li><p><strong>world</strong> (<a class="reference internal" href="#pyenki.World" title="pyenki.World"><em>World</em></a>) – the world to be displayed</p></li>
+<li><p><strong>run_world_update</strong> (<em>bool</em>) – whetever to run or not <code class="docutils literal notranslate"><span class="pre">world.step</span></code> at each view refresh (default <cite>False</cite>)</p></li>
 <li><p><strong>cam_position</strong> (<em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – the position of the viewpoint in centimeters (default <cite>(0, 0)</cite>)</p></li>
 <li><p><strong>cam_altitude</strong> (<em>float</em>) – the altitude of the viewpoint in centimeters (default <cite>0</cite>)</p></li>
 <li><p><strong>cam_yaw</strong> (<em>float</em>) – the yaw of the viewpoint in radians (default <cite>0</cite>)</p></li>
 <li><p><strong>cam_pitch</strong> (<em>float</em>) – the pitch of the viewpoint in radians (default <cite>0</cite>)</p></li>
 <li><p><strong>walls_height</strong> (<em>float</em>) – the height of world boundary walls in centimeters (default <cite>10</cite>)</p></li>
+<li><p><strong>orthographic</strong> (<em>bool</em>) – whetever to use an down looking camera with ortographic projection (default <cite>False</cite>)</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="attribute">
 <dt id="pyenki.WorldView.run_world_update">
 <code class="sig-name descname">run_world_update</code><a class="headerlink" href="#pyenki.WorldView.run_world_update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whetever to run or not <code class="docutils literal notranslate"><span class="pre">world.step</span></code> at each view refresh.</p>
+<dd><p>whetever to run or not <code class="docutils literal notranslate"><span class="pre">world.step</span></code> at each view refresh.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>bool</p>
@@ -931,6 +933,17 @@ It requires that a QApplication has already been instantiated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.WorldView.orthographic">
+<code class="sig-name descname">orthographic</code><a class="headerlink" href="#pyenki.WorldView.orthographic" title="Permalink to this definition">¶</a></dt>
+<dd><p>whetever to use an down looking camera with ortographic projection. If enabled, the <cite>cam_pitch</cite> is fixed to <span class="math notranslate nohighlight">\(-\pi/2\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -983,7 +996,7 @@ It requires that a QApplication has already been instantiated.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="examples.html"
-                        title="previous chapter">Example</a></p>
+                        title="previous chapter">Examples</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -1012,7 +1025,7 @@ It requires that a QApplication has already been instantiated.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="examples.html" title="Example"
+          <a href="examples.html" title="Examples"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">pyenki  documentation</a> &#187;</li> 
       </ul>
