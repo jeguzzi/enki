@@ -476,7 +476,7 @@ class World:
                 cam_yaw (float): the yaw of the viewpoint in radians
                 cam_pitch (float): the pitch of the viewpoint in radians
                 walls_height (float): the height of (visualized) walls in centimeters
-                orthographic (bool): whetever to use an down looking camera with ortographic projection (default `False`)
+                orthographic (bool): whetever to use a down looking camera with ortographic projection (default `False`)
         """
         ...
 
@@ -494,7 +494,7 @@ class WorldView:
             cam_yaw (float): the yaw of the viewpoint in radians (default `0`)
             cam_pitch (float): the pitch of the viewpoint in radians (default `0`)
             walls_height (float): the height of world boundary walls in centimeters (default `10`)
-            orthographic (bool): whetever to use an down looking camera with ortographic projection (default `False`)
+            orthographic (bool): whetever to use a down looking camera with ortographic projection (default `False`)
 
         Attributes:
             run_world_update (bool): whetever to run or not ``world.step`` at each view refresh.
@@ -502,7 +502,7 @@ class WorldView:
             cam_altitude (float): the altitude of the viewpoint in centimeters
             cam_yaw (float): the yaw of the viewpoint in radians
             cam_pitch (float): the pitch of the viewpoint in radians
-            orthographic (bool): whetever to use an down looking camera with ortographic projection. If enabled, the `cam_pitch` is fixed to :math:`-\pi/2`.
+            orthographic (bool): whetever to use a down looking camera with ortographic projection. If enabled, the `cam_pitch` is fixed to :math:`-\pi/2`.
 
         Example (in an IPython qtconsole/notebook):
         ::
