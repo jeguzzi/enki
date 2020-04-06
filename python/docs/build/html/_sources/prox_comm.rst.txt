@@ -23,3 +23,8 @@ where :math:`r` ~ 4200 is the maximal value, :math:`x_0` ~ 0.02 cm is a small of
 
 We set to 0 all responses not large enough (i.e., lower than the response caused by an emitter at distance :math:`\rho`).
 Note that this is still a simplification because we ignore that the real intensities depends also on the orientations.
+
+
+Each received message in encoded as an :ref:`IRCommEvent` ``event``, where ``event.payloads`` and ``event.intensities`` contain the response of the seven proximity sensors:
+the first five entries are from frontal sensors ordered from left to right and the last two entries are from rear sensors ordered from left to right.
+When a sensor read no message (i.e., when the response is too weak), the corresponding payload and intensity are set to zero.

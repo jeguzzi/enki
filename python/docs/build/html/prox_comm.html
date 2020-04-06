@@ -58,6 +58,9 @@ a pulse from <cite>e</cite> to <cite>r</cite> is visible if the following criter
 <p>where <span class="math notranslate nohighlight">\(r\)</span> ~ 4200 is the maximal value, <span class="math notranslate nohighlight">\(x_0\)</span> ~ 0.02 cm is a small offset and <cite>c</cite> ~ 275 <span class="math notranslate nohighlight">\(\textrm{cm}^2\)</span> is a bias</p>
 <p>We set to 0 all responses not large enough (i.e., lower than the response caused by an emitter at distance <span class="math notranslate nohighlight">\(\rho\)</span>).
 Note that this is still a simplification because we ignore that the real intensities depends also on the orientations.</p>
+<p>Each received message in encoded as an <a class="reference internal" href="api.html#ircommevent"><span class="std std-ref">IRCommEvent</span></a> <code class="docutils literal notranslate"><span class="pre">event</span></code>, where <code class="docutils literal notranslate"><span class="pre">event.payloads</span></code> and <code class="docutils literal notranslate"><span class="pre">event.intensities</span></code> contain the response of the seven proximity sensors:
+the first five entries are from frontal sensors ordered from left to right and the last two entries are from rear sensors ordered from left to right.
+When a sensor read no message (i.e., when the response is too weak), the corresponding payload and intensity are set to zero.</p>
 </div>
 
 
