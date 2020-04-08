@@ -826,7 +826,7 @@ It is either</p>
 
 <dl class="method">
 <dt id="pyenki.World.run_in_viewer">
-<code class="sig-name descname">run_in_viewer</code><span class="sig-paren">(</span><em class="sig-param">cam_position: Tuple[float</em>, <em class="sig-param">float] = (0</em>, <em class="sig-param">0)</em>, <em class="sig-param">cam_altitude: float = 0</em>, <em class="sig-param">cam_yaw: float = 0</em>, <em class="sig-param">cam_pitch: float = 0</em>, <em class="sig-param">walls_height: float = 10</em>, <em class="sig-param">orthographic: bool = False</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.World.run_in_viewer" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_in_viewer</code><span class="sig-paren">(</span><em class="sig-param">cam_position: Tuple[float</em>, <em class="sig-param">float] = (0</em>, <em class="sig-param">0)</em>, <em class="sig-param">cam_altitude: float = 0</em>, <em class="sig-param">cam_yaw: float = 0</em>, <em class="sig-param">cam_pitch: float = 0</em>, <em class="sig-param">walls_height: float = 10</em>, <em class="sig-param">orthographic: bool = False</em>, <em class="sig-param">period: float = 0.03</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.World.run_in_viewer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Launch a QApplication to visualize the world from a (camera) viewpoint.
 The application run loop will keep real time while calling <cite>World.step</cite>
 at the appropriate time.</p>
@@ -839,6 +839,7 @@ at the appropriate time.</p>
 <li><p><strong>cam_pitch</strong> (<em>float</em>) – the pitch of the viewpoint in radians</p></li>
 <li><p><strong>walls_height</strong> (<em>float</em>) – the height of (visualized) walls in centimeters</p></li>
 <li><p><strong>orthographic</strong> (<em>bool</em>) – whetever to use a down looking camera with ortographic projection (default <cite>False</cite>)</p></li>
+<li><p><strong>period</strong> (<em>float</em>) – the period [s] at which to run <code class="docutils literal notranslate"><span class="pre">world.step</span></code> if <cite>run_world_update</cite> is enabled (default <cite>0.03</cite>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -873,7 +874,7 @@ at the appropriate time.</p>
 <h2>WorldView<a class="headerlink" href="#worldview" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyenki.WorldView">
-<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">WorldView</code><span class="sig-paren">(</span><em class="sig-param">world: pyenki.World</em>, <em class="sig-param">run_world_update: bool = False</em>, <em class="sig-param">cam_position: Tuple[float</em>, <em class="sig-param">float] = (0</em>, <em class="sig-param">0)</em>, <em class="sig-param">cam_altitude: float = 0</em>, <em class="sig-param">cam_yaw: float = 0</em>, <em class="sig-param">cam_pitch: float = 0</em>, <em class="sig-param">walls_height: float = 10</em>, <em class="sig-param">orthographic: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.WorldView" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">WorldView</code><span class="sig-paren">(</span><em class="sig-param">world: pyenki.World</em>, <em class="sig-param">run_world_update: bool = False</em>, <em class="sig-param">cam_position: Tuple[float</em>, <em class="sig-param">float] = (0</em>, <em class="sig-param">0)</em>, <em class="sig-param">cam_altitude: float = 0</em>, <em class="sig-param">cam_yaw: float = 0</em>, <em class="sig-param">cam_pitch: float = 0</em>, <em class="sig-param">walls_height: float = 10</em>, <em class="sig-param">orthographic: bool = False</em>, <em class="sig-param">period: float = 0.03</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.WorldView" title="Permalink to this definition">¶</a></dt>
 <dd><p>A QWidget subclass to display the world that automatically refreshes 30 times per second.
 It requires that a QApplication has already been instantiated.</p>
 <dl class="field-list simple">
@@ -887,6 +888,7 @@ It requires that a QApplication has already been instantiated.</p>
 <li><p><strong>cam_pitch</strong> (<em>float</em>) – the pitch of the viewpoint in radians (default <cite>0</cite>)</p></li>
 <li><p><strong>walls_height</strong> (<em>float</em>) – the height of world boundary walls in centimeters (default <cite>10</cite>)</p></li>
 <li><p><strong>orthographic</strong> (<em>bool</em>) – whetever to use a down looking camera with ortographic projection (default <cite>False</cite>)</p></li>
+<li><p><strong>period</strong> (<em>float</em>) – the period [s] at which to run <code class="docutils literal notranslate"><span class="pre">world.step</span></code> if <cite>run_world_update</cite> is enabled (default <cite>0.03</cite>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -948,7 +950,8 @@ It requires that a QApplication has already been instantiated.</p>
 <dl class="attribute">
 <dt id="pyenki.WorldView.orthographic">
 <code class="sig-name descname">orthographic</code><a class="headerlink" href="#pyenki.WorldView.orthographic" title="Permalink to this definition">¶</a></dt>
-<dd><p>whetever to use a down looking camera with ortographic projection. If enabled, <cite>cam_pitch</cite> is fixed to <span class="math notranslate nohighlight">\(-\pi/2\)</span>.</p>
+<dd><p>whetever to use a down looking camera with ortographic projection.
+If enabled, <cite>cam_pitch</cite> is fixed to <span class="math notranslate nohighlight">\(-\pi/2\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>bool</p>

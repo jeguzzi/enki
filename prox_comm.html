@@ -41,9 +41,24 @@
             
   <div class="section" id="proximity-communication">
 <h1>Proximity communication<a class="headerlink" href="#proximity-communication" title="Permalink to this headline">¶</a></h1>
-<p>A Thymio can enable proximity communication and transmits an integer payload each 0.1 s.
+<p>A Thymio can enable proximity communication and transmits an integer payload every 0.1 s.
 The message is received by other Thymios if they have enabled proximity communication too and if at least one of their proximity sensors
 is visible by one of the emitter’s [proximity] LEDs.</p>
+<div class="section" id="run-time">
+<h2>Run-time<a class="headerlink" href="#run-time" title="Permalink to this headline">¶</a></h2>
+<p>At each control step, the simulation collect neighbors’ messages sent after the last control step
+into <a class="reference internal" href="api.html#pyenki.Thymio2.prox_comm_events" title="pyenki.Thymio2.prox_comm_events"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pyenki.Thymio2.prox_comm_events</span></code></a>.</p>
+<p>Note that each message is broadcasted only for 1 control step.
+Therefore if the duration of a control step (i.e. the period at which messages are received)
+is shorter than 0.1 (i.e. the period at which messages are sent),
+for some control steps the robot will receive no message.</p>
+<p>This mimic the behavior of the real robot that will receive short pulses of IR light sent by a neighbor every 0.1 seconds.
+One minor difference is that the real robots tries to avoid collision between their IR pulses by moving
+slightly the timing of their emission in the 0.1 second long time-window. On the contrary, the simulated robots,
+sent the messages immediately before the next control step and their messages do not incur into collisions.</p>
+</div>
+<div class="section" id="simulated-response">
+<h2>Simulated Response<a class="headerlink" href="#simulated-response" title="Permalink to this headline">¶</a></h2>
 <p>More precisely, given an emitting [proximity] LED at point <span class="math notranslate nohighlight">\(p_e\)</span> and angle <span class="math notranslate nohighlight">\(\alpha_e\)</span> and a receiving [proximity] sensor at point <span class="math notranslate nohighlight">\(p_r\)</span> and angle <span class="math notranslate nohighlight">\(\alpha_r\)</span>,
 a pulse from <cite>e</cite> to <cite>r</cite> is visible if the following criteria are met:</p>
 <ol class="arabic simple">
@@ -60,7 +75,8 @@ a pulse from <cite>e</cite> to <cite>r</cite> is visible if the following criter
 Note that this is still a simplification because we ignore that the real intensities depends also on the orientations.</p>
 <p>Each received message in encoded as an <a class="reference internal" href="api.html#ircommevent"><span class="std std-ref">IRCommEvent</span></a> <code class="docutils literal notranslate"><span class="pre">event</span></code>, where <code class="docutils literal notranslate"><span class="pre">event.payloads</span></code> and <code class="docutils literal notranslate"><span class="pre">event.intensities</span></code> contain the response of the seven proximity sensors:
 the first five entries are from frontal sensors ordered from left to right and the last two entries are from rear sensors ordered from left to right.
-When a sensor read no message (i.e., when the response is too weak), the corresponding payload and intensity are set to zero.</p>
+When a sensor doesn’t receive the message (i.e., when the response is too weak), the corresponding payload and intensity are set to zero.</p>
+</div>
 </div>
 
 
@@ -69,6 +85,15 @@ When a sensor read no message (i.e., when the response is too weak), the corresp
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Proximity communication</a><ul>
+<li><a class="reference internal" href="#run-time">Run-time</a></li>
+<li><a class="reference internal" href="#simulated-response">Simulated Response</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="changelog.html"
                         title="previous chapter">Changelog</a></p>
