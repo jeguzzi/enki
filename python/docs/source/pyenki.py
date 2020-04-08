@@ -472,7 +472,7 @@ class World:
 
     def run_in_viewer(self, cam_position: Vector = (0, 0), cam_altitude: float = 0,
                       cam_yaw: float = 0, cam_pitch: float = 0, walls_height: float = 10,
-                      orthographic: bool = False) -> None:
+                      orthographic: bool = False, period: float = 0.03) -> None:
         """
             Launch a QApplication to visualize the world from a (camera) viewpoint.
             The application run loop will keep real time while calling `World.step`
@@ -485,6 +485,7 @@ class World:
                 cam_pitch (float): the pitch of the viewpoint in radians
                 walls_height (float): the height of (visualized) walls in centimeters
                 orthographic (bool): whetever to use a down looking camera with ortographic projection (default `False`)
+                period (float): the period [s] at which to run ``world.step`` if `run_world_update` is enabled (default `0.03`)
         """
         ...
 
@@ -503,6 +504,7 @@ class WorldView:
             cam_pitch (float): the pitch of the viewpoint in radians (default `0`)
             walls_height (float): the height of world boundary walls in centimeters (default `10`)
             orthographic (bool): whetever to use a down looking camera with ortographic projection (default `False`)
+            period (float): the period [s] at which to run ``world.step`` if `run_world_update` is enabled (default `0.03`)
 
         Attributes:
             run_world_update (bool): whetever to run or not ``world.step`` at each view refresh.
@@ -510,7 +512,8 @@ class WorldView:
             cam_altitude (float): the altitude of the viewpoint in centimeters
             cam_yaw (float): the yaw of the viewpoint in radians
             cam_pitch (float): the pitch of the viewpoint in radians
-            orthographic (bool): whetever to use a down looking camera with ortographic projection. If enabled, `cam_pitch` is fixed to :math:`-\pi/2`.
+            orthographic (bool): whetever to use a down looking camera with ortographic projection.
+                If enabled, `cam_pitch` is fixed to :math:`-\pi/2`.
 
         Example (in an IPython qtconsole/notebook):
         ::
@@ -531,7 +534,7 @@ class WorldView:
     def __init__(self, world: World, run_world_update: bool = False,
                  cam_position: Tuple[float, float] = (0, 0), cam_altitude: float = 0,
                  cam_yaw: float = 0, cam_pitch: float = 0, walls_height: float = 10,
-                 orthographic: bool = False) -> None:
+                 orthographic: bool = False, period: float = 0.03) -> None:
         ...
 
     def show(self) -> None:

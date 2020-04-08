@@ -1123,6 +1123,12 @@ namespace Enki
 			if (wallsType != WALLS_NONE)
 				o->doLocalWallsInteraction(dt, this);
 			o->doGlobalInteractions(dt, this);
+		}
+
+		// interact objects with walls and control step
+		for (ObjectsIterator i = objects.begin(); i != objects.end(); ++i)
+		{
+			PhysicalObject* o = *i;
 			o->finalizeLocalInteractions(dt, this);
 			o->finalizeGlobalInteractions(dt, this);
 			o->controlStep(dt);

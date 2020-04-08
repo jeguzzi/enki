@@ -4,8 +4,6 @@ Changelog
 [Unreleased]
 ------------
 
-.. _Changelog
-
 Added
 ~~~~~
 - Thymio2 proximity communication
@@ -18,7 +16,7 @@ Added
 - Documentation
 - Examples
 - Down looking view with orthographic projection
-
+- timerPeriodMs in Viewer constructor
 
 
 Changed

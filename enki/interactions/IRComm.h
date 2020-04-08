@@ -96,7 +96,7 @@ namespace Enki
     // IRComm(Robot *owner, std::vector<IRSensor *> sensors) : enabled(false), sensors(sensors), tx_value(0) {};
     IRComm(Robot *owner, double range=25, double period=0.1, double aperture=0.644, double m=4200, double x0=0.02, double c=275, double noiseSd = 0.) :
     GlobalInteraction(owner), enabled(false), tx_value(0), range(range),
-    time(0), last_sent(-1), period(period), receiver_aperture(aperture),
+    last_sent(-1.0), time(0), period(period), receiver_aperture(aperture),
     m(m), x0(x0), c(c), noiseSd(noiseSd) {
       min_intensity = responseFunction(range, range, m, c, x0);
     }
@@ -107,7 +107,7 @@ namespace Enki
     void step(double dt, World *w);
     void receive_events();
     ~IRComm() { } ;
-    void set_enable(bool value) { enabled=value; last_sent=time;}
+    void set_enable(bool value) { enabled=value; last_sent=-1.0;}
     bool get_enable() { return enabled;}
     void set_tx(int value) { tx_value=value; }
     int get_tx() { return tx_value; }

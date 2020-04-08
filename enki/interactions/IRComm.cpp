@@ -192,12 +192,17 @@ void IRComm::init(double dt, World* w)
   // std::cout << owner->uid << " IRComm::init done\n";
 }
 
+const double EPSILON = -1.0e-3;
+
 void IRComm::step(double dt, World* w)
 {
   // send messages (!after IRSensor has computed the ray intersections)
-  if(enabled && time - last_sent > period)
+  if(enabled && time - last_sent - period > EPSILON)
   {
-    last_sent += period;
+    if (last_sent < 0)
+      last_sent = time;
+    else
+      last_sent += period;
     radio->send(owner->uid, message());
   }
   else{

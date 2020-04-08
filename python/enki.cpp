@@ -682,8 +682,8 @@ struct PythonViewer: public ViewerWidget
 
   // PythonViewer(World& world, bool _run_world_update=false, Vector camPos=Vector(0.0, 0.0), double camAltitude=0.0, double camYaw=0.0, double camPitch=0.0, double _wallsHeight=10.0);
 
-  PythonViewer(World& world, bool _run_world_update=false, Vector camPos=Vector(0.0, 0.0), double camAltitude=0.0, double camYaw=0.0, double camPitch=0.0, double _wallsHeight=10.0, bool _ortho=false):
-    ViewerWidget(&world, 0),
+  PythonViewer(World& world, bool _run_world_update=false, Vector camPos=Vector(0.0, 0.0), double camAltitude=0.0, double camYaw=0.0, double camPitch=0.0, double _wallsHeight=10.0, bool _ortho=false, double timer_period=0.03):
+    ViewerWidget(&world, 0, int (timer_period * 1000)),
     pythonSavedState(0)
   {
     run_world_update = _run_world_update;
@@ -756,12 +756,12 @@ struct PythonViewer: public ViewerWidget
   }
 };
 
-void runInViewer(World& world, Vector camPos = Vector(0,0), double camAltitude = 0, double camYaw = 0, double camPitch = 0, double wallsHeight = 10, bool orthographic = false)
+void runInViewer(World& world, Vector camPos = Vector(0,0), double camAltitude = 0, double camYaw = 0, double camPitch = 0, double wallsHeight = 10, bool orthographic = false, double timer_period = 0.03)
 {
   int argc(1);
   char* argv[1] = {(char*)"dummy"}; // FIXME: recovery sys.argv
   QApplication app(argc, argv);
-  PythonViewer viewer(world, true, camPos, camAltitude, camYaw, camPitch, wallsHeight, orthographic);
+  PythonViewer viewer(world, true, camPos, camAltitude, camYaw, camPitch, wallsHeight, orthographic, timer_period);
   viewer.show();
   viewer.pythonSavedState = PyEval_SaveThread();
   app.exec();
@@ -781,7 +781,7 @@ double float_value(number const& value)
 }
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(step_overloads, step, 1, 2)
-BOOST_PYTHON_FUNCTION_OVERLOADS(runInViewer_overloads, runInViewer, 1, 7)
+BOOST_PYTHON_FUNCTION_OVERLOADS(runInViewer_overloads, runInViewer, 1, 8)
 
 BOOST_PYTHON_MODULE(pyenki)
 {
@@ -809,7 +809,7 @@ BOOST_PYTHON_MODULE(pyenki)
       "WorldView",
       init<World&, bool, Vector, double, double, double, double, bool>
       ((arg("world"), arg("run_world_update")=false, arg("cam_position")=Vector(0.0, 0.0), arg("cam_altitude")=0.0,
-       arg("cam_yaw")=0.0, arg("cam_pitch")=0.0, arg("walls_height")=10.0, arg("orthographic")=false)))
+       arg("cam_yaw")=0.0, arg("cam_pitch")=0.0, arg("walls_height")=10.0, arg("orthographic")=false, arg("period")=0.03)))
       // (args("world", "run_world_update", "cam_position", "cam_altitude", "cam_yaw", "cam_pitch", "walls_height")))
   // .def("update", &PythonViewer::updateGL)
   .def("show", &PythonViewer::show)
@@ -1001,7 +1001,11 @@ BOOST_PYTHON_MODULE(pyenki)
     .def("remove_object", &World::removeObject)
     .def("set_random_seed", &World::setRandomSeed)
     .def("run", run)
-    .def("run_in_viewer", runInViewer, runInViewer_overloads(args("self", "cam_position", "cam_altitude", "cam_yaw", "cam_pitch", "walls_height", "orthographic")))
+    // .def("run_in_viewer", runInViewer, runInViewer_overloads(args("self", "cam_position", "cam_altitude", "cam_yaw", "cam_pitch", "walls_height", "orthographic", "period")))
+
+    .def("run_in_viewer", runInViewer, runInViewer_overloads((arg("self"), arg("cam_position")=Vector(0.0, 0.0), arg("cam_altitude")=0.0,
+     arg("cam_yaw")=0.0, arg("cam_pitch")=0.0, arg("walls_height")=10.0, arg("orthographic")=false, arg("period")=0.03)))
+
   ;
 
   class_<WorldWithTexturedGround, bases<WorldWithoutObjectsOwnership> >("WorldWithTexturedGround",

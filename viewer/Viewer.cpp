@@ -188,9 +188,9 @@ namespace Enki
 		link(link)
 	{}
 
-	ViewerWidget::ViewerWidget(World *world, QWidget *parent) :
+	ViewerWidget::ViewerWidget(World *world, QWidget *parent,int _timerPeriodMs) :
 		QGLWidget(parent),
-		timerPeriodMs(30),
+		timerPeriodMs(_timerPeriodMs),
 		camera(world),
 		doDumpFrames(false),
 		dumpFramesCounter(0),
@@ -211,7 +211,7 @@ namespace Enki
 		ortho(false)
 	{
 		initTexturesResources();
-		elapsedTime = double(30)/1000.; // average second between two frames, can be updated each frame to better precision
+		elapsedTime = double(timerPeriodMs)/1000.; // average second between two frames, can be updated each frame to better precision
 
 		startTimer(timerPeriodMs);
 	}

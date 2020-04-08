@@ -188,7 +188,7 @@ namespace Enki
 
 
 	public:
-		ViewerWidget(World *world, QWidget *parent = 0);
+		ViewerWidget(World *world, QWidget *parent = 0, int _timerPeriodMs = 30);
 		~ViewerWidget();
 
 		World* getWorld() const;
