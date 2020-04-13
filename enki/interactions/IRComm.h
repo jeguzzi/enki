@@ -71,7 +71,8 @@ namespace Enki
   {
   private:
     IRMessage message();
-    static IRCommRadio *radio;
+    IRCommRadio *radio;
+    static std::map<World *, IRCommRadio*> radios;
     bool enabled;
     int tx_value;
     std::vector<IRCommEvent> events;
@@ -92,12 +93,15 @@ namespace Enki
 
     double min_intensity;
 
+    IRCommRadio * radio_in_world(World * world);
+
   public:
     // IRComm(Robot *owner, std::vector<IRSensor *> sensors) : enabled(false), sensors(sensors), tx_value(0) {};
     IRComm(Robot *owner, double range=25, double period=0.1, double aperture=0.644, double m=4200, double x0=0.02, double c=275, double noiseSd = 0.) :
-    GlobalInteraction(owner), enabled(false), tx_value(0), range(range),
+    GlobalInteraction(owner), radio(NULL), enabled(false), tx_value(0), range(range),
     last_sent(-1.0), time(0), period(period), receiver_aperture(aperture),
-    m(m), x0(x0), c(c), noiseSd(noiseSd) {
+    m(m), x0(x0), c(c), noiseSd(noiseSd)
+    {
       min_intensity = responseFunction(range, range, m, c, x0);
     }
 
@@ -106,7 +110,8 @@ namespace Enki
     void finalize(double dt, World* w);
     void step(double dt, World *w);
     void receive_events();
-    ~IRComm() { } ;
+    // ~IRComm() { } ;
+    ~IRComm();
     void set_enable(bool value) { enabled=value; last_sent=-1.0;}
     bool get_enable() { return enabled;}
     void set_tx(int value) { tx_value=value; }

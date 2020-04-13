@@ -53,7 +53,14 @@ response = std::max(0., std::min(m, gaussianRand(response, noiseSd)));
 
 // #define SUM_INTENSITIES
 
+
+
+
 namespace Enki {
+
+// static std::map<World *, IRCommRadio> radios;
+
+
 
 // CircularSector receiver_sector(IRSensor *sensor, double range, double receiver_aperture);
 
@@ -146,6 +153,14 @@ double received_ir_message_intensity(IRSensor *sensor, IRMessage *message, doubl
   return 0.0;
 }
 
+std::map<World *, IRCommRadio *> IRComm::radios = std::map<World *, IRCommRadio *>();
+
+IRCommRadio * IRComm::radio_in_world(World * world)
+{
+  if(radios.count(world) == 0)
+    radios[world] = new IRCommRadio();
+  return radios[world];
+}
 
 void IRComm::receive_events() {
   std::map<int, IRMessage> *messages = radio->get_messages();
@@ -188,6 +203,7 @@ void IRComm::receive_events() {
 void IRComm::init(double dt, World* w)
 {
   time += dt;
+  if(!radio) radio = radio_in_world(w);
   // std::cout << owner->uid << " IRComm::init\n";
   // std::cout << owner->uid << " IRComm::init done\n";
 }
@@ -230,5 +246,23 @@ IRMessage IRComm::message() {
   return message;
 }
 
-IRCommRadio *IRComm::radio = new IRCommRadio();
+IRComm::~IRComm()
+{
+  // Cleaning up
+  if(radio)
+  {
+    std::map<World *, IRCommRadio *>::iterator it;
+    for(it = radios.begin(); it != radios.end(); it++ )
+    {
+      if(it->second == radio)
+      {
+        delete radio;
+        radios.erase(it);
+        return;
+      }
+    }
+  }
+}
+
+// IRCommRadio *IRComm::radio = new IRCommRadio();
 } // namespace Enki
