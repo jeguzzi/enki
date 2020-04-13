@@ -528,7 +528,7 @@ struct Thymio2Wrap: Thymio2, wrapper<Thymio2>
     irComm.set_enable(value);
   }
 
-  bool getEnableIRComm(bool value)
+  bool getEnableIRComm()
   {
     return irComm.get_enable();
   }
@@ -807,7 +807,7 @@ BOOST_PYTHON_MODULE(pyenki)
 
   class_<PythonViewer, boost::noncopyable>(
       "WorldView",
-      init<World&, bool, Vector, double, double, double, double, bool>
+      init<World&, bool, Vector, double, double, double, double, bool, double>
       ((arg("world"), arg("run_world_update")=false, arg("cam_position")=Vector(0.0, 0.0), arg("cam_altitude")=0.0,
        arg("cam_yaw")=0.0, arg("cam_pitch")=0.0, arg("walls_height")=10.0, arg("orthographic")=false, arg("period")=0.03)))
       // (args("world", "run_world_update", "cam_position", "cam_altitude", "cam_yaw", "cam_pitch", "walls_height")))
