@@ -100,7 +100,7 @@ std::vector<CircularSector> emitter_sectors(IRSensor *sensor) {
   std::vector<CircularSector> sectors;
   for (size_t i = 0; i < sensor->getRayCount() - 1; i++) {
     CircularSector sector;
-    sector.radius = std::max(sensor->getRayDist(i), sensor->getRayDist(i + 1)) + tol;
+    sector.radius = std::max(sensor->getRayDistSearch(i), sensor->getRayDistSearch(i + 1)) + tol;
     sector.center = sensor->getAbsolutePosition();
     sector.begin = sensor->getAbsRayAngle(i);
     sector.end = sensor->getAbsRayAngle(i + 1);

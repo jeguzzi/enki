@@ -10,6 +10,7 @@ add_library(enki
 	interactions/ActiveSoundSource.cpp
 	interactions/Microphone.cpp
 	interactions/IRComm.cpp
+	interactions/IRSensorRealistic.cpp
 	interactions/Radio.cpp
 	robots/DifferentialWheeled.cpp
 	robots/khepera/Khepera.cpp

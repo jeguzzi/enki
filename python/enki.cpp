@@ -412,6 +412,8 @@ struct Thymio2Wrap: Thymio2, wrapper<Thymio2>
 
   //From https://github.com/aseba-community/aseba/blob/bceb8ace1cb4f91d54e1520ab6b6fee5c6b9773a/aseba/targets/playground/robots/thymio2/Thymio2.cpp#L329
 
+#define MIN_VALUE 1000
+
   double getSaturatedProxHorizontal(unsigned i)
   {
     const IRSensor* sensor(nullptr);
@@ -427,14 +429,18 @@ struct Thymio2Wrap: Thymio2, wrapper<Thymio2>
       default: break;
     }
     assert(sensor);
-
-    double dist(0);
-    for (unsigned j = 0; j < sensor->getRayCount(); ++j)
-      dist += sensor->getRayDist(j);
-    dist /= sensor->getRayCount();
-    if (dist >= sensor->getRange() - 1e-4)
-      return 0;
     return sensor->getValue();
+    //
+    // double dist(0);
+    // for (unsigned j = 0; j < sensor->getRayCount(); ++j)
+    //   dist += sensor->getRayDist(j);
+    // dist /= sensor->getRayCount();
+    // if (dist >= sensor->getRange() - 1e-4)
+    //   return 0;
+    // double v = sensor->getValue();
+    // if (v< MIN_VALUE)
+    //   return 0;
+    // return v;
   }
 
   number to_number(double value)

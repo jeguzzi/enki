@@ -36,7 +36,7 @@
 
 #include <enki/robots/DifferentialWheeled.h>
 #include <enki/interactions/IRComm.h>
-#include <enki/interactions/IRSensor.h>
+#include <enki/interactions/IRSensorRealistic.h>
 #include <enki/interactions/GroundSensor.h>
 
 /*!	\file Thymio2.h
@@ -51,19 +51,19 @@ namespace Enki
 	{
 	public:
 		//! The infrared sensor 0 (front-left-left)
-		IRSensor infraredSensor0;
+		IRSensorRealistic infraredSensor0;
 		//! The infrared sensor 1 (front-left)
-		IRSensor infraredSensor1;
+		IRSensorRealistic infraredSensor1;
 		//! The infrared sensor 2 (front-front)
-		IRSensor infraredSensor2;
+		IRSensorRealistic infraredSensor2;
 		//! The infrared sensor 3 (front-right)
-		IRSensor infraredSensor3;
+		IRSensorRealistic infraredSensor3;
 		//! The infrared sensor 4 (front-right-right)
-		IRSensor infraredSensor4;
+		IRSensorRealistic infraredSensor4;
 		//! The infrared sensor 5 (back-left)
-		IRSensor infraredSensor5;
+		IRSensorRealistic infraredSensor5;
 		//! The infrared sensor 6 (back-right)
-		IRSensor infraredSensor6;
+		IRSensorRealistic infraredSensor6;
 
 		IRComm irComm;
 

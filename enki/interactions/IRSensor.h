@@ -136,6 +136,7 @@ namespace Enki
 		//! Final computed distance
 		double finalDist;
 
+
 	public:
 		//! Constructor
 		/*!
@@ -166,7 +167,8 @@ namespace Enki
 		//! Return the value of a ray
 		double getRayValue(unsigned i) const { return rayValues.at(i); }
 		//! Return the distance of a ray
-		double getRayDist(unsigned i) const { return rayDists.at(i); }
+		double getRayDist(unsigned i) const { return std::min(rayDists.at(i), range); }
+		double getRayDistSearch(unsigned i) const { return rayDists.at(i); }
 		//! Return the distance of a ray
 		double getAbsRayAngle(unsigned i) const { return absRayAngles.at(i); }
 		//! Return the absolute position of the IR sensor, updated at each time step on init()
