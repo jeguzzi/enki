@@ -116,8 +116,8 @@ Objects
     >>> colorful_box_shape = [(0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0)]
     >>> colorful_box_colors = [pyenki.Color.red, pyenki.Color(0.5, 0.5, 0.0),
                                pyenki.Color.green, pyenki.Color(0.0, 0.5, 0.5)]
-    >>> colorful_box = pyenki.ConvexObject(colorful_box_shape, 1, -1,
-                                           side_color=colorful_box_colors)
+    >>> colorful_box = pyenki.ConvexObject(colorful_box_shape, 1, -1, side_color=colorful_box_colors)
+    >>> colorful_box.position = (20, 0)
     >>> world.add_object(colorful_box)
 
 .. image:: images/objects.png
