@@ -43,8 +43,7 @@
 </div>
 <div class="section" id="polygon">
 <h2>Polygon<a class="headerlink" href="#polygon" title="Permalink to this headline">¶</a></h2>
-<p>A type alias for Iterable[<a class="reference internal" href="#vector"><span class="std std-ref">Vector</span></a>].
-Point should be ordered counter-clockwise.</p>
+<p>A type alias for Iterable[<a class="reference internal" href="#vector"><span class="std std-ref">Vector</span></a>], where points should be ordered counter-clockwise.</p>
 </div>
 <div class="section" id="part">
 <h2>Part<a class="headerlink" href="#part" title="Permalink to this headline">¶</a></h2>
@@ -357,7 +356,7 @@ Point should be ordered counter-clockwise.</p>
 <dl class="class">
 <dt id="pyenki.RectangularObject">
 <em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">RectangularObject</code><span class="sig-paren">(</span><em class="sig-param">l1: float</em>, <em class="sig-param">l2: float</em>, <em class="sig-param">height: float</em>, <em class="sig-param">mass: float</em>, <em class="sig-param">color: pyenki.Color = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.RectangularObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a <cite>PhysicalObject</cite> box with a given mass and color.</p>
+<dd><p>Create a <a class="reference internal" href="#physicalobject"><span class="std std-ref">PhysicalObject</span></a> box with a given mass and color.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -377,7 +376,7 @@ Point should be ordered counter-clockwise.</p>
 <dl class="class">
 <dt id="pyenki.CircularObject">
 <em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">CircularObject</code><span class="sig-paren">(</span><em class="sig-param">radius: float</em>, <em class="sig-param">height: float</em>, <em class="sig-param">mass: float</em>, <em class="sig-param">color: pyenki.Color = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.CircularObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a <cite>PhysicalObject</cite> cylinder with a given mass and color.</p>
+<dd><p>Create a <a class="reference internal" href="#physicalobject"><span class="std std-ref">PhysicalObject</span></a> cylinder with a given mass and color.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -396,7 +395,7 @@ Point should be ordered counter-clockwise.</p>
 <dl class="class">
 <dt id="pyenki.ConvexObject">
 <em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">ConvexObject</code><span class="sig-paren">(</span><em class="sig-param">shape: Iterable[Tuple[float, float]], height: float, mass: float, color: pyenki.Color = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.ConvexObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a <cite>PhysicalObject</cite> with the shape of a right prism,
+<dd><p>Create a <a class="reference internal" href="#physicalobject"><span class="std std-ref">PhysicalObject</span></a> with the shape of a right prism,
 specified by a convex polygonal base, height, mass and color.</p>
 <p>The initializer does not check that the base is convex.</p>
 <dl class="field-list simple">
@@ -423,7 +422,7 @@ specified by a convex polygonal base, height, mass and color.</p>
 <dl class="class">
 <dt id="pyenki.CompositeObject">
 <em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">CompositeObject</code><span class="sig-paren">(</span><em class="sig-param">parts: Iterable[Tuple[float, float]], height: float, mass: float, color: pyenki.Color = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.CompositeObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a <cite>PhysicalObject</cite> as a collection of convex right prisms.</p>
+<dd><p>Create a <a class="reference internal" href="#physicalobject"><span class="std std-ref">PhysicalObject</span></a> as a collection of convex right prisms.</p>
 <p>The initializer does not check that the prisms are all convex.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -442,7 +441,7 @@ The shape of the convex bases are specified by counter-clockwise ordered points 
     <span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)],</span> <span class="mf">1.0</span><span class="p">),</span>
     <span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)],</span> <span class="mf">1.0</span><span class="p">)</span>
     <span class="p">]</span>
-<span class="n">c_object</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">CompositeObject</span><span class="p">(</span><span class="n">c_parts</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">c_object</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">CompositeObject</span><span class="p">(</span><span class="n">c_parts</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
