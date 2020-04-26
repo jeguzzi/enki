@@ -4,7 +4,7 @@ Examples
 Basic Examples
 --------------
 
-These three example show how to create a world, add robot and objects, read sensors and perform actions.
+These three examples show how to create a world, add robots and objects, read sensors and perform actions.
 
 E-puck
 ~~~~~~~
@@ -34,7 +34,7 @@ Marxbot
 .. code-block:: Python
 
     >>> import pyenki
-    >>> # create a world surrondded by a cylindrical wall.
+    >>> # create a world surrounded by a cylindrical wall.
     >>> world = pyenki.World(r=20.0, walls_color=pyenki.Color(0.8, 0.2, 0.1))
     >>> marxbot = pyenki.Marxbot()
     >>> world.add_object(marxbot)
@@ -43,7 +43,7 @@ Marxbot
     >>> # Spin the robot on itself
     >>> marxbot.left_wheel_target_speed = 5.0
     >>> marxbot.right_wheel_target_speed = -5.0
-    >>> # Read the omnidirectional rgbd camera
+    >>> # Read the omnidirectional rgb-d camera
     >>> # Distances
     >>> thymio.scanner_distances
     [19.68757743875876, ...
@@ -87,6 +87,7 @@ Objects
 
     >>> import pyenki
     >>> world = pyenki.World()
+    >>>
     >>> c = pyenki.CompositeObject(
     >>>     [
     >>>         ([(0, 1), (0, 0.5), (2, 0.5), (2, 1)], 1.0),
@@ -105,7 +106,6 @@ Objects
     >>> cylinder = pyenki.CircularObject(1.0, 1.0, -1, pyenki.Color(0.5, 0.0, 0.5))
     >>> cylinder.position = (10, 0)
     >>> world.add_object(cylinder)
-    >>>
     >>>
     >>> box = pyenki.RectangularObject(2.0, 1.0, 1.0, -1, pyenki.Color(0.2, 0.5, 0.7))
     >>> box.position = (15, 0)
