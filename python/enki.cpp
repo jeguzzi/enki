@@ -315,6 +315,25 @@ struct RectangularPhysicalObject: public PhysicalObject
 //   }
 // };
 
+inline Texture make_texture(const Color& color)
+{
+  return Texture(1, color);
+}
+
+Textures make_textures(const object &colors)
+{
+  Textures textures;
+  stl_input_iterator<Color> color(colors), end;
+  for(; color != end; color++)
+  {
+    textures.push_back(make_texture(*color));
+  }
+  // Does not work
+  // textures.resize(end - begin);
+  // std::transform (begin, end, textures.begin(), make_texture);
+  return textures;
+}
+
 Polygon make_polygon(object points)
 {
   Polygon p;
@@ -326,6 +345,10 @@ Polygon make_polygon(object points)
 Enki::PhysicalObject::Part _part(object obj)
 {
   double height = extract<double>(obj[1]);
+  if(len(obj) > 2)
+  {
+    return Enki::PhysicalObject::Part(make_polygon(obj[0]), height, make_textures(obj[2]));
+  }
   return Enki::PhysicalObject::Part(make_polygon(obj[0]), height);
 }
 
@@ -368,6 +391,19 @@ struct ConvexPhysicalObject: public PhysicalObject
     setCustomHull(hull, mass);
     setColor(color);
   }
+
+  // ConvexPhysicalObject(object &shape, double height, double mass, const Textures& textures)
+  // {
+  //   Enki::PhysicalObject::Hull hull(Enki::PhysicalObject::Part(make_polygon(shape), height, textures));
+  //   setCustomHull(hull, mass);
+  // }
+
+  ConvexPhysicalObject(object &shape, double height, double mass, const object& colors)
+  {
+    Enki::PhysicalObject::Hull hull(Enki::PhysicalObject::Part(make_polygon(shape), height, make_textures(colors)));
+    setCustomHull(hull, mass);
+  }
+
 };
 
 
@@ -1028,8 +1064,10 @@ BOOST_PYTHON_MODULE(pyenki)
   );
 
   class_<ConvexPhysicalObject, bases<PhysicalObject> >("ConvexObject",
-    init<object &, double, double, optional<const Color&> >(args("shape", "height", "mass", "color"))
-  );
+    init<object &, double, double, optional<const Color&> >(args("shape", "height", "mass", "color")))
+    // .def(init<object &, double, double, const Textures&> (args("shape", "height", "mass", "textures")))
+    .def(init<object &, double, double, const object&> (args("shape", "height", "mass", "textures")))
+  ;
 
 
   // class_<MyPolygon>("Polygon",
@@ -1050,7 +1088,7 @@ BOOST_PYTHON_MODULE(pyenki)
 
   // Robots
 
-  class_<Robot, bases<PhysicalObject> >("PhysicalObject", no_init)
+  class_<Robot, bases<PhysicalObject> >("Robot", no_init)
   ;
 
   class_<DifferentialWheeled, bases<Robot> >("DifferentialWheeled", no_init)

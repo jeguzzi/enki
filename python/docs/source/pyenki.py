@@ -1,8 +1,8 @@
-from typing import ClassVar, Iterable, List, Tuple, overload
+from typing import ClassVar, Iterable, List, Tuple, Union, overload
 
 Vector = Tuple[float, float]
 Polygon = Iterable[Vector]
-Part = Tuple[Polygon, float]
+Part = Union[Tuple[Polygon, float], Tuple[Polygon, float, Iterable['Color']]]
 
 
 class Color:
@@ -417,10 +417,10 @@ class Marxbot(DifferentialWheeled):
             >>> marxbot.right_wheel_target_speed = -5.0
             >>> # Read the omnidirectional rgbd camera
             >>> # Distances
-            >>> thymio.scanner_distances
+            >>> marxbot.scanner_distances
             [19.68757743875876, ...
             >>> # Image
-            >>> thymio.scanner_image
+            >>> marxbot.scanner_image
             [[(0.8, 0.2, 0.1), ...
 
         Attributes:
@@ -565,16 +565,25 @@ class ConvexObject(PhysicalObject):
             height (float): Height in centimeters
             mass (float): Mass in kilograms
             color (Color): Color (default is black)
+            side_color (Iterable[Color]): Optional specification of one color per shape side (default is ``[]``):
+                if the sizes do not correpond, `color` is used instead.
 
         Example of a yellow, static, right triangular prism of height 1 cm:
         ::
             import pyenki
             triangle_shape = [(0.0, 0.0), (1.0, -1.0), (1.0, 1.0)]
             triangle_object = pyenki.ConvexObject(triangle_shape, 1, -1, pyenki.Color(0.5, 0.5))
+
+        Example of a static, right triangular prism of height 1 cm with red, green, and blue sides:
+        ::
+            import pyenki
+            triangle_shape = [(0.0, 0.0), (1.0, -1.0), (1.0, 1.0)]
+            triangle_colors = [pyenki.Color.red, pyenki.Color.green, pyenki.Color.red]
+            triangle_object = pyenki.ConvexObject(triangle_shape, 1, -1, side_color=triangle_colors)
     """
 
     def __init__(self, shape: Polygon, height: float, mass: float,
-                 color: Color = Color.black) -> None:
+                 color: Color = Color.black, side_color: Iterable[Color] = []) -> None:
         ...
 
 
@@ -585,7 +594,8 @@ class CompositeObject(PhysicalObject):
         The initializer does not check that the prisms are all convex.
 
         Args:
-            parts (Iterable[:ref:`Part`]): each part is defined by the convex base and the height in centimeters.
+            parts (Iterable[:ref:`Part`]): each part is defined by the convex base, the height in centimeters,
+                and optionally the specification of one color per side.
                 The shape of the convex bases are specified by counter-clockwise ordered points in centimeters.
             mass (float): Mass in kilograms
             color (Color): Color (default is black)
@@ -599,6 +609,13 @@ class CompositeObject(PhysicalObject):
                 ([(0, 0.5), (0, -0.5), (0.5, -0.5), (0.5, 0.5)], 1.0)
                 ]
             c_object = pyenki.CompositeObject(c_parts, -1, pyenki.Color(0, 0, 0.5))
+
+        Example of a static, right triangular prism of height 1 cm with red, green, and blue sides:
+        ::
+            import pyenki
+            triangle_shape = [(0.0, 0.0), (1.0, -1.0), (1.0, 1.0)]
+            triangle_colors = [pyenki.Color.red, pyenki.Color.green, pyenki.Color.red]
+            triangle_object = pyenki.CompositeObject([(triangle_shape, 1, triangle_colors)], -1)
 
     """
 

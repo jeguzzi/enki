@@ -45,10 +45,10 @@ Marxbot
     >>> marxbot.right_wheel_target_speed = -5.0
     >>> # Read the omnidirectional rgb-d camera
     >>> # Distances
-    >>> thymio.scanner_distances
+    >>> marxbot.scanner_distances
     [19.68757743875876, ...
     >>> # Image
-    >>> thymio.scanner_image
+    >>> marxbot.scanner_image
     [[(0.8, 0.2, 0.1), ...
 
 .. image:: images/marxbot.png
@@ -110,6 +110,15 @@ Objects
     >>> box = pyenki.RectangularObject(2.0, 1.0, 1.0, -1, pyenki.Color(0.2, 0.5, 0.7))
     >>> box.position = (15, 0)
     >>> world.add_object(box)
+
+    >>> # at the moment textures are used to compute the sensors (cameras) response
+    >>> # but are ignored when displaying the object
+    >>> colorful_box_shape = [(0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0)]
+    >>> colorful_box_colors = [pyenki.Color.red, pyenki.Color(0.5, 0.5),
+                               pyenki.Color.green, pyenki.Color(0, 0.5, 0.5)]
+    >>> colorful_box = pyenki.ConvexObject(tricolorful_box_shapeangle_shape, 1, -1,
+                                           side_color=colorful_box_colors)
+    >>> world.add_object(colorful_box)
 
 .. image:: images/objects.png
   :width: 400

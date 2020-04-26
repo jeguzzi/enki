@@ -39,7 +39,7 @@
 <h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="vector">
 <h2>Vector<a class="headerlink" href="#vector" title="Permalink to this headline">¶</a></h2>
-<p>A type alias for Tuple[float, float] as (x, y).</p>
+<p>A type alias for Tuple[float, float] as <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code>.</p>
 </div>
 <div class="section" id="polygon">
 <h2>Polygon<a class="headerlink" href="#polygon" title="Permalink to this headline">¶</a></h2>
@@ -47,7 +47,14 @@
 </div>
 <div class="section" id="part">
 <h2>Part<a class="headerlink" href="#part" title="Permalink to this headline">¶</a></h2>
-<p>A type alias for Tuple[<a class="reference internal" href="#polygon"><span class="std std-ref">Polygon</span></a>, float] representing a convex right prism as (base, height).</p>
+<p>A type alias for Union[Tuple[<a class="reference internal" href="#polygon"><span class="std std-ref">Polygon</span></a>, float], Tuple[<a class="reference internal" href="#polygon"><span class="std std-ref">Polygon</span></a>, float, Iterable[<a class="reference internal" href="#color"><span class="std std-ref">Color</span></a>]]]
+representing a convex right prism as <code class="docutils literal notranslate"><span class="pre">(base,</span> <span class="pre">height)</span></code> or <code class="docutils literal notranslate"><span class="pre">(base,</span> <span class="pre">heigh,</span> <span class="pre">side_color)</span></code>,
+where <code class="docutils literal notranslate"><span class="pre">side_color</span></code> and <code class="docutils literal notranslate"><span class="pre">base</span></code> must have the same length.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>At the moment textures (<code class="docutils literal notranslate"><span class="pre">side_color</span></code>) are used to compute the sensors (cameras) response
+but are ignored when displaying the object.</p>
+</div>
 </div>
 <div class="section" id="color">
 <h2>Color<a class="headerlink" href="#color" title="Permalink to this headline">¶</a></h2>
@@ -394,7 +401,7 @@
 <h2>ConvexObject<a class="headerlink" href="#convexobject" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyenki.ConvexObject">
-<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">ConvexObject</code><span class="sig-paren">(</span><em class="sig-param">shape: Iterable[Tuple[float, float]], height: float, mass: float, color: pyenki.Color = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.ConvexObject" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">ConvexObject</code><span class="sig-paren">(</span><em class="sig-param">shape: Iterable[Tuple[float, float]], height: float, mass: float, color: pyenki.Color = None, side_color: Iterable[pyenki.Color] = []</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.ConvexObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a <a class="reference internal" href="#physicalobject"><span class="std std-ref">PhysicalObject</span></a> with the shape of a right prism,
 specified by a convex polygonal base, height, mass and color.</p>
 <p>The initializer does not check that the base is convex.</p>
@@ -405,6 +412,8 @@ specified by a convex polygonal base, height, mass and color.</p>
 <li><p><strong>height</strong> (<em>float</em>) – Height in centimeters</p></li>
 <li><p><strong>mass</strong> (<em>float</em>) – Mass in kilograms</p></li>
 <li><p><strong>color</strong> (<a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – Color (default is black)</p></li>
+<li><p><strong>side_color</strong> (<em>Iterable</em><em>[</em><a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a><em>]</em>) – Optional specification of one color per shape side (default is <code class="docutils literal notranslate"><span class="pre">[]</span></code>):
+if the sizes do not correpond, <cite>color</cite> is used instead.</p></li>
 </ul>
 </dd>
 </dl>
@@ -414,8 +423,20 @@ specified by a convex polygonal base, height, mass and color.</p>
 <span class="n">triangle_object</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">ConvexObject</span><span class="p">(</span><span class="n">triangle_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
 </pre></div>
 </div>
+<p>Example of a static, right triangular prism of height 1 cm with red, green, and blue sides:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="n">triangle_shape</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)]</span>
+<span class="n">triangle_colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">red</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">green</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">red</span><span class="p">]</span>
+<span class="n">triangle_object</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">ConvexObject</span><span class="p">(</span><span class="n">triangle_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">side_color</span><span class="o">=</span><span class="n">triangle_colors</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>At the moment textures (<code class="docutils literal notranslate"><span class="pre">side_color</span></code>) are used to compute the sensors (cameras) response
+but are ignored when displaying the object.</p>
+</div>
 </div>
 <div class="section" id="compositeobject">
 <h2>CompositeObject<a class="headerlink" href="#compositeobject" title="Permalink to this headline">¶</a></h2>
@@ -427,7 +448,8 @@ specified by a convex polygonal base, height, mass and color.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>parts</strong> (Iterable[<a class="reference internal" href="#part"><span class="std std-ref">Part</span></a>]) – each part is defined by the convex base and the height in centimeters.
+<li><p><strong>parts</strong> (Iterable[<a class="reference internal" href="#part"><span class="std std-ref">Part</span></a>]) – each part is defined by the convex base, the height in centimeters,
+and optionally the specification of one color per side.
 The shape of the convex bases are specified by counter-clockwise ordered points in centimeters.</p></li>
 <li><p><strong>mass</strong> (<em>float</em>) – Mass in kilograms</p></li>
 <li><p><strong>color</strong> (<a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – Color (default is black)</p></li>
@@ -444,8 +466,20 @@ The shape of the convex bases are specified by counter-clockwise ordered points 
 <span class="n">c_object</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">CompositeObject</span><span class="p">(</span><span class="n">c_parts</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
 </pre></div>
 </div>
+<p>Example of a static, right triangular prism of height 1 cm with red, green, and blue sides:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="n">triangle_shape</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)]</span>
+<span class="n">triangle_colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">red</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">green</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">red</span><span class="p">]</span>
+<span class="n">triangle_object</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">CompositeObject</span><span class="p">([(</span><span class="n">triangle_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">triangle_colors</span><span class="p">)],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>At the moment textures (<code class="docutils literal notranslate"><span class="pre">side_color</span></code>) are used to compute the sensors (cameras) response
+but are ignored when displaying the object.</p>
+</div>
 </div>
 <div class="section" id="ircommevent">
 <h2>IRCommEvent<a class="headerlink" href="#ircommevent" title="Permalink to this headline">¶</a></h2>
@@ -680,10 +714,10 @@ which detects surrondings objects (distance and color).</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">marxbot</span><span class="o">.</span><span class="n">right_wheel_target_speed</span> <span class="o">=</span> <span class="o">-</span><span class="mf">5.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Read the omnidirectional rgbd camera</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Distances</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">scanner_distances</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">marxbot</span><span class="o">.</span><span class="n">scanner_distances</span>
 <span class="go">[19.68757743875876, ...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Image</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">scanner_image</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">marxbot</span><span class="o">.</span><span class="n">scanner_image</span>
 <span class="go">[[(0.8, 0.2, 0.1), ...</span>
 </pre></div>
 </div>

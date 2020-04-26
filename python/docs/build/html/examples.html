@@ -76,10 +76,10 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="n">marxbot</span><span class="o">.</span><span class="n">right_wheel_target_speed</span> <span class="o">=</span> <span class="o">-</span><span class="mf">5.0</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="c1"># Read the omnidirectional rgb-d camera</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="c1"># Distances</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">scanner_distances</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">marxbot</span><span class="o">.</span><span class="n">scanner_distances</span>
 <span class="p">[</span><span class="mf">19.68757743875876</span><span class="p">,</span> <span class="o">...</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="c1"># Image</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">scanner_image</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">marxbot</span><span class="o">.</span><span class="n">scanner_image</span>
 <span class="p">[[(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="o">...</span>
 </pre></div>
 </div>
@@ -133,6 +133,15 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="n">box</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">RectangularObject</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">))</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">box</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># at the moment textures are used to compute the sensors (cameras) response</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># but are ignored when displaying the object</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">colorful_box_shape</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">colorful_box_colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">red</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
+                           <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">green</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">colorful_box</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">ConvexObject</span><span class="p">(</span><span class="n">tricolorful_box_shapeangle_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                                       <span class="n">side_color</span><span class="o">=</span><span class="n">colorful_box_colors</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">colorful_box</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/objects.png"><img alt="_images/objects.png" src="_images/objects.png" style="width: 400px;" /></a>
