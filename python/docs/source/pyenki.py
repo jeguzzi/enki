@@ -578,7 +578,7 @@ class ConvexObject(PhysicalObject):
         ::
             import pyenki
             triangle_shape = [(0.0, 0.0), (1.0, -1.0), (1.0, 1.0)]
-            triangle_colors = [pyenki.Color.red, pyenki.Color.green, pyenki.Color.red]
+            triangle_colors = [pyenki.Color.red, pyenki.Color.green, pyenki.Color.blue]
             triangle_object = pyenki.ConvexObject(triangle_shape, 1, -1, side_color=triangle_colors)
     """
 
