@@ -3,6 +3,25 @@ API
 
 .. currentmodule:: pyenki
 
+
+Vector
+--------
+
+A type alias for Tuple[float, float] as (x, y).
+
+Polygon
+--------
+
+A type alias for Iterable[:ref:`Vector`].
+Point should be ordered counter-clockwise.
+
+
+Part
+--------
+
+A type alias for Tuple[:ref:`Polygon`, float] representing a convex right prism as (base, height).
+
+
 Color
 ---------------
 
@@ -26,11 +45,42 @@ CircularObject
 
 .. autoclass:: CircularObject
 
+ConvexObject
+---------------
+
+.. autoclass:: ConvexObject
+
+CompositeObject
+---------------
+
+.. autoclass:: CompositeObject
+
 
 IRCommEvent
 ---------------
 
 .. autoclass:: IRCommEvent
+
+DifferentialWheeled
+---------------
+
+.. autoclass:: DifferentialWheeled
+   :members: reset_encoders
+
+
+E-puck
+-------
+
+.. autoclass:: Epuck
+  :members: controlStep, set_led_ring
+
+
+Marxbot
+-------
+
+.. autoclass:: Marxbot
+  :members: controlStep
+
 
 Thymio2
 ---------------

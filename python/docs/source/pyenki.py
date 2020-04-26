@@ -1,6 +1,8 @@
-from typing import ClassVar, List, Tuple, overload
+from typing import ClassVar, Iterable, List, Tuple, overload
 
 Vector = Tuple[float, float]
+Polygon = Iterable[Vector]
+Part = Tuple[Polygon, float]
 
 
 class Color:
@@ -58,7 +60,7 @@ class PhysicalObject:
             radius (float): The radius of the object's enclosing circle in centimeters
             height (float): The object height in centimeters
             is_cylindric (bool): True if the object is cylindrical shaped.
-            mass (float): The object mass in kilograms. If below zero, the object can't move (infinite mass).
+            mass (float): The object mass in kilograms. If below zero, the object is static.
             moment_of_inertia (float): The obejct moment of inertial [Note: this is a symmetrical simplification.]
 
             color (Color): The object color.
@@ -126,10 +128,61 @@ class IRCommEvent:
         ...
 
 
-class Thymio2(PhysicalObject):
+class DifferentialWheeled(PhysicalObject):
     """
-        Create a `PhysicalObject` Thymio2 robot.
-        Attribute names mimic the aseba interface, see http://wiki.thymio.org/en:thymioapi
+
+        The virtual base class of all enki robots.
+
+        Attributes:
+
+            {left,right}_wheel_target_speed (float): The target {left,right} wheel speed in centrimeters per second.
+            {left,right}_wheel_encoder_speed (float): The {left,right} wheel speed measured by simulated wheel encoders in centrimeters per second (*readonly*).
+            {left,right}_wheel_odometry (float): The {left,right} wheel odometry intergrated from measured wheel speeds in centrimeters (*readonly*).
+            max_wheel_speed (float): The maximal wheel speed in centrimeters per second (*readonly*).
+            wheel_speed_noise (float): The relative noise applied to the target wheel speed at each control step (*readonly*).
+            wheel_axis (float): The distance between the wheels in centimeters (*readonly*).
+
+    """
+
+    left_wheel_target_speed: float
+    right_wheel_target_speed: float
+
+    @property
+    def left_wheel_encoder_speed(self) -> float:
+        ...
+
+    @property
+    def right_wheel_encoder_speed(self) -> float:
+        ...
+
+    @property
+    def leftEncoder_wheel_odometry(self) -> float:
+        ...
+
+    @property
+    def right_wheel_odometry(self) -> float:
+        ...
+
+    def reset_encoders(self) -> None:
+        ...
+
+    @property
+    def wheel_axis(self) -> float:
+        ...
+
+    @property
+    def max_wheel_speed(self) -> float:
+        ...
+
+    @property
+    def wheel_speed_noise(self) -> float:
+        ...
+
+
+class Thymio2(DifferentialWheeled):
+    """
+        Create a :ref:`DifferentialWheeled` Thymio2 robot.
+        Attribute names mimic the aseba interface, see http://wiki.thymio.org/en:thymioapi.
 
         Args:
             use_aseba_units (bool): use the same units and type as Aseba (default `False`).
@@ -178,7 +231,7 @@ class Thymio2(PhysicalObject):
                 The first 5 entries are from frontal sensors ordered from left to right.
                 The last two entries are from rear sensors  ordered from left to right.
             prox_distances (List[float]): A list of (7) distances between proximity sensor and nearest obstancle, one for each sensors;
-                please note that this variable is directly accessible by the real robot (*readonly*).
+                please note that this value would *not* directly be accessible by a real robot (*readonly*).
                 The first 5 entries are from frontal sensors ordered from left to right.
                 The last two entries are from rear sensors  ordered from left to right.
             prox_comm_tx (int): The integer payload to be sent. The real robot can only send 11 bits,
@@ -341,6 +394,132 @@ class Thymio2(PhysicalObject):
         ...
 
 
+class Marxbot(DifferentialWheeled):
+    """
+        Create a :ref:`DifferentialWheeled` Marbot robot.
+        The robot has a planar, omnidirectional scanner, placed centrally at a height of 11 cm,
+        which detects surrondings objects (distance and color).
+
+        Args:
+            scanner_range (float): the maximal sensing range of the scanner (default `150.0`).
+
+        Example:
+        ::
+            >>> import pyenki
+            >>> # create a world surrondded by a cylindrical wall.
+            >>> world = pyenki.World(r=20.0, walls_color=pyenki.Color(0.8, 0.2, 0.1))
+            >>> marxbot = pyenki.Marxbot()
+            >>> world.add_object(marxbot)
+            >>> marxbot.position = (0.0, 0.0)
+            >>> marxbot.angle = 0.0
+            >>> # Spin the robot on itself
+            >>> marxbot.left_wheel_target_speed = 5.0
+            >>> marxbot.right_wheel_target_speed = -5.0
+            >>> # Read the omnidirectional rgbd camera
+            >>> # Distances
+            >>> thymio.scanner_distances
+            [19.68757743875876, ...
+            >>> # Image
+            >>> thymio.scanner_image
+            [[(0.8, 0.2, 0.1), ...
+
+        Attributes:
+
+            scanner_distances (List[float]): A list of (180) radial distances measured by the scanner,
+                ordered from -180 degrees to 180 degrees in centimeters.
+            scanner_image (List[Tuple[float, float, float]]): A list of (180) rgb color value
+                between 0 and 1 measured by the scanner,
+    """
+
+    def __init__(self, scanner_range: float = 150.0) -> None:
+        ...
+
+    def controlStep(self, dt: float) -> None:
+        """
+            Perform one control step.
+            This method should be overwritten by any subclass to control the robot.
+
+            Args:
+                dt (float): The control step duration.
+        """
+        ...
+
+    @property
+    def scanner_distances(self) -> List[float]:
+        ...
+
+    @property
+    def scanner_image(self) -> List[Tuple[float, float, float]]:
+        ...
+
+
+class Epuck(DifferentialWheeled):
+    """
+        Create a :ref:`DifferentialWheeled` e-puck robot.
+
+        The robots has a 60 pixels frontal looking camera placed at a height of 2.2 cm and with a fov of 60 degrees,
+        and 8 infrared proximity sensors (maximal range 12 cm) placed at a height of 2.5 cm and at angles:
+        -18, -45, -90, -142, 142, 90, 45, 18 [degrees].
+
+        Example:
+        ::
+            >>> import pyenki
+            >>> world = pyenki.World()
+            >>> epuck = pyenki.EPuck()
+            >>> world.add_object(epuck)
+            >>> epuck.position = (-10, 0)
+            >>> epuck.set_led_ring(True)
+            >>> world.add_object(pyenki.CircularObject(2.0, 5.0, -1, pyenki.Color(0.3, 0.7, 0)))
+            >>> world.step(0.1)
+            >>> epuck.prox_values
+            [104.60820372038921, ...
+            >>> epuck.camera_image
+            [(0.5, 0.5, 0.5), ...
+
+        Attributes:
+
+            prox_values (List[float]): A list of (8) proximity sensor readings, one for each sensors (*readonly*).
+            prox_distances (List[float]): A list of (8) distances between proximity sensor and nearest obstancle, one for each sensors;
+                please note that this value would *not* directly be accessible by a real robot (*readonly*).
+            camera_image (List[Tuple[float, float, float]]): A list of (180) rgb color values between 0 and 1.
+    """
+
+    def __init__(self) -> None:
+        ...
+
+    def controlStep(self, dt: float) -> None:
+        """
+            Perform one control step.
+            This method should be overwritten by any subclass to control the robot.
+
+            Args:
+                dt (float): The control step duration.
+        """
+        ...
+
+    @property
+    def camera_image(self) -> List[Tuple[float, float, float]]:
+        ...
+
+    @property
+    def prox_values(self) -> List[float]:
+        ...
+
+    @property
+    def prox_distances(self) -> List[float]:
+        ...
+
+    def set_led_ring(self, value: bool) -> None:
+        """
+            Toggle the (red) led ring. The real robot has 8 independelty controllable LEDs that compose the ring,
+            while the simulated robot exposes a single value for the whole ring.
+
+            Args:
+                value (bool): The desired LED status.
+        """
+        ...
+
+
 class CircularObject(PhysicalObject):
     """
         Create a `PhysicalObject` cylinder with a given mass and color.
@@ -349,7 +528,7 @@ class CircularObject(PhysicalObject):
             radius (float): Radius in centimeters
             height (float): Height in centimeters
             mass (float): Mass in kilograms
-            color (Color): Color
+            color (Color): Color (default is black)
     """
 
     def __init__(self, radius: float, height: float, mass: float,
@@ -366,10 +545,64 @@ class RectangularObject(PhysicalObject):
             l2 (float): Width in centimeters
             height (float): Height in centimeters
             mass (float): Mass in kilograms
-            color (Color): Color
+            color (Color): Color (default is black)
     """
 
     def __init__(self, l1: float, l2: float, height: float, mass: float,
+                 color: Color = Color.black) -> None:
+        ...
+
+
+class ConvexObject(PhysicalObject):
+    """
+        Create a `PhysicalObject` with the shape of a right prism,
+        specified by a convex polygonal base, height, mass and color.
+
+        The initializer does not check that the base is convex.
+
+        Args:
+            shape (:ref:`Polygon`): The shape of the convex base, specified by a counter-clockwise ordered points in centimeters.
+            height (float): Height in centimeters
+            mass (float): Mass in kilograms
+            color (Color): Color (default is black)
+
+        Example of a yellow, static, right triangular prism of height 1 cm:
+        ::
+            import pyenki
+            triangle_shape = [(0.0, 0.0), (1.0, -1.0), (1.0, 1.0)]
+            triangle_object = pyenki.ConvexObject(triangle_shape, 1, -1, pyenki.Color(0.5, 0.5))
+    """
+
+    def __init__(self, shape: Polygon, height: float, mass: float,
+                 color: Color = Color.black) -> None:
+        ...
+
+
+class CompositeObject(PhysicalObject):
+    """
+        Create a `PhysicalObject` as a collection of convex right prisms.
+
+        The initializer does not check that the prisms are all convex.
+
+        Args:
+            parts (Iterable[:ref:`Part`]): each part is defined by the convex base and the height in centimeters.
+                The shape of the convex bases are specified by counter-clockwise ordered points in centimeters.
+            mass (float): Mass in kilograms
+            color (Color): Color (default is black)
+
+        Example of a blue, static, C-shaped prism of constant height 1 cm:
+        ::
+            import pyenki
+            c_parts = [
+                ([(0, 1), (0, 0.5), (2, 0.5), (2, 1)], 1.0),
+                ([(0, -0.5), (0, -1), (2, -1), (2, -0.5)], 1.0),
+                ([(0, 0.5), (0, -0.5), (0.5, -0.5), (0.5, 0.5)], 1.0)
+                ]
+            c_object = pyenki.CompositeObject(c_parts, -1, pyenki.Color(0, 0.5, 0))
+
+    """
+
+    def __init__(self, parts: Polygon, height: float, mass: float,
                  color: Color = Color.black) -> None:
         ...
 

@@ -43,6 +43,7 @@
 #include <boost/python/return_value_policy.hpp>
 #include <boost/python/implicit.hpp>
 #include <boost/python/exception_translator.hpp>
+// #include <boost/python/numpy.hpp>
 #include <boost/variant.hpp>
 #include "../enki/Types.h"
 #include "../enki/Geometry.h"
@@ -62,6 +63,7 @@
 #endif
 
 using namespace boost::python;
+// namespace np = boost::python::numpy;
 using namespace Enki;
 
 typedef boost::variant<int, double> number;
@@ -304,13 +306,91 @@ struct RectangularPhysicalObject: public PhysicalObject
   }
 };
 
+// struct MyPolygon: public Polygon
+// {
+//   MyPolygon(object points)
+//   {
+//     stl_input_iterator<Vector> begin(points), end;
+//     assign(begin, end);
+//   }
+// };
+
+Polygon make_polygon(object points)
+{
+  Polygon p;
+  stl_input_iterator<Vector> begin(points), end;
+  p.assign(begin, end);
+  return p;
+}
+
+Enki::PhysicalObject::Part _part(object obj)
+{
+  double height = extract<double>(obj[1]);
+  return Enki::PhysicalObject::Part(make_polygon(obj[0]), height);
+}
+
+struct CompositePhysicalObject: public PhysicalObject
+{
+  // CompositePhysicalObject(object &parts, double mass, const Color& color = Color())
+  // {
+  //   Enki::PhysicalObject::Hull hull;
+  //   stl_input_iterator<Enki::PhysicalObject::Part> part(parts), end;
+  //   for(; part != end; part++)
+  //   {
+  //     hull += *part;
+  //   }
+  //   setCustomHull(hull, mass);
+  //   setColor(color);
+  // }
+
+  CompositePhysicalObject(object &parts, double mass, const Color& color = Color())
+  {
+    Enki::PhysicalObject::Hull hull;
+    stl_input_iterator<object> part(parts), end;
+    for(; part != end; part++)
+    {
+      Enki::PhysicalObject::Part enki_part = _part(*part);
+      hull += enki_part;
+    }
+    setCustomHull(hull, mass);
+    setColor(color);
+  }
+};
+
+struct ConvexPhysicalObject: public PhysicalObject
+{
+  ConvexPhysicalObject(object &shape, double height, double mass, const Color& color = Color())
+  {
+    // stl_input_iterator<Vector> begin(shape), end;
+    // Enki::Polygon polygon;
+    // polygon.assign(begin, end);
+    Enki::PhysicalObject::Hull hull(Enki::PhysicalObject::Part(make_polygon(shape), height));
+    setCustomHull(hull, mass);
+    setColor(color);
+  }
+};
+
+
 // wrappers for robots
+tuple pixel(const Color& color)
+{
+  return make_tuple(
+    color.components[0],
+    color.components[1],
+    color.components[2]
+  );
+}
+
 
 struct MarxbotWrap: Marxbot, wrapper<Marxbot>
 {
-  MarxbotWrap():
-    Marxbot()
-  {}
+  double rangesq;
+
+  MarxbotWrap(double laser_range=150.0):
+    Marxbot(),
+    rangesq(laser_range * laser_range)
+  {
+  }
 
   virtual void controlStep(double dt)
   {
@@ -318,6 +398,37 @@ struct MarxbotWrap: Marxbot, wrapper<Marxbot>
       controlStep(dt);
 
     Marxbot::controlStep(dt);
+  }
+
+  // TODO: use cleaner and more efficient ways to expose the array. Maybe as numpy array?
+  list getScanner()
+  {
+    list vs;
+    std::valarray<double> buffer = rotatingDistanceSensor.zbuffer;
+    for (size_t i = 0; i < 180; i++) {
+      double v = buffer[i];
+      if (v > rangesq)
+        v = rangesq;
+      vs.append(sqrt(v));
+    }
+    return vs;
+  }
+
+  // Texture getCameraImage(void)
+  // {
+  //   Texture texture;
+  //   texture.reserve(rotatingDistanceSensor.image.size());
+  //   for (size_t i = 0; i < rotatingDistanceSensor.image.size(); ++i)
+  //     texture.push_back(rotatingDistanceSensor.image[i]);
+  //   return texture;
+  // }
+
+  list getCameraImage(void)
+  {
+    list vs;
+    for (size_t i = 0; i < rotatingDistanceSensor.image.size(); ++i)
+      vs.append(pixel(rotatingDistanceSensor.image[i]));
+    return vs;
   }
 
 };
@@ -365,14 +476,22 @@ struct EPuckWrap: EPuck, wrapper<EPuck>
     return l;
   }
 
-  Texture getCameraImage(void)
+  list getCameraImage(void)
   {
-    Texture texture;
-    texture.reserve(camera.image.size());
+    list vs;
     for (size_t i = 0; i < camera.image.size(); ++i)
-      texture.push_back(camera.image[i]);
-    return texture;
+      vs.append(pixel(camera.image[i]));
+    return vs;
   }
+
+  // Texture getCameraImage(void)
+  // {
+  //   Texture texture;
+  //   texture.reserve(camera.image.size());
+  //   for (size_t i = 0; i < camera.image.size(); ++i)
+  //     texture.push_back(camera.image[i]);
+  //   return texture;
+  // }
 };
 
 struct IRCommEventWrap
@@ -805,11 +924,7 @@ BOOST_PYTHON_MODULE(pyenki)
   to_python_converter<Vector, Vector_to_python_tuple>();
   Vector_from_python();
 
-
-  // .def("__init__", bp::make_constructor(&Net_Init,
-  //           bp::default_call_policies(), (bp::arg("network_file"), "phase",
-  //             bp::arg("level")=0, bp::arg("stages")=bp::object(),
-  //             bp::arg("weights_file")=bp::object())))
+  // implicitly_convertible<MyPolygon, object>();
 
   class_<PythonViewer, boost::noncopyable>(
       "WorldView",
@@ -912,36 +1027,68 @@ BOOST_PYTHON_MODULE(pyenki)
     init<double, double, double, double, optional<const Color&> >(args("l1", "l2", "height", "mass", "color"))
   );
 
+  class_<ConvexPhysicalObject, bases<PhysicalObject> >("ConvexObject",
+    init<object &, double, double, optional<const Color&> >(args("shape", "height", "mass", "color"))
+  );
+
+
+  // class_<MyPolygon>("Polygon",
+  //   init<object &>(args("points"))
+  // );
+  //
+  // implicitly_convertible<object, MyPolygon>();
+  //
+  // class_<Enki::PhysicalObject::Part>("Part",
+  //   init<Polygon, double >(args("polygon", "height")))
+  //   .def(init<double, double, double >(args("l1", "l2", "height")))
+  // ;
+
+
+  class_<CompositePhysicalObject, bases<PhysicalObject> >("CompositeObject",
+    init<object &, double, optional<const Color&> >(args("parts", "mass", "color"))
+  );
+
   // Robots
 
   class_<Robot, bases<PhysicalObject> >("PhysicalObject", no_init)
   ;
 
   class_<DifferentialWheeled, bases<Robot> >("DifferentialWheeled", no_init)
-    .def_readwrite("left_wheel_speed", &DifferentialWheeled::leftSpeed)
-    .def_readwrite("right_wheel_speed", &DifferentialWheeled::rightSpeed)
-    .def_readonly("left_wheel_encoder", &DifferentialWheeled::leftEncoder)
-    .def_readonly("right_wheel_encoder", &DifferentialWheeled::rightEncoder)
+    .def_readwrite("left_wheel_target_speed", &DifferentialWheeled::leftSpeed)
+    .def_readwrite("right_wheel_target_speed", &DifferentialWheeled::rightSpeed)
+    .def_readonly("left_wheel_encoder_speed", &DifferentialWheeled::leftEncoder)
+    .def_readonly("right_wheel_encoder_speed", &DifferentialWheeled::rightEncoder)
     .def_readonly("left_wheel_odometry", &DifferentialWheeled::leftOdometry)
     .def_readonly("right_wheel_odometry", &DifferentialWheeled::rightOdometry)
     .def("reset_encoders", &DifferentialWheeled::resetEncoders)
+    .add_property("wheel_axis", &DifferentialWheeled::getDistBetweenWheels)
+    .add_property("max_wheel_speed", &DifferentialWheeled::getMaxSpeed)
+    .add_property("wheel_speed_noise", &DifferentialWheeled::getNoiseAmount)
   ;
 
-  class_<MarxbotWrap, bases<DifferentialWheeled>, boost::noncopyable>("Marxbot")
-    .def("controlStep", &EPuckWrap::controlStep)
+  class_<MarxbotWrap, bases<DifferentialWheeled>, boost::noncopyable>("Marxbot", "",
+    init<optional<bool>>(
+      "Create a Marxbot robot.\n\n"
+      "Arguments:\n"
+      "    scanner_range -- the range on the scanner in cm, default: 150.0\n",
+      args("scanner_range")))
+    .def("controlStep", &MarxbotWrap::controlStep)
+    .add_property("scanner_distances", &MarxbotWrap::getScanner)
+    .add_property("scanner_image", &MarxbotWrap::getCameraImage)
   ;
 
   class_<EPuckWrap, bases<DifferentialWheeled>, boost::noncopyable>("EPuck")
     .def("controlStep", &EPuckWrap::controlStep)
-    .def_readonly("proximity_sensor_values", &EPuckWrap::getProxSensorValues)
-    .def_readonly("proximity_sensor_distances", &EPuckWrap::getProxSensorDistances)
+    .def_readonly("prox_values", &EPuckWrap::getProxSensorValues)
+    .def_readonly("prox_distances", &EPuckWrap::getProxSensorDistances)
     .def_readonly("camera_image", &EPuckWrap::getCameraImage)
+    .def("set_led_ring", &EPuckWrap::setLedRing)
   ;
 
-  // typedef std::vector<int> MyList;
-  //
-  // class_<MyList>("list")
-  //   .def(vector_indexing_suite<MyList>() );
+  // typedef std::vector<double> MyFloatList;
+  // //
+  // class_<MyFloatList>("list")
+  //   .def(vector_indexing_suite<MyFloatList>() );
   // class_<IRCommEvent>("IRCommEvent", no_init)
   //   .def_readonly("rx_value", &IRCommEvent::rx_value)
   //   .def_readonly("intensities", &IRCommEvent::intensities)
