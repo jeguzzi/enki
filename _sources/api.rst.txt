@@ -7,7 +7,7 @@ API
 Vector
 --------
 
-A type alias for Tuple[float, float] as (x, y).
+A type alias for Tuple[float, float] as ``(x, y)``.
 
 Polygon
 --------
@@ -18,8 +18,13 @@ A type alias for Iterable[:ref:`Vector`], where points should be ordered counter
 Part
 --------
 
-A type alias for Tuple[:ref:`Polygon`, float] representing a convex right prism as (base, height).
+A type alias for Union[Tuple[:ref:`Polygon`, float], Tuple[:ref:`Polygon`, float, Iterable[:ref:`Color`]]]
+representing a convex right prism as ``(base, height)`` or ``(base, heigh, side_color)``,
+where ``side_color`` and ``base`` must have the same length.
 
+.. warning::
+    At the moment textures (``side_color``) are used to compute the sensors (cameras) response
+    but are ignored when displaying the object.
 
 Color
 ---------------
@@ -49,11 +54,18 @@ ConvexObject
 
 .. autoclass:: ConvexObject
 
+.. warning::
+    At the moment textures (``side_color``) are used to compute the sensors (cameras) response
+    but are ignored when displaying the object.
+
 CompositeObject
 ---------------
 
 .. autoclass:: CompositeObject
 
+.. warning::
+    At the moment textures (``side_color``) are used to compute the sensors (cameras) response
+    but are ignored when displaying the object.
 
 IRCommEvent
 ---------------
