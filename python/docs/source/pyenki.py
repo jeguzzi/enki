@@ -522,7 +522,7 @@ class Epuck(DifferentialWheeled):
 
 class CircularObject(PhysicalObject):
     """
-        Create a `PhysicalObject` cylinder with a given mass and color.
+        Create a :ref:`PhysicalObject` cylinder with a given mass and color.
 
         Args:
             radius (float): Radius in centimeters
@@ -538,7 +538,7 @@ class CircularObject(PhysicalObject):
 
 class RectangularObject(PhysicalObject):
     """
-        Create a `PhysicalObject` box with a given mass and color.
+        Create a :ref:`PhysicalObject` box with a given mass and color.
 
         Args:
             l1 (float): Depth in centimeters
@@ -555,7 +555,7 @@ class RectangularObject(PhysicalObject):
 
 class ConvexObject(PhysicalObject):
     """
-        Create a `PhysicalObject` with the shape of a right prism,
+        Create a :ref:`PhysicalObject` with the shape of a right prism,
         specified by a convex polygonal base, height, mass and color.
 
         The initializer does not check that the base is convex.
@@ -580,7 +580,7 @@ class ConvexObject(PhysicalObject):
 
 class CompositeObject(PhysicalObject):
     """
-        Create a `PhysicalObject` as a collection of convex right prisms.
+        Create a :ref:`PhysicalObject` as a collection of convex right prisms.
 
         The initializer does not check that the prisms are all convex.
 
@@ -598,7 +598,7 @@ class CompositeObject(PhysicalObject):
                 ([(0, -0.5), (0, -1), (2, -1), (2, -0.5)], 1.0),
                 ([(0, 0.5), (0, -0.5), (0.5, -0.5), (0.5, 0.5)], 1.0)
                 ]
-            c_object = pyenki.CompositeObject(c_parts, -1, pyenki.Color(0, 0.5, 0))
+            c_object = pyenki.CompositeObject(c_parts, -1, pyenki.Color(0, 0, 0.5))
 
     """
 

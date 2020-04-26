@@ -12,8 +12,7 @@ A type alias for Tuple[float, float] as (x, y).
 Polygon
 --------
 
-A type alias for Iterable[:ref:`Vector`].
-Point should be ordered counter-clockwise.
+A type alias for Iterable[:ref:`Vector`], where points should be ordered counter-clockwise.
 
 
 Part
