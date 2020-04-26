@@ -41,6 +41,103 @@
             
   <div class="section" id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basic-examples">
+<h2>Basic Examples<a class="headerlink" href="#basic-examples" title="Permalink to this headline">¶</a></h2>
+<p>These three example show how to create a world, add robot and objects, read sensors and perform actions.</p>
+<div class="section" id="e-puck">
+<h3>E-puck<a class="headerlink" href="#e-puck" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">epuck</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">EPuck</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">epuck</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">epuck</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">epuck</span><span class="o">.</span><span class="n">set_led_ring</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">pyenki</span><span class="o">.</span><span class="n">CircularObject</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">epuck</span><span class="o">.</span><span class="n">prox_values</span>
+<span class="p">[</span><span class="mf">104.60820372038921</span><span class="p">,</span> <span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">epuck</span><span class="o">.</span><span class="n">camera_image</span>
+<span class="p">[(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="o">...</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/epuck.png"><img alt="_images/epuck.png" src="_images/epuck.png" style="width: 400px;" /></a>
+</div>
+<div class="section" id="marxbot">
+<h3>Marxbot<a class="headerlink" href="#marxbot" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># create a world surrondded by a cylindrical wall.</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span> <span class="n">walls_color</span><span class="o">=</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">marxbot</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Marxbot</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">marxbot</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">marxbot</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">marxbot</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Spin the robot on itself</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">marxbot</span><span class="o">.</span><span class="n">left_wheel_target_speed</span> <span class="o">=</span> <span class="mf">5.0</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">marxbot</span><span class="o">.</span><span class="n">right_wheel_target_speed</span> <span class="o">=</span> <span class="o">-</span><span class="mf">5.0</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Read the omnidirectional rgbd camera</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Distances</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">scanner_distances</span>
+<span class="p">[</span><span class="mf">19.68757743875876</span><span class="p">,</span> <span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Image</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">scanner_image</span>
+<span class="p">[[(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="o">...</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/marxbot.png"><img alt="_images/marxbot.png" src="_images/marxbot.png" style="width: 400px;" /></a>
+</div>
+<div class="section" id="thymio">
+<h3>Thymio<a class="headerlink" href="#thymio" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">(</span><span class="n">use_aseba_units</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mf">14.1</span><span class="p">,</span> <span class="mf">7.2</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="mf">4.0</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Spin the robot on itself</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">motor_left_target</span> <span class="o">=</span> <span class="mf">10.2</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">motor_right_target</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.2</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="c1"># Switch the top LED yellow</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">pyenki</span><span class="o">.</span><span class="n">RectangularObject</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">prox_values</span>
+<span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">3043.220367053277</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/thymio.png"><img alt="_images/thymio.png" src="_images/thymio.png" style="width: 400px;" /></a>
+</div>
+<div class="section" id="objects">
+<h3>Objects<a class="headerlink" href="#objects" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">CompositeObject</span><span class="p">(</span>
+<span class="o">&gt;&gt;&gt;</span>     <span class="p">[</span>
+<span class="o">&gt;&gt;&gt;</span>         <span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span> <span class="mf">1.0</span><span class="p">),</span>
+<span class="o">&gt;&gt;&gt;</span>          <span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)],</span> <span class="mf">1.0</span><span class="p">),</span>
+<span class="o">&gt;&gt;&gt;</span>          <span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)],</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span>     <span class="p">],</span>
+<span class="o">&gt;&gt;&gt;</span>     <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">triangle</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">ConvexObject</span><span class="p">(</span>
+<span class="o">&gt;&gt;&gt;</span>         <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)],</span>
+<span class="o">&gt;&gt;&gt;</span>         <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">triangle</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">triangle</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cylinder</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">CircularObject</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">cylinder</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">cylinder</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">box</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">RectangularObject</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">box</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/objects.png"><img alt="_images/objects.png" src="_images/objects.png" style="width: 400px;" /></a>
+</div>
+</div>
 <div class="section" id="hello-thymio">
 <h2>Hello Thymio<a class="headerlink" href="#hello-thymio" title="Permalink to this headline">¶</a></h2>
 <p>In the most common case, you want to subclass one or more robots adding the appropriate controller.
@@ -211,6 +308,13 @@ while manipulating it in an interactive session (e.g., in a jupyter notebook or 
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Examples</a><ul>
+<li><a class="reference internal" href="#basic-examples">Basic Examples</a><ul>
+<li><a class="reference internal" href="#e-puck">E-puck</a></li>
+<li><a class="reference internal" href="#marxbot">Marxbot</a></li>
+<li><a class="reference internal" href="#thymio">Thymio</a></li>
+<li><a class="reference internal" href="#objects">Objects</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#hello-thymio">Hello Thymio</a></li>
 <li><a class="reference internal" href="#proximity-communication">Proximity Communication</a></li>
 <li><a class="reference internal" href="#interactive-gui">Interactive GUI</a></li>

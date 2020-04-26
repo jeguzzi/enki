@@ -37,6 +37,19 @@
             
   <div class="section" id="api">
 <h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="vector">
+<h2>Vector<a class="headerlink" href="#vector" title="Permalink to this headline">¶</a></h2>
+<p>A type alias for Tuple[float, float] as (x, y).</p>
+</div>
+<div class="section" id="polygon">
+<h2>Polygon<a class="headerlink" href="#polygon" title="Permalink to this headline">¶</a></h2>
+<p>A type alias for Iterable[<a class="reference internal" href="#vector"><span class="std std-ref">Vector</span></a>].
+Point should be ordered counter-clockwise.</p>
+</div>
+<div class="section" id="part">
+<h2>Part<a class="headerlink" href="#part" title="Permalink to this headline">¶</a></h2>
+<p>A type alias for Tuple[<a class="reference internal" href="#polygon"><span class="std std-ref">Polygon</span></a>, float] representing a convex right prism as (base, height).</p>
+</div>
 <div class="section" id="color">
 <h2>Color<a class="headerlink" href="#color" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -263,7 +276,7 @@
 <dl class="attribute">
 <dt id="pyenki.PhysicalObject.mass">
 <code class="sig-name descname">mass</code><a class="headerlink" href="#pyenki.PhysicalObject.mass" title="Permalink to this definition">¶</a></dt>
-<dd><p>The object mass in kilograms. If below zero, the object can’t move (infinite mass).</p>
+<dd><p>The object mass in kilograms. If below zero, the object is static.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>float</p>
@@ -352,7 +365,7 @@
 <li><p><strong>l2</strong> (<em>float</em>) – Width in centimeters</p></li>
 <li><p><strong>height</strong> (<em>float</em>) – Height in centimeters</p></li>
 <li><p><strong>mass</strong> (<em>float</em>) – Mass in kilograms</p></li>
-<li><p><strong>color</strong> (<a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – Color</p></li>
+<li><p><strong>color</strong> (<a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – Color (default is black)</p></li>
 </ul>
 </dd>
 </dl>
@@ -371,10 +384,67 @@
 <li><p><strong>radius</strong> (<em>float</em>) – Radius in centimeters</p></li>
 <li><p><strong>height</strong> (<em>float</em>) – Height in centimeters</p></li>
 <li><p><strong>mass</strong> (<em>float</em>) – Mass in kilograms</p></li>
-<li><p><strong>color</strong> (<a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – Color</p></li>
+<li><p><strong>color</strong> (<a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – Color (default is black)</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+</div>
+<div class="section" id="convexobject">
+<h2>ConvexObject<a class="headerlink" href="#convexobject" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyenki.ConvexObject">
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">ConvexObject</code><span class="sig-paren">(</span><em class="sig-param">shape: Iterable[Tuple[float, float]], height: float, mass: float, color: pyenki.Color = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.ConvexObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <cite>PhysicalObject</cite> with the shape of a right prism,
+specified by a convex polygonal base, height, mass and color.</p>
+<p>The initializer does not check that the base is convex.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<a class="reference internal" href="#polygon"><span class="std std-ref">Polygon</span></a>) – The shape of the convex base, specified by a counter-clockwise ordered points in centimeters.</p></li>
+<li><p><strong>height</strong> (<em>float</em>) – Height in centimeters</p></li>
+<li><p><strong>mass</strong> (<em>float</em>) – Mass in kilograms</p></li>
+<li><p><strong>color</strong> (<a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – Color (default is black)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Example of a yellow, static, right triangular prism of height 1 cm:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="n">triangle_shape</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)]</span>
+<span class="n">triangle_object</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">ConvexObject</span><span class="p">(</span><span class="n">triangle_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="compositeobject">
+<h2>CompositeObject<a class="headerlink" href="#compositeobject" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyenki.CompositeObject">
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">CompositeObject</code><span class="sig-paren">(</span><em class="sig-param">parts: Iterable[Tuple[float, float]], height: float, mass: float, color: pyenki.Color = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.CompositeObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <cite>PhysicalObject</cite> as a collection of convex right prisms.</p>
+<p>The initializer does not check that the prisms are all convex.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parts</strong> (Iterable[<a class="reference internal" href="#part"><span class="std std-ref">Part</span></a>]) – each part is defined by the convex base and the height in centimeters.
+The shape of the convex bases are specified by counter-clockwise ordered points in centimeters.</p></li>
+<li><p><strong>mass</strong> (<em>float</em>) – Mass in kilograms</p></li>
+<li><p><strong>color</strong> (<a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – Color (default is black)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Example of a blue, static, C-shaped prism of constant height 1 cm:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="n">c_parts</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)],</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)],</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="n">c_object</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">CompositeObject</span><span class="p">(</span><span class="n">c_parts</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -425,13 +495,245 @@ The last two entries are from rear sensors  ordered from left to right.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="differentialwheeled">
+<h2>DifferentialWheeled<a class="headerlink" href="#differentialwheeled" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyenki.DifferentialWheeled">
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">DifferentialWheeled</code><a class="headerlink" href="#pyenki.DifferentialWheeled" title="Permalink to this definition">¶</a></dt>
+<dd><p>The virtual base class of all enki robots.</p>
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">{left,right}_wheel_target_speed</code></dt>
+<dd><p>The target {left,right} wheel speed in centrimeters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">{left,right}_wheel_encoder_speed</code></dt>
+<dd><p>The {left,right} wheel speed measured by simulated wheel encoders in centrimeters per second (<em>readonly</em>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">{left,right}_wheel_odometry</code></dt>
+<dd><p>The {left,right} wheel odometry intergrated from measured wheel speeds in centrimeters (<em>readonly</em>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.DifferentialWheeled.max_wheel_speed">
+<code class="sig-name descname">max_wheel_speed</code><a class="headerlink" href="#pyenki.DifferentialWheeled.max_wheel_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximal wheel speed in centrimeters per second (<em>readonly</em>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.DifferentialWheeled.wheel_speed_noise">
+<code class="sig-name descname">wheel_speed_noise</code><a class="headerlink" href="#pyenki.DifferentialWheeled.wheel_speed_noise" title="Permalink to this definition">¶</a></dt>
+<dd><p>The relative noise applied to the target wheel speed at each control step (<em>readonly</em>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.DifferentialWheeled.wheel_axis">
+<code class="sig-name descname">wheel_axis</code><a class="headerlink" href="#pyenki.DifferentialWheeled.wheel_axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>The distance between the wheels in centimeters (<em>readonly</em>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="e-puck">
+<h2>E-puck<a class="headerlink" href="#e-puck" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyenki.Epuck">
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">Epuck</code><a class="headerlink" href="#pyenki.Epuck" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <a class="reference internal" href="#differentialwheeled"><span class="std std-ref">DifferentialWheeled</span></a> e-puck robot.</p>
+<p>The robots has a 60 pixels frontal looking camera placed at a height of 2.2 cm and with a fov of 60 degrees,
+and 8 infrared proximity sensors (maximal range 12 cm) placed at a height of 2.5 cm and at angles:
+-18, -45, -90, -142, 142, 90, 45, 18 [degrees].</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">epuck</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">EPuck</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">epuck</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">epuck</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">epuck</span><span class="o">.</span><span class="n">set_led_ring</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">pyenki</span><span class="o">.</span><span class="n">CircularObject</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">world</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">epuck</span><span class="o">.</span><span class="n">prox_values</span>
+<span class="go">[104.60820372038921, ...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">epuck</span><span class="o">.</span><span class="n">camera_image</span>
+<span class="go">[(0.5, 0.5, 0.5), ...</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="pyenki.Epuck.prox_values">
+<code class="sig-name descname">prox_values</code><a class="headerlink" href="#pyenki.Epuck.prox_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of (8) proximity sensor readings, one for each sensors (<em>readonly</em>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Epuck.prox_distances">
+<code class="sig-name descname">prox_distances</code><a class="headerlink" href="#pyenki.Epuck.prox_distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of (8) distances between proximity sensor and nearest obstancle, one for each sensors;
+please note that this value would <em>not</em> directly be accessible by a real robot (<em>readonly</em>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Epuck.camera_image">
+<code class="sig-name descname">camera_image</code><a class="headerlink" href="#pyenki.Epuck.camera_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of (180) rgb color values between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[Tuple[float, float, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.Epuck.controlStep">
+<code class="sig-name descname">controlStep</code><span class="sig-paren">(</span><em class="sig-param">dt: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.Epuck.controlStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform one control step.
+This method should be overwritten by any subclass to control the robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dt</strong> (<em>float</em>) – The control step duration.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.Epuck.set_led_ring">
+<code class="sig-name descname">set_led_ring</code><span class="sig-paren">(</span><em class="sig-param">value: bool</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.Epuck.set_led_ring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggle the (red) led ring. The real robot has 8 independelty controllable LEDs that compose the ring,
+while the simulated robot exposes a single value for the whole ring.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>bool</em>) – The desired LED status.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="marxbot">
+<h2>Marxbot<a class="headerlink" href="#marxbot" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyenki.Marxbot">
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">Marxbot</code><span class="sig-paren">(</span><em class="sig-param">scanner_range: float = 150.0</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.Marxbot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <a class="reference internal" href="#differentialwheeled"><span class="std std-ref">DifferentialWheeled</span></a> Marbot robot.
+The robot has a planar, omnidirectional scanner, placed centrally at a height of 11 cm,
+which detects surrondings objects (distance and color).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scanner_range</strong> (<em>float</em>) – the maximal sensing range of the scanner (default <cite>150.0</cite>).</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyenki</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># create a world surrondded by a cylindrical wall.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span> <span class="n">walls_color</span><span class="o">=</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">marxbot</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Marxbot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">marxbot</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">marxbot</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">marxbot</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Spin the robot on itself</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">marxbot</span><span class="o">.</span><span class="n">left_wheel_target_speed</span> <span class="o">=</span> <span class="mf">5.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">marxbot</span><span class="o">.</span><span class="n">right_wheel_target_speed</span> <span class="o">=</span> <span class="o">-</span><span class="mf">5.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Read the omnidirectional rgbd camera</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Distances</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">scanner_distances</span>
+<span class="go">[19.68757743875876, ...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Image</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">scanner_image</span>
+<span class="go">[[(0.8, 0.2, 0.1), ...</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="pyenki.Marxbot.scanner_distances">
+<code class="sig-name descname">scanner_distances</code><a class="headerlink" href="#pyenki.Marxbot.scanner_distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of (180) radial distances measured by the scanner,
+ordered from -180 degrees to 180 degrees in centimeters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyenki.Marxbot.scanner_image">
+<code class="sig-name descname">scanner_image</code><a class="headerlink" href="#pyenki.Marxbot.scanner_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of (180) rgb color value
+between 0 and 1 measured by the scanner,</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>List[Tuple[float, float, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyenki.Marxbot.controlStep">
+<code class="sig-name descname">controlStep</code><span class="sig-paren">(</span><em class="sig-param">dt: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyenki.Marxbot.controlStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform one control step.
+This method should be overwritten by any subclass to control the robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dt</strong> (<em>float</em>) – The control step duration.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="thymio2">
 <h2>Thymio2<a class="headerlink" href="#thymio2" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyenki.Thymio2">
 <em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">Thymio2</code><span class="sig-paren">(</span><em class="sig-param">use_aseba_units: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.Thymio2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a <cite>PhysicalObject</cite> Thymio2 robot.
-Attribute names mimic the aseba interface, see <a class="reference external" href="http://wiki.thymio.org/en:thymioapi">http://wiki.thymio.org/en:thymioapi</a></p>
+<dd><p>Create a <a class="reference internal" href="#differentialwheeled"><span class="std std-ref">DifferentialWheeled</span></a> Thymio2 robot.
+Attribute names mimic the aseba interface, see <a class="reference external" href="http://wiki.thymio.org/en:thymioapi">http://wiki.thymio.org/en:thymioapi</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>use_aseba_units</strong> (<em>bool</em>) – use the same units and type as Aseba (default <cite>False</cite>).</p>
@@ -507,7 +809,7 @@ The last two entries are from rear sensors  ordered from left to right.</p>
 <dt id="pyenki.Thymio2.prox_distances">
 <code class="sig-name descname">prox_distances</code><a class="headerlink" href="#pyenki.Thymio2.prox_distances" title="Permalink to this definition">¶</a></dt>
 <dd><p>A list of (7) distances between proximity sensor and nearest obstancle, one for each sensors;
-please note that this variable is directly accessible by the real robot (<em>readonly</em>).
+please note that this value would <em>not</em> directly be accessible by a real robot (<em>readonly</em>).
 The first 5 entries are from frontal sensors ordered from left to right.
 The last two entries are from rear sensors  ordered from left to right.</p>
 <dl class="field-list simple">
@@ -993,11 +1295,19 @@ If enabled, <cite>cam_pitch</cite> is fixed to <span class="math notranslate noh
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">API</a><ul>
+<li><a class="reference internal" href="#vector">Vector</a></li>
+<li><a class="reference internal" href="#polygon">Polygon</a></li>
+<li><a class="reference internal" href="#part">Part</a></li>
 <li><a class="reference internal" href="#color">Color</a></li>
 <li><a class="reference internal" href="#physicalobject">PhysicalObject</a></li>
 <li><a class="reference internal" href="#rectangularobject">RectangularObject</a></li>
 <li><a class="reference internal" href="#circularobject">CircularObject</a></li>
+<li><a class="reference internal" href="#convexobject">ConvexObject</a></li>
+<li><a class="reference internal" href="#compositeobject">CompositeObject</a></li>
 <li><a class="reference internal" href="#ircommevent">IRCommEvent</a></li>
+<li><a class="reference internal" href="#differentialwheeled">DifferentialWheeled</a></li>
+<li><a class="reference internal" href="#e-puck">E-puck</a></li>
+<li><a class="reference internal" href="#marxbot">Marxbot</a></li>
 <li><a class="reference internal" href="#thymio2">Thymio2</a></li>
 <li><a class="reference internal" href="#world">World</a></li>
 <li><a class="reference internal" href="#worldview">WorldView</a></li>
