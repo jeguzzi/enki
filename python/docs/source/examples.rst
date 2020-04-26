@@ -114,9 +114,9 @@ Objects
     >>> # at the moment textures are used to compute the sensors (cameras) response
     >>> # but are ignored when displaying the object
     >>> colorful_box_shape = [(0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0)]
-    >>> colorful_box_colors = [pyenki.Color.red, pyenki.Color(0.5, 0.5),
-                               pyenki.Color.green, pyenki.Color(0, 0.5, 0.5)]
-    >>> colorful_box = pyenki.ConvexObject(tricolorful_box_shapeangle_shape, 1, -1,
+    >>> colorful_box_colors = [pyenki.Color.red, pyenki.Color(0.5, 0.5, 0.0),
+                               pyenki.Color.green, pyenki.Color(0.0, 0.5, 0.5)]
+    >>> colorful_box = pyenki.ConvexObject(colorful_box_shape, 1, -1,
                                            side_color=colorful_box_colors)
     >>> world.add_object(colorful_box)
 
