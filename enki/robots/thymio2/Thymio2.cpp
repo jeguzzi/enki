@@ -40,20 +40,43 @@
 /*! \file Thymio2.cpp
 	\brief Implementation of the Thymio II robot
 */
+
+#define RAYS 5
+#define APERTURE 30
+#define RANGE 28
+#define M 4505
+#define C 73
+#define X0 0.03
+// #define M 4466
+// #define C 42
+// #define X0 0.6
+#define NOISE 2.87
+#define MIN_VALUE 1000
+
+#define COMM_RANGE 48
+#define COMM_M 4600
+#define COMM_C 917
+#define COMM_X0 0.2
+#define COMM_RECEIVER_APERTURE 0.644
+#define COMM_MIN_VALUE 1400.0
+#define COMM_KE 18.0
+#define COMM_KR 9.0
+
 namespace Enki
 {
 	using namespace std;
 
 	Thymio2::Thymio2() :
 		DifferentialWheeled(9.4, 16.6, 0.027),
-		infraredSensor0(this, Vector(6.2, 4.85),   3.4, 0.69813,  14, 4505, 0.03, 73, 2.87),
-		infraredSensor1(this, Vector(7.5, 2.55),   3.4, 0.34906,  14, 4505, 0.03, 73, 2.87),
-		infraredSensor2(this, Vector(7.95, 0.0),   3.4, 0.0,      14, 4505, 0.03, 73, 2.87),
-		infraredSensor3(this, Vector(7.5, -2.55),  3.4, -0.34906, 14, 4505, 0.03, 73, 2.87),
-		infraredSensor4(this, Vector(6.2, -4.85),  3.4, -0.69813, 14, 4505, 0.03, 73, 2.87),
-		infraredSensor5(this, Vector(-2.95, 2.95), 3.4, -M_PI,    14, 4505, 0.03, 73, 2.87),
-		infraredSensor6(this, Vector(-2.95, -2.95),3.4, -M_PI,    14, 4505, 0.03, 73, 2.87),
-		irComm(this, 25, 0.1, 0.644, 4200, 0.02, 275, 2.87),
+		infraredSensor0(this, Vector(6.2, 4.85),   3.4, 0.69813,  RANGE, M, X0, C, NOISE, RAYS, APERTURE, MIN_VALUE),
+		infraredSensor1(this, Vector(7.5, 2.55),   3.4, 0.34906,  RANGE, M, X0, C, NOISE, RAYS, APERTURE, MIN_VALUE),
+		infraredSensor2(this, Vector(7.95, 0.0),   3.4, 0.0,      RANGE, M, X0, C, NOISE, RAYS, APERTURE, MIN_VALUE),
+		infraredSensor3(this, Vector(7.5, -2.55),  3.4, -0.34906, RANGE, M, X0, C, NOISE, RAYS, APERTURE, MIN_VALUE),
+		infraredSensor4(this, Vector(6.2, -4.85),  3.4, -0.69813, RANGE, M, X0, C, NOISE, RAYS, APERTURE, MIN_VALUE),
+		infraredSensor5(this, Vector(-2.95, 2.95), 3.4, -M_PI,    RANGE, M, X0, C, NOISE, RAYS, APERTURE, MIN_VALUE),
+		infraredSensor6(this, Vector(-2.95, -2.95),3.4, -M_PI,    RANGE, M, X0, C, NOISE, RAYS, APERTURE, MIN_VALUE),
+		// irComm(this, 25, 0.1, 0.644, 4200, 0.02, 275, 2.87),
+		irComm(this, COMM_RANGE, 0.1, COMM_RECEIVER_APERTURE, COMM_M, COMM_X0, COMM_C, NOISE, COMM_MIN_VALUE, COMM_KE, COMM_KR),
 		groundSensor0(this, Vector(7.2, 1.15),  0.44, 9, 884, 60, 0.4, 10),
 		groundSensor1(this, Vector(7.2, -1.15), 0.44, 9, 884, 60, 0.4, 10)
 	{
