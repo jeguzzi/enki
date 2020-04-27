@@ -150,7 +150,7 @@ namespace Enki
 			\param c third parameter of response function
 			\param noiseSd standard deviation of Gaussian noise in the response space
 		*/
-		IRSensor(Robot *owner, Vector pos, double height, double orientation, double range, double m, double x0, double c, double noiseSd = 0.);
+		IRSensor(Robot *owner, Vector pos, double height, double orientation, double range, double m, double x0, double c, double noiseSd = 0., unsigned int rays = 3, double _aperture = 15.0);
 		//! Reset distance values
 		void init(double dt, World* w);
 		//! Check for all potential intersections using smartRadius of sensor and calculate and find closest distance for each ray.

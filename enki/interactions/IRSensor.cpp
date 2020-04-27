@@ -60,14 +60,14 @@ namespace Enki
 		// no activation until first loop
 	}
 
-	IRSensor::IRSensor(Robot *owner, Vector pos, double height, double orientation, double range, double m, double x0, double c, double noiseSd):
+	IRSensor::IRSensor(Robot *owner, Vector pos, double height, double orientation, double range, double m, double x0, double c, double noiseSd, unsigned int rays, double _aperture):
 		pos(pos),
 		height(height),
 		orientation(orientation),
 		range(range),
-		aperture(15.*M_PI/180.),
+		aperture(_aperture*M_PI/180.),
 		alpha(1/cos(aperture)),
-		rayCount(3),
+		rayCount(rays),
 		m(m),
 		x0(x0),
 		c(c),
