@@ -12,6 +12,7 @@ namespace Enki
     double begin;
     double end;
     double radius;
+    double angle;
     Point center;
     bool contains(Point &p);
   };

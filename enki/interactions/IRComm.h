@@ -91,18 +91,20 @@ namespace Enki
     //! Standard deviation of Gaussian noise in the response space
     const double noiseSd;
 
-    double min_intensity;
+    const double min_intensity;
+    const double ke;
+    const double kr;
 
     IRCommRadio * radio_in_world(World * world);
 
   public:
     // IRComm(Robot *owner, std::vector<IRSensor *> sensors) : enabled(false), sensors(sensors), tx_value(0) {};
-    IRComm(Robot *owner, double range=25, double period=0.1, double aperture=0.644, double m=4200, double x0=0.02, double c=275, double noiseSd = 0.) :
+    IRComm(Robot *owner, double range=25, double period=0.1, double aperture=0.644, double m=4200, double x0=0.02, double c=275, double noiseSd = 0., double min_intensity=1400, double ke=20.0, double kr=10.0) :
     GlobalInteraction(owner), radio(NULL), enabled(false), tx_value(0), range(range),
     last_sent(-1.0), time(0), period(period), receiver_aperture(aperture),
-    m(m), x0(x0), c(c), noiseSd(noiseSd)
+    m(m), x0(x0), c(c), noiseSd(noiseSd), min_intensity(min_intensity), ke(ke), kr(kr)
     {
-      min_intensity = responseFunction(range, range, m, c, x0);
+      // min_intensity = responseFunction(range, range, m, c, x0);
     }
 
     void add_sensor(IRSensor * sensor) { sensor->setSearchRange(range); sensors.push_back(sensor); }

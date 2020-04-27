@@ -2,7 +2,7 @@
 #include <vector>
 #include <enki/interactions/Radio.h>
 #include <enki/Geometry.h>
-// #include <iostream>
+#include <iostream>
 
 namespace Enki
 {
@@ -26,7 +26,7 @@ namespace Enki
 
   std::ostream &operator<<(std::ostream &os, CircularSector const &sector)
   {
-    return os << "(" << sector.center.x << ", " << sector.center.y << ") " << sector.radius << " [" << sector.begin << ", " << sector.end << "]";
+    return os << "(" << sector.center.x << ", " << sector.center.y << ") " << sector.radius << " [" << sector.begin << ", " << sector.end << "] " << sector.angle;
   }
 
   // template<typename T>

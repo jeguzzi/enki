@@ -46,12 +46,13 @@ response = std::max(0., std::min(m, gaussianRand(response, noiseSd)));
 #include <iostream>
 #include <limits>
 #include <sstream>
+#include <enki/Geometry.h>
 
 /*!	\file IRSensor.cpp
   \brief Implementation of the generic infrared sensor
 */
 
-// #define SUM_INTENSITIES
+#define SUM_INTENSITIES
 
 
 
@@ -89,28 +90,33 @@ CircularSector receiver_sector(IRSensor *sensor, double range, double receiver_a
   CircularSector sector;
   sector.radius = range;
   sector.center = sensor->getAbsolutePosition();
-  double angle = sensor->getAbsoluteOrientation();
-  sector.begin = angle - receiver_aperture;
-  sector.end = angle + receiver_aperture;
+  sector.angle = sensor->getAbsoluteOrientation();
+  sector.begin = sector.angle - receiver_aperture;
+  sector.end = sector.angle + receiver_aperture;
   return sector;
 }
 
 std::vector<CircularSector> emitter_sectors(IRSensor *sensor) {
   const double tol = 0.5;
   std::vector<CircularSector> sectors;
+  Point p = sensor->getAbsolutePosition();
+  double angle = angle = sensor->getAbsoluteOrientation();
   for (size_t i = 0; i < sensor->getRayCount() - 1; i++) {
     CircularSector sector;
     sector.radius = std::max(sensor->getRayDistSearch(i), sensor->getRayDistSearch(i + 1)) + tol;
-    sector.center = sensor->getAbsolutePosition();
+    sector.center = p;
     sector.begin = sensor->getAbsRayAngle(i);
     sector.end = sensor->getAbsRayAngle(i + 1);
+    sector.angle = angle;
     sectors.push_back(sector);
   }
   return sectors;
 }
 
 bool intersection(CircularSector &sector1, CircularSector &sector2) {
-  return sector1.contains(sector2.center) && sector2.contains(sector1.center);
+  bool v = sector1.contains(sector2.center) && sector2.contains(sector1.center);
+  // std::cout << "intersection " << sector1 << " " << sector2 << " -> " << v << "\n";
+  return v;
 }
 
 double received_ir_message_distance(IRSensor *sensor, IRMessage *message, double range, double receiver_aperture) {
@@ -131,22 +137,34 @@ double responseFunction(double x, double range, double m, double c, double x0)
   return m*(c - x0*x0)/(x*x - 2*x0*x + c);
 }
 
+double angle_between_sectors(const CircularSector &s1, const CircularSector &s2 )
+{
+  return normalizeAngle((s2.center - s1.center).angle() - s1.angle);
+}
+
 // New version that sums the amplitude of the sectors
-double received_ir_message_intensity(IRSensor *sensor, IRMessage *message, double range, double receiver_aperture, double m, double c, double x0, double min_response) {
+double received_ir_message_intensity(IRSensor *sensor, IRMessage *message, double range, double receiver_aperture, double m, double c, double x0, double min_response, double ke, double kr) {
   CircularSector s_sector = receiver_sector(sensor, range, receiver_aperture);
+  // std::cout << "Receiver" << s_sector << std::endl;
   std::vector<CircularSector> *m_sectors = &(message->sectors);
   double inverse_square_sum = 0;
   for (std::vector<CircularSector>::iterator it = m_sectors->begin();
        it != m_sectors->end(); it++) {
     if (intersection(*it, s_sector))
     {
+      // std::cout << "Intersects" << *it << std::endl;
       double dx = (it->center - s_sector.center).norm() - x0;
-      inverse_square_sum += 1.0 / (dx * dx);
+      double alpha_e = abs(angle_between_sectors(*it, s_sector));
+      double alpha_r = abs(angle_between_sectors(s_sector, *it));
+      double w = pow(cos(alpha_e), ke) * pow(cos(alpha_r), kr);
+      // w = 1.0;
+      // printf("w %.2f (%.2f, %.2f)\n", w, alpha_e, alpha_r);
+      inverse_square_sum += w / (dx * dx);
     }
   }
   if(inverse_square_sum)
   {
-    double response = m / (1.0 + 1.0 / inverse_square_sum / (c - x0*x0));
+    double response = m / (1.0 + 1.0 / (inverse_square_sum * (c - x0*x0)));
     if(response < min_response) return 0.0;
     else return response;
   }
@@ -179,14 +197,19 @@ void IRComm::receive_events() {
       // std::cout << "test sensor " << i <<"\n";
       i++;
       #ifdef SUM_INTENSITIES
-      if (double intensity = received_ir_message_intensity(*it, &(mit->second), range, receiver_aperture, m, c, x0, min_intensity)) {
+      // printf("%.2f %.2f %.2f %.2f %.2f %.2f\n", range, receiver_aperture, m, c, x0, min_intensity);
+      if (double intensity = received_ir_message_intensity(*it, &(mit->second), range, receiver_aperture, m, c, x0, min_intensity, ke, kr)) {
       #else
       if (double distance = received_ir_message_distance(*it, &(mit->second), range, receiver_aperture)) {
         double intensity = responseFunction(distance, range, m, c, x0);
       #endif
         event.rx_value = mit->second.data;
         event.payloads.push_back(event.rx_value);
-        intensity = std::max(0., std::min(4200.0, gaussianRand(intensity, noiseSd)));
+        intensity = std::max(0., std::min(m, gaussianRand(intensity, noiseSd)));
+        if(intensity < min_intensity)
+        {
+          intensity = 0.0;
+        }
         event.intensities.push_back(intensity);
         received = true;
       } else {
