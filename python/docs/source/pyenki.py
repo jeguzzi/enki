@@ -135,10 +135,10 @@ class DifferentialWheeled(PhysicalObject):
 
         Attributes:
 
-            {left,right}_wheel_target_speed (float): The target {left,right} wheel speed in centrimeters per second.
-            {left,right}_wheel_encoder_speed (float): The {left,right} wheel speed measured by simulated wheel encoders in centrimeters per second (*readonly*).
-            {left,right}_wheel_odometry (float): The {left,right} wheel odometry intergrated from measured wheel speeds in centrimeters (*readonly*).
-            max_wheel_speed (float): The maximal wheel speed in centrimeters per second (*readonly*).
+            {left,right}_wheel_target_speed (float): The target {left,right} wheel speed in centimeters per second.
+            {left,right}_wheel_encoder_speed (float): The {left,right} wheel speed measured by simulated wheel encoders in centimeters per second (*readonly*).
+            {left,right}_wheel_odometry (float): The {left,right} wheel odometry intergrated from measured wheel speeds in centimeters (*readonly*).
+            max_wheel_speed (float): The maximal wheel speed in centimeters per second (*readonly*).
             wheel_speed_noise (float): The relative noise applied to the target wheel speed at each control step (*readonly*).
             wheel_axis (float): The distance between the wheels in centimeters (*readonly*).
 
