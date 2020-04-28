@@ -382,14 +382,21 @@ struct CompositePhysicalObject: public PhysicalObject
 
 struct ConvexPhysicalObject: public PhysicalObject
 {
-  ConvexPhysicalObject(object &shape, double height, double mass, const Color& color = Color())
+  ConvexPhysicalObject(object &shape, double height, double mass, const Color& color = Color(), const object &colors = boost::python::api::object())
   {
     // stl_input_iterator<Vector> begin(shape), end;
     // Enki::Polygon polygon;
     // polygon.assign(begin, end);
-    Enki::PhysicalObject::Hull hull(Enki::PhysicalObject::Part(make_polygon(shape), height));
-    setCustomHull(hull, mass);
-    setColor(color);
+
+    if(colors == boost::python::api::object())
+    {
+      setCustomHull(Enki::PhysicalObject::Hull(Enki::PhysicalObject::Part(make_polygon(shape), height)), mass);
+      setColor(color);
+    }
+    else
+    {
+      setCustomHull(Enki::PhysicalObject::Hull(Enki::PhysicalObject::Part(make_polygon(shape), height, make_textures(colors))), mass);
+    }
   }
 
   // ConvexPhysicalObject(object &shape, double height, double mass, const Textures& textures)
@@ -398,11 +405,11 @@ struct ConvexPhysicalObject: public PhysicalObject
   //   setCustomHull(hull, mass);
   // }
 
-  ConvexPhysicalObject(object &shape, double height, double mass, const object& colors)
-  {
-    Enki::PhysicalObject::Hull hull(Enki::PhysicalObject::Part(make_polygon(shape), height, make_textures(colors)));
-    setCustomHull(hull, mass);
-  }
+  // ConvexPhysicalObject(object &shape, double height, double mass, const object& colors)
+  // {
+  //   Enki::PhysicalObject::Hull hull(Enki::PhysicalObject::Part(make_polygon(shape), height, make_textures(colors)));
+  //   setCustomHull(hull, mass);
+  // }
 
 };
 
@@ -1064,9 +1071,9 @@ BOOST_PYTHON_MODULE(pyenki)
   );
 
   class_<ConvexPhysicalObject, bases<PhysicalObject> >("ConvexObject",
-    init<object &, double, double, optional<const Color&> >(args("shape", "height", "mass", "color")))
+    init<object &, double, double, const Color&, const object& >((arg("shape"), arg("height"), arg("mass"), arg("color")=Color::black, arg("side_color")=object())))
     // .def(init<object &, double, double, const Textures&> (args("shape", "height", "mass", "textures")))
-    .def(init<object &, double, double, const object&> (args("shape", "height", "mass", "textures")))
+    // .def(init<object &, double, double, const object&> (args("shape", "height", "mass", "side_color")))
   ;
 
 

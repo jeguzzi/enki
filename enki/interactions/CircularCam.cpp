@@ -75,6 +75,14 @@ namespace Enki
 		pixelOperation = &depthTest;
 	}
 
+	float distance_to_circle(double angle, double distance, double radius)
+	{
+		double z = radius * radius - pow((sin(angle) * distance), 2);
+		if(z<=0)
+			z = 0.0;
+		return cos(angle) * distance - sqrt(z);
+	}
+
 	void CircularCam::objectStep(double dt, World *w, PhysicalObject *po)
 	{
 		// if we see over the object
@@ -137,11 +145,14 @@ namespace Enki
 			const size_t firstPixelUsed = static_cast<size_t>(floor((zbuffer.size() - 1) * 0.5 * (beginAngle / halfFieldOfView + 1)));
 			const size_t lastPixelUsed = static_cast<size_t>(ceil((zbuffer.size() - 1) * 0.5 * (endAngle / halfFieldOfView + 1)));
 
-			const double poDist2 = poDist * poDist;
+			// const double poDist2 = poDist * poDist;
+			const double dAngle = 2.0*halfFieldOfView / (zbuffer.size() - 1);
 			for (size_t i = firstPixelUsed; i <= lastPixelUsed; i++)
 			{
 				// apply pixel operation to framebuffer
-				(*pixelOperation)(zbuffer[i], image[i], poDist2, color);
+				double angle = -halfFieldOfView + i * dAngle - poAngle;
+				double distance = distance_to_circle(angle, poDist, radius);
+				(*pixelOperation)(zbuffer[i], image[i], distance * distance, color);
 			}
 		}
 	};

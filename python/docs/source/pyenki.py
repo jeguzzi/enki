@@ -1,4 +1,4 @@
-from typing import ClassVar, Iterable, List, Tuple, Union, overload
+from typing import ClassVar, Iterable, List, Optional, Tuple, Union, overload
 
 Vector = Tuple[float, float]
 Polygon = Iterable[Vector]
@@ -565,7 +565,7 @@ class ConvexObject(PhysicalObject):
             height (float): Height in centimeters
             mass (float): Mass in kilograms
             color (Color): Color (default is black)
-            side_color (Iterable[Color]): Optional specification of one color per shape side (default is ``[]``):
+            side_color (Iterable[Color]): Optional specification of one color per shape side (default is ``None``):
                 if the sizes do not correpond, `color` is used instead.
 
         Example of a yellow, static, right triangular prism of height 1 cm:
@@ -583,7 +583,7 @@ class ConvexObject(PhysicalObject):
     """
 
     def __init__(self, shape: Polygon, height: float, mass: float,
-                 color: Color = Color.black, side_color: Iterable[Color] = []) -> None:
+                 color: Color = Color.black, side_color: Optional[Iterable[Color]] = None) -> None:
         ...
 
 

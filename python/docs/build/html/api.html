@@ -401,7 +401,7 @@ but are ignored when displaying the object.</p>
 <h2>ConvexObject<a class="headerlink" href="#convexobject" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyenki.ConvexObject">
-<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">ConvexObject</code><span class="sig-paren">(</span><em class="sig-param">shape: Iterable[Tuple[float, float]], height: float, mass: float, color: pyenki.Color = None, side_color: Iterable[pyenki.Color] = []</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.ConvexObject" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyenki.</code><code class="sig-name descname">ConvexObject</code><span class="sig-paren">(</span><em class="sig-param">shape: Iterable[Tuple[float, float]], height: float, mass: float, color: pyenki.Color = None, side_color: Optional[Iterable[pyenki.Color]] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.ConvexObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a <a class="reference internal" href="#physicalobject"><span class="std std-ref">PhysicalObject</span></a> with the shape of a right prism,
 specified by a convex polygonal base, height, mass and color.</p>
 <p>The initializer does not check that the base is convex.</p>
@@ -412,7 +412,7 @@ specified by a convex polygonal base, height, mass and color.</p>
 <li><p><strong>height</strong> (<em>float</em>) – Height in centimeters</p></li>
 <li><p><strong>mass</strong> (<em>float</em>) – Mass in kilograms</p></li>
 <li><p><strong>color</strong> (<a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – Color (default is black)</p></li>
-<li><p><strong>side_color</strong> (<em>Iterable</em><em>[</em><a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a><em>]</em>) – Optional specification of one color per shape side (default is <code class="docutils literal notranslate"><span class="pre">[]</span></code>):
+<li><p><strong>side_color</strong> (<em>Iterable</em><em>[</em><a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a><em>]</em>) – Optional specification of one color per shape side (default is <code class="docutils literal notranslate"><span class="pre">None</span></code>):
 if the sizes do not correpond, <cite>color</cite> is used instead.</p></li>
 </ul>
 </dd>

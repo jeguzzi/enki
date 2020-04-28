@@ -94,20 +94,20 @@ Objects
     >>>          ([(0, -0.5), (0, -1), (2, -1), (2, -0.5)], 1.0),
     >>>          ([(0, 0.5), (0, -0.5), (0.5, -0.5), (0.5, 0.5)], 1.0)
     >>>     ],
-    >>>     -1, pyenki.Color(0, 0.5, 0.5))
+    >>>     -1, color=pyenki.Color(0, 0.5, 0.5))
     >>> world.add_object(c)
     >>>
     >>> triangle = pyenki.ConvexObject(
     >>>         [(0.0, 0.0), (1.0, -1.0), (1.0, 1.0)],
-    >>>         1, -1, pyenki.Color(0.5, 0.5, 0.0))
+    >>>         1, -1, color=pyenki.Color(0.5, 0.5, 0.0))
     >>> triangle.position = (5, 0)
     >>> world.add_object(triangle)
     >>>
-    >>> cylinder = pyenki.CircularObject(1.0, 1.0, -1, pyenki.Color(0.5, 0.0, 0.5))
+    >>> cylinder = pyenki.CircularObject(1.0, 1.0, -1, color=pyenki.Color(0.5, 0.0, 0.5))
     >>> cylinder.position = (10, 0)
     >>> world.add_object(cylinder)
     >>>
-    >>> box = pyenki.RectangularObject(2.0, 1.0, 1.0, -1, pyenki.Color(0.2, 0.5, 0.7))
+    >>> box = pyenki.RectangularObject(2.0, 1.0, 1.0, -1, color=pyenki.Color(0.2, 0.5, 0.7))
     >>> box.position = (15, 0)
     >>> world.add_object(box)
 
