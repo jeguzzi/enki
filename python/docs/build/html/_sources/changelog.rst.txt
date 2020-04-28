@@ -23,3 +23,8 @@ Added
 Changed
 ~~~~~~~
 - Changed most names to comply with PEP8
+
+Fixed
+~~~~~
+- Corrected distance from cylinders computation for Circular Camera
+- Reset IRSensor distances at init.
