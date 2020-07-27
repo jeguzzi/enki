@@ -13,7 +13,7 @@ IF (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.11)
 	# make sure we have the right modules
 	if (Python_FOUND AND Qt5Widgets_FOUND AND Qt5OpenGL_FOUND)
 		message(STATUS "Python libs and executable found looking for boost::python")
-		FIND_PACKAGE(Boost COMPONENTS system python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR})
+		FIND_PACKAGE(Boost COMPONENTS system python${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
 		if (Boost_FOUND)
 			message(STATUS "boost::python found, generating python bindings")
 			include_directories(${PROJECT_SOURCE_DIR} ${Python_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
