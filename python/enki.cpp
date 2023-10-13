@@ -43,6 +43,7 @@
 #include <boost/python/return_value_policy.hpp>
 #include <boost/python/implicit.hpp>
 #include <boost/python/exception_translator.hpp>
+#include <boost/python/call.hpp>
 // #include <boost/python/numpy.hpp>
 #include <boost/variant.hpp>
 #include "../enki/Types.h"
@@ -847,12 +848,15 @@ struct PythonViewer: public ViewerWidget
 {
   PyThreadState *pythonSavedState;
   bool run_world_update;
+  float realtime_factor;
+  PyObject * cb;
+
 
   // PythonViewer(World& world, bool _run_world_update=false, Vector camPos=Vector(0.0, 0.0), double camAltitude=0.0, double camYaw=0.0, double camPitch=0.0, double _wallsHeight=10.0);
 
-  PythonViewer(World& world, bool _run_world_update=false, Vector camPos=Vector(0.0, 0.0), double camAltitude=0.0, double camYaw=0.0, double camPitch=0.0, double _wallsHeight=10.0, bool _ortho=false, double timer_period=0.03):
+  PythonViewer(World& world, bool _run_world_update=false, Vector camPos=Vector(0.0, 0.0), double camAltitude=0.0, double camYaw=0.0, double camPitch=0.0, double _wallsHeight=10.0, bool _ortho=false, double timer_period=0.03, float realtime_factor_=1.0, PyObject * cb = nullptr):
     ViewerWidget(&world, 0, int (timer_period * 1000)),
-    pythonSavedState(0)
+    pythonSavedState(0), realtime_factor(realtime_factor_), cb(cb)
   {
     run_world_update = _run_world_update;
     camera.pos.setX(camPos.x);
@@ -916,7 +920,13 @@ struct PythonViewer: public ViewerWidget
       PyEval_RestoreThread(pythonSavedState);
     // touch Python objects while locked
     // ViewerWidget::timerEvent(event);
-    if(run_world_update) world->step(double(timerPeriodMs)/1000., 3);
+    if(run_world_update) {
+      double dt = double(timerPeriodMs)/1000. * realtime_factor;
+      world->step(dt, 3);
+      if (cb) {
+        call<void>(cb, dt);
+     }
+    }
     updateGL();
     // release Python lock
     if (pythonSavedState)
@@ -924,12 +934,14 @@ struct PythonViewer: public ViewerWidget
   }
 };
 
-void runInViewer(World& world, Vector camPos = Vector(0,0), double camAltitude = 0, double camYaw = 0, double camPitch = 0, double wallsHeight = 10, bool orthographic = false, double timer_period = 0.03)
+void runInViewer(World& world, Vector camPos = Vector(0,0), double camAltitude = 0, double camYaw = 0, 
+                 double camPitch = 0, double wallsHeight = 10, bool orthographic = false, 
+                 double timer_period = 0.03, float realtime_factor = 1.0, PyObject * cb = nullptr)
 {
   int argc(1);
   char* argv[1] = {(char*)"dummy"}; // FIXME: recovery sys.argv
   QApplication app(argc, argv);
-  PythonViewer viewer(world, true, camPos, camAltitude, camYaw, camPitch, wallsHeight, orthographic, timer_period);
+  PythonViewer viewer(world, true, camPos, camAltitude, camYaw, camPitch, wallsHeight, orthographic, timer_period, realtime_factor, cb);
   viewer.show();
   viewer.pythonSavedState = PyEval_SaveThread();
   app.exec();
@@ -937,11 +949,18 @@ void runInViewer(World& world, Vector camPos = Vector(0,0), double camAltitude =
     PyEval_RestoreThread(viewer.pythonSavedState);
 }
 
-void run(World& world, unsigned steps)
+void run(World& world, unsigned steps=1, float time_step = 1./30., PyObject * cb = nullptr)
 {
-  for (unsigned i = 0; i < steps; ++i)
-    world.step(1./30., 3);
+  for (unsigned i = 0; i < steps; ++i) {
+    world.step(time_step, 3);
+    if (cb) {
+      call<void>(cb, time_step);
+    }
+  }
 }
+
+BOOST_PYTHON_FUNCTION_OVERLOADS(run_overloads, run, 1, 4)
+
 
 double float_value(number const& value)
 {
@@ -949,7 +968,7 @@ double float_value(number const& value)
 }
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(step_overloads, step, 1, 2)
-BOOST_PYTHON_FUNCTION_OVERLOADS(runInViewer_overloads, runInViewer, 1, 8)
+BOOST_PYTHON_FUNCTION_OVERLOADS(runInViewer_overloads, runInViewer, 1, 10)
 
 BOOST_PYTHON_MODULE(pyenki)
 {
@@ -1198,11 +1217,11 @@ BOOST_PYTHON_MODULE(pyenki)
     .def("add_object", &World::addObject, with_custodian_and_ward<1,2>())
     .def("remove_object", &World::removeObject)
     .def("set_random_seed", &World::setRandomSeed)
-    .def("run", run)
+    .def("run", run, run_overloads((arg("self"), arg("steps")=1, arg("time_step")=1.0/30.0, arg("callback") = object())))
     // .def("run_in_viewer", runInViewer, runInViewer_overloads(args("self", "cam_position", "cam_altitude", "cam_yaw", "cam_pitch", "walls_height", "orthographic", "period")))
 
     .def("run_in_viewer", runInViewer, runInViewer_overloads((arg("self"), arg("cam_position")=Vector(0.0, 0.0), arg("cam_altitude")=0.0,
-     arg("cam_yaw")=0.0, arg("cam_pitch")=0.0, arg("walls_height")=10.0, arg("orthographic")=false, arg("period")=0.03)))
+     arg("cam_yaw")=0.0, arg("cam_pitch")=0.0, arg("walls_height")=10.0, arg("orthographic")=false, arg("period")=0.03, arg("realtime_factor")=1.0, arg("callback")=object())))
 
   ;
 

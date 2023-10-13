@@ -5,6 +5,8 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 set(CMAKE_MACOSX_RPATH 1)
 endif()
 
+add_compile_definitions(QT_FEATURE_topleveldomain=1)
+
 message("We are using Cmake ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}")
 
 IF (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.11)
@@ -13,12 +15,13 @@ IF (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.11)
 	# make sure we have the right modules
 	if (Python_FOUND AND Qt5Widgets_FOUND AND Qt5OpenGL_FOUND)
 		message(STATUS "Python libs and executable found looking for boost::python")
-		FIND_PACKAGE(Boost COMPONENTS system python${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
+		# FIND_PACKAGE(Boost COMPONENTS system python${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
+		FIND_PACKAGE(Boost COMPONENTS system python3)
 		if (Boost_FOUND)
-			message(STATUS "boost::python found, generating python bindings")
+			message(STATUS "boost::python found, generating python bindings ${Boost_LIBRARIES}")
 			include_directories(${PROJECT_SOURCE_DIR} ${Python_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
 			Python_add_library(pyenki MODULE enki.cpp)
-			target_link_libraries(pyenki  PRIVATE enki enkiviewer ${Boost_LIBRARIES} Qt5::OpenGL Qt5::Widgets ${OPENGL_gl_LIBRARY})
+			target_link_libraries(pyenki  PRIVATE enki enkiviewer ${Boost_LIBRARIES} Qt5::OpenGL Qt5::Gui Qt5::Widgets ${OPENGL_gl_LIBRARY})
 
       file(MAKE_DIRECTORY ${Python_SITELIB}/pyenki)
       install(TARGETS pyenki LIBRARY DESTINATION ${Python_SITELIB}/pyenki RENAME __init__.py)
