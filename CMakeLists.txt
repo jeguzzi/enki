@@ -5,6 +5,9 @@ project(Enki)
 # additional CMake modules
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 
+
+set(CMAKE_CXX_STANDARD 17)
+
 enable_testing()
 
 find_package(Qt5 COMPONENTS Core Gui Widgets OpenGL)
