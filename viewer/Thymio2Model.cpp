@@ -49,10 +49,9 @@ namespace Enki
 	{
 		viewer = v;
 
-		textures.resize(3);
-		textures[0] = v->bindTexture(QPixmap(QString(":/textures/thymio-bottomLed-diffusionMap.png")), GL_TEXTURE_2D, GL_LUMINANCE8);
-		textures[1] = v->bindTexture(QPixmap(QString(":/textures/thymio-wheel-texture.png")), GL_TEXTURE_2D);
-		textures[2] = v->bindTexture(QPixmap(QString(":/textures/thymio-ground-shadow.png")), GL_TEXTURE_2D, GL_LUMINANCE8);
+		textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/thymio-bottomLed-diffusionMap.png")).mirrored()));
+		textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/thymio-wheel-texture.png")).mirrored()));
+		textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/thymio-ground-shadow.png")).mirrored()));
 
 		bodyTexture = QImage(QString(":/textures/thymio-body-texture.png"));
 		bodyDiffusionMap0 = QImage(QString(":/textures/thymio-body-diffusionMap0.png"));
@@ -112,20 +111,17 @@ namespace Enki
 
 	void Thymio2Model::cleanup(ViewerWidget* viewer)
 	{
-		for (int i = 0; i < textures.size(); i++)
-			viewer->deleteTexture(textures[i]);
 		for (int i = 0; i < lists.size(); i++)
 			glDeleteLists(lists[i], 1);
 	}
 
-	void Thymio2Model::draw(PhysicalObject* object) const
+	void Thymio2Model::draw(PhysicalObject* object)
 	{
 		Thymio2* thymio = polymorphic_downcast<Thymio2*>(object);
 		if (thymio->ledTextureNeedUpdate)
 		{
-			viewer->deleteTexture(thymio->textureID);
 			thymio->ledTextureNeedUpdate = false;
-			thymio->textureID = updateLedTexture(thymio);
+			updateLedTexture(thymio);
 		}
 
 		const double wheelRadius = 2.1;
@@ -135,7 +131,7 @@ namespace Enki
 		glDisable(GL_LIGHTING);
 		glColor3d(1, 1, 1);
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, thymio->textureID);
+		thymio_textures.at(thymio)->bind();
 		
 		glPushMatrix();
 		glTranslatef(2.5,0,0);
@@ -143,7 +139,7 @@ namespace Enki
 		glPopMatrix();
 
 		// wheels
-		glBindTexture(GL_TEXTURE_2D, textures[1]);
+		textures[1]->bind();
 
 		glPushMatrix();
 		glTranslatef(0,0,wheelRadius);
@@ -163,7 +159,7 @@ namespace Enki
 		glPopMatrix();
 		
 		// shadow
-		glBindTexture(GL_TEXTURE_2D, textures[2]);
+		textures[2]->bind();
 		glDisable(GL_LIGHTING);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ZERO, GL_SRC_COLOR);
@@ -187,7 +183,7 @@ namespace Enki
 		glPopMatrix();
 		
 		// bottom lighting
-		glBindTexture(GL_TEXTURE_2D, textures[0]);
+		textures[0]->bind();
 		glBlendFunc(GL_SRC_COLOR, GL_ONE);
 		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		if (thymio->getColorLed(Thymio2::BOTTOM_LEFT).a() != 0.0)
@@ -226,7 +222,7 @@ namespace Enki
 		glDisable(GL_TEXTURE_2D);
 	}
 
-	unsigned Thymio2Model::updateLedTexture(Thymio2* thymio) const
+	unsigned Thymio2Model::updateLedTexture(Thymio2* thymio)
 	{
 		if (!thymio->ledTexture)
 		{
@@ -265,9 +261,9 @@ namespace Enki
 			}
 		}
 		
-		const unsigned texId(viewer->bindTexture(QImage((uint8_t*)(thymio->ledTexture), textureDimension, textureDimension, QImage::Format_ARGB32), GL_TEXTURE_2D));
-		
-		return texId;
+		QImage i((uint8_t*)(thymio->ledTexture), textureDimension, textureDimension, QImage::Format_ARGB32);
+		thymio_textures.emplace(thymio, std::make_unique<QOpenGLTexture>(i.mirrored()));
+		return 0;
 	}
 	
 	// generated with this Python code:

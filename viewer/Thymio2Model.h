@@ -44,7 +44,7 @@ namespace Enki
 	public:
 		Thymio2Model(ViewerWidget* viewer);
 		virtual void cleanup(ViewerWidget* viewer);
-		virtual void draw(PhysicalObject* object) const;
+		virtual void draw(PhysicalObject* object);
 
 		unsigned textureDimension;
 		QImage bodyDiffusionMap0, bodyDiffusionMap1, bodyDiffusionMap2, bodyTexture;
@@ -52,10 +52,11 @@ namespace Enki
 	protected:
 		std::vector<Vector> ledCenter[Thymio2::LED_COUNT];
 		std::vector<Vector> ledSize[Thymio2::LED_COUNT];
+        std::map<Thymio2 *, std::unique_ptr<QOpenGLTexture>> thymio_textures;
 
 		ViewerWidget* viewer;
 
-		unsigned updateLedTexture(Thymio2* thymio) const;
+		unsigned updateLedTexture(Thymio2* thymio);
 		void drawRect(uint32_t* target, uint32_t* base, const Vector& center, const Vector& size, const Color& color, uint32_t* diffTex) const;
 	};
 } // namespace Enki

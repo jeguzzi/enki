@@ -43,7 +43,7 @@ namespace Enki
 	public:
 		EPuckModel(ViewerWidget* viewer);
 		virtual void cleanup(ViewerWidget* viewer);
-		virtual void draw(PhysicalObject* object) const;
+		virtual void draw(PhysicalObject* object);
 		virtual void drawSpecial(PhysicalObject* object, int param) const;
 	};
 } // namespace Enki

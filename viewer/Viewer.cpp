@@ -53,6 +53,10 @@
 	\brief Implementation of the Qt-based viewer widget
 */
 
+static void qglColor(QColor color) {
+	glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
+}
+
 static void initTexturesResources()
 {
 	Q_INIT_RESOURCE(enki_viewer_textures);
@@ -85,7 +89,7 @@ namespace Enki
 			deletedWithObject = true;
 		}
 		
-		virtual void draw(PhysicalObject* object) const
+		virtual void draw(PhysicalObject* object)
 		{
 			glColor3d(object->getColor().components[0], object->getColor().components[1], object->getColor().components[2]);
 			glCallList(list);
@@ -188,7 +192,7 @@ namespace Enki
 	{}
 
 	ViewerWidget::ViewerWidget(World *world, QWidget *parent) :
-		QGLWidget(parent),
+		QOpenGLWidget(parent),
 		timerPeriodMs(30),
 		camera(world),
 		doDumpFrames(false),
@@ -216,15 +220,16 @@ namespace Enki
 	
 	ViewerWidget::~ViewerWidget()
 	{
+		makeCurrent();
 		world->disconnectExternalObjectsUserData();
 		if (isValid())
 		{
-			deleteTexture(helpWidget);
-			deleteTexture(centerWidget);
-			deleteTexture(selectionTexture);
+			helpWidget = nullptr;
+			centerWidget = nullptr;
+			selectionTexture = nullptr;
 			glDeleteLists(worldList, 1);
-			deleteTexture (worldTexture);
-			deleteTexture (wallTexture);
+			worldTexture = nullptr;
+			wallTexture = nullptr;
 			if (world->hasGroundTexture())
 				glDeleteTextures(1, &worldGroundTexture);
 		}
@@ -237,6 +242,7 @@ namespace Enki
 			data->cleanup(this);
 			delete data;
 		}
+		doneCurrent();
 	}
 	
 	World* ViewerWidget::getWorld() const
@@ -614,7 +620,7 @@ namespace Enki
 				glEnd();
 				
 				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, worldTexture);
+				worldTexture->bind();
 				
 				renderWorldSegment(Segment(world->w, 0, 0, 0));
 				renderWorldSegment(Segment(world->w, world->h, world->w, 0));
@@ -665,7 +671,7 @@ namespace Enki
 					glEnd();
 					
 					glEnable(GL_TEXTURE_2D);
-					glBindTexture(GL_TEXTURE_2D, worldTexture);
+					worldTexture->bind();
 					
 					// draw sides
 					glNormal3d(-cos(angMid), -sin(angMid), 0);
@@ -730,7 +736,7 @@ namespace Enki
 		
 		// TODO: use object texture if any
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, wallTexture);
+		wallTexture->bind();
 		
 		// sides
 		for (size_t i = 0; i < segmentCount; ++i)
@@ -860,12 +866,12 @@ namespace Enki
 		glHint (GL_FOG_HINT, GL_NICEST);
 		glEnable (GL_FOG);*/
 		
-		helpWidget = bindTexture(QPixmap(QString(":/widgets/help.png")), GL_TEXTURE_2D, GL_RGBA);
-		centerWidget = bindTexture(QPixmap(QString(":/widgets/center.png")), GL_TEXTURE_2D, GL_RGBA);
+		helpWidget = std::make_unique<QOpenGLTexture>(QImage(QString(":/widgets/help.png")).mirrored());
+		centerWidget = std::make_unique<QOpenGLTexture>(QImage(QString(":/widgets/center.png")).mirrored());
 		
-		selectionTexture = bindTexture(QPixmap(QString(":/textures/selection.png")), GL_TEXTURE_2D, GL_RGBA);
-		worldTexture = bindTexture(QPixmap(QString(":/textures/world.png")), GL_TEXTURE_2D, GL_LUMINANCE8);
-		wallTexture = bindTexture(QPixmap(QString(":/textures/wall.png")), GL_TEXTURE_2D, GL_LUMINANCE8);
+		selectionTexture = std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/selection.png")).mirrored());
+		worldTexture = std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/world.png")).mirrored());
+		wallTexture = std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/wall.png")).mirrored());
 		if (world->hasGroundTexture())
 		{
 			glGenTextures(1, &worldGroundTexture);
@@ -978,7 +984,7 @@ namespace Enki
 			glEnable(GL_BLEND);
 			glEnable(GL_TEXTURE_2D);
 			glDisable(GL_LIGHTING);
-			glBindTexture(GL_TEXTURE_2D, selectionTexture);
+			selectionTexture->bind();
 			glColor4d(1,1,1,1);
 			glBegin(GL_QUADS);
 				const double r(selectedObject->getRadius() * 1.5);
@@ -993,6 +999,47 @@ namespace Enki
 			glPopMatrix();
 		}
 	}
+
+    void ViewerWidget::renderText(int x, int y, const QString &str, const QFont & font) {
+        // GLdouble glColor[4];
+        // glGetDoublev(GL_CURRENT_COLOR, glColor);
+        // QColor fontColor = QColor(glColor[0], glColor[1], glColor[2], glColor[3]);
+    	QColor fontColor = QColor::fromRgb(50, 0, 0);
+
+	    glPushAttrib(GL_ACCUM_BUFFER_BIT);
+	    glPushAttrib(GL_VIEWPORT_BIT);
+	    glPushAttrib(GL_TRANSFORM_BIT);
+	    glPushAttrib(GL_POLYGON_BIT);
+	    
+	    glPushAttrib(GL_PIXEL_MODE_BIT);
+	    glPushAttrib(GL_MULTISAMPLE_BIT);
+	    glPushAttrib(GL_LIGHTING_BIT);
+	    glPushAttrib(GL_ENABLE_BIT);
+	    
+	    glPushAttrib(GL_DEPTH_BUFFER_BIT);
+	    glPushAttrib(GL_CURRENT_BIT);
+	    glPushAttrib(GL_COLOR_BUFFER_BIT);
+
+        QPainter painter(this);
+        painter.setPen(fontColor);
+        painter.setFont(font);
+        painter.drawText(x, y, str);
+        painter.end();
+
+	    glPopAttrib();
+	    glPopAttrib();
+	    glPopAttrib();
+	    glPopAttrib();
+	    
+	    glPopAttrib();
+	    glPopAttrib();
+	    glPopAttrib();
+	    glPopAttrib();
+	    
+	    glPopAttrib();
+	    glPopAttrib();
+	    glPopAttrib();
+    }
 
 	void ViewerWidget::picking(double left, double right, double bottom, double top, double zNear, double zFar)
 	{
@@ -1091,7 +1138,7 @@ namespace Enki
 		const int margin(24);
 		const int size(48);
 		
-		glBindTexture(GL_TEXTURE_2D, helpWidget);
+		helpWidget->bind();
 		glBegin(GL_QUADS);
 		{
 			const int yPos(0);
@@ -1102,7 +1149,7 @@ namespace Enki
 		}
 		glEnd();
 		
-		glBindTexture(GL_TEXTURE_2D, centerWidget);
+		centerWidget->bind();
 		glBegin(GL_QUADS);
 		{
 			const int yPos(48+12);
@@ -1206,7 +1253,7 @@ namespace Enki
 		displayWidgets();
 
 		if (doDumpFrames)
-			grabFrameBuffer().save(QString("enkiviewer-frame%1.png").arg(dumpFramesCounter++, (int)8, (int)10, QChar('0')));
+			grabFramebuffer().save(QString("enkiviewer-frame%1.png").arg(dumpFramesCounter++, (int)8, (int)10, QChar('0')));
 	}
 	
 	void ViewerWidget::resizeGL(int width, int height)
@@ -1416,7 +1463,7 @@ namespace Enki
 	void ViewerWidget::timerEvent(QTimerEvent * event)
 	{
 		world->step(double(timerPeriodMs)/1000., 3);
-		updateGL();
+		update();
 	}
 	
 	//! Help button or F1 have been pressed

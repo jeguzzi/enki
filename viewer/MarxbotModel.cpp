@@ -48,8 +48,7 @@ namespace Enki
 {
 	MarxbotModel::MarxbotModel(ViewerWidget* viewer)
 	{
-		textures.resize(1);
-		textures[0] = viewer->bindTexture(QPixmap(QString(":/textures/marxbot.png")), GL_TEXTURE_2D);
+		textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/marxbot.png")).mirrored()));
 		lists.resize(2);
 		lists[0] = GenMarxbotBase();
 		lists[1] = GenMarxbotWheel();
@@ -57,13 +56,11 @@ namespace Enki
 	
 	void MarxbotModel::cleanup(ViewerWidget* viewer)
 	{
-		for (int i = 0; i < textures.size(); i++)
-			viewer->deleteTexture(textures[i]);
 		for (int i = 0; i < lists.size(); i++)
 			glDeleteLists(lists[i], 1);
 	}
 	
-	void MarxbotModel::draw(PhysicalObject* object) const
+	void MarxbotModel::draw(PhysicalObject* object)
 	{
 		DifferentialWheeled* dw = polymorphic_downcast<DifferentialWheeled*>(object);
 		
@@ -71,7 +68,7 @@ namespace Enki
 		const double wheelCirc = 2 * M_PI * wheelRadius;
 		
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, textures[0]);
+		textures[0]->bind();
 		glColor3d(1, 1, 1);
 		
 		

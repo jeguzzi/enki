@@ -43,7 +43,7 @@ namespace Enki
 	public:
 		MarxbotModel(ViewerWidget* viewer);
 		virtual void cleanup(ViewerWidget* viewer);
-		virtual void draw(PhysicalObject* object) const;
+		virtual void draw(PhysicalObject* object);
 	};
 } // namespace Enki
 

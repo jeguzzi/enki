@@ -49,9 +49,8 @@ namespace Enki
 {
 	EPuckModel::EPuckModel(ViewerWidget* viewer)
 	{
-		textures.resize(2);
-		textures[0] = viewer->bindTexture(QPixmap(QString(":/textures/epuck.png")), GL_TEXTURE_2D);
-		textures[1] = viewer->bindTexture(QPixmap(QString(":/textures/epuckr.png")), GL_TEXTURE_2D, GL_LUMINANCE8);
+		textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/epuck.png")).mirrored()));
+		textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/epuckr.png")).mirrored()));
 		lists.resize(5);
 		lists[0] = GenEPuckBody();
 		lists[1] = GenEPuckRest();
@@ -62,13 +61,11 @@ namespace Enki
 	
 	void EPuckModel::cleanup(ViewerWidget* viewer)
 	{
-		for (int i = 0; i < textures.size(); i++)
-			viewer->deleteTexture(textures[i]);
 		for (int i = 0; i < lists.size(); i++)
 			glDeleteLists(lists[i], 1);
 	}
 	
-	void EPuckModel::draw(PhysicalObject* object) const
+	void EPuckModel::draw(PhysicalObject* object)
 	{
 		DifferentialWheeled* dw = polymorphic_downcast<DifferentialWheeled*>(object);
 		
@@ -79,7 +76,7 @@ namespace Enki
 		glPushMatrix();
 		glTranslated(0, 0, wheelRadius);
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, textures[0]);
+		textures[0]->bind();
 		
 		glColor3d(1, 1, 1);
 		
@@ -105,7 +102,7 @@ namespace Enki
 		glPopMatrix();
 		
 		// shadow
-		glBindTexture(GL_TEXTURE_2D, textures[1]);
+		textures[1]->bind();
 		glDisable(GL_LIGHTING);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ZERO, GL_SRC_COLOR);

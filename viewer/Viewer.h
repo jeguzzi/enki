@@ -35,7 +35,8 @@
 #define __ENKI_VIEWER_H
 
 #include <typeinfo>
-#include <QGLWidget>
+#include <QOpenGLWidget>
+#include <QOpenGLTexture>
 #include <QPoint>
 #include <QPointF>
 #include <QMap>
@@ -44,6 +45,7 @@
 
 #include <enki/Geometry.h>
 #include <enki/PhysicalEngine.h>
+#include <memory>
 
 /*!	\file Viewer.h
 	\brief Definition of the Qt-based viewer widget
@@ -58,7 +60,7 @@ namespace Enki
 	class World;
 	class PhysicalObject;
 	
-	class ViewerWidget : public QGLWidget
+	class ViewerWidget : public QOpenGLWidget
 	{
 		Q_OBJECT
 	
@@ -68,7 +70,7 @@ namespace Enki
 		class ViewerUserData : public PhysicalObject::UserData
 		{
 		public:
-			virtual void draw(PhysicalObject* object) const = 0;
+			virtual void draw(PhysicalObject* object) = 0;
 			virtual void drawSpecial(PhysicalObject* object, int param = 0) const { }
 			// for data managed by the viewer, called upon viewer destructor
 			virtual void cleanup(ViewerWidget* viewer) { }
@@ -79,7 +81,7 @@ namespace Enki
 		{
 		public:
 			QVector<GLuint> lists;
-			QVector<GLuint> textures;
+			std::vector<std::unique_ptr<QOpenGLTexture>> textures;
 		
 		public:
 			CustomRobotModel();
@@ -131,12 +133,12 @@ namespace Enki
 	protected:
 		World *world;
 		
-		GLuint helpWidget;
-		GLuint centerWidget;
-		GLuint selectionTexture;
+		std::unique_ptr<QOpenGLTexture> helpWidget;
+		std::unique_ptr<QOpenGLTexture> centerWidget;
+		std::unique_ptr<QOpenGLTexture> selectionTexture;
 		GLuint worldList;
-		GLuint worldTexture;
-		GLuint wallTexture;
+		std::unique_ptr<QOpenGLTexture> worldTexture;
+		std::unique_ptr<QOpenGLTexture> wallTexture;
 		GLuint worldGroundTexture;
 		
 		typedef QMap<const std::type_info*, ViewerUserData*> ManagedObjectsMap;
@@ -220,6 +222,7 @@ namespace Enki
 		void renderWorld();
 		void renderShape(const Polygon& shape, const double height, const Color& color);
 		void renderSimpleObject(PhysicalObject *object);
+		void renderText(int x, int y, const QString &str, const QFont & font = QFont());
 		
 		// helper functions for coordinates
 		void glVertex2Screen(int x, int y);
