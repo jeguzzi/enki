@@ -46,18 +46,36 @@ inline Derived polymorphic_downcast(Base base)
 
 namespace Enki
 {
-	MarxbotModel::MarxbotModel(ViewerWidget* viewer)
+
+    std::vector<GLuint> MarxbotModel::lists{};
+    std::vector<std::unique_ptr<QOpenGLTexture>> MarxbotModel::textures{};
+    
+	MarxbotModel::MarxbotModel()
 	{
-		textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/marxbot.png")).mirrored()));
-		lists.resize(2);
-		lists[0] = GenMarxbotBase();
-		lists[1] = GenMarxbotWheel();
+		init();
+	}
+
+	void MarxbotModel::init()
+	{
+		if (lists.size() == 0) {
+		    textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/marxbot.png")).mirrored()));
+		    lists.push_back(GenMarxbotBase());
+		    lists.push_back(GenMarxbotWheel());
+		}
+	}
+
+	void MarxbotModel::deinit()
+	{
+		if (lists.size()) {
+		    for (int i = 0; i < lists.size(); i++)
+		    	glDeleteLists(lists[i], 1);
+			lists.clear(); 
+			textures.clear(); 
+		}
 	}
 	
-	void MarxbotModel::cleanup(ViewerWidget* viewer)
+	void MarxbotModel::cleanup()
 	{
-		for (int i = 0; i < lists.size(); i++)
-			glDeleteLists(lists[i], 1);
 	}
 	
 	void MarxbotModel::draw(PhysicalObject* object)

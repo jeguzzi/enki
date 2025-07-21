@@ -375,9 +375,6 @@ struct PythonViewer: public ViewerWidget
 		camera.yaw = camYaw;
 		camera.pitch = camPitch;
 		wallsHeight = _wallsHeight;
-		
-		managedObjectsAliases[&typeid(EPuckWrap)] = &typeid(EPuck);
-		managedObjectsAliases[&typeid(Thymio2Wrap)] = &typeid(Thymio2);
 	}
 	
 	void timerEvent(QTimerEvent * event)

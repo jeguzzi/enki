@@ -47,22 +47,40 @@ inline Derived polymorphic_downcast(Base base)
 
 namespace Enki
 {
-	EPuckModel::EPuckModel(ViewerWidget* viewer)
+
+    std::vector<GLuint> EPuckModel::lists{};
+    std::vector<std::unique_ptr<QOpenGLTexture>> EPuckModel::textures{};
+
+    void EPuckModel::init() {
+    	if (lists.size() == 0) {
+    		textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/epuck.png")).mirrored()));
+			textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/epuckr.png")).mirrored()));
+			lists.push_back(GenEPuckBody());
+			lists.push_back(GenEPuckRest());
+			lists.push_back(GenEPuckRing());
+			lists.push_back(GenEPuckWheelLeft());
+			lists.push_back(GenEPuckWheelRight());
+    	}
+    }
+
+    void EPuckModel::deinit() {
+    	std::cout << "EPuckModel::deinit\n";
+    	if (lists.size()) {
+     		for (int i = 0; i < lists.size(); i++)
+				glDeleteLists(lists[i], 1);
+			lists.clear(); 
+			textures.clear();   		
+		}
+    }
+
+	EPuckModel::EPuckModel()
 	{
-		textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/epuck.png")).mirrored()));
-		textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/epuckr.png")).mirrored()));
-		lists.resize(5);
-		lists[0] = GenEPuckBody();
-		lists[1] = GenEPuckRest();
-		lists[2] = GenEPuckRing();
-		lists[3] = GenEPuckWheelLeft();
-		lists[4] = GenEPuckWheelRight();
+		init();
 	}
 	
-	void EPuckModel::cleanup(ViewerWidget* viewer)
+	void EPuckModel::cleanup()
 	{
-		for (int i = 0; i < lists.size(); i++)
-			glDeleteLists(lists[i], 1);
+		
 	}
 	
 	void EPuckModel::draw(PhysicalObject* object)

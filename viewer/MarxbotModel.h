@@ -41,9 +41,13 @@ namespace Enki
 	class MarxbotModel : public ViewerWidget::CustomRobotModel
 	{
 	public:
-		MarxbotModel(ViewerWidget* viewer);
-		virtual void cleanup(ViewerWidget* viewer);
-		virtual void draw(PhysicalObject* object);
+        MarxbotModel();
+        virtual void cleanup();
+        virtual void draw(PhysicalObject* object);
+        static std::vector<GLuint> lists;
+        static std::vector<std::unique_ptr<QOpenGLTexture>> textures;  
+        static void init();
+        static void deinit();
 	};
 } // namespace Enki
 

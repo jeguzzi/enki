@@ -103,7 +103,7 @@ namespace Enki
 	
 	ViewerWidget::CustomRobotModel::CustomRobotModel()
 	{
-		deletedWithObject = false;
+		deletedWithObject = true;
 	}
 	
 	//! Create a camera at 0
@@ -221,7 +221,7 @@ namespace Enki
 	ViewerWidget::~ViewerWidget()
 	{
 		makeCurrent();
-		world->disconnectExternalObjectsUserData();
+		// world->disconnectExternalObjectsUserData();
 		if (isValid())
 		{
 			helpWidget = nullptr;
@@ -233,18 +233,19 @@ namespace Enki
 			if (world->hasGroundTexture())
 				glDeleteTextures(1, &worldGroundTexture);
 		}
-		
-		ManagedObjectsMapIterator i(managedObjects);
-		while (i.hasNext())
-		{
-			i.next();
-			ViewerUserData* data = i.value();
-			data->cleanup(this);
-			delete data;
-		}
 		doneCurrent();
 	}
+
+	QOpenGLContext * ViewerWidget::sharedContext = nullptr;
 	
+	void ViewerWidget::deinit() {
+		std::cout << "ViewerWidget::deinit\n";
+		SwitchContext c;
+		EPuckModel::deinit();
+		Thymio2Model::deinit();
+		MarxbotModel::deinit();
+	}
+
 	World* ViewerWidget::getWorld() const
 	{
 		return world;
@@ -765,11 +766,9 @@ namespace Enki
 		glEnd();
 	}
 	
-	void ViewerWidget::renderSimpleObject(PhysicalObject *object)
+	void ViewerWidget::renderSimpleObject(GLuint & list, PhysicalObject *object)
 	{
-		SimpleDisplayList *userData = new SimpleDisplayList;
-		object->userData = userData;
-		glNewList(userData->list, GL_COMPILE);
+		glNewList(list, GL_COMPILE);
 		
 		glDisable(GL_LIGHTING);
 		if (!object->getHull().empty())
@@ -837,6 +836,22 @@ namespace Enki
 	
 	void ViewerWidget::initializeGL()
 	{
+		// if (!sharedContext) {
+		// 	// sharedContext = std::make_unique<QOpenGLContext>();
+		// 	sharedContext = new QOpenGLContext();
+		// 	sharedContext->create();
+		// 	std::cout << "sharedContext s" << sharedContext->surface() << std::endl;
+		// }
+		// if (!sharedContext) {
+		// 	sharedContext = std::make_unique<QOpenGLContext>();
+		// 	sharedContext->create();
+		// }
+		// if (context()) {
+		// 	delete context();
+		// 	sharedContext->setShareContext(context());
+		// }
+		// sharedContext->setShareContext(context());
+
 		glClearColor(world->color.r(), world->color.g(), world->color.b(), 1.0);
 		
 		float LightAmbient[] = {0.6, 0.6, 0.6, 1};
@@ -881,15 +896,32 @@ namespace Enki
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		}
 		worldList = glGenLists(1);
-		renderWorld();
-		
-		// render all static types
-		managedObjects[&typeid(EPuck)] = new EPuckModel(this);
-		managedObjects[&typeid(Marxbot)] = new MarxbotModel(this);
-		managedObjects[&typeid(Thymio2)] = new Thymio2Model(this);
-		
+		renderWorld();		
 		// let subclass manage their static types
 		renderObjectsTypesHook();
+	}
+
+	ViewerWidget::ViewerUserData * ViewerWidget::makeUserData(PhysicalObject * object) {
+		SwitchContext c;
+		if (dynamic_cast<EPuck* >(object)) {
+			return new EPuckModel(); 
+		}
+		if (dynamic_cast<Marxbot* >(object)) {
+			return new MarxbotModel(); 
+		}
+		if (dynamic_cast<Thymio2* >(object)) {
+			return new Thymio2Model(); 
+		}
+		auto d = new SimpleDisplayList();
+		renderSimpleObject(d->list, object);
+		return d;
+	}
+
+	ViewerWidget::ViewerUserData * ViewerWidget::getUserData(PhysicalObject * object) {
+		if (!object->userData) {
+			object->userData = makeUserData(object);
+		}
+		return dynamic_cast<ViewerWidget::ViewerUserData *>(object->userData);
 	}
 	
 	void ViewerWidget::renderScene(double left, double right, double bottom, double top, double zNear, double zFar)
@@ -915,52 +947,13 @@ namespace Enki
 		glCallList(worldList);
 		for (World::ObjectsIterator it = world->objects.begin(); it != world->objects.end(); ++it)
 		{
-			// if required, initialize this object (display list)
-			if (!(*it)->userData)
-			{
-				bool found = false;
-				const std::type_info* typeToSearch = &typeid(**it);
-				
-				// search the alias map
-				ManagedObjectsAliasesMapIterator aliasIt(managedObjectsAliases);
-				while (aliasIt.hasNext())
-				{
-					aliasIt.next();
-					if (*aliasIt.key() == *typeToSearch)
-					{
-						typeToSearch = aliasIt.value();
-						break;
-					}
-				}
-				
-				// search the real map
-				ManagedObjectsMapIterator dataIt(managedObjects);
-				while (dataIt.hasNext())
-				{
-					dataIt.next();
-					if (*dataIt.key() == (*typeToSearch))
-					{
-						(*it)->userData = dataIt.value();
-						found = true;
-						break;
-					}
-				}
-				
-				if (!found)
-					renderSimpleObject(*it);
-			}
-			
+			ViewerUserData* userData = getUserData(*it);
 			// draw object
 			glPushMatrix();
-			
 			glTranslated((*it)->pos.x, (*it)->pos.y, 0);
 			glRotated(rad2deg * (*it)->angle, 0, 0, 1);
-			
-			ViewerUserData* userData = polymorphic_downcast<ViewerUserData *>((*it)->userData);
-
 			userData->draw(*it);
 			displayObjectHook(*it);
-			
 			glPopMatrix();
 		}
 
@@ -975,7 +968,7 @@ namespace Enki
 			// if it is being move, draw the object as it has not been drawn before
 			if (movingObject)
 			{
-				ViewerUserData* userData = polymorphic_downcast<ViewerUserData *>(selectedObject->userData);
+				ViewerUserData* userData = getUserData(selectedObject);
 				userData->draw(selectedObject);
 				displayObjectHook(selectedObject);
 			}

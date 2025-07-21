@@ -45,74 +45,101 @@ inline Derived polymorphic_downcast(Base base)
 
 namespace Enki
 {
-	Thymio2Model::Thymio2Model(ViewerWidget* v)
-	{
-		viewer = v;
 
-		textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/thymio-bottomLed-diffusionMap.png")).mirrored()));
-		textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/thymio-wheel-texture.png")).mirrored()));
-		textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/thymio-ground-shadow.png")).mirrored()));
+    std::vector<GLuint> Thymio2Model::lists{};
+    std::vector<std::unique_ptr<QOpenGLTexture>> Thymio2Model::textures{};
+    QImage Thymio2Model::bodyTexture;
+    QImage Thymio2Model::bodyDiffusionMap0;
+    QImage Thymio2Model::bodyDiffusionMap1;
+    QImage Thymio2Model::bodyDiffusionMap2;
+    unsigned Thymio2Model::textureDimension;
+    std::vector<Vector> Thymio2Model::ledCenter[Thymio2::LED_COUNT];
+    std::vector<Vector> Thymio2Model::ledSize[Thymio2::LED_COUNT];
 
-		bodyTexture = QImage(QString(":/textures/thymio-body-texture.png"));
-		bodyDiffusionMap0 = QImage(QString(":/textures/thymio-body-diffusionMap0.png"));
-		bodyDiffusionMap1 = QImage(QString(":/textures/thymio-body-diffusionMap1.png"));
-		bodyDiffusionMap2 = QImage(QString(":/textures/thymio-body-diffusionMap2.png"));
-
-		lists.resize(2);
-		lists[0] = GenThymio2Body();
-		lists[1] = GenThymio2Wheel();
-
-		textureDimension = bodyTexture.width();
-		Vector buttonCenter(0.136f,0.764f);
-		for (unsigned i=0; i<Thymio2::LED_COUNT; i++)
-		{
-			switch(i)
-			{
-				case Thymio2::TOP:     	    ledCenter[i].push_back(Vector(0.5f,0.5f));       ledSize[i].push_back(Vector(1.f,1.f)); break;
-				case Thymio2::BOTTOM_LEFT:  ledCenter[i].push_back(Vector(0.6074f,0.1841f)); ledSize[i].push_back(Vector(0.1133f,0.2939f));
-											ledCenter[i].push_back(Vector(0.7309f,0.7837f)); ledSize[i].push_back(Vector(0.1885f,0.1396f)); break;
-				case Thymio2::BOTTOM_RIGHT: ledCenter[i].push_back(Vector(0.6636f,0.4297f)); ledSize[i].push_back(Vector(0.2236f,0.1875f)); break;
-
-				case Thymio2::BUTTON_UP:    ledCenter[i].push_back((buttonCenter + Vector(-0.038f,0))); ledSize[i].push_back(Vector(0.035f,0.045f)); break;
-				case Thymio2::BUTTON_DOWN:  ledCenter[i].push_back((buttonCenter + Vector( 0.038f,0))); ledSize[i].push_back(Vector(0.035f,0.045f)); break;
-				case Thymio2::BUTTON_LEFT:  ledCenter[i].push_back((buttonCenter + Vector(0, 0.038f))); ledSize[i].push_back(Vector(0.045f,0.035f)); break;
-				case Thymio2::BUTTON_RIGHT: ledCenter[i].push_back((buttonCenter + Vector(0,-0.038f))); ledSize[i].push_back(Vector(0.045f,0.035f)); break;
-
-				case Thymio2::RING_0:       ledCenter[i].push_back((buttonCenter + Vector(-0.105f,0)));         ledSize[i].push_back(Vector(0.04f,0.08f)); break;
-				case Thymio2::RING_1:       ledCenter[i].push_back((buttonCenter + Vector(-0.0703f,-0.0703f))); ledSize[i].push_back(Vector(0.065f,0.065f)); break;
-				case Thymio2::RING_2:       ledCenter[i].push_back((buttonCenter + Vector( 0,-0.105f)));        ledSize[i].push_back(Vector(0.08f,0.04f)); break;
-				case Thymio2::RING_3:       ledCenter[i].push_back((buttonCenter + Vector( 0.0703f,-0.0703f))); ledSize[i].push_back(Vector(0.065f,0.065f)); break;
-				case Thymio2::RING_4:       ledCenter[i].push_back((buttonCenter + Vector( 0.105f,0)));         ledSize[i].push_back(Vector(0.04f,0.08f)); break;
-				case Thymio2::RING_5:       ledCenter[i].push_back((buttonCenter + Vector( 0.0703f, 0.0703f))); ledSize[i].push_back(Vector(0.065f,0.065f)); break;
-				case Thymio2::RING_6:       ledCenter[i].push_back((buttonCenter + Vector( 0, 0.105f)));        ledSize[i].push_back(Vector(0.08f,0.04f)); break;
-				case Thymio2::RING_7:       ledCenter[i].push_back((buttonCenter + Vector(-0.0703f, 0.0703f))); ledSize[i].push_back(Vector(0.065f,0.065f)); break;
-
-				case Thymio2::IR_FRONT_0:   ledCenter[i].push_back(Vector(0.5586f,0.0459f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
-				case Thymio2::IR_FRONT_1:   ledCenter[i].push_back(Vector(0.5644f,0.1279f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
-				case Thymio2::IR_FRONT_2:   ledCenter[i].push_back(Vector(0.5673f,0.2441f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
-				case Thymio2::IR_FRONT_3:   ledCenter[i].push_back(Vector(0.5693f,0.3056f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
-				case Thymio2::IR_FRONT_4:   ledCenter[i].push_back(Vector(0.5664f,0.4258f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
-				case Thymio2::IR_FRONT_5:   ledCenter[i].push_back(Vector(0.5615f,0.5185f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
-				case Thymio2::IR_BACK_0:    ledCenter[i].push_back(Vector(0.8759f,0.6289f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
-				case Thymio2::IR_BACK_1:    ledCenter[i].push_back(Vector(0.5449f,0.6289f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
-
-				case Thymio2::LEFT_BLUE:    ledCenter[i].push_back(Vector(0.7163f,0.8428f)); ledSize[i].push_back(Vector(0.0771f,0.0878f)); break;
-				case Thymio2::LEFT_RED:     ledCenter[i].push_back(Vector(0.7163f,0.8428f)); ledSize[i].push_back(Vector(0.0771f,0.0878f)); break;
-				case Thymio2::RIGHT_BLUE:   ledCenter[i].push_back(Vector(0.7974f,0.3750f)); ledSize[i].push_back(Vector(0.0910f,0.0910f)); break;
-				case Thymio2::RIGHT_RED:    ledCenter[i].push_back(Vector(0.7773f,0.4336f)); ledSize[i].push_back(Vector(0.0400f,0.0400f)); break;
-				default: break;
-			}
-
-			// shrink vector
-			std::vector<Vector>(ledCenter[i]).swap(ledCenter[i]);
-			std::vector<Vector>(ledSize[i]).swap(ledSize[i]);
+	void Thymio2Model::init() {
+		if (lists.size() == 0) {
+		    textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/thymio-bottomLed-diffusionMap.png")).mirrored()));
+		    textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/thymio-wheel-texture.png")).mirrored()));
+		    textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/thymio-ground-shadow.png")).mirrored()));
+		    bodyTexture = QImage(QString(":/textures/thymio-body-texture.png"));
+		    bodyDiffusionMap0 = QImage(QString(":/textures/thymio-body-diffusionMap0.png"));
+		    bodyDiffusionMap1 = QImage(QString(":/textures/thymio-body-diffusionMap1.png"));
+		    bodyDiffusionMap2 = QImage(QString(":/textures/thymio-body-diffusionMap2.png"));
+		    lists.push_back(GenThymio2Body());
+		    lists.push_back(GenThymio2Wheel());
+		
+		    textureDimension = bodyTexture.width();
+		    Vector buttonCenter(0.136f,0.764f);
+		    for (unsigned i=0; i<Thymio2::LED_COUNT; i++)
+		    {
+		    	switch(i)
+		    	{
+		    		case Thymio2::TOP:     	    ledCenter[i].push_back(Vector(0.5f,0.5f));       ledSize[i].push_back(Vector(1.f,1.f)); break;
+		    		case Thymio2::BOTTOM_LEFT:  ledCenter[i].push_back(Vector(0.6074f,0.1841f)); ledSize[i].push_back(Vector(0.1133f,0.2939f));
+		    									ledCenter[i].push_back(Vector(0.7309f,0.7837f)); ledSize[i].push_back(Vector(0.1885f,0.1396f)); break;
+		    		case Thymio2::BOTTOM_RIGHT: ledCenter[i].push_back(Vector(0.6636f,0.4297f)); ledSize[i].push_back(Vector(0.2236f,0.1875f)); break;
+    
+		    		case Thymio2::BUTTON_UP:    ledCenter[i].push_back((buttonCenter + Vector(-0.038f,0))); ledSize[i].push_back(Vector(0.035f,0.045f)); break;
+		    		case Thymio2::BUTTON_DOWN:  ledCenter[i].push_back((buttonCenter + Vector( 0.038f,0))); ledSize[i].push_back(Vector(0.035f,0.045f)); break;
+		    		case Thymio2::BUTTON_LEFT:  ledCenter[i].push_back((buttonCenter + Vector(0, 0.038f))); ledSize[i].push_back(Vector(0.045f,0.035f)); break;
+		    		case Thymio2::BUTTON_RIGHT: ledCenter[i].push_back((buttonCenter + Vector(0,-0.038f))); ledSize[i].push_back(Vector(0.045f,0.035f)); break;
+    
+		    		case Thymio2::RING_0:       ledCenter[i].push_back((buttonCenter + Vector(-0.105f,0)));         ledSize[i].push_back(Vector(0.04f,0.08f)); break;
+		    		case Thymio2::RING_1:       ledCenter[i].push_back((buttonCenter + Vector(-0.0703f,-0.0703f))); ledSize[i].push_back(Vector(0.065f,0.065f)); break;
+		    		case Thymio2::RING_2:       ledCenter[i].push_back((buttonCenter + Vector( 0,-0.105f)));        ledSize[i].push_back(Vector(0.08f,0.04f)); break;
+		    		case Thymio2::RING_3:       ledCenter[i].push_back((buttonCenter + Vector( 0.0703f,-0.0703f))); ledSize[i].push_back(Vector(0.065f,0.065f)); break;
+		    		case Thymio2::RING_4:       ledCenter[i].push_back((buttonCenter + Vector( 0.105f,0)));         ledSize[i].push_back(Vector(0.04f,0.08f)); break;
+		    		case Thymio2::RING_5:       ledCenter[i].push_back((buttonCenter + Vector( 0.0703f, 0.0703f))); ledSize[i].push_back(Vector(0.065f,0.065f)); break;
+		    		case Thymio2::RING_6:       ledCenter[i].push_back((buttonCenter + Vector( 0, 0.105f)));        ledSize[i].push_back(Vector(0.08f,0.04f)); break;
+		    		case Thymio2::RING_7:       ledCenter[i].push_back((buttonCenter + Vector(-0.0703f, 0.0703f))); ledSize[i].push_back(Vector(0.065f,0.065f)); break;
+    
+		    		case Thymio2::IR_FRONT_0:   ledCenter[i].push_back(Vector(0.5586f,0.0459f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
+		    		case Thymio2::IR_FRONT_1:   ledCenter[i].push_back(Vector(0.5644f,0.1279f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
+		    		case Thymio2::IR_FRONT_2:   ledCenter[i].push_back(Vector(0.5673f,0.2441f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
+		    		case Thymio2::IR_FRONT_3:   ledCenter[i].push_back(Vector(0.5693f,0.3056f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
+		    		case Thymio2::IR_FRONT_4:   ledCenter[i].push_back(Vector(0.5664f,0.4258f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
+		    		case Thymio2::IR_FRONT_5:   ledCenter[i].push_back(Vector(0.5615f,0.5185f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
+		    		case Thymio2::IR_BACK_0:    ledCenter[i].push_back(Vector(0.8759f,0.6289f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
+		    		case Thymio2::IR_BACK_1:    ledCenter[i].push_back(Vector(0.5449f,0.6289f)); ledSize[i].push_back(Vector(0.06f,0.06f)); break;
+    
+		    		case Thymio2::LEFT_BLUE:    ledCenter[i].push_back(Vector(0.7163f,0.8428f)); ledSize[i].push_back(Vector(0.0771f,0.0878f)); break;
+		    		case Thymio2::LEFT_RED:     ledCenter[i].push_back(Vector(0.7163f,0.8428f)); ledSize[i].push_back(Vector(0.0771f,0.0878f)); break;
+		    		case Thymio2::RIGHT_BLUE:   ledCenter[i].push_back(Vector(0.7974f,0.3750f)); ledSize[i].push_back(Vector(0.0910f,0.0910f)); break;
+		    		case Thymio2::RIGHT_RED:    ledCenter[i].push_back(Vector(0.7773f,0.4336f)); ledSize[i].push_back(Vector(0.0400f,0.0400f)); break;
+		    		default: break;
+		    	}
+    
+		    	// shrink vector
+		    	std::vector<Vector>(ledCenter[i]).swap(ledCenter[i]);
+		    	std::vector<Vector>(ledSize[i]).swap(ledSize[i]);
+		    }
 		}
 	}
 
-	void Thymio2Model::cleanup(ViewerWidget* viewer)
+	Thymio2Model::Thymio2Model()
 	{
-		for (int i = 0; i < lists.size(); i++)
-			glDeleteLists(lists[i], 1);
+		init();
+	}
+
+	void Thymio2Model::deinit()
+	{
+		if (lists.size()) {
+		    for (int i = 0; i < lists.size(); i++)
+		    	glDeleteLists(lists[i], 1);
+			lists.clear(); 
+			textures.clear(); 
+		}
+	}
+
+	void Thymio2Model::cleanup()
+	{
+		thymio_texture = nullptr;
+	}
+
+	Thymio2Model::~Thymio2Model()
+	{
+		ViewerWidget::SwitchContext c;
+		thymio_texture = nullptr;
 	}
 
 	void Thymio2Model::draw(PhysicalObject* object)
@@ -131,7 +158,7 @@ namespace Enki
 		glDisable(GL_LIGHTING);
 		glColor3d(1, 1, 1);
 		glEnable(GL_TEXTURE_2D);
-		thymio_textures.at(thymio)->bind();
+		thymio_texture->bind();
 		
 		glPushMatrix();
 		glTranslatef(2.5,0,0);
@@ -262,7 +289,10 @@ namespace Enki
 		}
 		
 		QImage i((uint8_t*)(thymio->ledTexture), textureDimension, textureDimension, QImage::Format_ARGB32);
-		thymio_textures.emplace(thymio, std::make_unique<QOpenGLTexture>(i.mirrored()));
+		{
+			ViewerWidget::SwitchContext c;
+			thymio_texture = std::make_unique<QOpenGLTexture>(i.mirrored());
+		}
 		return 0;
 	}
 	
