@@ -64,7 +64,6 @@ namespace Enki
     }
 
     void EPuckModel::deinit() {
-    	std::cout << "EPuckModel::deinit\n";
     	if (lists.size()) {
      		for (int i = 0; i < lists.size(); i++)
 				glDeleteLists(lists[i], 1);

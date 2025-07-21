@@ -116,8 +116,8 @@ namespace Enki
 	
 	//! Create a camera centered on a given world
 	ViewerWidget::CameraPose::CameraPose(const World *world):
-		pos(QPointF(world->w * 0.5, -qMax(0., world->r * 0.9))),
-		altitude(qMax(qMax(world->w, world->h), world->r*2) * 0.9),
+		pos(world ? QPointF(world->w * 0.5, -qMax(0., world->r * 0.9)) : QPointF(0, 0)),
+		altitude(world ? qMax(qMax(world->w, world->h), world->r*2) * 0.9 : 0),
 		yaw(M_PI/2),
 		pitch(-(3*M_PI)/8)
 	{
@@ -191,7 +191,7 @@ namespace Enki
 		link(link)
 	{}
 
-	ViewerWidget::ViewerWidget(World *world, QWidget *parent) :
+	ViewerWidget::ViewerWidget(World *world, QWidget *parent, bool updateWorld) :
 		QOpenGLWidget(parent),
 		timerPeriodMs(30),
 		camera(world),
@@ -210,7 +210,8 @@ namespace Enki
 		movingObject(false),
 		mouseLeftButtonRobot(0),
 		mouseRightButtonRobot(0),
-		mouseMiddleButtonRobot(0)
+		mouseMiddleButtonRobot(0),
+		updateWorld(updateWorld)
 	{
 		initTexturesResources();
 		elapsedTime = double(30)/1000.; // average second between two frames, can be updated each frame to better precision
@@ -220,18 +221,15 @@ namespace Enki
 	
 	ViewerWidget::~ViewerWidget()
 	{
+		setWorld(nullptr);
 		makeCurrent();
-		// world->disconnectExternalObjectsUserData();
 		if (isValid())
 		{
 			helpWidget = nullptr;
 			centerWidget = nullptr;
 			selectionTexture = nullptr;
-			glDeleteLists(worldList, 1);
 			worldTexture = nullptr;
 			wallTexture = nullptr;
-			if (world->hasGroundTexture())
-				glDeleteTextures(1, &worldGroundTexture);
 		}
 		doneCurrent();
 	}
@@ -239,7 +237,6 @@ namespace Enki
 	QOpenGLContext * ViewerWidget::sharedContext = nullptr;
 	
 	void ViewerWidget::deinit() {
-		std::cout << "ViewerWidget::deinit\n";
 		SwitchContext c;
 		EPuckModel::deinit();
 		Thymio2Model::deinit();
@@ -251,6 +248,49 @@ namespace Enki
 		return world;
 	}
 	
+	void ViewerWidget::initWorld(World * world) {
+		Color color = world ? world->color : Color::gray;
+		glClearColor(color.r(), color.g(), color.b(), 1.0);
+		if (world) {
+		    if (world->hasGroundTexture())
+		    {
+		        glGenTextures(1, &worldGroundTexture);
+		        glBindTexture(GL_TEXTURE_2D, worldGroundTexture);
+		        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, world->groundTexture.width, world->groundTexture.height, 0, GL_BGRA, GL_UNSIGNED_BYTE, &world->groundTexture.data[0]);
+		        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		    }
+		    worldList = glGenLists(1);
+		    renderWorld();		
+		    // let subclass manage their static types
+		    renderObjectsTypesHook();		
+		}
+		shouldInitWorld = false;
+	}
+
+	void ViewerWidget::setWorld(World * value)
+	{
+		makeCurrent();
+		if (value != world) {
+			if (world && false) {
+				glDeleteLists(worldList, 1);
+				if (world->hasGroundTexture())
+				{
+					glDeleteTextures(1, &worldGroundTexture);
+				}
+			}
+			world = value;
+			shouldInitWorld = true;
+		}
+		doneCurrent();
+	}
+
+	void ViewerWidget::resetCamera() { 
+		if(world) {
+			camera = UpdatableCameraPose(world); 
+		}
+	}
+
 	ViewerWidget::CameraPose ViewerWidget::getCamera() const
 	{
 		return camera;
@@ -566,7 +606,6 @@ namespace Enki
 	void ViewerWidget::renderWorld()
 	{
 		const double infPlanSize = 3000;
-		
 		glNewList(worldList, GL_COMPILE);
 		
 		glNormal3d(0, 0, 1);
@@ -654,7 +693,6 @@ namespace Enki
 					glVertex3d(cos(angEnd)*(r+infPlanSize), sin(angEnd)*(r+infPlanSize), 10);
 					glVertex3d(cos(angEnd)*r, sin(angEnd)*r, 10);
 					glEnd();
-					
 					// draw ground center
 					if (world->hasGroundTexture())
 					{
@@ -670,7 +708,6 @@ namespace Enki
 					glTexCoord2f(0.5f+0.5f*cosf(angEnd), 0.5f+0.5f*sinf(angEnd));
 					glVertex3d(cos(angEnd) * r, sin(angEnd) * r, 0);
 					glEnd();
-					
 					glEnable(GL_TEXTURE_2D);
 					worldTexture->bind();
 					
@@ -836,24 +873,6 @@ namespace Enki
 	
 	void ViewerWidget::initializeGL()
 	{
-		// if (!sharedContext) {
-		// 	// sharedContext = std::make_unique<QOpenGLContext>();
-		// 	sharedContext = new QOpenGLContext();
-		// 	sharedContext->create();
-		// 	std::cout << "sharedContext s" << sharedContext->surface() << std::endl;
-		// }
-		// if (!sharedContext) {
-		// 	sharedContext = std::make_unique<QOpenGLContext>();
-		// 	sharedContext->create();
-		// }
-		// if (context()) {
-		// 	delete context();
-		// 	sharedContext->setShareContext(context());
-		// }
-		// sharedContext->setShareContext(context());
-
-		glClearColor(world->color.r(), world->color.g(), world->color.b(), 1.0);
-		
 		float LightAmbient[] = {0.6, 0.6, 0.6, 1};
 		float LightDiffuse[] = {1.2, 1.2, 1.2, 1};
 		float defaultColor[] = {0.5, 0.5, 0.5, 1};
@@ -887,18 +906,7 @@ namespace Enki
 		selectionTexture = std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/selection.png")).mirrored());
 		worldTexture = std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/world.png")).mirrored());
 		wallTexture = std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/wall.png")).mirrored());
-		if (world->hasGroundTexture())
-		{
-			glGenTextures(1, &worldGroundTexture);
-			glBindTexture(GL_TEXTURE_2D, worldGroundTexture);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, world->groundTexture.width, world->groundTexture.height, 0, GL_BGRA, GL_UNSIGNED_BYTE, &world->groundTexture.data[0]);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		}
-		worldList = glGenLists(1);
-		renderWorld();		
-		// let subclass manage their static types
-		renderObjectsTypesHook();
+		initWorld(world);
 	}
 
 	ViewerWidget::ViewerUserData * ViewerWidget::makeUserData(PhysicalObject * object) {
@@ -1228,8 +1236,10 @@ namespace Enki
 
 	void ViewerWidget::paintGL()
 	{
+		if (shouldInitWorld) {
+			initWorld(world);
+		}
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		const double znear = 0.5;
 		if (trackingView && selectedObject)
 			camera.updateTracking(selectedObject->angle, QVector3D(selectedObject->pos.x, selectedObject->pos.y, selectedObject->getHeight()), znear);
@@ -1237,11 +1247,11 @@ namespace Enki
 			camera.update();
 
 		const double aspectRatio = double(width()) / double(height());
-		renderScene(-aspectRatio*0.5*znear, aspectRatio*0.5*znear, -0.5*znear, 0.5*znear, znear, 2000);
-		sceneCompletedHook();
-		
-		picking(-aspectRatio*0.5*znear, aspectRatio*0.5*znear, -0.5*znear, 0.5*znear, znear, 2000);
-		
+		if (world) {
+			renderScene(-aspectRatio*0.5*znear, aspectRatio*0.5*znear, -0.5*znear, 0.5*znear, znear, 2000);
+			sceneCompletedHook();
+			picking(-aspectRatio*0.5*znear, aspectRatio*0.5*znear, -0.5*znear, 0.5*znear, znear, 2000);
+		}
 		displayMessages();
 		displayWidgets();
 
@@ -1456,8 +1466,18 @@ namespace Enki
 	
 	void ViewerWidget::timerEvent(QTimerEvent * event)
 	{
-		world->step(double(timerPeriodMs)/1000., 3);
+		if (world && updateWorld) {
+			world->step(double(timerPeriodMs)/1000., 3);
+		}
 		update();
+	}
+
+	void ViewerWidget::setUpdateWorld(bool value) {
+		updateWorld = value;
+	}
+
+	bool ViewerWidget::getUpdateWorld() const {
+		return updateWorld;
 	}
 	
 	//! Help button or F1 have been pressed

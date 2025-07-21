@@ -186,12 +186,15 @@ namespace Enki
 		double elapsedTime;
 
 	public:
-		ViewerWidget(World *world, QWidget *parent = 0);
+		ViewerWidget(World *world, QWidget *parent = 0, bool updateWorld = true);
 		~ViewerWidget();
 
 		static void deinit();
 	
 		World* getWorld() const;
+		void setWorld(World *);
+		void setUpdateWorld(bool value);
+		bool getUpdateWorld() const;
 		CameraPose getCamera() const;
 		QVector3D getPointedPoint() const;
 		PhysicalObject* getPointedObject() const;
@@ -205,6 +208,7 @@ namespace Enki
 	public slots:
 		void setCamera(const QPointF& pos, double altitude, double yaw, double pitch);
 		void setCamera(double x, double y, double altitude, double yaw, double pitch);
+		void resetCamera();
 		void restartDumpFrames();
 		void setDumpFrames(bool doDump);
 		void setTracking(bool doTrack);
@@ -222,7 +226,10 @@ namespace Enki
 		void renderShape(const Polygon& shape, const double height, const Color& color);
 		void renderSimpleObject(GLuint & list, PhysicalObject *object);
 		void renderText(int x, int y, const QString &str, const QFont & font = QFont());
-		
+		void initWorld(World *);
+		bool shouldInitWorld;
+		bool updateWorld;
+
 		// helper functions for coordinates
 		void glVertex2Screen(int x, int y);
 		void computeInfoMessageAreaSize();
