@@ -7,7 +7,13 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 
 enable_testing()
 
+option(USE_Qt6 "Use Qt6" OFF)
+
+if(USE_Qt6)
+find_package(Qt6 COMPONENTS Core Gui Widgets OpenGL OpenGLWidgets)
+else()
 find_package(Qt5 COMPONENTS Core Gui Widgets OpenGL)
+endif()
 find_package(OpenGL REQUIRED)
 
 # check for SDL2
@@ -22,7 +28,7 @@ set(LIB_VERSION_STRING ${LIB_VERSION_MAJOR}.${LIB_VERSION_MINOR}.${LIB_VERSION_P
 
 add_subdirectory(enki)
 
-if (Qt5Widgets_FOUND AND Qt5OpenGL_FOUND)
+if (Qt6_FOUND OR Qt5_FOUND)
 	add_subdirectory(viewer)
 endif()
 

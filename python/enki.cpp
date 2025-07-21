@@ -43,7 +43,6 @@
 #include "../viewer/Viewer.h"
 #include <QApplication>
 #include <QImage>
-#include <QGLWidget>
 
 #if PY_MAJOR_VERSION >= 3
 #define INT_CHECK PyLong_Check

@@ -361,13 +361,13 @@ namespace Enki
 
 	void ViewerWidget::showHelp()
 	{
-		addInfoMessage(trUtf8("Available controls:"));
-		addInfoMessage(trUtf8("• F1 key: show this help message"));
-		addInfoMessage(trUtf8("• left click on object: select object"));
-		addInfoMessage(trUtf8("• left click outside object: de-select object"));
-		addInfoMessage(trUtf8("• left drag: if object selected, move it, otherwise move camera"));
-		addInfoMessage(trUtf8("• right drag: if object selected, rotate it, otherwise rotate camera"));
-		addInfoMessage(trUtf8("• mouse wheel/left drag + shift: zoom camera"));
+		addInfoMessage(tr("Available controls:"));
+		addInfoMessage(tr("• F1 key: show this help message"));
+		addInfoMessage(tr("• left click on object: select object"));
+		addInfoMessage(tr("• left click outside object: de-select object"));
+		addInfoMessage(tr("• left drag: if object selected, move it, otherwise move camera"));
+		addInfoMessage(tr("• right drag: if object selected, rotate it, otherwise rotate camera"));
+		addInfoMessage(tr("• mouse wheel/left drag + shift: zoom camera"));
 	}
 
 	void ViewerWidget::renderSegment(const Segment& segment, double height)
@@ -1225,7 +1225,7 @@ namespace Enki
 	{
 		messageListWidth = 0;
 		for (MessageList::iterator it = messageList.begin(); it != messageList.end(); ++it)
-			messageListWidth = std::max(messageListWidth, fontMetrics.width(it->message));
+			messageListWidth = std::max(messageListWidth, fontMetrics.horizontalAdvance(it->message));
 		const int lineSpacing(fontMetrics.lineSpacing()+3);
 		messageListWidth += 20; 
 		messageListHeight = messageList.size() * lineSpacing;
@@ -1441,10 +1441,11 @@ namespace Enki
 	
 	void ViewerWidget::wheelEvent(QWheelEvent * event)
 	{
+		const auto delta = event->angleDelta().y();
 		// zoom
 		if (trackingView)
 		{
-			camera.radius *= 1 - 0.0003*event->delta();
+			camera.radius *= 1 - 0.0003 * delta;
 			if (camera.radius < 1.0)
 				camera.radius = 1.0;
 		}
@@ -1453,9 +1454,9 @@ namespace Enki
 		else
 		{
 			const double sensitivity = (1 + 0.1*camera.altitude) * 0.003;
-			camera.pos.rx() += sensitivity * event->delta()*camera.forward.x();
-			camera.pos.ry() += sensitivity * event->delta()*camera.forward.y();
-			camera.altitude += sensitivity * event->delta()*camera.forward.z();
+			camera.pos.rx() += sensitivity * delta * camera.forward.x();
+			camera.pos.ry() += sensitivity * delta * camera.forward.y();
+			camera.altitude += sensitivity * delta * camera.forward.z();
 			camera.altitude = std::max(camera.altitude, 0.);
 		}
 	}
