@@ -58,7 +58,7 @@ namespace Enki
 	void MarxbotModel::init()
 	{
 		if (lists.size() == 0) {
-		    textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/marxbot.png")).mirrored()));
+		    textures.emplace_back(loadTexture(":/textures/marxbot.png"));
 		    lists.push_back(GenMarxbotBase());
 		    lists.push_back(GenMarxbotWheel());
 		}

@@ -61,6 +61,9 @@ class QWidget;
 
 namespace Enki
 {
+
+	std::unique_ptr<QOpenGLTexture> loadTexture(const char * path);
+
 	class World;
 	class PhysicalObject;
 	
@@ -142,6 +145,10 @@ namespace Enki
 		std::unique_ptr<QOpenGLTexture> wallTexture;
 		GLuint worldGroundTexture;
 		
+		// Deprecated
+		typedef QMap<const std::type_info*, const std::type_info*> ManagedObjectsAliasesMap;
+		ManagedObjectsAliasesMap managedObjectsAliases;
+
 		virtual ViewerUserData * makeUserData(PhysicalObject * object);
 		ViewerUserData * getUserData(PhysicalObject * object);
 		

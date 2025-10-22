@@ -53,8 +53,8 @@ namespace Enki
 
     void EPuckModel::init() {
     	if (lists.size() == 0) {
-    		textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/epuck.png")).mirrored()));
-			textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/epuckr.png")).mirrored()));
+    		textures.emplace_back(loadTexture(":/textures/epuck.png"));
+			textures.emplace_back(loadTexture(":/textures/epuckr.png"));
 			lists.push_back(GenEPuckBody());
 			lists.push_back(GenEPuckRest());
 			lists.push_back(GenEPuckRing());

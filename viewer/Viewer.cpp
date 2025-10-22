@@ -76,6 +76,14 @@ namespace Enki
 	#define rad2deg (180 / M_PI)
 	#define clamp(x, low, high) ((x) < (low) ? (low) : ((x) > (high) ? (high) : (x)))
 	
+	std::unique_ptr<QOpenGLTexture> loadTexture(const char * path) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 9, 0))
+		return std::make_unique<QOpenGLTexture>(QImage(QString(path)).mirrored());
+#else
+		return std::make_unique<QOpenGLTexture>(QImage(QString(path)).flipped(Qt::Vertical));
+#endif
+	}
+
 	// simple display list, one per instance
 	class SimpleDisplayList : public ViewerWidget::ViewerUserData
 	{
@@ -900,12 +908,12 @@ namespace Enki
 		glHint (GL_FOG_HINT, GL_NICEST);
 		glEnable (GL_FOG);*/
 		
-		helpWidget = std::make_unique<QOpenGLTexture>(QImage(QString(":/widgets/help.png")).mirrored());
-		centerWidget = std::make_unique<QOpenGLTexture>(QImage(QString(":/widgets/center.png")).mirrored());
+		helpWidget = loadTexture(":/widgets/help.png");
+		centerWidget = loadTexture(":/widgets/center.png");
 		
-		selectionTexture = std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/selection.png")).mirrored());
-		worldTexture = std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/world.png")).mirrored());
-		wallTexture = std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/wall.png")).mirrored());
+		selectionTexture = loadTexture(":/textures/selection.png");
+		worldTexture = loadTexture(":/textures/world.png");
+		wallTexture = loadTexture(":/textures/wall.png");
 		initWorld(world);
 	}
 
@@ -1167,9 +1175,14 @@ namespace Enki
 	
 	void ViewerWidget::clickWidget(QMouseEvent *event)
 	{
-		if (event->y() > 24 && event->y() < 72)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))		
+		const auto y = event->y();
+#else
+		const auto y = event->position().y();
+#endif
+		if (y > 24 && y < 72)
 			helpActivated();
-		else if (event->y() > 24+48+12 && event->y() < 72+48+12)
+		else if (y > 24+48+12 && y < 72+48+12)
 			camera = UpdatableCameraPose(world);
 	}
 	
@@ -1278,13 +1291,20 @@ namespace Enki
 		// change selected object
 		if (event->button() == Qt::LeftButton)
 		{
-			if (event->x() > width() - 72 && event->x() < width() - 24)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))		
+		const auto x = event->x();
+		const auto y = event->y();
+#else
+		const auto x = event->position().x();
+		const auto y = event->position().y();
+#endif
+			if (x > width() - 72 && x < width() - 24)
 			{
 				clickWidget(event);
 			}
-			else if (!messageList.empty() && event->x() < messageListWidth && event->y() < messageListHeight)
+			else if (!messageList.empty() && x < messageListWidth && y < messageListHeight)
 			{
-				const int messageIndex((event->y() - 5) / fontMetrics.lineSpacing());
+				const int messageIndex((y - 5) / fontMetrics.lineSpacing());
 				if (messageIndex >= 0 && messageIndex < messageList.size())
 				{
 					MessageList::iterator it(messageList.begin());

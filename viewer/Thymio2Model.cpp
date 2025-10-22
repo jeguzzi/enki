@@ -58,9 +58,9 @@ namespace Enki
 
 	void Thymio2Model::init() {
 		if (lists.size() == 0) {
-		    textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/thymio-bottomLed-diffusionMap.png")).mirrored()));
-		    textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/thymio-wheel-texture.png")).mirrored()));
-		    textures.emplace_back(std::make_unique<QOpenGLTexture>(QImage(QString(":/textures/thymio-ground-shadow.png")).mirrored()));
+		    textures.emplace_back(loadTexture(":/textures/thymio-bottomLed-diffusionMap.png"));
+		    textures.emplace_back(loadTexture(":/textures/thymio-wheel-texture.png"));
+		    textures.emplace_back(loadTexture(":/textures/thymio-ground-shadow.png"));
 		    bodyTexture = QImage(QString(":/textures/thymio-body-texture.png"));
 		    bodyDiffusionMap0 = QImage(QString(":/textures/thymio-body-diffusionMap0.png"));
 		    bodyDiffusionMap1 = QImage(QString(":/textures/thymio-body-diffusionMap1.png"));
@@ -291,7 +291,13 @@ namespace Enki
 		QImage i((uint8_t*)(thymio->ledTexture), textureDimension, textureDimension, QImage::Format_ARGB32);
 		{
 			ViewerWidget::SwitchContext c;
-			thymio_texture = std::make_unique<QOpenGLTexture>(i.mirrored());
+			thymio_texture = std::make_unique<QOpenGLTexture>(i
+#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
+				.mirrored()
+#else
+				.flipped(Qt::Vertical)
+#endif
+				);
 		}
 		return 0;
 	}
