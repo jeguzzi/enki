@@ -46,14 +46,14 @@ namespace Enki
 {
 	using namespace std;
 	
-	IRSensor::IRSensor(Robot *owner, Vector pos, double height, double orientation, double range, double m, double x0, double c, double noiseSd):
+	IRSensor::IRSensor(Robot *owner, Vector pos, double height, double orientation, double range, double m, double x0, double c, double noiseSd, unsigned int rays, double _aperture):
 		pos(pos),
 		height(height),
 		orientation(orientation),
 		range(range),
-		aperture(15.*M_PI/180.),
+		aperture(_aperture*M_PI/180.),
 		alpha(1/cos(aperture)),
-		rayCount(3),
+		rayCount(rays),
 		m(m),
 		x0(x0),
 		c(c),
@@ -73,12 +73,7 @@ namespace Enki
 		// compute ray orientation
 		for (size_t i = 0; i<rayCount; i++)
 			rayAngles[i] = - aperture + (i*2.0*aperture)/(rayCount-1.0);
-		// calculate interaction radius, which is measured from center of robot
-		this->r = sqrt(pos.norm2()+range*range-2*pos.norm()*range*cos(M_PI-orientation+pos.angle()));
-		// calculate the smartRadius
-		this->smartRadius = range*sqrt(1.25-cos(aperture));
-		// calculate relative position for center of central ray
-		this->smartPos = Point (range/2*cos(orientation), range/2*sin(orientation));
+		setSearchRange(range);
 		// no activation until first loop
 		finalValue = 0;
 		finalDist = range;
@@ -87,7 +82,7 @@ namespace Enki
 	void IRSensor::init(double dt, World* w)
 	{
 		// fill initial values with very large value; will be replaced if smaller distance is found
-		std::fill(rayDists.begin(), rayDists.end(), range);
+		std::fill(rayDists.begin(), rayDists.end(), search_range);
 		std::fill(rayValues.begin(), rayValues.end(), 0);
 
 		// compute absolute position and orientation
@@ -99,6 +94,20 @@ namespace Enki
 			absRayAngles[i] = absOrientation + rayAngles[i];
 		// calculate current position of center of central ray
 		absSmartPos = rot * smartPos + absPos;
+	}
+
+	void IRSensor::setSearchRange(double value)
+	{
+		// cout << "Set search range to " << value << "\n";
+		assert(value > 0);
+		search_range = value;
+		// calculate interaction radius, which is measured from center of robot
+		r = sqrt(pos.norm2()+search_range*search_range-2*pos.norm()*search_range*cos(M_PI-orientation+pos.angle()));
+		// calculate the smartRadius
+		smartRadius = search_range*sqrt(1.25-cos(aperture));
+		// calculate relative position for center of central ray
+		smartPos = Point (search_range/2*cos(orientation), search_range/2*sin(orientation));
+		// no activation until first loop
 	}
 	
 	// robot bounding circle overlaps with po
@@ -200,7 +209,7 @@ namespace Enki
 					const Vector rayDir(cos(absRayAngles[i]), sin(absRayAngles[i]));
 					
 					// the absolute position of the sensor ray's end point
-					const Point absRayEndPoint = absPos+rayDir*range;
+					const Point absRayEndPoint = absPos+rayDir*search_range;
 					double candidate0 = HUGE_VAL;
 					double candidate1 = HUGE_VAL;
 					
@@ -218,7 +227,7 @@ namespace Enki
 						candidate1 = (w->h-absPos.y) / (absRayEndPoint.y-absPos.y);
 					
 					double dist = std::min(candidate0, candidate1);
-					dist *= range;
+					dist *= search_range;
 					updateRay(i, dist);
 				}
 			}
@@ -323,7 +332,7 @@ namespace Enki
 	double IRSensor::distanceToPolygon(double rayAngle, const Polygon &p) const 
 	{
 		// compute ray segment in global coordinates
-		Point absEnd = absPos + Vector(cos(rayAngle), sin(rayAngle)) * range;
+		Point absEnd = absPos + Vector(cos(rayAngle), sin(rayAngle)) * search_range;
 		Segment ray(absPos.x, absPos.y, absEnd.x, absEnd.y);
 
 		const int n = p.size();         // number of points in the polygon

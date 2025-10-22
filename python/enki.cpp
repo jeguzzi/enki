@@ -309,6 +309,25 @@ struct EPuckWrap: EPuck, wrapper<EPuck>
 	}
 };
 
+struct IRCommEventWrap
+{
+
+  list intensities;
+  list payloads;
+  int rx_value;
+
+  IRCommEventWrap(IRCommEvent *event)
+  {
+    rx_value = event->rx_value;
+    for (std::vector<int>::iterator iter = event->intensities.begin(); iter != event->intensities.end(); ++iter) {
+      intensities.append(*iter);
+    }
+    for (std::vector<int>::iterator iter = event->payloads.begin(); iter != event->payloads.end(); ++iter) {
+      payloads.append(*iter);
+    }
+  }
+};
+
 struct Thymio2Wrap: Thymio2, wrapper<Thymio2>
 {
 	virtual void controlStep(double dt)
@@ -352,6 +371,36 @@ struct Thymio2Wrap: Thymio2, wrapper<Thymio2>
 		l.append(groundSensor1.getValue());
 		return l;
 	}
+
+   list getIRCommEvents(void)
+   {
+     list l;
+     std::vector<IRCommEvent> events = irComm.get_events();
+     for (std::vector<IRCommEvent>::iterator iter = events.begin(); iter != events.end(); ++iter) {
+       l.append(IRCommEventWrap(&(*iter)));
+     }
+     return l;
+   }
+ 
+   void setEnableIRComm(bool value)
+   {
+     irComm.set_enable(value);
+   }
+ 
+   bool getEnableIRComm()
+   {
+     return irComm.get_enable();
+   }
+ 
+   void setIRCommTx(int value)
+   {
+     irComm.set_tx(value);
+   }
+ 
+   int getIRCommTx()
+   {
+     return irComm.get_tx();
+   }
 
 	void setLedIntensity(int index, double intensity) {
 		Thymio2::setLedIntensity((LedIndex)index, intensity);
@@ -529,6 +578,12 @@ BOOST_PYTHON_MODULE(pyenki)
 		.def_readonly("cameraImage", &EPuckWrap::getCameraImage)
 	;
 	
+    class_<IRCommEventWrap>("IRCommEvent", no_init)
+       .def_readonly("rx", &IRCommEventWrap::rx_value)
+       .def_readonly("intensities", &IRCommEventWrap::intensities)
+       .def_readonly("payloads", &IRCommEventWrap::payloads)
+     ;
+
 	class_<Thymio2Wrap, bases<DifferentialWheeled>, boost::noncopyable>("Thymio2")
 		.def("controlStep", &Thymio2Wrap::controlStep)
 		.def("setLedIntensity", &Thymio2Wrap::setLedIntensity)
@@ -536,6 +591,9 @@ BOOST_PYTHON_MODULE(pyenki)
 		.def_readonly("proximitySensorValues", &Thymio2Wrap::getProxSensorValues)
 		.def_readonly("proximitySensorDistances", &Thymio2Wrap::getProxSensorDistances)
 		.def_readonly("groundSensorValues", &Thymio2Wrap::getGroundSensorValues)
+		.def_readonly("proxCommEvents", &Thymio2Wrap::getIRCommEvents)
+    	.add_property("proxCommTx", &Thymio2Wrap::getIRCommTx, &Thymio2Wrap::setIRCommTx)
+    	.add_property("proxCommEnable", &Thymio2Wrap::getEnableIRComm, &Thymio2Wrap::setEnableIRComm)
 	;
 	
 	// World
