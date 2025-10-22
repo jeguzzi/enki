@@ -1,1 +1,6 @@
 *~
+build
+notebooks
+venv
+dist
+.DS_Store

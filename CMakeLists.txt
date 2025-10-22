@@ -1,9 +1,13 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.16)
 
 project(Enki)
 
 # additional CMake modules
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
+option(BUILD_EXAMPLES ON)
+option(BUILD_TESTS ON)
+option(BUILD_PYTHON ON)
+
 
 enable_testing()
 
@@ -26,9 +30,15 @@ if (Qt5Widgets_FOUND AND Qt5OpenGL_FOUND)
 	add_subdirectory(viewer)
 endif()
 
+if (BUILD_PYTHON)
 add_subdirectory(python)
+endif()
+if (BUILD_TESTS)
 add_subdirectory(tests)
+endif()
+if (BUILD_EXAMPLES)
 add_subdirectory(examples)
+endif()
 
 # Documentation
 find_package(Doxygen)
