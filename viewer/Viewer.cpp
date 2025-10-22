@@ -53,10 +53,6 @@
 	\brief Implementation of the Qt-based viewer widget
 */
 
-static void qglColor(QColor color) {
-	glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
-}
-
 static void initTexturesResources()
 {
 	Q_INIT_RESOURCE(enki_viewer_textures);
@@ -76,6 +72,11 @@ namespace Enki
 	#define rad2deg (180 / M_PI)
 	#define clamp(x, low, high) ((x) < (low) ? (low) : ((x) > (high) ? (high) : (x)))
 	
+
+    void qglColor(QColor color) {
+    	glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
+    }
+
 	std::unique_ptr<QOpenGLTexture> loadTexture(const char * path) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 9, 0))
 		return std::make_unique<QOpenGLTexture>(QImage(QString(path)).mirrored());

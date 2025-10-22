@@ -64,6 +64,8 @@ namespace Enki
 
 	std::unique_ptr<QOpenGLTexture> loadTexture(const char * path);
 
+	void qglColor(QColor color);
+
 	class World;
 	class PhysicalObject;
 	
