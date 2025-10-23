@@ -691,11 +691,27 @@ namespace Enki
 		}
 	}
 
+	void Robot::initGlobalInteractions(double dt, World* w)
+	{
+		for (size_t i=0; i<globalInteractions.size(); i++ )
+		{
+			globalInteractions[i]->init(dt, w);
+		}
+	}
+
 	void Robot::doGlobalInteractions(double dt, World* w)
 	{
 		for (size_t i=0; i<globalInteractions.size(); i++)
 		{
 			globalInteractions[i]->step(dt, w);
+		}
+	}
+
+	void Robot::finalizeGlobalInteractions(double dt, World* w)
+	{
+		for (size_t i=0; i<globalInteractions.size(); i++ )
+		{
+			globalInteractions[i]->finalize(dt, w);
 		}
 	}
 	
@@ -1107,11 +1123,16 @@ namespace Enki
 			if (wallsType != WALLS_NONE)
 				o->doLocalWallsInteraction(dt, this);
 			o->doGlobalInteractions(dt, this);
+		}
+	
+		for (ObjectsIterator i = objects.begin(); i != objects.end(); ++i)
+		{
+			PhysicalObject* o = *i;
 			o->finalizeLocalInteractions(dt, this);
 			o->finalizeGlobalInteractions(dt, this);
 			o->controlStep(dt);
 		}
-		
+
 		// do a control step for the world
 		controlStep(dt);
 		// TODO: cleanup this

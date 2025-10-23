@@ -406,9 +406,12 @@ namespace Enki
 		virtual void doLocalWallsInteraction(double dt, World* w);
 		//! All the local interactions are finished, call finalize on each one.
 		virtual void finalizeLocalInteractions(double dt, World* w);
-		
+		//! Initialize the global interactions, do nothing for PhysicalObject.
+		virtual void initGlobalInteractions(double dt, World* w);
 		//! Do the global interactions, call step on each one.
 		virtual void doGlobalInteractions(double dt, World* w);
+		//! All global interactions are finished, do nothing for PhysicalObject.
+		virtual void finalizeGlobalInteractions(double dt, World* w);
 		//! Sort local interactions. Called by addLocalInteraction ; can be called by subclasses in case of interaction radius change.
 		void sortLocalInteractions(void);
 	};

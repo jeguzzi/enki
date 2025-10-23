@@ -29,6 +29,10 @@
 	You should have received a copy of the GNU General Public License
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+	Modified by Jerome Guzzi:
+	- added irComm
+	- added IRSensorRealistic
 */
 
 #ifndef __ENKI_THYMIO2_H
@@ -36,11 +40,15 @@
 
 #include <enki/robots/DifferentialWheeled.h>
 #include <enki/interactions/IRSensor.h>
+#include <enki/interactions/IRSensorRealistic.h>
+#include <enki/interactions/IRComm.h>
 #include <enki/interactions/GroundSensor.h>
 
 /*!	\file Thymio2.h
 	\brief Header of the Thymio robot
 */
+
+#define ThymioIRSensor IRSensorRealistic
 	
 namespace Enki
 {
@@ -50,19 +58,21 @@ namespace Enki
 	{
 	public:
 		//! The infrared sensor 0 (front-left-left)
-		IRSensor infraredSensor0;
+		ThymioIRSensor infraredSensor0;
 		//! The infrared sensor 1 (front-left)
-		IRSensor infraredSensor1;
+		ThymioIRSensor infraredSensor1;
 		//! The infrared sensor 2 (front-front)
-		IRSensor infraredSensor2;
+		ThymioIRSensor infraredSensor2;
 		//! The infrared sensor 3 (front-right)
-		IRSensor infraredSensor3;
+		ThymioIRSensor infraredSensor3;
 		//! The infrared sensor 4 (front-right-right)
-		IRSensor infraredSensor4;
+		ThymioIRSensor infraredSensor4;
 		//! The infrared sensor 5 (back-left)
-		IRSensor infraredSensor5;
+		ThymioIRSensor infraredSensor5;
 		//! The infrared sensor 6 (back-right)
-		IRSensor infraredSensor6;
+		ThymioIRSensor infraredSensor6;
+
+		IRComm irComm;
 		
 		//! The ground sensor 0 (left)
 		GroundSensor groundSensor0;
