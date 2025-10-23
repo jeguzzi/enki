@@ -42,20 +42,23 @@ namespace Enki
 	class Thymio2Model : public ViewerWidget::CustomRobotModel
 	{
 	public:
-		Thymio2Model(ViewerWidget* viewer);
-		virtual void cleanup(ViewerWidget* viewer);
-		virtual void draw(PhysicalObject* object) const;
+		Thymio2Model();
+		~Thymio2Model();
+		virtual void cleanup();
+		virtual void draw(PhysicalObject* object);
 
-		unsigned textureDimension;
-		QImage bodyDiffusionMap0, bodyDiffusionMap1, bodyDiffusionMap2, bodyTexture;
+		static unsigned textureDimension;
+		static QImage bodyDiffusionMap0, bodyDiffusionMap1, bodyDiffusionMap2, bodyTexture;
+		static std::vector<GLuint> lists;
+		static std::vector<std::unique_ptr<QOpenGLTexture>> textures;  
+		static void init();
+		static void deinit();
+		static std::vector<Vector> ledCenter[Thymio2::LED_COUNT];
+		static std::vector<Vector> ledSize[Thymio2::LED_COUNT];
 
 	protected:
-		std::vector<Vector> ledCenter[Thymio2::LED_COUNT];
-		std::vector<Vector> ledSize[Thymio2::LED_COUNT];
-
-		ViewerWidget* viewer;
-
-		unsigned updateLedTexture(Thymio2* thymio) const;
+		std::unique_ptr<QOpenGLTexture> thymio_texture;
+		unsigned updateLedTexture(Thymio2* thymio);
 		void drawRect(uint32_t* target, uint32_t* base, const Vector& center, const Vector& size, const Color& color, uint32_t* diffTex) const;
 	};
 } // namespace Enki

@@ -12,7 +12,7 @@ class MyEPuck(pyenki.EPuck):
 		print('IR values: ' + str(self.proximitySensorValues))
 		assert(not any(map(math.isnan, self.proximitySensorValues)))
 		print('Cam image: ' + str(self.cameraImage))
-		print len(self.cameraImage), self.cameraImage[0]
+		print(len(self.cameraImage), self.cameraImage[0])
 
 w = pyenki.World()
 e = MyEPuck()
@@ -21,4 +21,4 @@ w.addObject(e)
 
 for i in range(10):
 	w.step(0.05)
-	print ''
+	print('')

@@ -328,7 +328,7 @@ public:
 // http://qtnode.net/wiki?title=Qt_with_cmake
 int main(int argc, char *argv[])
 {
-	QApplication app(argc, argv);
+	EnkiApplication app(argc, argv);
 	
 	// Create the world and the viewer
 	bool igt(app.arguments().size() > 1);

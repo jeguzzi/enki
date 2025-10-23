@@ -1,0 +1,10 @@
+if(Qt6_FOUND OR Qt5_FOUND)
+add_executable(viewers viewers.cpp)
+
+target_link_libraries(viewers LINK_PUBLIC enki enkiviewer ${OPENGL_gl_LIBRARY})
+if(Qt6_FOUND)
+target_link_libraries(viewers LINK_PUBLIC enki Qt6::Widgets Qt6::OpenGL Qt6::OpenGLWidgets)
+else()
+target_link_libraries(viewers LINK_PUBLIC enki Qt5::Widgets Qt5::OpenGL)
+endif()
+endif()
