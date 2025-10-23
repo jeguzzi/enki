@@ -1,1 +1,5 @@
 *~
+build
+dist
+notebooks
+.DS_Store
