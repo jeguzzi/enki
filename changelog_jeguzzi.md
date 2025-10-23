@@ -52,3 +52,19 @@ Cleaner implementation of prox and prox-comm based on `ircomm` branch.
 - exposed number of rays and aperture in IRSensor constructor
 - added a different range and search_range in IRSensor
 - added virtual methods to specialize initialization and finalization of global interactions
+
+## Branch complete_pyenki
+
+- Changed names to comply with PEP8
+- Added methods to set all Thymios LEDs
+- Added callbacks (control and collision)
+- Added objects accessors
+- Added physical objects factory methods
+- Added aseba-compatible versions of the Thymio methods/accessors
+- Switched sensor readings to return numpy arrays
+- Added e-Puck scanner
+- Added e-Puck capabilities
+- Added docstrings
+- Added examples
+- Added docs
+
