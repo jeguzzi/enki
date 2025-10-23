@@ -43,7 +43,6 @@
 #include "../viewer/Viewer.h"
 #include <QApplication>
 #include <QImage>
-#include <QGLWidget>
 
 #if PY_MAJOR_VERSION >= 3
 #define INT_CHECK PyLong_Check
@@ -376,9 +375,6 @@ struct PythonViewer: public ViewerWidget
 		camera.yaw = camYaw;
 		camera.pitch = camPitch;
 		wallsHeight = _wallsHeight;
-		
-		managedObjectsAliases[&typeid(EPuckWrap)] = &typeid(EPuck);
-		managedObjectsAliases[&typeid(Thymio2Wrap)] = &typeid(Thymio2);
 	}
 	
 	void timerEvent(QTimerEvent * event)
@@ -398,7 +394,7 @@ void runInViewer(World& world, Vector camPos = Vector(0,0), double camAltitude =
 {
 	int argc(1);
 	char* argv[1] = {(char*)"dummy"}; // FIXME: recovery sys.argv
-	QApplication app(argc, argv);
+	EnkiApplication app(argc, argv);
 	PythonViewer viewer(world, camPos, camAltitude, camYaw, camPitch, wallsHeight);
 	viewer.setWindowTitle("PyEnki Viewer");
 	viewer.show();

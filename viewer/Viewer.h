@@ -35,15 +35,21 @@
 #define __ENKI_VIEWER_H
 
 #include <typeinfo>
-#include <QGLWidget>
+#include <QOpenGLWidget>
+#include <QOpenGLTexture>
 #include <QPoint>
 #include <QPointF>
 #include <QMap>
 #include <QVector3D>
 #include <QUrl>
+#include <QOpenGLContext>
+#include <QOpenGLContextGroup>
+#include <QOffscreenSurface>
+#include <QApplication>
 
 #include <enki/Geometry.h>
 #include <enki/PhysicalEngine.h>
+#include <memory>
 
 /*!	\file Viewer.h
 	\brief Definition of the Qt-based viewer widget
@@ -55,10 +61,15 @@ class QWidget;
 
 namespace Enki
 {
+
+	std::unique_ptr<QOpenGLTexture> loadTexture(const char * path);
+
+	void qglColor(QColor color);
+
 	class World;
 	class PhysicalObject;
 	
-	class ViewerWidget : public QGLWidget
+	class ViewerWidget : public QOpenGLWidget
 	{
 		Q_OBJECT
 	
@@ -68,19 +79,15 @@ namespace Enki
 		class ViewerUserData : public PhysicalObject::UserData
 		{
 		public:
-			virtual void draw(PhysicalObject* object) const = 0;
+			virtual void draw(PhysicalObject* object) = 0;
 			virtual void drawSpecial(PhysicalObject* object, int param = 0) const { }
 			// for data managed by the viewer, called upon viewer destructor
-			virtual void cleanup(ViewerWidget* viewer) { }
+			virtual void cleanup() { }
 		};
 		
 		// complex robot, one per robot type stored here
 		class CustomRobotModel : public ViewerUserData
-		{
-		public:
-			QVector<GLuint> lists;
-			QVector<GLuint> textures;
-		
+		{		
 		public:
 			CustomRobotModel();
 		};
@@ -123,28 +130,29 @@ namespace Enki
 			void update();
 			void updateTracking(double targetAngle, const QVector3D& targetPosition = QVector3D(), double zNear = 2.f);
 		};
-		
+
 	public:
 		bool doDumpFrames;
 		unsigned dumpFramesCounter;
+		static QOpenGLContext * sharedContext;
 		
 	protected:
 		World *world;
 		
-		GLuint helpWidget;
-		GLuint centerWidget;
-		GLuint selectionTexture;
+		std::unique_ptr<QOpenGLTexture> helpWidget;
+		std::unique_ptr<QOpenGLTexture> centerWidget;
+		std::unique_ptr<QOpenGLTexture> selectionTexture;
 		GLuint worldList;
-		GLuint worldTexture;
-		GLuint wallTexture;
+		std::unique_ptr<QOpenGLTexture> worldTexture;
+		std::unique_ptr<QOpenGLTexture> wallTexture;
 		GLuint worldGroundTexture;
 		
-		typedef QMap<const std::type_info*, ViewerUserData*> ManagedObjectsMap;
-		typedef QMapIterator<const std::type_info*, ViewerUserData*> ManagedObjectsMapIterator;
-		ManagedObjectsMap managedObjects;
+		// Deprecated
 		typedef QMap<const std::type_info*, const std::type_info*> ManagedObjectsAliasesMap;
-		typedef QMapIterator<const std::type_info*, const std::type_info*> ManagedObjectsAliasesMapIterator;
 		ManagedObjectsAliasesMap managedObjectsAliases;
+
+		virtual ViewerUserData * makeUserData(PhysicalObject * object);
+		ViewerUserData * getUserData(PhysicalObject * object);
 		
 		struct InfoMessage
 		{
@@ -187,10 +195,15 @@ namespace Enki
 		double elapsedTime;
 
 	public:
-		ViewerWidget(World *world, QWidget *parent = 0);
+		ViewerWidget(World *world, QWidget *parent = 0, bool updateWorld = true);
 		~ViewerWidget();
+
+		static void deinit();
 	
 		World* getWorld() const;
+		void setWorld(World *);
+		void setUpdateWorld(bool value);
+		bool getUpdateWorld() const;
 		CameraPose getCamera() const;
 		QVector3D getPointedPoint() const;
 		PhysicalObject* getPointedObject() const;
@@ -204,6 +217,7 @@ namespace Enki
 	public slots:
 		void setCamera(const QPointF& pos, double altitude, double yaw, double pitch);
 		void setCamera(double x, double y, double altitude, double yaw, double pitch);
+		void resetCamera();
 		void restartDumpFrames();
 		void setDumpFrames(bool doDump);
 		void setTracking(bool doTrack);
@@ -219,8 +233,12 @@ namespace Enki
 		void renderWorldSegment(const Segment& segment);
 		void renderWorld();
 		void renderShape(const Polygon& shape, const double height, const Color& color);
-		void renderSimpleObject(PhysicalObject *object);
-		
+		void renderSimpleObject(GLuint & list, PhysicalObject *object);
+		void renderText(int x, int y, const QString &str, const QFont & font = QFont());
+		void initWorld(World *);
+		bool shouldInitWorld;
+		bool updateWorld;
+
 		// helper functions for coordinates
 		void glVertex2Screen(int x, int y);
 		void computeInfoMessageAreaSize();
@@ -254,7 +272,47 @@ namespace Enki
 
 		// Internal event handling
 		virtual void helpActivated();
+
+	public:
+		struct SwitchContext {
+			SwitchContext() : _context(QOpenGLContext::currentContext()), _surface(_context ? _context->surface() : nullptr), temp(_surface == nullptr) {
+				if (temp) {
+					QOffscreenSurface * s = new QOffscreenSurface();
+					s->setFormat(QOpenGLContext::globalShareContext()->format());
+    				s->create();
+    				_surface = s;
+				}
+				if (_surface) {
+					QOpenGLContext::globalShareContext()->makeCurrent(_surface);
+				}
+			}
+
+			~SwitchContext() {
+				if (temp) {
+					delete _surface;
+					_surface = nullptr;
+				}
+				if (_context) {
+					_context->makeCurrent(_surface);
+				}	
+			}
+
+			QOpenGLContext * _context;
+			QSurface * _surface;
+			bool temp;
+		};
 	};
+
+    class EnkiApplication: public QApplication {
+    public:
+    	EnkiApplication(int &argc, char **argv) :  QApplication(init(argc), argv) {}
+        ~EnkiApplication() { ViewerWidget::deinit(); }
+    private:
+    	static int & init(int &argc) {
+    		QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    		return argc;
+    	}
+    };
 }
 
 #endif

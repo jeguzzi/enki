@@ -1,2 +1,5 @@
 add_subdirectory(minimal)
 add_subdirectory(playground)
+add_subdirectory(viewers)
+add_subdirectory(seq)
+add_subdirectory(set_world)

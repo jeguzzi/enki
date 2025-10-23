@@ -41,10 +41,14 @@ namespace Enki
 	class EPuckModel : public ViewerWidget::CustomRobotModel
 	{
 	public:
-		EPuckModel(ViewerWidget* viewer);
-		virtual void cleanup(ViewerWidget* viewer);
-		virtual void draw(PhysicalObject* object) const;
-		virtual void drawSpecial(PhysicalObject* object, int param) const;
+        EPuckModel();
+        virtual void cleanup();
+        virtual void draw(PhysicalObject* object);
+        virtual void drawSpecial(PhysicalObject* object, int param) const;
+        static std::vector<GLuint> lists;
+        static std::vector<std::unique_ptr<QOpenGLTexture>> textures;  
+        static void init();
+        static void deinit();
 	};
 } // namespace Enki
 
