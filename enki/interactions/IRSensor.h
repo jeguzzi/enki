@@ -29,6 +29,13 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+	Modified by Jerome Guzzi:
+	- exposed number of rays and aperture
+	- added searchRange as the range used during ray casting. 
+	  A different (larger) value than search 
+	  (used as upper limit in the response function) is needed 
+	  in the implementation of IRComm sensors.
 */
 
 #ifndef __ENKI_IRSENSOR_H
@@ -39,10 +46,6 @@
 
 #include <valarray>
 #undef min
-
-/*!	\file IRSensor.h
-	\brief Header of the generic infrared sensor
-*/
 
 namespace Enki
 {
@@ -98,6 +101,8 @@ namespace Enki
 		const double orientation;
 		//! Actual detection range
 		const double range;
+		//! The detection range of the (active) sensors
+		double searchRange;
 		//! Aperture angle
 		const double aperture;
 		//! 1/cos(aperture)
@@ -146,7 +151,7 @@ namespace Enki
 			\param c third parameter of response function
 			\param noiseSd standard deviation of Gaussian noise in the response space
 		*/
-		IRSensor(Robot *owner, Vector pos, double height, double orientation, double range, double m, double x0, double c, double noiseSd = 0.);
+		IRSensor(Robot *owner, Vector pos, double height, double orientation, double range, double m, double x0, double c, double noiseSd = 0., unsigned int rays = 3, double _aperture = 15.0);
 		//! Reset distance values
 		void init(double dt, World* w);
 		//! Check for all potential intersections using smartRadius of sensor and calculate and find closest distance for each ray.
@@ -180,6 +185,10 @@ namespace Enki
 		//! Return current position of the center of the smartRadius, i.e. center of the smallest circle enclosing all rays in relative (robot) coordinates
 		Point getAbsSmartPos(void) const { return absSmartPos; }
 		
+		double getRayDistSearch(unsigned i) const { return rayDists.at(i); }
+		double getAbsRayAngle(unsigned i) const { return absRayAngles.at(i); }
+		//! Set the search radius
+		void setSearchRange(double value);
 	protected:
 		//! If dist is smaller than current ray distance, update distance and response value
 		void updateRay(size_t i, double dist);

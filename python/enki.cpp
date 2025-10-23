@@ -277,6 +277,25 @@ struct EPuckWrap: EPuck
 	OVERRIDE_CONTROL_STEP(EPuck, EPuckWrap)
 };
 
+struct IRCommEventWrap
+{
+
+  list intensities;
+  list payloads;
+  int rx_value;
+
+  IRCommEventWrap(IRCommEvent *event)
+  {
+    rx_value = event->rx_value;
+    for (std::vector<int>::iterator iter = event->intensities.begin(); iter != event->intensities.end(); ++iter) {
+      intensities.append(*iter);
+    }
+    for (std::vector<int>::iterator iter = event->payloads.begin(); iter != event->payloads.end(); ++iter) {
+      payloads.append(*iter);
+    }
+  }
+};
+
 struct Thymio2Wrap: Thymio2
 {
 
@@ -313,6 +332,37 @@ struct Thymio2Wrap: Thymio2
 		l.append(groundSensor1.getValue());
 		return l;
 	}
+
+   list getIRCommEvents(void)
+   {
+     list l;
+     std::vector<IRCommEvent> events = irComm.get_events();
+     for (std::vector<IRCommEvent>::iterator iter = events.begin(); iter != events.end(); ++iter) {
+       l.append(IRCommEventWrap(&(*iter)));
+     }
+     return l;
+   }
+ 
+   void setEnableIRComm(bool value)
+   {
+   	 std::cout << "setEnableIRComm " << value << std::endl;
+     irComm.set_enable(value);
+   }
+ 
+   bool getEnableIRComm()
+   {
+     return irComm.get_enable();
+   }
+ 
+   void setIRCommTx(int value)
+   {
+     irComm.set_tx(value);
+   }
+ 
+   int getIRCommTx()
+   {
+     return irComm.get_tx();
+   }
 
 	void setLedIntensity(int index, double intensity) {
 		Thymio2::setLedIntensity((LedIndex)index, intensity);
@@ -493,6 +543,12 @@ PYBIND11_MODULE(pyenki, m) {
 		.def_property("cameraImage", &EPuckWrap::getCameraImage, nullptr)
 	;
 	
+  class_<IRCommEventWrap>(m, "IRCommEvent", "")
+     .def_readonly("rx", &IRCommEventWrap::rx_value)
+     .def_readonly("intensities", &IRCommEventWrap::intensities)
+     .def_readonly("payloads", &IRCommEventWrap::payloads)
+   ;
+
 	class_<Thymio2Wrap, DifferentialWheeled, PhysicalObject>(m, "Thymio2", "")
 		.def(init<>())
 		.def("controlStep", &Thymio2Wrap::controlStep)
@@ -501,6 +557,9 @@ PYBIND11_MODULE(pyenki, m) {
 		.def_property("proximitySensorValues", &Thymio2Wrap::getProxSensorValues, nullptr)
 		.def_property("proximitySensorDistances", &Thymio2Wrap::getProxSensorDistances, nullptr)
 		.def_property("groundSensorValues", &Thymio2Wrap::getGroundSensorValues, nullptr)
+		.def_property("proxCommEvents", &Thymio2Wrap::getIRCommEvents, nullptr)
+    .def_property("proxCommTx", &Thymio2Wrap::getIRCommTx, &Thymio2Wrap::setIRCommTx)
+    .def_property("proxCommEnabled", &Thymio2Wrap::getEnableIRComm, &Thymio2Wrap::setEnableIRComm)
 	;
 	
 	// World

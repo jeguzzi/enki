@@ -42,3 +42,13 @@ Switched from python-boost to pybind11. The Python module keeps almost the same 
 - added pyproject.toml
 - wheels can now be build using `python -m build -w`
 - `Enki::Vector` is now exposed as a numpy array, which it now requires now.
+
+## Branch proximity_sensors
+
+Cleaner implementation of prox and prox-comm based on `ircomm` branch.
+
+- added IRComm
+- added IRSensorRealistic
+- exposed number of rays and aperture in IRSensor constructor
+- added a different range and search_range in IRSensor
+- added virtual methods to specialize initialization and finalization of global interactions
