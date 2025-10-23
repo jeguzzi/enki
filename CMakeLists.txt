@@ -4,9 +4,9 @@ project(Enki)
 
 # additional CMake modules
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
-option(BUILD_EXAMPLES ON)
-option(BUILD_TESTS ON)
-option(BUILD_PYTHON ON)
+option(BUILD_EXAMPLES "Whether to build examples" ON)
+option(BUILD_TESTS "Whether to build tests" ON)
+option(BUILD_PYTHON "Whether to build the python module" ON)
 
 
 enable_testing()
