@@ -84,6 +84,10 @@ namespace Enki
 		virtual void controlStep(double dt);
 		//! Consider that robot wheels have immobile contact points with ground, and override speeds. This kills three objects dynamics, but is good enough for the type of simulation Enki covers (and the correct solution is immensely more complex)
 		virtual void applyForces(double dt);
+
+		float getNoiseAmount() {return noiseAmount;}
+		float getMaxSpeed() {return maxSpeed;}
+		float getDistBetweenWheels() {return distBetweenWheels;}
 	};
 }
 

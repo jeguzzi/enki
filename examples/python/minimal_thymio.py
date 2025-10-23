@@ -9,12 +9,12 @@ import pyenki
 
 
 def log(thymio, tid, time):
-    events = thymio.proxCommEvents
+    events = thymio.prox_comm_events
     if not events:
         return
     print(f"At time {time:.1f}, Thymio {tid} received msgs")
     for e in events:
-        print(f"- value: {e.rx}, payloads: {e.payloads}, intensities: {e.intensities}")
+        print(f"- value: {e.rx_value}, payloads: {e.payloads}, intensities: {e.intensities}")
 
 
 def main():
@@ -23,11 +23,11 @@ def main():
     robots = []
     for x, theta, tx in zip((100, 115, 130), (0, math.pi, 0), (111, 222, 333)):
         thymio = pyenki.Thymio2()
-        thymio.pos = (x, 100)
+        thymio.position = (x, 100)
         thymio.angle = theta
-        world.addObject(thymio)
-        thymio.proxCommEnabled = True
-        thymio.proxCommTx = tx
+        world.add_object(thymio)
+        thymio.prox_comm_enabled = True
+        thymio.prox_comm_tx = tx
         robots.append(thymio)
     print("Start Simulation")
     for i in range(15):

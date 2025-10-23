@@ -1,24 +1,29 @@
 import pyenki
 import math
 
+
 class MyEPuck(pyenki.EPuck):
-	def controlStep(self, dt):
-		self.leftSpeed = 0.1
-		self.rightSpeed = 0.2
-		print('Control step')
-		print('pos: ' + str(self.pos))
-		print('IR dists: ' + str(self.proximitySensorDistances))
-		assert(not any(map(math.isnan, self.proximitySensorDistances)))
-		print('IR values: ' + str(self.proximitySensorValues))
-		assert(not any(map(math.isnan, self.proximitySensorValues)))
-		print('Cam image: ' + str(self.cameraImage))
-		print(len(self.cameraImage), self.cameraImage[0])
+
+    def __init__(self):
+        super().__init__(proximity=True, camera=True)
+
+    def controlStep(self, dt):
+        self.left_wheel_target_speed = 0.1
+        self.right_wheel_target_speed = 0.2
+        print('Control step')
+        print(f'pos: {self.position}')
+        print(f'IR dists: {self.prox_distances}')
+        assert (not any(map(math.isnan, self.prox_distances)))
+        print(f'IR values: {self.prox_values}')
+        assert (not any(map(math.isnan, self.prox_values)))
+        print(f'Cam image: {self.camera_image}')
+
 
 w = pyenki.World()
 e = MyEPuck()
 #e = pyenki.EPuck()
-w.addObject(e)
+w.add_object(e)
 
 for i in range(10):
-	w.step(0.05)
-	print('')
+    w.step(0.05)
+    print('')
