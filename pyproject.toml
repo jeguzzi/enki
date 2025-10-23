@@ -1,0 +1,13 @@
+[build-system]
+requires = ["scikit-build-core>=0.11", "numpy"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "pyenki"
+version = "0.0.1.alpha"
+
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+cmake.define = {BUILD_TESTS = "OFF", BUILD_EXAMPLES = "OFF"}
+
+

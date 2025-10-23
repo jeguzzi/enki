@@ -20,7 +20,7 @@ class MyEPuck(pyenki.EPuck):
 		#print('IR values: ' + str(self.proximitySensorValues))
 		#print('Cam image: ' + str(self.cameraImage))
 		#print len(self.cameraImage), self.cameraImage[0]
-		print id(self), self.pos
+		print(id(self), self.pos)
 
 
 w = pyenki.World()
