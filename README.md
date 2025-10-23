@@ -1,5 +1,16 @@
 # Enki
 
+> [!NOTE]
+
+> This is a fork of [Enki](https://github.com/enki-community/enki) with changes listed in [changelog](changelog_jeguzzi).
+> Changes that could be merged back in the main repository includes:
+> 	- [x] support for qt6 (see PR ...)
+> 	- [x] switch to pybind11 (see PR ...)
+> 	- [x] addition of proximity-based communication to Thymio2 (see PR ...)
+> 
+> Other changes are more disruptive, in particular to the pyenki API, which is > documented [here](https://jeguzzi.github.io/enki/).
+
+
 Enki is an open source robot simulator written in C++.
 It provides collision and limited physics support for robots evolving on a flat surface.
 On a contemporary desktop computer, Enki is able to simulate groups of robots hundred times faster than real-time.
