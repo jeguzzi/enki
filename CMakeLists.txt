@@ -4,6 +4,10 @@ project(Enki)
 
 # additional CMake modules
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
+option(BUILD_EXAMPLES ON)
+option(BUILD_TESTS ON)
+option(BUILD_PYTHON ON)
+
 
 enable_testing()
 
@@ -32,9 +36,15 @@ if (Qt6_FOUND OR Qt5_FOUND)
 	add_subdirectory(viewer)
 endif()
 
+if (BUILD_PYTHON)
 add_subdirectory(python)
+endif()
+if (BUILD_TESTS)
 add_subdirectory(tests)
+endif()
+if (BUILD_EXAMPLES)
 add_subdirectory(examples)
+endif()
 
 # Documentation
 find_package(Doxygen)

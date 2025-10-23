@@ -32,9 +32,15 @@
 */
 
 #include <Python.h>
-#include <boost/python.hpp>
-#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
-#include <boost/python/return_value_policy.hpp>
+
+#include <pybind11/functional.h>
+#include <pybind11/numpy.h>
+#include <pybind11/operators.h>
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/stl/filesystem.h>
+#include <pybind11/stl_bind.h>
+
 #include "../enki/Types.h"
 #include "../enki/Geometry.h"
 #include "../enki/PhysicalEngine.h"
@@ -44,14 +50,88 @@
 #include <QApplication>
 #include <QImage>
 
-#if PY_MAJOR_VERSION >= 3
-#define INT_CHECK PyLong_Check
+using namespace Enki;
+namespace py = pybind11;
+
+namespace pybind11 {
+namespace detail {
+template <> struct type_caster<Vector> {
+
+  PYBIND11_TYPE_CASTER(Vector, const_name("Vector"));
+
+  static handle cast(const Vector &src, return_value_policy policy,
+                     handle parent) {
+    py::array_t<double> ts(2);
+    py::buffer_info buf = ts.request();
+#if 1
+    double *ds = static_cast<double *>(buf.ptr);
+    ds[0] = src.x;
+    ds[1] = src.y;
 #else
-#define INT_CHECK PyInt_Check
+    buf.ptr = (void *)(&(src.x));
+#endif
+    return type_caster<py::array_t<double>>::cast(&ts, policy, parent);
+  }
+
+  bool load(handle src, bool convert) {
+
+    if (isinstance<sequence>(src)) {
+      const auto seq = reinterpret_borrow<sequence>(src);
+      if (seq.size() != 2) {
+        return false;
+      }
+      value.x = seq[0].cast<double>();
+      value.y = seq[1].cast<double>();
+      return true;
+    }
+    if (isinstance<array>(src)) {
+      auto args = reinterpret_borrow<py::array_t<double>>(src);
+      // tuple args(src, true);
+      if (args.size() != 2)
+        return false;
+      value.x = args.data()[0];
+      value.y = args.data()[1];
+      return true;
+    }
+    return false;
+  }
+};
+
+#if CONVERT_COLOR
+template <> struct type_caster<Color> {
+
+  PYBIND11_TYPE_CASTER(Color, const_name("Color"));
+
+  static handle cast(const Color &src, return_value_policy policy,
+                     handle parent) {
+    std::tuple<double, double, double, double> ts{
+        src.components[0], src.components[1], src.components[2],
+        src.components[3]};
+    return type_caster<std::tuple<double, double, double, double>>::cast(
+        &ts, policy, parent);
+  }
+
+  bool load(handle src, bool convert) {
+    if (!src || src.is_none())
+      return false;
+    auto args = reinterpret_borrow<tuple>(src);
+    // tuple args(src, true);
+    if (len(args) != 4)
+      return false;
+    for (int i = 0; i < 4; ++i) {
+      value.components[i] = args[i].cast<double>();
+    }
+    return true;
+  }
+};
 #endif
 
-using namespace boost::python;
-using namespace Enki;
+} // namespace detail
+} // namespace pybind11
+
+// wrappers for world
+
+using namespace pybind11;
 
 tuple getColorComponents(const Color& color)
 {
@@ -67,97 +147,11 @@ void setColorComponents(Color& color, tuple values)
 {
 	if (len(values) != 4)
 		throw std::runtime_error("Tuple used to set components must be of length 4");
-	color.components[0] = extract<double>(values[0]);
-	color.components[1] = extract<double>(values[1]);
-	color.components[2] = extract<double>(values[2]);
-	color.components[3] = extract<double>(values[3]);
+	color.components[0] = values[0].cast<double>();
+	color.components[1] = values[1].cast<double>();
+	color.components[2] = values[2].cast<double>();
+	color.components[3] = values[3].cast<double>();
 }
-
-#define def_readwrite_by_value(name, target) \
-	add_property(\
-		(name), \
-		make_getter((target), return_value_policy<return_by_value>()), \
-		make_setter((target), return_value_policy<return_by_value>()) \
-	)
-
-// vector convertion
-
-struct Vector_to_python_tuple
-{
-	static PyObject* convert(const Vector& value)
-	{
-		return incref(make_tuple(value.x, value.y).ptr());
-	}
-};
-struct Vector_from_python
-{
-	Vector_from_python()
-	{
-		converter::registry::push_back(
-			&convertible,
-			&construct,
-			type_id<Vector>()
-		);
-	}
-	
-	static void* convertible(PyObject* objPtr)
-	{
-		if (PyTuple_Check(objPtr))
-		{
-			Py_ssize_t l = PyTuple_Size(objPtr);
-			if (l != 2)
-				return 0;
-			
-			PyObject* item0(PyTuple_GetItem(objPtr, 0));
-			assert (item0);
-			if (!(PyFloat_Check(item0) || INT_CHECK(item0)))
-				return 0;
-			PyObject* item1(PyTuple_GetItem(objPtr, 1));
-			assert (item1);
-			if (!(PyFloat_Check(item1) || INT_CHECK(item1)))
-				return 0;
-		}
-		else
-		{
-			Py_ssize_t l = PyObject_Length(objPtr);
-			if (l != 2)
-				return 0;
-			
-			PyObject* item0(PyList_GetItem(objPtr, 0));
-			assert (item0);
-			if (!(PyFloat_Check(item0) || INT_CHECK(item0)))
-				return 0;
-			PyObject* item1(PyList_GetItem(objPtr, 1));
-			assert (item1);
-			if (!(PyFloat_Check(item1) || INT_CHECK(item1)))
-				return 0;
-		}
-		
-		return objPtr;
-	}
-	
-	static void construct(PyObject* objPtr, converter::rvalue_from_python_stage1_data* data)
-	{
-		double x,y;
-		
-		if (PyTuple_Check(objPtr))
-		{
-			x = PyFloat_AsDouble(PyTuple_GetItem(objPtr, 0));
-			y = PyFloat_AsDouble(PyTuple_GetItem(objPtr, 1));
-		}
-		else
-		{
-			x = PyFloat_AsDouble(PyList_GetItem(objPtr, 0));
-			y = PyFloat_AsDouble(PyList_GetItem(objPtr, 1));
-		}
-		
-		void* storage = ((converter::rvalue_from_python_storage<Vector>*)data)->storage.bytes;
-		new (storage) Vector(x,y);
-		data->convertible = storage;
-	}
-};
-
-// wrappers for world
 
 static World::GroundTexture loadTexture(const std::string& fileName)
 {
@@ -201,39 +195,6 @@ static World::GroundTexture loadTexture(const std::string& fileName)
 	#endif
 }
 
-struct WorldWithoutObjectsOwnership: public World
-{
-	WorldWithoutObjectsOwnership(double width, double height, const Color& wallsColor = Color::gray, const GroundTexture& groundTexture = GroundTexture()):
-		World(width, height, wallsColor, groundTexture)
-	{
-		takeObjectOwnership = false;
-	}
-	
-	WorldWithoutObjectsOwnership(double r, const Color& wallsColor = Color::gray, const GroundTexture& groundTexture = GroundTexture()):
-		World(r, wallsColor, groundTexture)
-	{
-		takeObjectOwnership = false;
-	}
-	
-	WorldWithoutObjectsOwnership()
-	{
-		takeObjectOwnership = false;
-	}
-};
-
-struct WorldWithTexturedGround: public WorldWithoutObjectsOwnership
-{
-	WorldWithTexturedGround(double width, double height, const std::string& ppmFileName, const Color& wallsColor = Color::gray):
-		WorldWithoutObjectsOwnership(width, height, wallsColor, loadTexture(ppmFileName))
-	{
-	}
-	
-	WorldWithTexturedGround(double r, const std::string& ppmFileName, const Color& wallsColor = Color::gray):
-		WorldWithoutObjectsOwnership(r, wallsColor, loadTexture(ppmFileName))
-	{
-	}
-};
-
 // wrappers for objects
 
 struct CircularPhysicalObject: public PhysicalObject
@@ -256,19 +217,25 @@ struct RectangularPhysicalObject: public PhysicalObject
 
 // wrappers for robots
 
-struct EPuckWrap: EPuck, wrapper<EPuck>
+#define OVERRIDE_CONTROL_STEP(cname, dname)                                    \
+public:                                                                        \
+  void controlStep(double dt) override {                                       \
+    control_step(dt);                                                          \
+    cname::controlStep(dt);                                                    \
+  }                                                                            \
+                                                                               \
+private:                                                                       \
+  void control_step(double dt) {                                               \
+    PYBIND11_OVERRIDE_IMPL(PYBIND11_TYPE(void), PYBIND11_TYPE(dname),          \
+                           "controlStep", dt);                                 \
+  }
+
+
+struct EPuckWrap: EPuck
 {
 	EPuckWrap():
 		EPuck(CAPABILITY_BASIC_SENSORS|CAPABILITY_CAMERA)
 	{}
-	
-	virtual void controlStep(double dt)
-	{
-		if (override controlStep = this->get_override("controlStep"))
-			controlStep(dt);
-		
-		EPuck::controlStep(dt);
-	}
 	
 	list getProxSensorValues(void)
 	{
@@ -306,18 +273,13 @@ struct EPuckWrap: EPuck, wrapper<EPuck>
 			texture.push_back(camera.image[i]);
 		return texture;
 	}
+
+	OVERRIDE_CONTROL_STEP(EPuck, EPuckWrap)
 };
 
-struct Thymio2Wrap: Thymio2, wrapper<Thymio2>
+struct Thymio2Wrap: Thymio2
 {
-	virtual void controlStep(double dt)
-	{
-		if (override controlStep = this->get_override("controlStep"))
-			controlStep(dt);
-		
-		Thymio2::controlStep(dt);
-	}
-	
+
 	list getProxSensorValues(void)
 	{
 		list l;
@@ -359,6 +321,8 @@ struct Thymio2Wrap: Thymio2, wrapper<Thymio2>
 	void setLedColor(int index, const Color& color) {
 		Thymio2::setLedColor((LedIndex)index, color);
 	}
+
+	OVERRIDE_CONTROL_STEP(Thymio2, Thymio2Wrap)
 };
 
 struct PythonViewer: public ViewerWidget
@@ -410,31 +374,25 @@ void run(World& world, unsigned steps)
 		world.step(1./30., 3);
 }
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(step_overloads, step, 1, 2)
-BOOST_PYTHON_FUNCTION_OVERLOADS(runInViewer_overloads, runInViewer, 1, 6)
+class WorldWithTexturedGround: public World {
+	using World::World;
+};
 
-BOOST_PYTHON_MODULE(pyenki)
-{
-	// setup converters
-	to_python_converter<Vector, Vector_to_python_tuple>();
-	Vector_from_python();
+PYBIND11_MAKE_OPAQUE(Texture)
+PYBIND11_MAKE_OPAQUE(Textures)
+
+PYBIND11_MODULE(pyenki, m) {
+  options options;
+#if PYBIND11_VERSION_MAJOR >= 2 && PYBIND11_VERSION_MINOR >= 10
+  options.disable_enum_members_docstring();
+#endif
 	
 	// TODO: complete doc
 	
-	// Color and texture
-	
-	class_<Color>("Color",
-		"A color in RGBA",
-		init<optional<double, double, double, double> >(
-			"Create a RGBA color.\n\n"
-			"Arguments:\n"
-			"    r -- red component [0..1], default: 0.0\n"
-			"    g -- green component [0..1], default: 0.0\n"
-			"    b -- blue component [0..1], default: 0.0\n"
-			"    a -- alpha (transparency) component [0..1], default: 1.0\n",
-			args("r", "g", "b", "a")
-		)
-	)
+#if !(CONVERT_COLOR)
+
+	class_<Color>(m, "Color", "A color in RGBA")
+		.def(init<double, double, double, double>(), py::arg("r") = 0, py::arg("g") = 0, py::arg("b") = 0, py::arg("a") = 1)
 		.def(self += double())
 		.def(self + double())
 		.def(self -= double())
@@ -449,65 +407,74 @@ BOOST_PYTHON_MODULE(pyenki)
 		.def(self - self)
 		.def(self == self)
 		.def(self != self)
-		.def(self_ns::str(self_ns::self))
+		// .def("__repr__", &Color::toString)
+		.def("__repr__", [](const Color &color) {
+			py::str s("Color(r=");
+			s += py::str(py::cast(color.r()));
+			s += py::str(", g=");
+			s += py::str(py::cast(color.g()));
+			s += py::str(", b=");
+			s += py::str(py::cast(color.b()));
+			s += py::str(", a=");
+			s += py::str(py::cast(color.a()));
+			s += py::str(")");
+			return s;
+		})
 		.def("threshold", &Color::threshold)
 		.def("toGray", &Color::toGray)
-		.def_readonly("black", &Color::black)
-		.def_readonly("white", &Color::white)
-		.def_readonly("gray", &Color::gray)
-		.def_readonly("red", &Color::red)
-		.def_readonly("green", &Color::green)
-		.def_readonly("blue", &Color::blue)
-		.add_property("r", &Color::r, &Color::setR)
-		.add_property("g", &Color::g, &Color::setG)
-		.add_property("b", &Color::b, &Color::setB)
-		.add_property("a", &Color::a, &Color::setA)
-		.add_property("components", getColorComponents, setColorComponents)
+		.def_property_readonly_static("black", [](py::object /* self */) { return Color::black; })
+		.def_property_readonly_static("white", [](py::object /* self */) { return Color::white; })
+		.def_property_readonly_static("gray", [](py::object /* self */) { return Color::gray; })
+		.def_property_readonly_static("red", [](py::object /* self */) { return Color::red; })
+		.def_property_readonly_static("green", [](py::object /* self */) { return Color::green; })
+		.def_property_readonly_static("blue", [](py::object /* self */) { return Color::blue; })
+		.def_property("r", &Color::r, &Color::setR)
+		.def_property("g", &Color::g, &Color::setG)
+		.def_property("b", &Color::b, &Color::setB)
+		.def_property("a", &Color::a, &Color::setA)
+		.def_property("components", getColorComponents, setColorComponents)
 	;
-	
-	class_<Texture>("Texture")
-		.def(vector_indexing_suite<Texture>())
-	;
-	
-	class_<Textures>("Textures")
-		.def(vector_indexing_suite<Textures>())
-	;
-	
+
+#endif
+
+	py::bind_vector<Texture>(m, "Texture");
+	py::bind_vector<Textures>(m, "Textures");
+
 	// Physical objects
 	
-	class_<PhysicalObject>("PhysicalObject", no_init)
-		.def_readonly("radius", &PhysicalObject::getRadius)
-		.def_readonly("height", &PhysicalObject::getHeight)
-		.def_readonly("isCylindric", &PhysicalObject::isCylindric)
-		.def_readonly("mass", &PhysicalObject::getMass)
-		.def_readonly("momentOfInertia", &PhysicalObject::getMomentOfInertia)
-		.def_readonly("interlacedDistance", &PhysicalObject::getInterlacedDistance)
+	class_<PhysicalObject>(m, "PhysicalObject", "")
+		.def_property("radius", &PhysicalObject::getRadius, nullptr)
+		.def_property("height", &PhysicalObject::getHeight, nullptr)
+		.def_property("isCylindric", &PhysicalObject::isCylindric, nullptr)
+		.def_property("mass", &PhysicalObject::getMass, nullptr)
+		.def_property("momentOfInertia", &PhysicalObject::getMomentOfInertia, nullptr)
+		.def_property("interlacedDistance", &PhysicalObject::getInterlacedDistance, nullptr)
 		.def_readwrite("collisionElasticity", &PhysicalObject::collisionElasticity)
 		.def_readwrite("dryFrictionCoefficient", &PhysicalObject::dryFrictionCoefficient)
 		.def_readwrite("viscousFrictionCoefficient", &PhysicalObject::viscousFrictionCoefficient)
 		.def_readwrite("viscousMomentFrictionCoefficient", &PhysicalObject::viscousMomentFrictionCoefficient)
-		.def_readwrite_by_value("pos", &PhysicalObject::pos)
+		.def_readwrite("pos", &PhysicalObject::pos)
 		.def_readwrite("angle", &PhysicalObject::angle)
-		.def_readwrite_by_value("speed", &PhysicalObject::speed)
+		.def_readwrite("speed", &PhysicalObject::speed)
 		.def_readwrite("angSpeed", &PhysicalObject::angSpeed)
-		.add_property("color",  make_function(&PhysicalObject::getColor, return_value_policy<copy_const_reference>()), &PhysicalObject::setColor)
+		.def_property("color",  &PhysicalObject::getColor, &PhysicalObject::setColor)
 		// warning setting the "color" property at run time using the viewer from the non-gui thread will lead to a crash because it will do an OpenGL call from that thread
 	;
 	
-	class_<CircularPhysicalObject, bases<PhysicalObject> >("CircularObject",
-		init<double, double, double, optional<const Color&> >(args("radius", "height", "mass", "color"))
-	);
-	
-	class_<RectangularPhysicalObject, bases<PhysicalObject> >("RectangularObject",
-		init<double, double, double, double, optional<const Color&> >(args("l1", "l2", "height", "mass", "color"))
-	);
-	
+  class_<CircularPhysicalObject>(m, "CircularPhysicalObject", "")
+  	.def(init<double, double, double, const Color &>(), 
+  		   py::arg("radius"), py::arg("height"), py::arg("mass"), py::arg("color") = Color());
+
+  class_<RectangularPhysicalObject>(m, "RectangularPhysicalObject", "")
+  	.def(init<double, double, double, double, const Color &>(), 
+  		   py::arg("l1"), py::arg("l2"), py::arg("height"), py::arg("mass"), py::arg("color") = Color());
+
 	// Robots
 	
-	class_<Robot, bases<PhysicalObject> >("PhysicalObject", no_init)
-	;
+	class_<Robot, PhysicalObject>(m, "Robot", "");
 	
-	class_<DifferentialWheeled, bases<Robot> >("DifferentialWheeled", no_init)
+	class_<DifferentialWheeled, Robot, PhysicalObject>(
+      m, "DifferentialWheeled", "")
 		.def_readwrite("leftSpeed", &DifferentialWheeled::leftSpeed)
 		.def_readwrite("rightSpeed", &DifferentialWheeled::rightSpeed)
 		.def_readonly("leftEncoder", &DifferentialWheeled::leftEncoder)
@@ -517,47 +484,75 @@ BOOST_PYTHON_MODULE(pyenki)
 		.def("resetEncoders", &DifferentialWheeled::resetEncoders)
 	;
 	
-	class_<EPuckWrap, bases<DifferentialWheeled>, boost::noncopyable>("EPuck")
+	class_<EPuckWrap, DifferentialWheeled, PhysicalObject>(m, "EPuck", "")
+	  .def(init<>())
 		.def("controlStep", &EPuckWrap::controlStep)
 		.def("setLedRing", &EPuckWrap::setLedRing)
-		.def_readonly("proximitySensorValues", &EPuckWrap::getProxSensorValues)
-		.def_readonly("proximitySensorDistances", &EPuckWrap::getProxSensorDistances)
-		.def_readonly("cameraImage", &EPuckWrap::getCameraImage)
+		.def_property("proximitySensorValues", &EPuckWrap::getProxSensorValues, nullptr)
+		.def_property("proximitySensorDistances", &EPuckWrap::getProxSensorDistances, nullptr)
+		.def_property("cameraImage", &EPuckWrap::getCameraImage, nullptr)
 	;
 	
-	class_<Thymio2Wrap, bases<DifferentialWheeled>, boost::noncopyable>("Thymio2")
+	class_<Thymio2Wrap, DifferentialWheeled, PhysicalObject>(m, "Thymio2", "")
+		.def(init<>())
 		.def("controlStep", &Thymio2Wrap::controlStep)
 		.def("setLedIntensity", &Thymio2Wrap::setLedIntensity)
 		.def("setLedColor", &Thymio2Wrap::setLedColor)
-		.def_readonly("proximitySensorValues", &Thymio2Wrap::getProxSensorValues)
-		.def_readonly("proximitySensorDistances", &Thymio2Wrap::getProxSensorDistances)
-		.def_readonly("groundSensorValues", &Thymio2Wrap::getGroundSensorValues)
+		.def_property("proximitySensorValues", &Thymio2Wrap::getProxSensorValues, nullptr)
+		.def_property("proximitySensorDistances", &Thymio2Wrap::getProxSensorDistances, nullptr)
+		.def_property("groundSensorValues", &Thymio2Wrap::getGroundSensorValues, nullptr)
 	;
 	
 	// World
 	
-	class_<World>("WorldBase", no_init)
-	;
-	
-	class_<WorldWithoutObjectsOwnership, bases<World> >("World",
+	class_<World>(m, "World",
 		"The world is the container of all objects and robots.\n"
 		"It is either a rectangular arena with walls at all sides, a circular area with walls, or an infinite surface."
-		,
-		init<double, double, optional<const Color&> >(args("width", "height", "wallsColor"))
 	)
-		.def(init<double, optional<const Color&> >(args("r", "wallsColor")))
-		.def(init<>())
-		.def("step", &World::step, step_overloads(args("dt", "physicsOversampling")))
-		.def("addObject", &World::addObject, with_custodian_and_ward<1,2>())
+    .def(py::init([]() {
+           auto w = std::make_unique<World>();
+           w->takeObjectOwnership = false;
+           return w;
+         }))
+    .def(py::init([](double width, double height,
+                     const Color &wallsColor = Color::gray) {
+           auto w = std::make_unique<World>(width, height, wallsColor);
+           w->takeObjectOwnership = false;
+           return w;
+         }),
+         py::arg("width"), py::arg("height"),
+         py::arg("walls_color") = Color::gray)
+    .def(py::init([](double radius, const Color &wallsColor = Color::gray) {
+           auto w = std::make_unique<World>(radius, wallsColor);
+           w->takeObjectOwnership = false;
+           return w;
+         }),
+         py::arg("radius"), py::arg("walls_color") = Color::gray)
+		.def("step", &World::step, py::arg("dt"), py::arg("physics_oversampling") = 3)
+		.def("addObject", &World::addObject, py::keep_alive<1, 2>())
 		.def("removeObject", &World::removeObject)
 		.def("setRandomSeed", &World::setRandomSeed)
 		.def("run", run)
-		.def("runInViewer", runInViewer, runInViewer_overloads(args("self", "camPos", "camAltitude", "camYaw", "camPitch", "wallsHeight")))
+		.def("runInViewer", [](World & world, Vector camPos = Vector(0,0), double camAltitude = 0, double camYaw = 0, double camPitch = 0, double wallsHeight = 10) {
+			runInViewer(world, camPos, camAltitude, camYaw, camPitch, wallsHeight);
+		}, py::arg("camPos") = Vector(0,0), py::arg("camAltitude") = 0, py::arg("camYaw") = 0, py::arg("camPitch") = 0, py::arg("wallsHeight") =10)
 	;
 	
-	class_<WorldWithTexturedGround, bases<WorldWithoutObjectsOwnership> >("WorldWithTexturedGround",
-		init<double, double, const std::string&, optional<const Color&> >(args("width", "height", "ppmFileName", "wallsColor"))
-	)
-		.def(init<double, const std::string&, optional<const Color&> >(args("r", "ppmFileName", "wallsColor")))
+	class_<WorldWithTexturedGround, World>(m, "WorldWithTexturedGround", "")
+    .def(py::init([](double width, double height,
+                     const std::string& ppmFileName, const Color& wallsColor = Color::gray) {
+           auto w = std::make_unique<WorldWithTexturedGround>(width, height, wallsColor, loadTexture(ppmFileName));
+           w->takeObjectOwnership = false;
+           return w;
+         }),
+         py::arg("width"), py::arg("height"), py::arg("ppmFileName"), 
+         py::arg("walls_color") = Color::gray)
+    .def(py::init([](double radius, const std::string& ppmFileName, const Color &wallsColor = Color::gray) {
+           auto w = std::make_unique<WorldWithTexturedGround>(radius, wallsColor, loadTexture(ppmFileName));
+           w->takeObjectOwnership = false;
+           return w;
+         }),
+         py::arg("radius"), py::arg("ppmFileName"), py::arg("walls_color") = Color::gray)
 	;
+
 }

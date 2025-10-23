@@ -1,39 +1,35 @@
-# find Python, make sure we use the same version for interpreter and libraries
-find_package(PythonInterp)
-message(STATUS "Python version from interpreter is ${PYTHON_VERSION_STRING}")
-set(Python_ADDITIONAL_VERSIONS ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
-find_package(PythonLibs)
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 17)
+endif()
 
-# make sure we have the right modules
-if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND AND (Qt5_FOUND OR Qt6_FOUND))
-	message(STATUS "Python libs and executable found, looking for boost::python")
-	find_package(Boost COMPONENTS python)
-	if (Boost_FOUND)
-		message(STATUS "boost::python found, generating python bindings")
-		include_directories(${PROJECT_SOURCE_DIR} ${PYTHON_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
-		python_add_module(pyenki enki.cpp)
-		target_link_libraries(pyenki enki enkiviewer  ${OPENGL_gl_LIBRARY} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
-		if (Qt5_FOUND)
-		target_link_libraries(pyenki Qt5::OpenGL Qt5::Widgets)
-		else()
-		target_link_libraries(pyenki Qt6::OpenGL Qt6::Widgets Qt6::OpenGLWidgets)
-		endif()
-		# fix for old python_add_module
-		set_target_properties(pyenki PROPERTIES PREFIX "")
-		if (PYTHON_CUSTOM_TARGET)
-			install(TARGETS pyenki LIBRARY DESTINATION ${PYTHON_CUSTOM_TARGET})
-		else (PYTHON_CUSTOM_TARGET)
-			if (PYTHON_DEB_INSTALL_TARGET)
-				set(PYTHON_COMMAND "import sys; print('lib/python'+str(sys.version_info[0])+'.'+str(sys.version_info[1])+'/dist-packages')")
-			else (PYTHON_DEB_INSTALL_TARGET)
-				set(PYTHON_COMMAND "from distutils.sysconfig import get_python_lib; print(get_python_lib(1, prefix='${CMAKE_INSTALL_PREFIX}'))")
-			endif (PYTHON_DEB_INSTALL_TARGET)
-			execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "${PYTHON_COMMAND}" OUTPUT_VARIABLE PYTHON_SITE_MODULES OUTPUT_STRIP_TRAILING_WHITESPACE)
-			install(TARGETS pyenki LIBRARY DESTINATION ${PYTHON_SITE_MODULES})
-		endif (PYTHON_CUSTOM_TARGET)
-	else (Boost_FOUND)
-		message(WARNING "You need boost::python to generate Python bindings")
-	endif (Boost_FOUND)
-else ()
-	message(WARNING "Python libs or executable, or Qt5, or OpenGL not found, skipping Python bindings")
-endif ()
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(Python3_FIND_STRATEGY LOCATION)
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+find_package(pybind11 QUIET)
+if(NOT pybind11_FOUND)
+  include(FetchContent)
+  FetchContent_Declare(
+    pybind11
+    GIT_REPOSITORY https://github.com/pybind/pybind11.git
+    GIT_TAG v2.13.6
+    GIT_SHALLOW TRUE
+    OVERRIDE_FIND_PACKAGE)
+  set(PYBIND11_INSTALL ON)
+  set(INCLUDE_PYBIND11 true)
+  FetchContent_MakeAvailable(pybind11)
+  find_package(pybind11 REQUIRED)
+endif()
+
+pybind11_add_module(pyenki enki.cpp)
+include_directories(${PROJECT_SOURCE_DIR})
+target_link_libraries(pyenki PRIVATE enki enkiviewer)
+target_compile_definitions(pyenki
+                           PRIVATE PYBIND11_DETAILED_ERROR_MESSAGES=1)
+
+set_target_properties(pyenki PROPERTIES AUTOMOC TRUE)
+
+# include(CheckIPOSupported)
+# check_ipo_supported(RESULT ipo_supported OUTPUT error)
+# if(ipo_supported)
+#   set_property(TARGET _pyenki PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+# endif()
