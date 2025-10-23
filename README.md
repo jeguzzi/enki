@@ -4,8 +4,8 @@
 > This is a fork of [Enki](https://github.com/enki-community/enki) with changes listed in [changelog](changelog_jeguzzi).
 > Changes that could be merged back in the main repository includes:
 > 	- [x] support for qt6 (see https://github.com/jeguzzi/enki/pull/2)
-> 	- [x] switch to pybind11 (see PR ...)
-> 	- [x] addition of proximity-based communication to Thymio2 (see PR ...)
+> 	- [x] switch to pybind11 (see https://github.com/jeguzzi/enki/pull/3)
+> 	- [x] addition of proximity-based communication to Thymio2 (see https://github.com/jeguzzi/enki/pull/4)
 > 
 > Other changes are more disruptive, in particular to the pyenki API, which is > documented [here](https://jeguzzi.github.io/enki/).
 
