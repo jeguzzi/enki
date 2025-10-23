@@ -7,6 +7,8 @@
 > 	- [x] switch to pybind11 (see https://github.com/jeguzzi/enki/pull/3)
 > 	- [x] addition of proximity-based communication to Thymio2 (see https://github.com/jeguzzi/enki/pull/4)
 > 
+> The branches have been merged into `rolling` in this same order.
+>
 > Other changes are more disruptive, in particular to the pyenki API, which is > documented [here](https://jeguzzi.github.io/enki/).
 
 
