@@ -384,6 +384,7 @@ struct Thymio2Wrap: Thymio2, wrapper<Thymio2>
  
    void setEnableIRComm(bool value)
    {
+   	 std::cout << "setEnableIRComm " << value << std::endl;
      irComm.set_enable(value);
    }
  
@@ -578,11 +579,11 @@ BOOST_PYTHON_MODULE(pyenki)
 		.def_readonly("cameraImage", &EPuckWrap::getCameraImage)
 	;
 	
-    class_<IRCommEventWrap>("IRCommEvent", no_init)
-       .def_readonly("rx", &IRCommEventWrap::rx_value)
-       .def_readonly("intensities", &IRCommEventWrap::intensities)
-       .def_readonly("payloads", &IRCommEventWrap::payloads)
-     ;
+  class_<IRCommEventWrap>("IRCommEvent", no_init)
+     .def_readonly("rx", &IRCommEventWrap::rx_value)
+     .def_readonly("intensities", &IRCommEventWrap::intensities)
+     .def_readonly("payloads", &IRCommEventWrap::payloads)
+   ;
 
 	class_<Thymio2Wrap, bases<DifferentialWheeled>, boost::noncopyable>("Thymio2")
 		.def("controlStep", &Thymio2Wrap::controlStep)
@@ -592,8 +593,8 @@ BOOST_PYTHON_MODULE(pyenki)
 		.def_readonly("proximitySensorDistances", &Thymio2Wrap::getProxSensorDistances)
 		.def_readonly("groundSensorValues", &Thymio2Wrap::getGroundSensorValues)
 		.def_readonly("proxCommEvents", &Thymio2Wrap::getIRCommEvents)
-    	.add_property("proxCommTx", &Thymio2Wrap::getIRCommTx, &Thymio2Wrap::setIRCommTx)
-    	.add_property("proxCommEnable", &Thymio2Wrap::getEnableIRComm, &Thymio2Wrap::setEnableIRComm)
+    .add_property("proxCommTx", &Thymio2Wrap::getIRCommTx, &Thymio2Wrap::setIRCommTx)
+    .add_property("proxCommEnabled", &Thymio2Wrap::getEnableIRComm, &Thymio2Wrap::setEnableIRComm)
 	;
 	
 	// World

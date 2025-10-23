@@ -29,6 +29,13 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+	Modified by Jerome Guzzi:
+	- exposed number of rays and aperture
+	- added searchRange as the range used during ray casting. 
+	  A different (larger) value than search 
+	  (used as upper limit in the response function) is needed 
+	  in the implementation of IRComm sensors.
 */
 
 #ifndef __ENKI_IRSENSOR_H
@@ -39,10 +46,6 @@
 
 #include <valarray>
 #undef min
-
-/*!	\file IRSensor.h
-	\brief Header of the generic infrared sensor
-*/
 
 namespace Enki
 {
@@ -99,7 +102,7 @@ namespace Enki
 		//! Actual detection range
 		const double range;
 		//! The detection range of the (active) sensors
-		double search_range;
+		double searchRange;
 		//! Aperture angle
 		const double aperture;
 		//! 1/cos(aperture)

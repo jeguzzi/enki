@@ -29,6 +29,13 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+	Modified by Jerome Guzzi:
+	- exposed number of rays and aperture
+	- added searchRange as the range used during ray casting. 
+	  A different (larger) value than search 
+	  (used as upper limit in the response function) is needed 
+	  in the implementation of IRComm sensors.
 */
 
 #include "IRSensor.h"
@@ -82,7 +89,7 @@ namespace Enki
 	void IRSensor::init(double dt, World* w)
 	{
 		// fill initial values with very large value; will be replaced if smaller distance is found
-		std::fill(rayDists.begin(), rayDists.end(), search_range);
+		std::fill(rayDists.begin(), rayDists.end(), searchRange);
 		std::fill(rayValues.begin(), rayValues.end(), 0);
 
 		// compute absolute position and orientation
@@ -100,13 +107,13 @@ namespace Enki
 	{
 		// cout << "Set search range to " << value << "\n";
 		assert(value > 0);
-		search_range = value;
+		searchRange = value;
 		// calculate interaction radius, which is measured from center of robot
-		r = sqrt(pos.norm2()+search_range*search_range-2*pos.norm()*search_range*cos(M_PI-orientation+pos.angle()));
+		r = sqrt(pos.norm2()+searchRange*searchRange-2*pos.norm()*searchRange*cos(M_PI-orientation+pos.angle()));
 		// calculate the smartRadius
-		smartRadius = search_range*sqrt(1.25-cos(aperture));
+		smartRadius = searchRange*sqrt(1.25-cos(aperture));
 		// calculate relative position for center of central ray
-		smartPos = Point (search_range/2*cos(orientation), search_range/2*sin(orientation));
+		smartPos = Point (searchRange/2*cos(orientation), searchRange/2*sin(orientation));
 		// no activation until first loop
 	}
 	
@@ -209,7 +216,7 @@ namespace Enki
 					const Vector rayDir(cos(absRayAngles[i]), sin(absRayAngles[i]));
 					
 					// the absolute position of the sensor ray's end point
-					const Point absRayEndPoint = absPos+rayDir*search_range;
+					const Point absRayEndPoint = absPos+rayDir*searchRange;
 					double candidate0 = HUGE_VAL;
 					double candidate1 = HUGE_VAL;
 					
@@ -227,7 +234,7 @@ namespace Enki
 						candidate1 = (w->h-absPos.y) / (absRayEndPoint.y-absPos.y);
 					
 					double dist = std::min(candidate0, candidate1);
-					dist *= search_range;
+					dist *= searchRange;
 					updateRay(i, dist);
 				}
 			}
@@ -332,7 +339,7 @@ namespace Enki
 	double IRSensor::distanceToPolygon(double rayAngle, const Polygon &p) const 
 	{
 		// compute ray segment in global coordinates
-		Point absEnd = absPos + Vector(cos(rayAngle), sin(rayAngle)) * search_range;
+		Point absEnd = absPos + Vector(cos(rayAngle), sin(rayAngle)) * searchRange;
 		Segment ray(absPos.x, absPos.y, absEnd.x, absEnd.y);
 
 		const int n = p.size();         // number of points in the polygon
