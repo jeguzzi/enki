@@ -47,28 +47,42 @@ inline Derived polymorphic_downcast(Base base)
 
 namespace Enki
 {
-	EPuckModel::EPuckModel(ViewerWidget* viewer)
+
+    std::vector<GLuint> EPuckModel::lists{};
+    std::vector<std::unique_ptr<QOpenGLTexture>> EPuckModel::textures{};
+
+    void EPuckModel::init() {
+    	if (lists.size() == 0) {
+    		textures.emplace_back(loadTexture(":/textures/epuck.png"));
+			textures.emplace_back(loadTexture(":/textures/epuckr.png"));
+			lists.push_back(GenEPuckBody());
+			lists.push_back(GenEPuckRest());
+			lists.push_back(GenEPuckRing());
+			lists.push_back(GenEPuckWheelLeft());
+			lists.push_back(GenEPuckWheelRight());
+    	}
+    }
+
+    void EPuckModel::deinit() {
+    	if (lists.size()) {
+     		for (int i = 0; i < lists.size(); i++)
+				glDeleteLists(lists[i], 1);
+			lists.clear(); 
+			textures.clear();   		
+		}
+    }
+
+	EPuckModel::EPuckModel()
 	{
-		textures.resize(2);
-		textures[0] = viewer->bindTexture(QPixmap(QString(":/textures/epuck.png")), GL_TEXTURE_2D);
-		textures[1] = viewer->bindTexture(QPixmap(QString(":/textures/epuckr.png")), GL_TEXTURE_2D, GL_LUMINANCE8);
-		lists.resize(5);
-		lists[0] = GenEPuckBody();
-		lists[1] = GenEPuckRest();
-		lists[2] = GenEPuckRing();
-		lists[3] = GenEPuckWheelLeft();
-		lists[4] = GenEPuckWheelRight();
+		init();
 	}
 	
-	void EPuckModel::cleanup(ViewerWidget* viewer)
+	void EPuckModel::cleanup()
 	{
-		for (int i = 0; i < textures.size(); i++)
-			viewer->deleteTexture(textures[i]);
-		for (int i = 0; i < lists.size(); i++)
-			glDeleteLists(lists[i], 1);
+		
 	}
 	
-	void EPuckModel::draw(PhysicalObject* object) const
+	void EPuckModel::draw(PhysicalObject* object)
 	{
 		DifferentialWheeled* dw = polymorphic_downcast<DifferentialWheeled*>(object);
 		
@@ -79,7 +93,7 @@ namespace Enki
 		glPushMatrix();
 		glTranslated(0, 0, wheelRadius);
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, textures[0]);
+		textures[0]->bind();
 		
 		glColor3d(1, 1, 1);
 		
@@ -105,7 +119,7 @@ namespace Enki
 		glPopMatrix();
 		
 		// shadow
-		glBindTexture(GL_TEXTURE_2D, textures[1]);
+		textures[1]->bind();
 		glDisable(GL_LIGHTING);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ZERO, GL_SRC_COLOR);

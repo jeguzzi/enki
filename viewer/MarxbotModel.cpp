@@ -46,24 +46,39 @@ inline Derived polymorphic_downcast(Base base)
 
 namespace Enki
 {
-	MarxbotModel::MarxbotModel(ViewerWidget* viewer)
+
+    std::vector<GLuint> MarxbotModel::lists{};
+    std::vector<std::unique_ptr<QOpenGLTexture>> MarxbotModel::textures{};
+    
+	MarxbotModel::MarxbotModel()
 	{
-		textures.resize(1);
-		textures[0] = viewer->bindTexture(QPixmap(QString(":/textures/marxbot.png")), GL_TEXTURE_2D);
-		lists.resize(2);
-		lists[0] = GenMarxbotBase();
-		lists[1] = GenMarxbotWheel();
+		init();
+	}
+
+	void MarxbotModel::init()
+	{
+		if (lists.size() == 0) {
+		    textures.emplace_back(loadTexture(":/textures/marxbot.png"));
+		    lists.push_back(GenMarxbotBase());
+		    lists.push_back(GenMarxbotWheel());
+		}
+	}
+
+	void MarxbotModel::deinit()
+	{
+		if (lists.size()) {
+		    for (int i = 0; i < lists.size(); i++)
+		    	glDeleteLists(lists[i], 1);
+			lists.clear(); 
+			textures.clear(); 
+		}
 	}
 	
-	void MarxbotModel::cleanup(ViewerWidget* viewer)
+	void MarxbotModel::cleanup()
 	{
-		for (int i = 0; i < textures.size(); i++)
-			viewer->deleteTexture(textures[i]);
-		for (int i = 0; i < lists.size(); i++)
-			glDeleteLists(lists[i], 1);
 	}
 	
-	void MarxbotModel::draw(PhysicalObject* object) const
+	void MarxbotModel::draw(PhysicalObject* object)
 	{
 		DifferentialWheeled* dw = polymorphic_downcast<DifferentialWheeled*>(object);
 		
@@ -71,7 +86,7 @@ namespace Enki
 		const double wheelCirc = 2 * M_PI * wheelRadius;
 		
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, textures[0]);
+		textures[0]->bind();
 		glColor3d(1, 1, 1);
 		
 		

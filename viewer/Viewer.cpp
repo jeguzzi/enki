@@ -72,6 +72,19 @@ namespace Enki
 	#define rad2deg (180 / M_PI)
 	#define clamp(x, low, high) ((x) < (low) ? (low) : ((x) > (high) ? (high) : (x)))
 	
+
+    void qglColor(QColor color) {
+    	glColor4f(color.redF(), color.greenF(), color.blueF(), color.alphaF());
+    }
+
+	std::unique_ptr<QOpenGLTexture> loadTexture(const char * path) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 9, 0))
+		return std::make_unique<QOpenGLTexture>(QImage(QString(path)).mirrored());
+#else
+		return std::make_unique<QOpenGLTexture>(QImage(QString(path)).flipped(Qt::Vertical));
+#endif
+	}
+
 	// simple display list, one per instance
 	class SimpleDisplayList : public ViewerWidget::ViewerUserData
 	{
@@ -85,7 +98,7 @@ namespace Enki
 			deletedWithObject = true;
 		}
 		
-		virtual void draw(PhysicalObject* object) const
+		virtual void draw(PhysicalObject* object)
 		{
 			glColor3d(object->getColor().components[0], object->getColor().components[1], object->getColor().components[2]);
 			glCallList(list);
@@ -99,7 +112,7 @@ namespace Enki
 	
 	ViewerWidget::CustomRobotModel::CustomRobotModel()
 	{
-		deletedWithObject = false;
+		deletedWithObject = true;
 	}
 	
 	//! Create a camera at 0
@@ -112,8 +125,8 @@ namespace Enki
 	
 	//! Create a camera centered on a given world
 	ViewerWidget::CameraPose::CameraPose(const World *world):
-		pos(QPointF(world->w * 0.5, -qMax(0., world->r * 0.9))),
-		altitude(qMax(qMax(world->w, world->h), world->r*2) * 0.9),
+		pos(world ? QPointF(world->w * 0.5, -qMax(0., world->r * 0.9)) : QPointF(0, 0)),
+		altitude(world ? qMax(qMax(world->w, world->h), world->r*2) * 0.9 : 0),
 		yaw(M_PI/2),
 		pitch(-(3*M_PI)/8)
 	{
@@ -187,8 +200,8 @@ namespace Enki
 		link(link)
 	{}
 
-	ViewerWidget::ViewerWidget(World *world, QWidget *parent) :
-		QGLWidget(parent),
+	ViewerWidget::ViewerWidget(World *world, QWidget *parent, bool updateWorld) :
+		QOpenGLWidget(parent),
 		timerPeriodMs(30),
 		camera(world),
 		doDumpFrames(false),
@@ -206,7 +219,8 @@ namespace Enki
 		movingObject(false),
 		mouseLeftButtonRobot(0),
 		mouseRightButtonRobot(0),
-		mouseMiddleButtonRobot(0)
+		mouseMiddleButtonRobot(0),
+		updateWorld(updateWorld)
 	{
 		initTexturesResources();
 		elapsedTime = double(30)/1000.; // average second between two frames, can be updated each frame to better precision
@@ -216,34 +230,76 @@ namespace Enki
 	
 	ViewerWidget::~ViewerWidget()
 	{
-		world->disconnectExternalObjectsUserData();
+		setWorld(nullptr);
+		makeCurrent();
 		if (isValid())
 		{
-			deleteTexture(helpWidget);
-			deleteTexture(centerWidget);
-			deleteTexture(selectionTexture);
-			glDeleteLists(worldList, 1);
-			deleteTexture (worldTexture);
-			deleteTexture (wallTexture);
-			if (world->hasGroundTexture())
-				glDeleteTextures(1, &worldGroundTexture);
+			helpWidget = nullptr;
+			centerWidget = nullptr;
+			selectionTexture = nullptr;
+			worldTexture = nullptr;
+			wallTexture = nullptr;
 		}
-		
-		ManagedObjectsMapIterator i(managedObjects);
-		while (i.hasNext())
-		{
-			i.next();
-			ViewerUserData* data = i.value();
-			data->cleanup(this);
-			delete data;
-		}
+		doneCurrent();
 	}
+
+	QOpenGLContext * ViewerWidget::sharedContext = nullptr;
 	
+	void ViewerWidget::deinit() {
+		SwitchContext c;
+		EPuckModel::deinit();
+		Thymio2Model::deinit();
+		MarxbotModel::deinit();
+	}
+
 	World* ViewerWidget::getWorld() const
 	{
 		return world;
 	}
 	
+	void ViewerWidget::initWorld(World * world) {
+		Color color = world ? world->color : Color::gray;
+		glClearColor(color.r(), color.g(), color.b(), 1.0);
+		if (world) {
+		    if (world->hasGroundTexture())
+		    {
+		        glGenTextures(1, &worldGroundTexture);
+		        glBindTexture(GL_TEXTURE_2D, worldGroundTexture);
+		        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, world->groundTexture.width, world->groundTexture.height, 0, GL_BGRA, GL_UNSIGNED_BYTE, &world->groundTexture.data[0]);
+		        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		    }
+		    worldList = glGenLists(1);
+		    renderWorld();		
+		    // let subclass manage their static types
+		    renderObjectsTypesHook();		
+		}
+		shouldInitWorld = false;
+	}
+
+	void ViewerWidget::setWorld(World * value)
+	{
+		makeCurrent();
+		if (value != world) {
+			if (world && false) {
+				glDeleteLists(worldList, 1);
+				if (world->hasGroundTexture())
+				{
+					glDeleteTextures(1, &worldGroundTexture);
+				}
+			}
+			world = value;
+			shouldInitWorld = true;
+		}
+		doneCurrent();
+	}
+
+	void ViewerWidget::resetCamera() { 
+		if(world) {
+			camera = UpdatableCameraPose(world); 
+		}
+	}
+
 	ViewerWidget::CameraPose ViewerWidget::getCamera() const
 	{
 		return camera;
@@ -355,13 +411,13 @@ namespace Enki
 
 	void ViewerWidget::showHelp()
 	{
-		addInfoMessage(trUtf8("Available controls:"));
-		addInfoMessage(trUtf8("• F1 key: show this help message"));
-		addInfoMessage(trUtf8("• left click on object: select object"));
-		addInfoMessage(trUtf8("• left click outside object: de-select object"));
-		addInfoMessage(trUtf8("• left drag: if object selected, move it, otherwise move camera"));
-		addInfoMessage(trUtf8("• right drag: if object selected, rotate it, otherwise rotate camera"));
-		addInfoMessage(trUtf8("• mouse wheel/left drag + shift: zoom camera"));
+		addInfoMessage(tr("Available controls:"));
+		addInfoMessage(tr("• F1 key: show this help message"));
+		addInfoMessage(tr("• left click on object: select object"));
+		addInfoMessage(tr("• left click outside object: de-select object"));
+		addInfoMessage(tr("• left drag: if object selected, move it, otherwise move camera"));
+		addInfoMessage(tr("• right drag: if object selected, rotate it, otherwise rotate camera"));
+		addInfoMessage(tr("• mouse wheel/left drag + shift: zoom camera"));
 	}
 
 	void ViewerWidget::renderSegment(const Segment& segment, double height)
@@ -559,7 +615,6 @@ namespace Enki
 	void ViewerWidget::renderWorld()
 	{
 		const double infPlanSize = 3000;
-		
 		glNewList(worldList, GL_COMPILE);
 		
 		glNormal3d(0, 0, 1);
@@ -614,7 +669,7 @@ namespace Enki
 				glEnd();
 				
 				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, worldTexture);
+				worldTexture->bind();
 				
 				renderWorldSegment(Segment(world->w, 0, 0, 0));
 				renderWorldSegment(Segment(world->w, world->h, world->w, 0));
@@ -647,7 +702,6 @@ namespace Enki
 					glVertex3d(cos(angEnd)*(r+infPlanSize), sin(angEnd)*(r+infPlanSize), 10);
 					glVertex3d(cos(angEnd)*r, sin(angEnd)*r, 10);
 					glEnd();
-					
 					// draw ground center
 					if (world->hasGroundTexture())
 					{
@@ -663,9 +717,8 @@ namespace Enki
 					glTexCoord2f(0.5f+0.5f*cosf(angEnd), 0.5f+0.5f*sinf(angEnd));
 					glVertex3d(cos(angEnd) * r, sin(angEnd) * r, 0);
 					glEnd();
-					
 					glEnable(GL_TEXTURE_2D);
-					glBindTexture(GL_TEXTURE_2D, worldTexture);
+					worldTexture->bind();
 					
 					// draw sides
 					glNormal3d(-cos(angMid), -sin(angMid), 0);
@@ -730,7 +783,7 @@ namespace Enki
 		
 		// TODO: use object texture if any
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, wallTexture);
+		wallTexture->bind();
 		
 		// sides
 		for (size_t i = 0; i < segmentCount; ++i)
@@ -759,11 +812,9 @@ namespace Enki
 		glEnd();
 	}
 	
-	void ViewerWidget::renderSimpleObject(PhysicalObject *object)
+	void ViewerWidget::renderSimpleObject(GLuint & list, PhysicalObject *object)
 	{
-		SimpleDisplayList *userData = new SimpleDisplayList;
-		object->userData = userData;
-		glNewList(userData->list, GL_COMPILE);
+		glNewList(list, GL_COMPILE);
 		
 		glDisable(GL_LIGHTING);
 		if (!object->getHull().empty())
@@ -831,8 +882,6 @@ namespace Enki
 	
 	void ViewerWidget::initializeGL()
 	{
-		glClearColor(world->color.r(), world->color.g(), world->color.b(), 1.0);
-		
 		float LightAmbient[] = {0.6, 0.6, 0.6, 1};
 		float LightDiffuse[] = {1.2, 1.2, 1.2, 1};
 		float defaultColor[] = {0.5, 0.5, 0.5, 1};
@@ -860,30 +909,36 @@ namespace Enki
 		glHint (GL_FOG_HINT, GL_NICEST);
 		glEnable (GL_FOG);*/
 		
-		helpWidget = bindTexture(QPixmap(QString(":/widgets/help.png")), GL_TEXTURE_2D, GL_RGBA);
-		centerWidget = bindTexture(QPixmap(QString(":/widgets/center.png")), GL_TEXTURE_2D, GL_RGBA);
+		helpWidget = loadTexture(":/widgets/help.png");
+		centerWidget = loadTexture(":/widgets/center.png");
 		
-		selectionTexture = bindTexture(QPixmap(QString(":/textures/selection.png")), GL_TEXTURE_2D, GL_RGBA);
-		worldTexture = bindTexture(QPixmap(QString(":/textures/world.png")), GL_TEXTURE_2D, GL_LUMINANCE8);
-		wallTexture = bindTexture(QPixmap(QString(":/textures/wall.png")), GL_TEXTURE_2D, GL_LUMINANCE8);
-		if (world->hasGroundTexture())
-		{
-			glGenTextures(1, &worldGroundTexture);
-			glBindTexture(GL_TEXTURE_2D, worldGroundTexture);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, world->groundTexture.width, world->groundTexture.height, 0, GL_BGRA, GL_UNSIGNED_BYTE, &world->groundTexture.data[0]);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		selectionTexture = loadTexture(":/textures/selection.png");
+		worldTexture = loadTexture(":/textures/world.png");
+		wallTexture = loadTexture(":/textures/wall.png");
+		initWorld(world);
+	}
+
+	ViewerWidget::ViewerUserData * ViewerWidget::makeUserData(PhysicalObject * object) {
+		SwitchContext c;
+		if (dynamic_cast<EPuck* >(object)) {
+			return new EPuckModel(); 
 		}
-		worldList = glGenLists(1);
-		renderWorld();
-		
-		// render all static types
-		managedObjects[&typeid(EPuck)] = new EPuckModel(this);
-		managedObjects[&typeid(Marxbot)] = new MarxbotModel(this);
-		managedObjects[&typeid(Thymio2)] = new Thymio2Model(this);
-		
-		// let subclass manage their static types
-		renderObjectsTypesHook();
+		if (dynamic_cast<Marxbot* >(object)) {
+			return new MarxbotModel(); 
+		}
+		if (dynamic_cast<Thymio2* >(object)) {
+			return new Thymio2Model(); 
+		}
+		auto d = new SimpleDisplayList();
+		renderSimpleObject(d->list, object);
+		return d;
+	}
+
+	ViewerWidget::ViewerUserData * ViewerWidget::getUserData(PhysicalObject * object) {
+		if (!object->userData) {
+			object->userData = makeUserData(object);
+		}
+		return dynamic_cast<ViewerWidget::ViewerUserData *>(object->userData);
 	}
 	
 	void ViewerWidget::renderScene(double left, double right, double bottom, double top, double zNear, double zFar)
@@ -909,52 +964,13 @@ namespace Enki
 		glCallList(worldList);
 		for (World::ObjectsIterator it = world->objects.begin(); it != world->objects.end(); ++it)
 		{
-			// if required, initialize this object (display list)
-			if (!(*it)->userData)
-			{
-				bool found = false;
-				const std::type_info* typeToSearch = &typeid(**it);
-				
-				// search the alias map
-				ManagedObjectsAliasesMapIterator aliasIt(managedObjectsAliases);
-				while (aliasIt.hasNext())
-				{
-					aliasIt.next();
-					if (*aliasIt.key() == *typeToSearch)
-					{
-						typeToSearch = aliasIt.value();
-						break;
-					}
-				}
-				
-				// search the real map
-				ManagedObjectsMapIterator dataIt(managedObjects);
-				while (dataIt.hasNext())
-				{
-					dataIt.next();
-					if (*dataIt.key() == (*typeToSearch))
-					{
-						(*it)->userData = dataIt.value();
-						found = true;
-						break;
-					}
-				}
-				
-				if (!found)
-					renderSimpleObject(*it);
-			}
-			
+			ViewerUserData* userData = getUserData(*it);
 			// draw object
 			glPushMatrix();
-			
 			glTranslated((*it)->pos.x, (*it)->pos.y, 0);
 			glRotated(rad2deg * (*it)->angle, 0, 0, 1);
-			
-			ViewerUserData* userData = polymorphic_downcast<ViewerUserData *>((*it)->userData);
-
 			userData->draw(*it);
 			displayObjectHook(*it);
-			
 			glPopMatrix();
 		}
 
@@ -969,7 +985,7 @@ namespace Enki
 			// if it is being move, draw the object as it has not been drawn before
 			if (movingObject)
 			{
-				ViewerUserData* userData = polymorphic_downcast<ViewerUserData *>(selectedObject->userData);
+				ViewerUserData* userData = getUserData(selectedObject);
 				userData->draw(selectedObject);
 				displayObjectHook(selectedObject);
 			}
@@ -978,7 +994,7 @@ namespace Enki
 			glEnable(GL_BLEND);
 			glEnable(GL_TEXTURE_2D);
 			glDisable(GL_LIGHTING);
-			glBindTexture(GL_TEXTURE_2D, selectionTexture);
+			selectionTexture->bind();
 			glColor4d(1,1,1,1);
 			glBegin(GL_QUADS);
 				const double r(selectedObject->getRadius() * 1.5);
@@ -993,6 +1009,47 @@ namespace Enki
 			glPopMatrix();
 		}
 	}
+
+    void ViewerWidget::renderText(int x, int y, const QString &str, const QFont & font) {
+        // GLdouble glColor[4];
+        // glGetDoublev(GL_CURRENT_COLOR, glColor);
+        // QColor fontColor = QColor(glColor[0], glColor[1], glColor[2], glColor[3]);
+    	QColor fontColor = QColor::fromRgb(50, 0, 0);
+
+	    glPushAttrib(GL_ACCUM_BUFFER_BIT);
+	    glPushAttrib(GL_VIEWPORT_BIT);
+	    glPushAttrib(GL_TRANSFORM_BIT);
+	    glPushAttrib(GL_POLYGON_BIT);
+	    
+	    glPushAttrib(GL_PIXEL_MODE_BIT);
+	    glPushAttrib(GL_MULTISAMPLE_BIT);
+	    glPushAttrib(GL_LIGHTING_BIT);
+	    glPushAttrib(GL_ENABLE_BIT);
+	    
+	    glPushAttrib(GL_DEPTH_BUFFER_BIT);
+	    glPushAttrib(GL_CURRENT_BIT);
+	    glPushAttrib(GL_COLOR_BUFFER_BIT);
+
+        QPainter painter(this);
+        painter.setPen(fontColor);
+        painter.setFont(font);
+        painter.drawText(x, y, str);
+        painter.end();
+
+	    glPopAttrib();
+	    glPopAttrib();
+	    glPopAttrib();
+	    glPopAttrib();
+	    
+	    glPopAttrib();
+	    glPopAttrib();
+	    glPopAttrib();
+	    glPopAttrib();
+	    
+	    glPopAttrib();
+	    glPopAttrib();
+	    glPopAttrib();
+    }
 
 	void ViewerWidget::picking(double left, double right, double bottom, double top, double zNear, double zFar)
 	{
@@ -1091,7 +1148,7 @@ namespace Enki
 		const int margin(24);
 		const int size(48);
 		
-		glBindTexture(GL_TEXTURE_2D, helpWidget);
+		helpWidget->bind();
 		glBegin(GL_QUADS);
 		{
 			const int yPos(0);
@@ -1102,7 +1159,7 @@ namespace Enki
 		}
 		glEnd();
 		
-		glBindTexture(GL_TEXTURE_2D, centerWidget);
+		centerWidget->bind();
 		glBegin(GL_QUADS);
 		{
 			const int yPos(48+12);
@@ -1119,9 +1176,14 @@ namespace Enki
 	
 	void ViewerWidget::clickWidget(QMouseEvent *event)
 	{
-		if (event->y() > 24 && event->y() < 72)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))		
+		const auto y = event->y();
+#else
+		const auto y = event->position().y();
+#endif
+		if (y > 24 && y < 72)
 			helpActivated();
-		else if (event->y() > 24+48+12 && event->y() < 72+48+12)
+		else if (y > 24+48+12 && y < 72+48+12)
 			camera = UpdatableCameraPose(world);
 	}
 	
@@ -1178,7 +1240,7 @@ namespace Enki
 	{
 		messageListWidth = 0;
 		for (MessageList::iterator it = messageList.begin(); it != messageList.end(); ++it)
-			messageListWidth = std::max(messageListWidth, fontMetrics.width(it->message));
+			messageListWidth = std::max(messageListWidth, fontMetrics.horizontalAdvance(it->message));
 		const int lineSpacing(fontMetrics.lineSpacing()+3);
 		messageListWidth += 20; 
 		messageListHeight = messageList.size() * lineSpacing;
@@ -1188,8 +1250,10 @@ namespace Enki
 
 	void ViewerWidget::paintGL()
 	{
+		if (shouldInitWorld) {
+			initWorld(world);
+		}
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		const double znear = 0.5;
 		if (trackingView && selectedObject)
 			camera.updateTracking(selectedObject->angle, QVector3D(selectedObject->pos.x, selectedObject->pos.y, selectedObject->getHeight()), znear);
@@ -1197,16 +1261,16 @@ namespace Enki
 			camera.update();
 
 		const double aspectRatio = double(width()) / double(height());
-		renderScene(-aspectRatio*0.5*znear, aspectRatio*0.5*znear, -0.5*znear, 0.5*znear, znear, 2000);
-		sceneCompletedHook();
-		
-		picking(-aspectRatio*0.5*znear, aspectRatio*0.5*znear, -0.5*znear, 0.5*znear, znear, 2000);
-		
+		if (world) {
+			renderScene(-aspectRatio*0.5*znear, aspectRatio*0.5*znear, -0.5*znear, 0.5*znear, znear, 2000);
+			sceneCompletedHook();
+			picking(-aspectRatio*0.5*znear, aspectRatio*0.5*znear, -0.5*znear, 0.5*znear, znear, 2000);
+		}
 		displayMessages();
 		displayWidgets();
 
 		if (doDumpFrames)
-			grabFrameBuffer().save(QString("enkiviewer-frame%1.png").arg(dumpFramesCounter++, (int)8, (int)10, QChar('0')));
+			grabFramebuffer().save(QString("enkiviewer-frame%1.png").arg(dumpFramesCounter++, (int)8, (int)10, QChar('0')));
 	}
 	
 	void ViewerWidget::resizeGL(int width, int height)
@@ -1228,13 +1292,20 @@ namespace Enki
 		// change selected object
 		if (event->button() == Qt::LeftButton)
 		{
-			if (event->x() > width() - 72 && event->x() < width() - 24)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))		
+		const auto x = event->x();
+		const auto y = event->y();
+#else
+		const auto x = event->position().x();
+		const auto y = event->position().y();
+#endif
+			if (x > width() - 72 && x < width() - 24)
 			{
 				clickWidget(event);
 			}
-			else if (!messageList.empty() && event->x() < messageListWidth && event->y() < messageListHeight)
+			else if (!messageList.empty() && x < messageListWidth && y < messageListHeight)
 			{
-				const int messageIndex((event->y() - 5) / fontMetrics.lineSpacing());
+				const int messageIndex((y - 5) / fontMetrics.lineSpacing());
 				if (messageIndex >= 0 && messageIndex < messageList.size())
 				{
 					MessageList::iterator it(messageList.begin());
@@ -1394,10 +1465,11 @@ namespace Enki
 	
 	void ViewerWidget::wheelEvent(QWheelEvent * event)
 	{
+		const auto delta = event->angleDelta().y();
 		// zoom
 		if (trackingView)
 		{
-			camera.radius *= 1 - 0.0003*event->delta();
+			camera.radius *= 1 - 0.0003 * delta;
 			if (camera.radius < 1.0)
 				camera.radius = 1.0;
 		}
@@ -1406,17 +1478,27 @@ namespace Enki
 		else
 		{
 			const double sensitivity = (1 + 0.1*camera.altitude) * 0.003;
-			camera.pos.rx() += sensitivity * event->delta()*camera.forward.x();
-			camera.pos.ry() += sensitivity * event->delta()*camera.forward.y();
-			camera.altitude += sensitivity * event->delta()*camera.forward.z();
+			camera.pos.rx() += sensitivity * delta * camera.forward.x();
+			camera.pos.ry() += sensitivity * delta * camera.forward.y();
+			camera.altitude += sensitivity * delta * camera.forward.z();
 			camera.altitude = std::max(camera.altitude, 0.);
 		}
 	}
 	
 	void ViewerWidget::timerEvent(QTimerEvent * event)
 	{
-		world->step(double(timerPeriodMs)/1000., 3);
-		updateGL();
+		if (world && updateWorld) {
+			world->step(double(timerPeriodMs)/1000., 3);
+		}
+		update();
+	}
+
+	void ViewerWidget::setUpdateWorld(bool value) {
+		updateWorld = value;
+	}
+
+	bool ViewerWidget::getUpdateWorld() const {
+		return updateWorld;
 	}
 	
 	//! Help button or F1 have been pressed

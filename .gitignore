@@ -1,6 +1,6 @@
 *~
 build
-notebooks
-venv
 dist
+venv
+notebooks
 .DS_Store

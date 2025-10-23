@@ -5,13 +5,18 @@ if (SDL2_FOUND)
 	add_definitions("-DUSE_SDL")
 endif ()
 
-if (Qt5Widgets_FOUND AND Qt5OpenGL_FOUND)
-	set(CMAKE_AUTOMOC ON)
-	set(viewer_playground_SRCS Playground.cpp)
-	
-	include_directories(${PROJECT_SOURCE_DIR})
-	
-	add_executable(enkiplayground ${viewer_playground_SRCS})
-	
-	target_link_libraries(enkiplayground enkiviewer enki ${OPENGL_gl_LIBRARY} ${EXTRA_LIBS} Qt5::OpenGL Qt5::Widgets)
-endif ()
+if(Qt6_FOUND OR Qt5_FOUND)
+set(CMAKE_AUTOMOC ON)
+set(viewer_playground_SRCS Playground.cpp)
+
+include_directories(${PROJECT_SOURCE_DIR})
+
+add_executable(enkiplayground ${viewer_playground_SRCS})
+target_link_libraries(enkiplayground enkiviewer enki ${OPENGL_gl_LIBRARY} ${EXTRA_LIBS})
+if(Qt6_FOUND)
+target_link_libraries(enkiplayground Qt6::Widgets Qt6::OpenGL Qt6::OpenGLWidgets)
+else()
+target_link_libraries(enkiplayground Qt5::OpenGL Qt5::Widgets)
+endif()
+endif()
+
