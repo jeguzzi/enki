@@ -9,5 +9,4 @@ version = "0.0.1.alpha"
 [tool.scikit-build]
 minimum-version = "build-system.requires"
 cmake.define = {BUILD_TESTS = "OFF", BUILD_EXAMPLES = "OFF"}
-
-
+install.components = ["pyenki"]
