@@ -85,40 +85,54 @@ Objects
 
 .. code-block:: Python
 
-    >>> import pyenki
-    >>> world = pyenki.World()
-    >>>
-    >>> c = pyenki.CompositeObject(
-    >>>     [
-    >>>         ([(0, 1), (0, 0.5), (2, 0.5), (2, 1)], 1.0),
-    >>>          ([(0, -0.5), (0, -1), (2, -1), (2, -0.5)], 1.0),
-    >>>          ([(0, 0.5), (0, -0.5), (0.5, -0.5), (0.5, 0.5)], 1.0)
-    >>>     ],
-    >>>     -1, color=pyenki.Color(0, 0.5, 0.5))
-    >>> world.add_object(c)
-    >>>
-    >>> triangle = pyenki.ConvexObject(
-    >>>         [(0.0, 0.0), (1.0, -1.0), (1.0, 1.0)],
-    >>>         1, -1, color=pyenki.Color(0.5, 0.5, 0.0))
-    >>> triangle.position = (5, 0)
-    >>> world.add_object(triangle)
-    >>>
-    >>> cylinder = pyenki.CircularObject(1.0, 1.0, -1, color=pyenki.Color(0.5, 0.0, 0.5))
-    >>> cylinder.position = (10, 0)
-    >>> world.add_object(cylinder)
-    >>>
-    >>> box = pyenki.RectangularObject(2.0, 1.0, 1.0, -1, color=pyenki.Color(0.2, 0.5, 0.7))
-    >>> box.position = (15, 0)
-    >>> world.add_object(box)
-
-    >>> # at the moment textures are used to compute the sensors (cameras) response
-    >>> # but are ignored when displaying the object
-    >>> colorful_box_shape = [(0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0)]
-    >>> colorful_box_colors = [pyenki.Color.red, pyenki.Color(0.5, 0.5, 0.0),
-                               pyenki.Color.green, pyenki.Color(0.0, 0.5, 0.5)]
-    >>> colorful_box = pyenki.ConvexObject(colorful_box_shape, 1, -1, side_color=colorful_box_colors)
-    >>> colorful_box.position = (20, 0)
-    >>> world.add_object(colorful_box)
+   import pyenki
+   
+   world = pyenki.World()
+   
+   c = pyenki.CompositeObject([([(0, 1), (0, 0.5), (2, 0.5), (2, 1)], 1.0),
+                               ([(0, -0.5), (0, -1), (2, -1), (2, -0.5)], 1.0),
+                               ([(0, 0.5), (0, -0.5), (0.5, -0.5),
+                                 (0.5, 0.5)], 1.0)],
+                              -1,
+                              color=pyenki.Color(0, 0.5, 0.5))
+   world.add_object(c)
+   
+   triangle = pyenki.ConvexObject([(0.0, 0.0), (1.0, -1.0), (1.0, 1.0)],
+                                  1,
+                                  -1,
+                                  color=pyenki.Color(0.5, 0.5, 0.0))
+   triangle.position = (5, 0)
+   world.add_object(triangle)
+   
+   cylinder = pyenki.CircularObject(1.0,
+                                    1.0,
+                                    -1,
+                                    color=pyenki.Color(0.5, 0.0, 0.5))
+   cylinder.position = (10, 0)
+   world.add_object(cylinder)
+   
+   box = pyenki.RectangularObject(2.0,
+                                  1.0,
+                                  1.0,
+                                  -1,
+                                  color=pyenki.Color(0.2, 0.5, 0.7))
+   box.position = (15, 0)
+   world.add_object(box)
+   
+   # at the moment textures are used to compute the sensors (cameras) response
+   # but are ignored when displaying the object
+   colorful_box_shape = [(0.0, 0.0), (1.0, 0.0), (1.0, 1.0), (0.0, 1.0)]
+   colorful_box_colors = [
+       pyenki.Color.red,
+       pyenki.Color(0.5, 0.5, 0.0), pyenki.Color.green,
+       pyenki.Color(0.0, 0.5, 0.5)
+   ]
+   colorful_box = pyenki.ConvexObject(colorful_box_shape,
+                                      1,
+                                      -1,
+                                      side_color=colorful_box_colors)
+   colorful_box.position = (20, 0)
+   world.add_object(colorful_box)
 
 .. image:: images/objects.png
   :width: 400
@@ -153,20 +167,46 @@ After each control step, we print the received messages.
 Interactive GUI
 ---------------
 
-The QWidget that display the world can be run either two modes:
-- embedded in a standalone QtApplication, like in :ref:`Hello Thymio`, that blocks until it terminates
-- or using an already running QtApplication, which does not block and allow to visualize the world
-while manipulating it in an interactive session (e.g., in a jupyter notebook or console)
+The Qt widget that displays the world can be run:
+- in a script, using a blocking loop, like in :ref:`Hello Thymio`
+- in a interactive session that does not block and allows to visualize the world
+while manipulating it.
 
-For instance, this script
+It can be used without PyQt, like in
 
-.. include:: ../../examples/python/interactive_view.py
+.. include:: ../../examples/python/world_view.py
   :code: Python
 
-will spawn a live world view when run inside an jupyter console
+and with PyQt, like in
 
-.. code-block:: Bash
+.. include:: ../../examples/python/world_view_qt.py
+  :code: Python
 
-  $ jupyter console
-  >>> %gui qt5
-  >>> %run interactive_view.py
+We also support an interactive visualization inside jupyter notebooks via `jupyter_rfb <https://jupyter-rfb.readthedocs.io>`_:
+
+.. code-cell::
+
+   import pyenki
+
+   world = pyenki.World()
+   thymio = pyenki.Thymio2()
+   thymio.left_wheel_target_speed = 10
+   world.add_object(thymio)
+
+.. code-cell::
+
+   from pyenki.buffer import EnkiRemoteFrameBuffer
+   w = EnkiRemoteFrameBuffer(world=world)
+   w
+
+.. code-cell::
+
+   await w.run_async(time_step=0.1, duration=5)
+
+Video
+-----
+
+To generate a video from a simulation, we can run:
+
+.. include:: ../../examples/python/video.py
+  :code: Python

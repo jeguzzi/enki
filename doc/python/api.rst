@@ -2,7 +2,7 @@
 API
 ====
 
-.. currentmodule:: pyenki
+.. currentmodule:: pyenki.pyenki
 
 
 Type aliases
@@ -33,6 +33,8 @@ Color
 =====
 
 .. autoclass:: Color
+   :members:
+   :exclude-members: __new__, __init__
 
 
 PhysicalObject
@@ -40,6 +42,7 @@ PhysicalObject
 
 .. autoclass:: PhysicalObject
    :members:
+   :exclude-members: __new__, __init__
 
 .. autofunction:: RectangularObject
 
@@ -58,46 +61,77 @@ PhysicalObject
 Robots
 ======
 
+Robot
+-----
+
+.. autoclass:: Robot
+   :exclude-members: __new__, __init__
+
 DifferentialWheeled
 -------------------
 
 .. autoclass:: DifferentialWheeled
    :members:
+   :exclude-members: __new__, __init__
 
 
 E-puck
 -------
 
 .. autoclass:: EPuck
-  :members:
+   :members:
+   :exclude-members: __new__
 
 
 Marxbot
 -------
 
 .. autoclass:: Marxbot
-  :members:
+   :members:
+   :exclude-members: __new__
 
 
 Thymio2
 -------
 
 .. autoclass:: IRCommEvent
+   :exclude-members: __new__, __init__
 
 .. autoclass:: Thymio2
    :members:
-
-
+   :exclude-members: __new__
 
 World
 =====
 
 .. autoclass:: World
-  :members:
+   :members:
+   :exclude-members: __new__
 
 
-.. WorldView
-.. ----------
+WorldView
+=========
 
-.. .. autoclass:: WorldView
-..   :members:
+.. autoclass:: WorldView
+   :members:
+   :exclude-members: __new__
+
+
+.. currentmodule:: pyenki
+
+Helpers
+=======
+
+Remote buffer
+-------------
+
+.. automodule:: pyenki.buffer
+   :members:
+
+
+Video
+-----
+
+.. automodule:: pyenki.video
+   :members:
+
