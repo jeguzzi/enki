@@ -28,7 +28,7 @@ target_compile_definitions(pyenki
 
 set_target_properties(pyenki PROPERTIES AUTOMOC TRUE)
 
-install(TARGETS pyenki DESTINATION . COMPONENT pyenki)
+install(TARGETS pyenki DESTINATION pyenki COMPONENT pyenki)
 
 # include(CheckIPOSupported)
 # check_ipo_supported(RESULT ipo_supported OUTPUT error)
