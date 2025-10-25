@@ -4,6 +4,7 @@
 #include <enki/robots/e-puck/EPuck.h>
 #include <QApplication>
 #include <QtGui>
+#include <QHBoxLayout>
 
 using namespace Enki;
 
@@ -28,20 +29,31 @@ int main(int argc, char *argv[])
 	world->addObject(thymio2);
 	world->addObject(epuck);
 	ViewerWidget viewer(world);
-	viewer.show();
+	// viewer.show();
 	World world1(120, Color(0.9, 0.9, 0.9));
 	Thymio2 * thymio1 = new Thymio2();
+	thymio1->leftSpeed = 3;
+	thymio1->rightSpeed = 4;
 	thymio1->setLedColor(Thymio2::TOP,Color(1.0,0.0,0.0,1.0));
 	world1.addObject(thymio1);
 	Thymio2 * thymio12 = new Thymio2();
 	thymio12->pos = Point(30, 0);
 	world1.addObject(thymio12);
-	ViewerWidget viewer1(&world1);
-	ViewerWidget viewer2(world, nullptr, false);
-	viewer1.show();
-	viewer2.show();
+	
+	QWidget window;
+	QHBoxLayout hbox = QHBoxLayout(&window);
+    window.resize(960, 320);
+    ViewerWidget viewer1(&world1, nullptr, 30, true, 1, 1);
+	ViewerWidget viewer2(world, nullptr, 30, false);
+	hbox.addWidget(&viewer);
+	hbox.addWidget(&viewer1);
+	hbox.addWidget(&viewer2);
+	window.show();
+	
+	// viewer1.show();
+	// viewer2.show();
 	// ViewerWidget viewer_2(&world_1);
-	//ViewerWidget viewer_1(&world);
+	// ViewerWidget viewer_1(&world);
 	// viewer_2.show();		
 	return app.exec();
 }
