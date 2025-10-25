@@ -15,7 +15,7 @@ class MyEPuck(pyenki.EPuck):
             self.timeout = random.randint(1, 10)
         else:
             self.timeout -= 1
-        print(id(self), self.position)
+        # print(id(self), self.position)
 
 
 w = pyenki.World()
