@@ -464,6 +464,9 @@ namespace Enki
 	void PhysicalObject::controlStep(double dt)
 	{
 		interlacedDistance = 0.;
+		if(cb) {
+			cb(this, dt);
+		}
 	}
 	
 	void PhysicalObject::applyForces(double dt)
