@@ -323,7 +323,7 @@ struct PythonViewer : public ViewerWidget {
                double wallsHeight_ = 10.0
                // std::optional<ViewCallback> cb = std::nullopt
                )
-      : ViewerWidget(world, nullptr, int(1000 / fps), updateWorld,
+      : ViewerWidget(world, nullptr, (fps > 0) ? int(1000 / fps) : 0, updateWorld,
                      worldTimeStep, realTimeFactor, helpers),
         pythonSavedState(0)
   // _cb(cb)
