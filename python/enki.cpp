@@ -1665,7 +1665,7 @@ Attributes:
 )doc")
       .def(py::init<PyWorld *, double, bool, double, double, bool, bool, Vector,
                     double, double, double, bool, double>(),
-           py::arg("world"), py::arg("fps") = 30,
+           py::arg("world") = py::none(), py::arg("fps") = 30,
            py::arg("update_world") = false, py::arg("time_step") = 0,
            py::arg("factor") = 1, py::arg("helpers") = true,
            py::arg("camera_reset") = false,
