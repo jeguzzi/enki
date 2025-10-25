@@ -238,7 +238,8 @@ namespace Enki
 		angle(0),
 		angSpeed(0),
 		interlacedDistance(0),
-		uid(uidNewObject++)
+		uid(uidNewObject++),
+		world(nullptr)
 	{
 		setCylindric(1, 1, 1);
 	}
@@ -1146,11 +1147,13 @@ namespace Enki
 	void World::addObject(PhysicalObject *o)
 	{
 		objects.insert(o);
+		o->world = this;
 	}
 
 	void World::removeObject(PhysicalObject *o)
 	{
 		objects.erase(o);
+		o->world = nullptr;
 	}
 	
 	void World::disconnectExternalObjectsUserData()
