@@ -127,6 +127,7 @@ namespace Enki
 		
 		setCylindric(3.7, 4.7, 152);
 		setColor(Color(0, 0.7, 0));
+		setName("e-puck");
 	}
 	
 	EPuck::~EPuck()

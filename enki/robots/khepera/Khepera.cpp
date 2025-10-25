@@ -68,6 +68,7 @@ namespace Enki
 		}
 		
 		setCylindric(2.6, 5, 80);
+		setName("khepera");
 	}
 }
 

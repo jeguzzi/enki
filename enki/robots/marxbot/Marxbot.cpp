@@ -65,6 +65,7 @@ namespace Enki
 		
 		setCylindric(8.5, 12, 1000);
 		setColor(Color(0.7, 0.7, 0.7));
+		setName("marxbot");
 	}
 	
 	double Marxbot::getVirtualBumper(unsigned number)
