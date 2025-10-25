@@ -46,6 +46,8 @@
 #include <QOpenGLContextGroup>
 #include <QOffscreenSurface>
 #include <QApplication>
+#include <QTimer>
+
 
 #include <enki/Geometry.h>
 #include <enki/PhysicalEngine.h>
@@ -134,6 +136,7 @@ namespace Enki
 	public:
 		bool doDumpFrames;
 		unsigned dumpFramesCounter;
+		bool displayHelpers;
 		static QOpenGLContext * sharedContext;
 		
 	protected:
@@ -193,17 +196,27 @@ namespace Enki
 		Robot* mouseMiddleButtonRobot;
 		
 		double elapsedTime;
+		double nextUpdateTime;
+		double worldTimeStep;
+		double rtFactor;
+		
+		double getEffectiveCameraPitch() {
+			if(cameraIsOrtho) return -M_PI/2;
+			return camera.pitch;
+		}
 
 	public:
-		ViewerWidget(World *world, QWidget *parent = 0, bool updateWorld = true);
+		ViewerWidget(World *world, QWidget *parent = 0, int timerPeriod=30, bool updateWorld = true, double worldTimeStep = 0, double realTimeFactor = 1, bool helpers = true);
 		~ViewerWidget();
 
 		static void deinit();
 	
+		bool cameraIsOrtho;
+
 		World* getWorld() const;
 		void setWorld(World *);
-		void setUpdateWorld(bool value);
-		bool getUpdateWorld() const;
+		void startUpdatingWorld(double timeStep = 0, double factor = 1);
+		void stopUpdatingWorld();
 		CameraPose getCamera() const;
 		QVector3D getPointedPoint() const;
 		PhysicalObject* getPointedObject() const;
@@ -213,6 +226,11 @@ namespace Enki
 		
 		void setMovableByPicking(PhysicalObject* object, bool movable = true);
 		void removeExtendedAttributes(PhysicalObject* object);
+
+		void saveImage(const std::string &path) {
+    		const QImage fb = grabFramebuffer();
+    		fb.save(QString::fromStdString(path));
+  		}
 
 	public slots:
 		void setCamera(const QPointF& pos, double altitude, double yaw, double pitch);
@@ -305,13 +323,43 @@ namespace Enki
 
     class EnkiApplication: public QApplication {
     public:
-    	EnkiApplication(int &argc, char **argv) :  QApplication(init(argc), argv) {}
+    	EnkiApplication(int &argc, char **argv) :  QApplication(setup(argc), argv) {}
         ~EnkiApplication() { ViewerWidget::deinit(); }
+    	static void init() {
+            if (qApp == nullptr) {
+              int argc(0);
+              // char *argv[1] = {(char *)"Test"};
+              // app = std::make_unique<EnkiApplication>(argc, argv);
+              app = std::make_unique<EnkiApplication>(argc, nullptr);
+              // app->setQuitOnLastWindowClosed(false);
+              QEventLoop loop;
+			  QTimer::singleShot(1000, &loop,SLOT(quit()));
+			  loop.exec();
+			  std::cout << "Set up app\n";
+            }
+    	}
+    	static void cleanup() {
+    		if (app) {
+    			app = nullptr;
+  			}
+    	}
+      	static void run(double duration = -1) {
+    		if (app) {
+    			if (duration >= 0) {
+    				QEventLoop loop;
+				    QTimer::singleShot(static_cast<int>(1000 * duration), &loop, SLOT(quit()));
+					loop.exec();
+    			} else {
+    				app->exec();
+    			}
+  			}
+    	}
     private:
-    	static int & init(int &argc) {
+    	static int & setup(int &argc) {
     		QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     		return argc;
     	}
+    	static inline std::unique_ptr<EnkiApplication> app = nullptr;
     };
 }
 

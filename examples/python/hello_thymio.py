@@ -52,12 +52,12 @@ def run(world: pyenki.World,
 
     if gui:
         # We can either run a simulation [in real-time] inside a Qt application
-        world.run_in_viewer(cam_position=(0, 0),
-                            cam_altitude=70.0,
-                            cam_yaw=0.0,
-                            cam_pitch=-math.pi / 2,
+        world.run_in_viewer(camera_position=(0, 0),
+                            camera_altitude=70.0,
+                            camera_yaw=0.0,
+                            camera_pitch=-math.pi / 2,
                             walls_height=10,
-                            orthographic=orthographic)
+                            camera_is_ortho=orthographic)
     else:
         # or we can write our own loop that run the simulaion as fast as possible.
         steps = int(T // dt)
