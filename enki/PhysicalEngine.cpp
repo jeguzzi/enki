@@ -728,7 +728,7 @@ namespace Enki
 		data(data, data+width*height)
 	{}
 
-	World::World(double width, double height, unsigned long seed, const Color& color, const GroundTexture& groundTexture) :
+	World::World(double width, double height, const Color& color, unsigned long seed, const GroundTexture& groundTexture) :
 		wallsType(WALLS_SQUARE),
 		w(width),
 		h(height),
@@ -741,7 +741,7 @@ namespace Enki
 	{
 	}
 	
-	World::World(double r, unsigned long seed, const Color& color, const GroundTexture& groundTexture) :
+	World::World(double r, const Color& color, unsigned long seed, const GroundTexture& groundTexture) :
 		wallsType(WALLS_CIRCULAR),
 		w(0),
 		h(0),

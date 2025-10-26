@@ -279,15 +279,15 @@ class WorldWithTexturedGround : public World {
 
 struct PyWorld : public World {
 
-  PyWorld(double width, double height, unsigned long seed = 0, const Color &wallsColor = Color::gray,
+  PyWorld(double width, double height, const Color &wallsColor = Color::gray, unsigned long seed = 0,
           const GroundTexture &groundTexture = GroundTexture())
-      : World(width, height, seed, wallsColor, groundTexture) {
+      : World(width, height, wallsColor, seed, groundTexture) {
     takeObjectOwnership = false;
   }
 
-  PyWorld(double radius, unsigned long seed = 0, const Color &wallsColor = Color::gray,
+  PyWorld(double radius, const Color &wallsColor = Color::gray, unsigned long seed = 0,
           const GroundTexture &groundTexture = GroundTexture())
-      : World(radius, seed, wallsColor, groundTexture) {
+      : World(radius, wallsColor, seed, groundTexture) {
     takeObjectOwnership = false;
   }
 
@@ -1398,15 +1398,15 @@ It is either
 
 - a rectangular arena with walls at all sides::
     
-    World(width: float, height: float, seed: int = 0, walls_color: Color = Color.gray)
+    World(width: float, height: float, ...)
 
 - a circular area with walls::
 
-    World(width: float, height: float, seed: int = 0, walls_color: Color = Color.gray)
+    World(width: float, ...)
 
 - or an infinite surface::
 
-    World(seed: int = 0)
+    World()
 
 Args:
     width (float): The rectangular world width in centimeters
@@ -1439,10 +1439,10 @@ Attributes:
     random_seed: The random seed
 )doc")
       .def(py::init<unsigned long>(), py::arg("seed") = 0)
-      .def(py::init<double, double, unsigned long, const Color &>(), py::arg("width"),
-           py::arg("height"), py::arg("seed") = 0, py::arg("walls_color") = Color::gray)
-      .def(py::init<double, unsigned long, const Color &>(), py::arg("radius"),
-           py::arg("seed") = 0, py::arg("walls_color") = Color::gray)
+      .def(py::init<double, double, const Color &, unsigned long>(), py::arg("width"),
+           py::arg("height"), py::arg("walls_color") = Color::gray, py::arg("seed") = 0)
+      .def(py::init<double, const Color &, unsigned long>(), py::arg("radius"),
+           py::arg("walls_color") = Color::gray, py::arg("seed") = 0)
       .def("step", &World::step, py::arg("time_step"),
            py::arg("physics_oversampling") = 1, R"doc( 
 Simulate a timestep
