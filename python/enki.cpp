@@ -279,19 +279,19 @@ class WorldWithTexturedGround : public World {
 
 struct PyWorld : public World {
 
-  PyWorld(double width, double height, const Color &wallsColor = Color::gray,
+  PyWorld(double width, double height, unsigned long seed = 0, const Color &wallsColor = Color::gray,
           const GroundTexture &groundTexture = GroundTexture())
-      : World(width, height, wallsColor, groundTexture) {
+      : World(width, height, seed, wallsColor, groundTexture) {
     takeObjectOwnership = false;
   }
 
-  PyWorld(double radius, const Color &wallsColor = Color::gray,
+  PyWorld(double radius, unsigned long seed = 0, const Color &wallsColor = Color::gray,
           const GroundTexture &groundTexture = GroundTexture())
-      : World(radius, wallsColor, groundTexture) {
+      : World(radius, seed, wallsColor, groundTexture) {
     takeObjectOwnership = false;
   }
 
-  PyWorld() : World() { takeObjectOwnership = false; }
+  PyWorld(unsigned long seed = 0) : World(seed) { takeObjectOwnership = false; }
 
   void run(unsigned steps = 1, float time_step = 1. / 30.,
            unsigned physics_oversampling = 3,
@@ -1398,20 +1398,21 @@ It is either
 
 - a rectangular arena with walls at all sides::
     
-    World(width: float, height: float, walls_color: Color = Color.gray)
+    World(width: float, height: float, seed: int = 0, walls_color: Color = Color.gray)
 
 - a circular area with walls::
 
-    World(width: float, height: float, walls_color: Color = Color.gray)
+    World(width: float, height: float, seed: int = 0, walls_color: Color = Color.gray)
 
 - or an infinite surface::
 
-    World()
+    World(seed: int = 0)
 
 Args:
     width (float): The rectangular world width in centimeters
     height (float): The rectangular world height in centimeters
     radius (float): The circular world radius in centimeters
+    seed (int): The random seed
     walls_color (Color): Optional wall color, default is ``Color.gray``
 
 
@@ -1435,13 +1436,13 @@ Attributes:
     robots (list[Robot]): The list of all robots
     static_objects (list[PhysicalObject]): The list of all objects that are not robots
     control_step_callback (Callable[[World, float], None] | None): A function called at each update step.
-
+    random_seed: The random seed
 )doc")
-      .def(py::init<>())
-      .def(py::init<double, double, const Color &>(), py::arg("width"),
-           py::arg("height"), py::arg("walls_color") = Color::gray)
-      .def(py::init<double, const Color &>(), py::arg("radius"),
-           py::arg("walls_color") = Color::gray)
+      .def(py::init<unsigned long>(), py::arg("seed") = 0)
+      .def(py::init<double, double, unsigned long, const Color &>(), py::arg("width"),
+           py::arg("height"), py::arg("seed") = 0, py::arg("walls_color") = Color::gray)
+      .def(py::init<double, unsigned long, const Color &>(), py::arg("radius"),
+           py::arg("seed") = 0, py::arg("walls_color") = Color::gray)
       .def("step", &World::step, py::arg("time_step"),
            py::arg("physics_oversampling") = 1, R"doc( 
 Simulate a timestep
@@ -1466,8 +1467,8 @@ Args:
     object (PhysicalObject): the object to remove.
 )doc")
       // TODO
-      // .def("copy_random_generator", &World::copyRandomGenerator)
-      // .def("set_random_seed", &World::setRandomSeed)
+      .def("copy_random_generator", &World::copyRandom)
+      .def_property("random_seed", &World::getRandomSeed, &World::setRandomSeed)
       .def_property("robots", &World::get_robots, nullptr)
       .def_property("static_objects", &World::get_static_objects, nullptr)
       .def_readonly("objects", &World::objects)

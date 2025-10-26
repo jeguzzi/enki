@@ -117,7 +117,10 @@ namespace Enki
 		
 		if (capabilities & CAPABILITY_BLUETOOTH)
 		{
-			bluetooth = new Bluetooth(this,1000,7,100,100,random.get()%UINT_MAX);
+			// Changed to set address = uid instead of address = random int 
+			// as at this point the robot does not yet belong to a world
+			// so no random generator is accessible.
+			bluetooth = new Bluetooth(this,1000,7,100,100,uid%UINT_MAX);
 			addGlobalInteraction(bluetooth);
 		}
 		

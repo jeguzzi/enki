@@ -94,7 +94,8 @@ namespace Enki
 				if (channel+i < noOfChannels) pitch[channel+i] = gaussian*signal;
 			}
 			*/
-			int c = (int)channel + round(gaussianRand(0, variance));
+			auto & random = owner->getWorld()->getRandom();
+			int c = (int)channel + round(random.gaussianRand(0, variance));
 			if (c < 0)
 				c = 0;
 			if (c >= noOfChannels)

@@ -48,8 +48,6 @@ namespace Enki
 {
 	//switching to an std::atomic<unsigned> when in the future we switch to C++11
 	static unsigned int uidNewObject = 0;
-
-	FastRandom random;
 	
 	// PhysicalObject::Part
 	
@@ -730,7 +728,7 @@ namespace Enki
 		data(data, data+width*height)
 	{}
 
-	World::World(double width, double height, const Color& color, const GroundTexture& groundTexture) :
+	World::World(double width, double height, unsigned long seed, const Color& color, const GroundTexture& groundTexture) :
 		wallsType(WALLS_SQUARE),
 		w(width),
 		h(height),
@@ -738,11 +736,12 @@ namespace Enki
 		color(color),
 		groundTexture(groundTexture),
 		takeObjectOwnership(true),
-		bluetoothBase(NULL)
+		bluetoothBase(NULL),
+		random(seed)
 	{
 	}
 	
-	World::World(double r, const Color& color, const GroundTexture& groundTexture) :
+	World::World(double r, unsigned long seed, const Color& color, const GroundTexture& groundTexture) :
 		wallsType(WALLS_CIRCULAR),
 		w(0),
 		h(0),
@@ -750,18 +749,20 @@ namespace Enki
 		color(color),
 		groundTexture(groundTexture),
 		takeObjectOwnership(true),
-		bluetoothBase(NULL)
+		bluetoothBase(NULL),
+		random(seed)
 	{
 	}
 	
-	World::World() :
+	World::World(unsigned long seed) :
 		wallsType(WALLS_NONE),
 		w(0),
 		h(0),
 		r(0),
 		color(Color::gray),
 		takeObjectOwnership(true),
-		bluetoothBase(NULL)
+		bluetoothBase(NULL),
+		random(seed)
 	{
 	}
 
@@ -1163,9 +1164,24 @@ namespace Enki
 				(*i)->userData = 0;
 	}
 	
-	void World::setRandomSeed(unsigned long seed)
+	void World::setRandomSeed(unsigned long seed) 
 	{
 		random.setSeed(seed);
+	}
+
+	unsigned long World::getRandomSeed() const 
+	{
+		return random.getSeed();
+	}
+
+	Random & World::getRandom() 
+	{
+		return random;
+	}
+
+	void World::copyRandom(World & world) 
+	{
+		random = world.getRandom();
 	}
 	
 	void World::initBluetoothBase()
