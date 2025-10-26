@@ -1,7 +1,6 @@
 import collections.abc
 import numpy
 import typing
-from _typeshed import Incomplete
 from typing import ClassVar, Literal, TypeAlias, overload
 
 Vector: TypeAlias = numpy.ndarray[tuple[Literal[2]], numpy.dtype[numpy.float64]]
@@ -47,7 +46,7 @@ class Color:
 class DifferentialWheeled(Robot):
     left_wheel_target_speed: float
     right_wheel_target_speed: float
-    def __init__(self, *args, **kwargs) -> None: ...
+    wheel_speed_noise: float
     def reset_encoders(self) -> None: ...
     @property
     def left_wheel_encoder_speed(self) -> float: ...
@@ -61,8 +60,6 @@ class DifferentialWheeled(Robot):
     def right_wheel_odometry(self) -> float: ...
     @property
     def wheel_axis(self) -> float: ...
-    @property
-    def wheel_speed_noise(self) -> float: ...
 
 class EPuck(DifferentialWheeled):
     def __init__(self, proximity: bool = ..., camera: bool = ..., scanner: bool = ...) -> None: ...
@@ -77,7 +74,6 @@ class EPuck(DifferentialWheeled):
     def scan(self) -> numpy.ndarray: ...
 
 class IRCommEvent:
-    def __init__(self, *args, **kwargs) -> None: ...
     @property
     def intensities(self) -> numpy.ndarray: ...
     @property
@@ -106,7 +102,6 @@ class PhysicalObject:
     velocity: Vector
     viscous_friction_coefficient: float
     viscous_moment_friction_coefficient: float
-    def __init__(self, *args, **kwargs) -> None: ...
     def control_step(self, time_step: typing.SupportsFloat) -> None: ...
     @property
     def has_collided(self) -> bool: ...
@@ -126,7 +121,7 @@ class PhysicalObject:
     def world(self): ...
 
 class Robot(PhysicalObject):
-    def __init__(self, *args, **kwargs) -> None: ...
+    pass
 
 class Thymio2(DifferentialWheeled):
     prox_comm_enabled: bool
@@ -166,7 +161,7 @@ class Thymio2(DifferentialWheeled):
     def prox_values_i(self) -> numpy.ndarray: ...
 
 class World:
-    control_step_callback: Incomplete
+    control_step_callback: collections.abc.Callable[[World, float], None]
     @overload
     def __init__(self) -> None: ...
     @overload
@@ -196,7 +191,7 @@ class WorldView:
     camera_yaw: float
     helpers: bool
     tracking: bool
-    world: Incomplete
+    world: World | None
     def __init__(self, world: World | None = ..., fps: typing.SupportsFloat = ..., update_world: bool = ..., time_step: typing.SupportsFloat = ..., factor: typing.SupportsFloat = ..., helpers: bool = ..., camera_reset: bool = ..., camera_position: Vector = ..., camera_altitude: typing.SupportsFloat = ..., camera_yaw: typing.SupportsFloat = ..., camera_pitch: typing.SupportsFloat = ..., camera_is_ortho: bool = ..., walls_height: typing.SupportsFloat = ...) -> None: ...
     def hide(self) -> None: ...
     def move_camera(self, target_position: Vector, target_altitude: typing.SupportsFloat = ..., target_distance: typing.SupportsFloat = ..., yaw: typing.SupportsFloat | None = ..., pitch: typing.SupportsFloat | None = ...) -> None: ...
