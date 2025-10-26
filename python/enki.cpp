@@ -313,21 +313,15 @@ struct PyWorld : public World {
 };
 
 struct PythonViewer : public ViewerWidget {
-  PyThreadState *pythonSavedState;
 
   PythonViewer(PyWorld *world, double fps = 30, bool updateWorld = true,
                double worldTimeStep = 0, double realTimeFactor = 1,
                bool helpers = true, bool camReset = false,
                Vector camPos = Vector(0.0, 0.0), double camAltitude = 0.0,
                double camYaw = 0.0, double camPitch = 0.0, bool ortho = false,
-               double wallsHeight_ = 10.0
-               // std::optional<ViewCallback> cb = std::nullopt
-               )
-      : ViewerWidget(world, nullptr, (fps > 0) ? int(1000 / fps) : 0, updateWorld,
-                     worldTimeStep, realTimeFactor, helpers),
-        pythonSavedState(0)
-  // _cb(cb)
-  {
+               double wallsHeight_ = 10.0)
+      : ViewerWidget(world, nullptr, (fps > 0) ? int(1000 / fps) : 0,
+                     updateWorld, worldTimeStep, realTimeFactor, helpers) {
     cameraIsOrtho = ortho;
     if (camReset) {
       resetCamera();
@@ -343,19 +337,10 @@ struct PythonViewer : public ViewerWidget {
     setWindowTitle("PyEnki Viewer");
   }
 
-#if 1
   void timerEvent(QTimerEvent *event) {
-    // get back Python lock
-    if (pythonSavedState)
-      PyEval_RestoreThread(pythonSavedState);
-    // touch Python objects while locked
-    // std::cerr << "E" << std::endl;
+    py::gil_scoped_acquire acquire;
     ViewerWidget::timerEvent(event);
-    // release Python lock
-    if (pythonSavedState)
-      pythonSavedState = PyEval_SaveThread();
   }
-#endif
 
   py::array getImage() { return get_rbg_array(grabFramebuffer()); }
 
@@ -464,24 +449,13 @@ void runInViewer(PyWorld *world, double fps = 30, double worldTimeStep = 0,
                  double camAltitude = 0.0, double camYaw = 0.0,
                  double camPitch = 0.0, bool ortho = false,
                  double wallsHeight = 10.0, double duration = -1) {
-  // int argc(1);
-  // char *argv[1] = {(char *)"dummy"}; // FIXME: recovery sys.argv
-  // EnkiApplication app(argc, argv);
   EnkiApplication::init();
   PythonViewer viewer(world, fps, true, worldTimeStep, realTimeFactor, helpers,
                       camReset, camPos, camAltitude, camYaw, camPitch, ortho,
                       wallsHeight);
   viewer.setWindowTitle("PyEnki Viewer");
   viewer.show();
-  // viewer.pythonSavedState = PyEval_SaveThread();
-  // app.exec();
-  if (duration > 0) {
-    QTimer::singleShot(duration * 1000 / realTimeFactor,
-                       []() { qApp->quit(); });
-  }
-  EnkiApplication::run();
-  // if (viewer.pythonSavedState)
-  //   PyEval_RestoreThread(viewer.pythonSavedState);
+  EnkiApplication::run(duration / realTimeFactor);
 }
 
 Polygon make_polygon(const std::vector<Vector> &ps) {
@@ -1564,7 +1538,8 @@ Args:
            py::arg("camera_position") = Vector(0.0, 0.0),
            py::arg("camera_altitude") = 0.0, py::arg("camera_yaw") = 0.0,
            py::arg("camera_pitch") = 0.0, py::arg("camera_is_ortho") = false,
-           py::arg("walls_height") = 10.0, py::arg("duration") = 0, R"doc( 
+           py::arg("walls_height") = 10.0, py::arg("duration") = 0,
+           py::call_guard<py::gil_scoped_release>(), R"doc( 
 Render a world to an RGB image array.
 
 Args:
@@ -1749,7 +1724,8 @@ Initialize the Qt runtime.
 
 Should be called before creating any py:class:`WorldView`.
 )doc");
-  m.def("run_ui", &EnkiApplication::run, py::arg("duration") = -1, R"doc( 
+  m.def("run_ui", &EnkiApplication::run, py::arg("duration") = -1,
+        py::call_guard<py::gil_scoped_release>(), R"doc( 
 Run the Qt run-loop for a while.
 
 Args:
