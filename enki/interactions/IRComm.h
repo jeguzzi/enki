@@ -82,7 +82,7 @@ public:
   void init(double dt, World *w);
   void finalize(double dt, World *w);
   void step(double dt, World *w);
-  void receive_events();
+  void receive_events(World *w);
   // ~IRComm() { } ;
   ~IRComm();
   void set_enable(bool value) {

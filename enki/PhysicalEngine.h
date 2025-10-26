@@ -36,7 +36,7 @@
 
 #include "Geometry.h"
 #include "Types.h"
-#include "Random.h"
+#include "RandomWithSeed.h"
 #include "Interaction.h"
 #include "BluetoothBase.h"
 #include <iostream>
@@ -258,6 +258,8 @@ namespace Enki
 		
 	private:		// variables
 		
+		World * world;
+
 		// Physics
 		
 		//! position before collision, used to compute interlacedDistance
@@ -325,6 +327,10 @@ namespace Enki
 		//! Called for a robot if a previously mouse button was pressed and is now released
 		virtual void mouseReleaseEvent(unsigned button) {};
 		
+		World * getWorld() const {
+			return world;
+		}
+
 	private:		// setup methods
 		
 		//! When a physical parameter (color, shape, ...) has been changed, the user data must be updated.
@@ -485,11 +491,11 @@ namespace Enki
 
 	public:
 		//! Construct a world with square walls, takes width and height of the world arena in cm.
-		World(double width, double height, const Color& wallsColor = Color::gray, const GroundTexture& groundTexture = GroundTexture());
+		World(double width, double height, const Color& wallsColor = Color::gray, unsigned long seed = 0, const GroundTexture& groundTexture = GroundTexture());
 		//! Construct a world with circle walls, takes radius of the world arena in cm.
-		World(double r, const Color& wallsColor = Color::gray, const GroundTexture& groundTexture = GroundTexture());
+		World(double r, const Color& wallsColor = Color::gray, unsigned long seed = 0, const GroundTexture& groundTexture = GroundTexture());
 		//! Construct a world with no walls
-		World();
+		World(unsigned long seed = 0);
 		//! Destructor, destroy all objects
 		virtual ~World();
 		
@@ -510,18 +516,25 @@ namespace Enki
 		
 		//! Set the seed of the random generator.
 		void setRandomSeed(unsigned long seed);
+		//! Get the seed of the random generator.
+		unsigned long getRandomSeed() const;
+		//! Get the random generator
+		Random & getRandom();
+		//! Copy random generator from another world;
+		void copyRandom(World &);
+
 		//! Initialise and activate the Bluetooth base
 		void initBluetoothBase();
 		//! Return the address of the Bluetooth base
 		BluetoothBase* getBluetoothBase();
-	
+
+	private:
+		Random random;
+
 	protected:
 		//! Can implement world specific control. By default do nothing
 		virtual void controlStep(double dt) { }
 	};
-	
-	//! Fast random for use by Enki
-	extern FastRandom random;
 }
 
 #endif

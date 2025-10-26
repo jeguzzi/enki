@@ -73,11 +73,11 @@ namespace Enki
 		const double noiseFactor = 2 * noiseAmount;
 		
 		const double realLeftSpeed = clamp(
-			leftSpeed * (baseFactor + random.getRange(noiseFactor)),
+			leftSpeed * (baseFactor + getWorld()->getRandom().getRange(noiseFactor)),
 			-maxSpeed,maxSpeed
 		);
 		const double realRightSpeed = clamp(
-			rightSpeed * (baseFactor + random.getRange(noiseFactor)),
+			rightSpeed * (baseFactor + getWorld()->getRandom().getRange(noiseFactor)),
 			-maxSpeed, maxSpeed
 		);
 		

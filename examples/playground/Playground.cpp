@@ -128,11 +128,11 @@ public:
 			o->pos = Point(100, 100);
 			world->addObject(o);
 		}
-		
+		auto & random = world->getRandom();
 		for (int i = 0; i < 10; i++)
 		{
 			PhysicalObject* o = new PhysicalObject;
-			o->pos = Point(UniformRand(20, 100)(), UniformRand(20, 100)());
+			o->pos = Point(random.uniformRange(20, 100), random.uniformRange(20, 100));
 			o->setCylindric(1, 1, 10);
 			o->setColor(Color(0.9, 0.2, 0.2));
 			o->dryFrictionCoefficient = 0.01;
@@ -151,7 +151,7 @@ public:
 			o->setCustomHull(hull, 30);
 			o->setColor(Color(0.2, 0.1, 0.6));
 			o->collisionElasticity = 0.2;
-			o->pos = Point(UniformRand(20, 100)(), UniformRand(20, 100)());
+			o->pos = Point(random.uniformRange(20, 100), random.uniformRange(20, 100));
 			world->addObject(o);
 		}
 		
@@ -164,7 +164,7 @@ public:
 			o->setCustomHull(hull, 60);
 			o->setColor(Color(0.2, 0.4, 0.6));
 			o->collisionElasticity = 0.2;
-			o->pos = Point(UniformRand(20, 100)(), UniformRand(20, 100)());
+			o->pos = Point(random.uniformRange(20, 100), random.uniformRange(20, 100));
 			world->addObject(o);
 		}
 		#endif // PROBLEM_GENERIC_TOY
@@ -221,7 +221,7 @@ public:
 			joysticks.push_back(joystick);
 			
 			EPuck *epuck = new EPuck;
-			//epuck->pos = Point(UniformRand(20, 100)(), UniformRand(20, 100)());
+			//epuck->pos = Point(random.uniformRange(20, 100), random.uniformRange(20, 100));
 			epuck->pos = Point(20, 20);
 			epucks.push_back(epuck);
 			world->addObject(epuck);
@@ -344,7 +344,7 @@ int main(int argc, char *argv[])
 	#else
 	uint32_t *bits = (uint32_t*)gt.bits();
 	#endif
-	World world(120, Color(0.9, 0.9, 0.9), igt ? World::GroundTexture(gt.width(), gt.height(), bits) : World::GroundTexture());
+	World world(120, Color(0.9, 0.9, 0.9), 0, igt ? World::GroundTexture(gt.width(), gt.height(), bits) : World::GroundTexture());
 	EnkiPlayground viewer(&world);
 	
 	viewer.show();

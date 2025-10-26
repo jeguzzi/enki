@@ -568,29 +568,29 @@ PYBIND11_MODULE(pyenki, m) {
 		"The world is the container of all objects and robots.\n"
 		"It is either a rectangular arena with walls at all sides, a circular area with walls, or an infinite surface."
 	)
-    .def(py::init([]() {
-           auto w = std::make_unique<World>();
+    .def(py::init([](unsigned long seed = 0) {
+           auto w = std::make_unique<World>(seed);
            w->takeObjectOwnership = false;
            return w;
-         }))
+         }), py::arg("seed") = 0)
     .def(py::init([](double width, double height,
-                     const Color &wallsColor = Color::gray) {
-           auto w = std::make_unique<World>(width, height, wallsColor);
+                     const Color &wallsColor = Color::gray, unsigned long seed = 0) {
+           auto w = std::make_unique<World>(width, height, wallsColor, seed);
            w->takeObjectOwnership = false;
            return w;
          }),
          py::arg("width"), py::arg("height"),
-         py::arg("walls_color") = Color::gray)
-    .def(py::init([](double radius, const Color &wallsColor = Color::gray) {
-           auto w = std::make_unique<World>(radius, wallsColor);
+         py::arg("walls_color") = Color::gray, py::arg("seed") = 0)
+    .def(py::init([](double radius, const Color &wallsColor = Color::gray, unsigned long seed = 0) {
+           auto w = std::make_unique<World>(radius, wallsColor, seed);
            w->takeObjectOwnership = false;
            return w;
          }),
-         py::arg("radius"), py::arg("walls_color") = Color::gray)
+         py::arg("radius"), py::arg("walls_color") = Color::gray, py::arg("seed") = 0)
 		.def("step", &World::step, py::arg("dt"), py::arg("physics_oversampling") = 3)
 		.def("addObject", &World::addObject, py::keep_alive<1, 2>())
 		.def("removeObject", &World::removeObject)
-		.def("setRandomSeed", &World::setRandomSeed)
+		.def_property("randomSeed", &World::getRandomSeed, &World::setRandomSeed)
 		.def("run", run)
 		.def("runInViewer", [](World & world, Vector camPos = Vector(0,0), double camAltitude = 0, double camYaw = 0, double camPitch = 0, double wallsHeight = 10) {
 			runInViewer(world, camPos, camAltitude, camYaw, camPitch, wallsHeight);
@@ -599,19 +599,19 @@ PYBIND11_MODULE(pyenki, m) {
 	
 	class_<WorldWithTexturedGround, World>(m, "WorldWithTexturedGround", "")
     .def(py::init([](double width, double height,
-                     const std::string& ppmFileName, const Color& wallsColor = Color::gray) {
-           auto w = std::make_unique<WorldWithTexturedGround>(width, height, wallsColor, loadTexture(ppmFileName));
+                     const std::string& ppmFileName, const Color& wallsColor = Color::gray, unsigned long seed = 0) {
+           auto w = std::make_unique<WorldWithTexturedGround>(width, height, wallsColor, seed, loadTexture(ppmFileName));
            w->takeObjectOwnership = false;
            return w;
          }),
          py::arg("width"), py::arg("height"), py::arg("ppmFileName"), 
-         py::arg("walls_color") = Color::gray)
-    .def(py::init([](double radius, const std::string& ppmFileName, const Color &wallsColor = Color::gray) {
-           auto w = std::make_unique<WorldWithTexturedGround>(radius, wallsColor, loadTexture(ppmFileName));
+         py::arg("walls_color") = Color::gray, py::arg("seed") = 0)
+    .def(py::init([](double radius, const std::string& ppmFileName, const Color &wallsColor = Color::gray, unsigned long seed = 0) {
+           auto w = std::make_unique<WorldWithTexturedGround>(radius, wallsColor, seed, loadTexture(ppmFileName));
            w->takeObjectOwnership = false;
            return w;
          }),
-         py::arg("radius"), py::arg("ppmFileName"), py::arg("walls_color") = Color::gray)
+         py::arg("radius"), py::arg("ppmFileName"), py::arg("walls_color") = Color::gray, py::arg("seed") = 0)
 	;
 
 }

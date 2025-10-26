@@ -277,7 +277,7 @@ namespace Enki
 	void IRSensor::finalize(double dt, World* w)
 	{
 		finalValue = rayValues[0] + rayValues[1] + rayValues[2];
-		finalValue = std::max(0., std::min(m, gaussianRand(finalValue, noiseSd)));
+		finalValue = std::max(0., std::min(m, w->getRandom().gaussianRand(finalValue, noiseSd)));
 		finalDist = inverseResponseFunction(finalValue);
 	}
 	

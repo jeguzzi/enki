@@ -43,7 +43,7 @@ namespace Enki
 	// TODO: use similar function as for distance sensors
 	// if we were to use IRSensors, the parameters would be
 	// around m=3000, x0=0.2, c=1
-	double marxbotVirtualBumperResponseFunction(double dist)
+	double marxbotVirtualBumperResponseFunction(double dist, Random & random)
 	{
 		if (dist<0.5)
 			dist = -440*dist+3000;
@@ -71,7 +71,7 @@ namespace Enki
 	{
 		assert(number < 24);
 		unsigned physicalNumber = (24 + 12 - number) % 24;
-		return marxbotVirtualBumperResponseFunction(sqrt(rotatingDistanceSensor.zbuffer[(physicalNumber * 180) / 24]) - getRadius());
+		return marxbotVirtualBumperResponseFunction(sqrt(rotatingDistanceSensor.zbuffer[(physicalNumber * 180) / 24]) - getRadius(), getWorld()->getRandom());
 	}
 }
 

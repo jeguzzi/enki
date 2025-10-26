@@ -67,7 +67,7 @@ void IRSensorRealistic::finalize(double dt, World *w) {
       d = m;
     }
   }
-  finalValue = std::max(0., std::min(m, gaussianRand(finalValue, noiseSd)));
+  finalValue = std::max(0., std::min(m, w->getRandom().gaussianRand(finalValue, noiseSd)));
   if (finalValue < min_value) {
     finalValue = 0.0;
     finalDist = range;
