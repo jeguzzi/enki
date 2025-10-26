@@ -279,19 +279,46 @@ class WorldWithTexturedGround : public World {
 
 struct PyWorld : public World {
 
-  PyWorld(double width, double height, const Color &wallsColor = Color::gray, unsigned long seed = 0,
+  std::optional<py::object> numpy_rng;
+
+  PyWorld(double width, double height, const Color &wallsColor = Color::gray,
+          unsigned long seed = 0,
           const GroundTexture &groundTexture = GroundTexture())
       : World(width, height, wallsColor, seed, groundTexture) {
     takeObjectOwnership = false;
   }
 
-  PyWorld(double radius, const Color &wallsColor = Color::gray, unsigned long seed = 0,
+  PyWorld(double radius, const Color &wallsColor = Color::gray,
+          unsigned long seed = 0,
           const GroundTexture &groundTexture = GroundTexture())
       : World(radius, wallsColor, seed, groundTexture) {
     takeObjectOwnership = false;
   }
 
   PyWorld(unsigned long seed = 0) : World(seed) { takeObjectOwnership = false; }
+
+  void setRandomSeed(unsigned long seed) {
+    if (seed != getRandomSeed()) {
+      py::module_ np = py::module_::import("numpy");
+      numpy_rng = np.attr("random").attr("default_rng")(seed);
+    }
+    World::setRandomSeed(seed);
+  }
+
+  void setRandom(py::object value) { numpy_rng = value; }
+
+  py::object getRandom() {
+    if (!numpy_rng) {
+      py::module_ np = py::module_::import("numpy");
+      numpy_rng = np.attr("random").attr("default_rng")(getRandomSeed());
+    }
+    return *numpy_rng;
+  }
+
+  void copyRandom(PyWorld &world) {
+    World::copyRandom(static_cast<World &>(world));
+    setRandom(world.getRandom());
+  }
 
   void run(unsigned steps = 1, float time_step = 1. / 30.,
            unsigned physics_oversampling = 3,
@@ -1439,8 +1466,9 @@ Attributes:
     random_seed: The random seed
 )doc")
       .def(py::init<unsigned long>(), py::arg("seed") = 0)
-      .def(py::init<double, double, const Color &, unsigned long>(), py::arg("width"),
-           py::arg("height"), py::arg("walls_color") = Color::gray, py::arg("seed") = 0)
+      .def(py::init<double, double, const Color &, unsigned long>(),
+           py::arg("width"), py::arg("height"),
+           py::arg("walls_color") = Color::gray, py::arg("seed") = 0)
       .def(py::init<double, const Color &, unsigned long>(), py::arg("radius"),
            py::arg("walls_color") = Color::gray, py::arg("seed") = 0)
       .def("step", &World::step, py::arg("time_step"),
@@ -1467,8 +1495,11 @@ Args:
     object (PhysicalObject): the object to remove.
 )doc")
       // TODO
-      .def("copy_random_generator", &World::copyRandom)
-      .def_property("random_seed", &World::getRandomSeed, &World::setRandomSeed)
+      .def("copy_random_generator", &PyWorld::copyRandom)
+      .def_property("random_seed", &PyWorld::getRandomSeed,
+                    &PyWorld::setRandomSeed)
+      .def_property("random_generator", &PyWorld::getRandom,
+                    &PyWorld::setRandom)
       .def_property("robots", &World::get_robots, nullptr)
       .def_property("static_objects", &World::get_static_objects, nullptr)
       .def_readonly("objects", &World::objects)
