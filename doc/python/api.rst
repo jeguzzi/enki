@@ -2,7 +2,7 @@
 API
 ====
 
-.. currentmodule:: pyenki.pyenki
+.. currentmodule:: pyenki
 
 
 Type aliases

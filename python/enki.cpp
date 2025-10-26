@@ -879,9 +879,9 @@ Reset the odometry of both wheels.
 
         Attributes:
             scanner_range (float): the range of the scanner. Default is infinite.
-            scanner_distances (numpy.array): An array of 180 radial distances,
+            scanner_distances (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 180 radial distances,
                 ordered from -180 degrees to 180 degrees, in centimeters (readonly).
-            scanner_image (numpy.array): An rgba array between 0 and 1 of shape ``(180, 4)`` (readonly).
+            scanner_image (numpy.ndarray[tuple[int, int], numpy.dtype[numpy.float64]]): An rgba array between 0 and 1 of shape ``(180, 4)`` (readonly).
       )doc")
       .def(py::init<>())
       .def_property(
@@ -939,11 +939,11 @@ Example::
 
 Attributes:
 
-    prox_values (numpy.array): An array of 8 proximity sensor readings, one for each sensors (readonly).
-    prox_distances (numpy.array): An array of 8 distances between proximity sensor and nearest obstacles, one for each sensors (readonly).
+    prox_values (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 8 proximity sensor readings, one for each sensors (readonly).
+    prox_distances (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 8 distances between proximity sensor and nearest obstacles, one for each sensors (readonly).
         please note that this value would *not* directly be accessible by a real robot (readonly).
-    scan (numpy.array): An array of 64 radial distances, ordered from -180 degrees to 180 degrees, in centimeters.
-    camera_image (numpy.array): An rgba array between 0 and 1 of shape ``(60, 4)`` (readonly).
+    scan (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 64 radial distances, ordered from -180 degrees to 180 degrees, in centimeters.
+    camera_image (numpy.ndarray[tuple[int, int], numpy.dtype[numpy.float64]]): An rgba array between 0 and 1 of shape ``(60, 4)`` (readonly).
 )doc")
       .def(py::init([](bool proximity = true, bool camera = false,
                        bool scanner = false) {
@@ -1009,10 +1009,10 @@ The sensors that do not receive the message, have the corresponding payloads and
 
 Attributes:
     rx_value (int): The received message payload (readonly)
-    payloads (numpy.array): An array of 7 integer payloads, one for each sensors (readonly).
+    payloads (numpy.ndarray[tuple[int], numpy.dtype[numpy.int64]]): An array of 7 integer payloads, one for each sensors (readonly).
         The first 5 entries are from frontal sensors ordered from left to right.
         The last two entries are from rear sensors  ordered from left to right.
-    intensities (numpy.array): An array of 7 integer intensities, one for each sensors (readonly).
+    intensities (numpy.ndarray[tuple[int], numpy.dtype[numpy.int64]]): An array of 7 integer intensities, one for each sensors (readonly).
         The first 5 entries are from frontal sensors ordered from left to right.
         The last two entries are from rear sensors  ordered from left to right.
 )doc")
@@ -1061,13 +1061,13 @@ which uses integers in the same units used by aseba. For example,
   in :py:meth:`set_led_top`.
 
 Attributes:
-    prox_values (numpy.array): An array of 7 proximity sensor readings, one for each sensors (readonly).
+    prox_values (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 7 proximity sensor readings, one for each sensors (readonly).
         The first 5 entries are from frontal sensors ordered from left to right.
         The last two entries are from rear sensors  ordered from left to right.
-    prox_values_i (numpy.array): An array of 7 proximity sensor readings, one for each sensors (readonly).
+    prox_values_i (numpy.ndarray[tuple[int], numpy.dtype[numpy.int64]]): An array of 7 proximity sensor readings, one for each sensors (readonly).
         The first 5 entries are from frontal sensors ordered from left to right.
         The last two entries are from rear sensors  ordered from left to right.
-    prox_distances (numpy.array): A list of 7 distances between proximity sensor and nearest obstancle, one for each sensors;
+    prox_distances (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): A list of 7 distances between proximity sensor and nearest obstancle, one for each sensors;
         please note that this value would *not* directly be accessible by a real robot (readonly).
         The first 5 entries are from frontal sensors ordered from left to right.
         The last two entries are from rear sensors  ordered from left to right.
@@ -1075,8 +1075,8 @@ Attributes:
         therefore to be compliant we should limit the value between 0 and 2047.
     prox_comm_enabled (bool): Enable/disable proximity communication.
     prox_comm_events (list[IRCommEvent]): A list of events, one for every received message during the last control step (readonly).
-    ground_values (numpy.array): An array of 2 ground sensor readings, one for each sensors (readonly)
-    ground_values_i (numpy.array): An array of 2 ground sensor readings, one for each sensors (readonly)
+    ground_values (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 2 ground sensor readings, one for each sensors (readonly)
+    ground_values_i (numpy.ndarray[tuple[int], numpy.dtype[numpy.int64]]): An array of 2 ground sensor readings, one for each sensors (readonly)
     left_wheel_target_speed_i (int): The target left wheel speed in ticks per second.
     right_wheel_target_speed_i (int): The target right wheel speed in ticks per second.
     left_wheel_encoder_speed_i (int): The current left wheel speed in ticks per second (readonly).
@@ -1508,7 +1508,7 @@ Args:
     height (int): the height of the image in pixels.
 
 Returns:
-    numpy.array: An array of shape ``(height, width, 3)`` and type ``uint8``.
+    numpy.ndarray[tuple[int, int, int], numpy.dtype[numpy.uint8]]: An array of shape ``(height, width, 3)`` and type ``uint8``.
 )doc")
       .def("save_image", &save_image, py::arg("path"),
            py::arg("camera_reset") = false,
@@ -1635,7 +1635,7 @@ Attributes:
     walls_height (float): the height of the world boundary in cm (readonly).
     tracking (bool): whether tracking is active.
     helpers (bool): whether to display the helpers widgets.
-    image (numpy.array): the currently rendered image.
+    image (numpy.ndarray[tuple[int, int, int], numpy.dtype[numpy.uint8]]): the currently rendered image.
     widget (QOpenGLWidget): this view sip-wrapped so to be manipulable by PyQt.
 )doc")
       .def(py::init<PyWorld *, double, bool, double, double, bool, bool, Vector,
