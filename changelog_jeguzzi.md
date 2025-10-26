@@ -52,3 +52,13 @@ Cleaner implementation of prox and prox-comm based on `ircomm` branch.
 - exposed number of rays and aperture in IRSensor constructor
 - added a different range and search_range in IRSensor
 - added virtual methods to specialize initialization and finalization of global interactions
+
+## Branch reproducible
+
+All random generators belongs now to the world and are seeded for reproducibility.
+
+- replaced Random.h with RandomWIthSeed.h
+- added a `Random` instance to the world.
+- added seed argument to `World` constructor
+
+
