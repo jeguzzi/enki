@@ -184,7 +184,7 @@ IRCommRadio *IRComm::radio_in_world(World *world) {
   return radios[world];
 }
 
-void IRComm::receive_events() {
+void IRComm::receive_events(World * world) {
   std::map<int, IRMessage> *messages = radio->get_messages();
   for (std::map<int, IRMessage>::iterator mit = messages->begin();
        mit != messages->end(); mit++) {
@@ -214,7 +214,7 @@ void IRComm::receive_events() {
 #endif
         event.rx_value = mit->second.data;
         event.payloads.push_back(event.rx_value);
-        intensity = std::max(0., std::min(m, gaussianRand(intensity, noiseSd)));
+        intensity = std::max(0., std::min(m, world->getRandom().gaussianRand(intensity, noiseSd)));
         if (intensity < min_intensity) {
           intensity = 0.0;
         }
@@ -257,7 +257,7 @@ void IRComm::step(double dt, World *w) {
 void IRComm::finalize(double dt, World *w) {
   // receive messages after all robots/IRComm have put their messages onair.
   events.clear();
-  receive_events();
+  receive_events(w);
 }
 
 IRMessage IRComm::message() {

@@ -319,7 +319,7 @@ namespace Enki
 		{
 			if (randomAddress)
 				while (bb->registerClient(this,address) == false)
-					address=random.get()%UINT_MAX;
+					address=w->getRandom().get()%UINT_MAX;
 			else
 				assert(bb->registerClient(this,address));
 			updateAddress=false;

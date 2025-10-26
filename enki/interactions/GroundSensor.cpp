@@ -97,8 +97,8 @@ namespace Enki
 				v += filter[i][j] * groundIntensity;
 			}
 		}
-		
+		auto & random = w->getRandom();
 		// changing value to response space and adding Gaussian noise before returning value
-		finalValue = gaussianRand(_sigm(v - cFactor, sFactor) * mFactor + aFactor, noiseSd);
+		finalValue = random.gaussianRand(_sigm(v - cFactor, sFactor) * mFactor + aFactor, noiseSd);
 	}
 }
