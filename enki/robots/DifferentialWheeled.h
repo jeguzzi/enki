@@ -86,6 +86,7 @@ namespace Enki
 		virtual void applyForces(double dt);
 
 		float getNoiseAmount() {return noiseAmount;}
+		void setNoiseAmount(float value) {noiseAmount = std::max<float>(value, 0);}
 		float getMaxSpeed() {return maxSpeed;}
 		float getDistBetweenWheels() {return distBetweenWheels;}
 	};

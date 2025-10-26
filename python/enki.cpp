@@ -828,7 +828,7 @@ Attributes:
     right_wheel_odometry (float): The right wheel odometry integrated from measured wheel speeds in centimeters (readonly).
     wheel_axis (float): The distance between wheels in cm (readonly).
     max_wheel_speed (float): The maximal wheel speed in centimeters per second (readonly).
-    wheel_speed_noise (float): The relative noise applied to the target wheel speed at each control step (readonly).
+    wheel_speed_noise (float): The relative noise applied to the target wheel speed at each control step.
 )doc")
       .def_readwrite("left_wheel_target_speed", &DifferentialWheeled::leftSpeed)
       .def_readwrite("right_wheel_target_speed",
@@ -844,7 +844,7 @@ Attributes:
       .def_property("max_wheel_speed", &DifferentialWheeled::getMaxSpeed,
                     nullptr)
       .def_property("wheel_speed_noise", &DifferentialWheeled::getNoiseAmount,
-                    nullptr)
+                    &DifferentialWheeled::setNoiseAmount)
       .def("reset_encoders", &DifferentialWheeled::resetEncoders, R"doc(
 Reset the odometry of both wheels.
 )doc");
