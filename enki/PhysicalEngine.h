@@ -518,9 +518,9 @@ namespace Enki
 
 	public:
 		//! Construct a world with square walls, takes width and height of the world arena in cm.
-		World(double width, double height, const Color& wallsColor = Color::gray, unsigned long seed = 0, const GroundTexture& groundTexture = GroundTexture());
+		World(double width, double height, const Color& wallsColor = Color::gray, const GroundTexture& groundTexture = GroundTexture(), unsigned long seed = 0);
 		//! Construct a world with circle walls, takes radius of the world arena in cm.
-		World(double r, const Color& wallsColor = Color::gray, unsigned long seed = 0, const GroundTexture& groundTexture = GroundTexture());
+		World(double r, const Color& wallsColor = Color::gray, const GroundTexture& groundTexture = GroundTexture(), unsigned long seed = 0);
 		//! Construct a world with no walls
 		World(unsigned long seed = 0);
 		//! Destructor, destroy all objects

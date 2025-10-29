@@ -284,14 +284,14 @@ struct PyWorld : public World {
   PyWorld(double width, double height, const Color &wallsColor = Color::gray,
           unsigned long seed = 0,
           const GroundTexture &groundTexture = GroundTexture())
-      : World(width, height, wallsColor, seed, groundTexture) {
+      : World(width, height, wallsColor, groundTexture, seed) {
     takeObjectOwnership = false;
   }
 
   PyWorld(double radius, const Color &wallsColor = Color::gray,
           unsigned long seed = 0,
           const GroundTexture &groundTexture = GroundTexture())
-      : World(radius, wallsColor, seed, groundTexture) {
+      : World(radius, wallsColor, groundTexture, seed) {
     takeObjectOwnership = false;
   }
 
