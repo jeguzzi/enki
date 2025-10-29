@@ -1,6 +1,9 @@
 *~
 build
+install
 dist
 venv
 notebooks
 .DS_Store
+Makefile
+make.bat
