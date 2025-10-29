@@ -212,6 +212,7 @@ namespace Enki
 			
 		private:
 			friend class PhysicalObject;
+
 			// geometrical properties
 			
 			//! The height of the part, used for interaction with the sensors of other robots.
@@ -259,6 +260,9 @@ namespace Enki
 	private:		// variables
 		
 		World * world;
+		std::string name;
+		std::function<void(PhysicalObject *, double)> cb;
+		std::function<void(PhysicalObject *, PhysicalObject *)> collisionCb;
 
 		// Physics
 		
@@ -327,6 +331,25 @@ namespace Enki
 		//! Called for a robot if a previously mouse button was pressed and is now released
 		virtual void mouseReleaseEvent(unsigned button) {};
 		
+		void setName(const std::string &value) {
+			name = value;
+		}
+		const std::string & getName() const {
+			return name;
+		}
+		void setControlCallback(std::function<void(PhysicalObject *, double)> &value) {
+			cb = value;
+		}
+		const std::function<void(PhysicalObject *, double)> & getControlCallback() const {
+			return cb;
+		}
+		void setCollisionCallback(std::function<void(PhysicalObject *, PhysicalObject *)> &value) {
+			collisionCb = value;
+		}
+		const std::function<void(PhysicalObject *, PhysicalObject *)> & getCollisionCallback() const {
+			return collisionCb;
+		}
+
 		World * getWorld() const {
 			return world;
 		}
@@ -352,7 +375,11 @@ namespace Enki
 		virtual void applyForces(double dt);
 		
 		//! The object collided with o during the current physical step, if o is null, it collided with walls. Called just before the object is de-interlaced
-		virtual void collisionEvent(PhysicalObject *o) {}
+		virtual void collisionEvent(PhysicalObject *o) {
+			if(collisionCb) {
+				collisionCb(this, o);
+			}
+		}
 		
 		//! Initialize the object specific interactions, do nothing for PhysicalObject.
 		virtual void initLocalInteractions(double dt, World* w) { }
@@ -491,9 +518,9 @@ namespace Enki
 
 	public:
 		//! Construct a world with square walls, takes width and height of the world arena in cm.
-		World(double width, double height, const Color& wallsColor = Color::gray, unsigned long seed = 0, const GroundTexture& groundTexture = GroundTexture());
+		World(double width, double height, const Color& wallsColor = Color::gray, const GroundTexture& groundTexture = GroundTexture(), unsigned long seed = 0);
 		//! Construct a world with circle walls, takes radius of the world arena in cm.
-		World(double r, const Color& wallsColor = Color::gray, unsigned long seed = 0, const GroundTexture& groundTexture = GroundTexture());
+		World(double r, const Color& wallsColor = Color::gray, const GroundTexture& groundTexture = GroundTexture(), unsigned long seed = 0);
 		//! Construct a world with no walls
 		World(unsigned long seed = 0);
 		//! Destructor, destroy all objects
@@ -528,12 +555,40 @@ namespace Enki
 		//! Return the address of the Bluetooth base
 		BluetoothBase* getBluetoothBase();
 
+		void setControlCallback(std::function<void(World *, double)> &value) {
+			cb = value;
+		}
+		const std::function<void(World *, double)> & getControlCallback() const {
+			return cb;
+		}
+
+  		std::vector<PhysicalObject *> get_robots() const {
+    		std::vector<PhysicalObject *> rs;
+    		std::copy_if(
+        		objects.begin(), objects.end(), std::back_inserter(rs),
+        		[](PhysicalObject *o) { return dynamic_cast<Robot *>(o) != nullptr; });
+    		return rs;
+  		}
+
+        std::vector<PhysicalObject *> get_static_objects() const {
+          	std::vector<PhysicalObject *> rs;
+          	std::copy_if(
+              	objects.begin(), objects.end(), std::back_inserter(rs),
+              	[](PhysicalObject *o) { return dynamic_cast<Robot *>(o) == nullptr; });
+          	return rs;
+        }
+
 	private:
+		std::function<void(World *, double)> cb;
 		Random random;
 
 	protected:
 		//! Can implement world specific control. By default do nothing
-		virtual void controlStep(double dt) { }
+		virtual void controlStep(double dt) { 
+			if(cb) {
+				cb(this, dt);
+			}
+		}
 	};
 }
 

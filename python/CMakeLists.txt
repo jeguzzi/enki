@@ -1,7 +1,3 @@
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 17)
-endif()
-
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(Python3_FIND_STRATEGY LOCATION)
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
@@ -27,6 +23,8 @@ target_compile_definitions(pyenki
                            PRIVATE PYBIND11_DETAILED_ERROR_MESSAGES=1)
 
 set_target_properties(pyenki PROPERTIES AUTOMOC TRUE)
+
+install(TARGETS pyenki DESTINATION pyenki COMPONENT pyenki)
 
 # include(CheckIPOSupported)
 # check_ipo_supported(RESULT ipo_supported OUTPUT error)

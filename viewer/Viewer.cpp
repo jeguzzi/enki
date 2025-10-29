@@ -243,9 +243,9 @@ namespace Enki
 		link(link)
 	{}
 
-	ViewerWidget::ViewerWidget(World *world, QWidget *parent, bool updateWorld) :
+	ViewerWidget::ViewerWidget(World *world, QWidget *parent, int timerPeriod, bool updateWorld, double worldTimeStep, double factor, bool helpers) :
 		QOpenGLWidget(parent),
-		timerPeriodMs(30),
+		timerPeriodMs(timerPeriod),
 		camera(world),
 		doDumpFrames(false),
 		dumpFramesCounter(0),
@@ -263,12 +263,20 @@ namespace Enki
 		mouseLeftButtonRobot(0),
 		mouseRightButtonRobot(0),
 		mouseMiddleButtonRobot(0),
-		updateWorld(updateWorld)
+		cameraIsOrtho(false),
+		displayHelpers(helpers),
+		updateWorld(false)
 	{
 		initTexturesResources();
-		elapsedTime = double(30)/1000.; // average second between two frames, can be updated each frame to better precision
+		elapsedTime = double(timerPeriod)/1000.; // average second between two frames, can be updated each frame to better precision
 		
-		startTimer(timerPeriodMs);
+		if (timerPeriodMs > 0) {
+			std::cout << "startTimer " << timerPeriodMs << std::endl;
+			startTimer(timerPeriodMs);
+		}
+		if (updateWorld) {
+			startUpdatingWorld(worldTimeStep, factor);
+		}
 	}
 	
 	ViewerWidget::~ViewerWidget()
@@ -987,15 +995,25 @@ namespace Enki
 	void ViewerWidget::renderScene(double left, double right, double bottom, double top, double zNear, double zFar)
 	{
 		//float aspectRatio = (float)width() / (float)height();
+		const double pitch = getEffectiveCameraPitch();
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glFrustum(left, right, bottom, top, zNear, zFar);//(-aspectRatio, aspectRatio, -1, 1, 2, 2000);
-		
+		if(cameraIsOrtho)
+		{
+			const double aspectRatio = double(width()) / double(height());
+			const double s = camera.altitude / abs(sin(pitch));
+			glOrtho(-aspectRatio*0.5*s, aspectRatio*0.5*s, -0.5*s, 0.5*s, zNear, s + zNear);
+		}
+		else
+		{
+			glFrustum(left, right, bottom, top, zNear, zFar);//(-aspectRatio, aspectRatio, -1, 1, 2, 2000);
+		}
+
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		
 		glRotated(-90, 1, 0, 0);
-		glRotated(rad2deg * -camera.pitch, 1, 0, 0);
+		glRotated(rad2deg * -pitch, 1, 0, 0);
 		glRotated(90, 0, 0, 1);
 		glRotated(rad2deg * -camera.yaw, 0, 0, 1);
 		
@@ -1117,14 +1135,25 @@ namespace Enki
 		if (!rect().contains(cursorPosition,true)) // window does not contain cursor
 			return;
 
+		const double pitch = getEffectiveCameraPitch();
+
 		// prepare matricies for invertion
 		QMatrix4x4 projection;
 			projection.setToIdentity();
-			projection.frustum(left, right, bottom, top, zNear, zFar);
+			if(cameraIsOrtho)
+			{
+				const double aspectRatio = double(width()) / double(height());
+				const double s = camera.altitude / abs(sin(pitch));
+				projection.ortho(-aspectRatio*0.5*s, aspectRatio*0.5*s, -0.5*s, 0.5*s, zNear, s + zNear);
+			}
+			else
+			{
+				projection.frustum(left, right, bottom, top, zNear, zFar);
+			}
 		QMatrix4x4 modelview;
 			modelview.setToIdentity();
 			modelview.rotate(-90, 1, 0, 0);
-			modelview.rotate(rad2deg * -camera.pitch, 1, 0, 0);
+			modelview.rotate(rad2deg * -pitch, 1, 0, 0);
 			modelview.rotate(90, 0, 0, 1);
 			modelview.rotate(rad2deg * -camera.yaw, 0, 0, 1);
 			modelview.translate(-camera.pos.x(), -camera.pos.y(), -camera.altitude);
@@ -1324,8 +1353,10 @@ namespace Enki
 			sceneCompletedHook();
 			picking(-aspectRatio*0.5*znear, aspectRatio*0.5*znear, -0.5*znear, 0.5*znear, znear, 2000);
 		}
-		displayMessages();
-		displayWidgets();
+		if (displayHelpers) {
+			displayMessages();
+			displayWidgets();
+		}
 
 		if (doDumpFrames)
 			grabFramebuffer().save(QString("enkiviewer-frame%1.png").arg(dumpFramesCounter++, (int)8, (int)10, QChar('0')));
@@ -1546,17 +1577,28 @@ namespace Enki
 	void ViewerWidget::timerEvent(QTimerEvent * event)
 	{
 		if (world && updateWorld) {
-			world->step(double(timerPeriodMs)/1000., 3);
+			nextUpdateTime -= rtFactor * double(timerPeriodMs)/1000.;
+			while (nextUpdateTime < 0) {
+				world->step(worldTimeStep, 3);
+				nextUpdateTime += worldTimeStep;
+			}
 		}
 		update();
 	}
 
-	void ViewerWidget::setUpdateWorld(bool value) {
-		updateWorld = value;
+	void ViewerWidget::startUpdatingWorld(double timeStep, double factor) {
+		rtFactor = factor;
+		if (timeStep <= 0) {
+			worldTimeStep = double(timerPeriodMs)/1000.;
+		} else {
+			worldTimeStep = timeStep;
+		}
+		nextUpdateTime = worldTimeStep;
+		updateWorld = true;
 	}
 
-	bool ViewerWidget::getUpdateWorld() const {
-		return updateWorld;
+	void ViewerWidget::stopUpdatingWorld() {
+		updateWorld = false;
 	}
 	
 	//! Help button or F1 have been pressed

@@ -118,6 +118,7 @@ namespace Enki
 		//addGlobalInteraction(&globalSound);
 		
 		setCylindric(6, 15, 500);
+		setName("s-bot");
 	}
 	
 	unsigned SbotGlobalSound::worldFrequenciesState = 0;

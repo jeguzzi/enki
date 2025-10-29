@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.16)
 
 project(Enki)
 
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 17)
+endif()
+
 # additional CMake modules
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 option(BUILD_EXAMPLES "Whether to build examples" ON)
@@ -11,11 +15,13 @@ option(BUILD_PYTHON "Whether to build the python module" ON)
 
 enable_testing()
 
-option(USE_Qt6 "Use Qt6" OFF)
+option(USE_Qt6 "Use Qt6" ON)
 
 if(USE_Qt6)
+set(QT_VERSION_REQ "6")
 find_package(Qt6 COMPONENTS Core Gui Widgets OpenGL OpenGLWidgets)
 else()
+set(QT_VERSION_REQ "5")
 find_package(Qt5 COMPONENTS Core Gui Widgets OpenGL)
 endif()
 find_package(OpenGL REQUIRED)

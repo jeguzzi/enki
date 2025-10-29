@@ -151,6 +151,7 @@ namespace Enki
 				default: break;
 			}
 		}
+		setName("thymio");
 	}
 	
 	Thymio2::~Thymio2()

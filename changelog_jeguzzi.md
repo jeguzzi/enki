@@ -61,4 +61,34 @@ All random generators belongs now to the world and are seeded for reproducibilit
 - added a `Random` instance to the world.
 - added seed argument to `World` constructor
 
+## Branch complete_pyenki
 
+In Python:
+- Changed names to comply with PEP8
+- Added methods to set all Thymios LEDs
+- Added callbacks (control and collision)
+- Added objects accessors
+- Added physical objects factory methods
+- Added aseba-compatible versions of the Thymio methods/accessors
+- Switched sensor readings to return numpy arrays
+- Added e-Puck scanner
+- Added e-Puck capabilities
+- Added marxbot
+- Added viewer and GUI functions
+- Added methods to render a world
+- Added numpy random generator to world
+- Added docstrings
+- Added examples
+- Added docs
+- Added package with helpers to generate videos and display live views of the world in a notebook.
+
+In C++:
+- Exposed `ViewerWidget ` timer period, and if/how it should update the world.
+- Added real-time factor to `ViewerWidget`
+- Added flag to not display helper widgets to `ViewerWidget`
+- Added orthographic projection to `ViewerWidget`
+- Added setter for motor noise.
+- Added default robot names.
+- Corrected distance from cylinders calculation in Circular camera.
+- Renamed ``EnkiApplication::init` to `EnkiApplication::setup`
+- Added `EnkiApplication::init`, `EnkiApplication::run`, `EnkiApplication::cleanup`.

@@ -89,10 +89,10 @@ public:
     enabled = value;
     last_sent = -1.0;
   }
-  bool get_enable() { return enabled; }
+  bool get_enable() const { return enabled; }
   void set_tx(int value) { tx_value = value; }
-  int get_tx() { return tx_value; }
-  std::vector<IRCommEvent> get_events() { return events; }
+  int get_tx() const { return tx_value; }
+  const std::vector<IRCommEvent> & get_events() const { return events; }
 };
 } // namespace Enki
 

@@ -344,7 +344,7 @@ int main(int argc, char *argv[])
 	#else
 	uint32_t *bits = (uint32_t*)gt.bits();
 	#endif
-	World world(120, Color(0.9, 0.9, 0.9), 0, igt ? World::GroundTexture(gt.width(), gt.height(), bits) : World::GroundTexture());
+	World world(120, Color(0.9, 0.9, 0.9), igt ? World::GroundTexture(gt.width(), gt.height(), bits) : World::GroundTexture());
 	EnkiPlayground viewer(&world);
 	
 	viewer.show();
