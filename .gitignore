@@ -5,6 +5,6 @@ dist
 venv
 notebooks
 .DS_Store
-doc/python/make.bat
-doc/python/Makefile
 __pycache__
+Makefile
+make.bat
