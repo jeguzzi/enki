@@ -235,6 +235,8 @@ namespace Enki
 		void renderShape(const Polygon& shape, const double height, const Color& color);
 		void renderSimpleObject(GLuint & list, PhysicalObject *object);
 		void renderText(int x, int y, const QString &str, const QFont & font = QFont());
+		void renderText(double x, double y, double z, const QString &str, const QFont &font = QFont());
+
 		void initWorld(World *);
 		bool shouldInitWorld;
 		bool updateWorld;
