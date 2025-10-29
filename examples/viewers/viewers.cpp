@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 	world1.addObject(thymio12);
 	
 	QWidget window;
-	QHBoxLayout hbox = QHBoxLayout(&window);
+	QHBoxLayout hbox(&window);
     window.resize(960, 320);
     ViewerWidget viewer1(&world1, nullptr, 30, true, 1, 1);
 	ViewerWidget viewer2(world, nullptr, 30, false);
