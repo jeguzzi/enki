@@ -30,10 +30,6 @@ elseif(Qt5_FOUND)
 else()
 	message("Enki will be built without Qt support")
 endif()
-find_package(OpenGL REQUIRED)
-
-# check for SDL2
-find_package(SDL2)
 
 # library version
 set(LIB_INSTALL_DIR lib CACHE FILEPATH "Where to install libraries")
@@ -45,6 +41,8 @@ set(LIB_VERSION_STRING ${LIB_VERSION_MAJOR}.${LIB_VERSION_MINOR}.${LIB_VERSION_P
 add_subdirectory(enki)
 
 if (Qt6_FOUND OR Qt5_FOUND)
+	find_package(OpenGL REQUIRED)
+	find_package(SDL2)
 	add_subdirectory(viewer)
 endif()
 
