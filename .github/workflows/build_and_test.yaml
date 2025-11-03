@@ -1,0 +1,32 @@
+name: Build and test
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: src/enki
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: install deps
+        run: pip install build
+      - name: build wheel
+        run: |
+          cd src/pyenki
+          python -m build -w --config-setting cmake.define.WITH_QT=
+      - name: install navground
+        run: |
+          wheels=( src/pyenki/dist/*.whl )
+          pip install ${wheels[0]}[all]
+      - name: install mypy
+        run: pip install mypy
+      - name: test with mypy
+        run: mypy -p pyenki --strict
+      - name: run headless examples
+        run: |
+          python examples/python/hello_thymio.py
+          python examples/python/minimal_thymio.py
+          python examples/python/two_thymios_comm.py

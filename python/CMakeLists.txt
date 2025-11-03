@@ -19,15 +19,17 @@ endif()
 pybind11_add_module(pyenki enki.cpp)
 include_directories(${PROJECT_SOURCE_DIR})
 target_link_libraries(pyenki PRIVATE enki enkiviewer)
-target_compile_definitions(pyenki
-                           PRIVATE PYBIND11_DETAILED_ERROR_MESSAGES=1)
+target_compile_definitions(pyenki PRIVATE PYBIND11_DETAILED_ERROR_MESSAGES=1)
+if(Qt6_FOUND OR Qt5_FOUND)
+  target_compile_definitions(pyenki PRIVATE QT)
+  set_target_properties(pyenki PROPERTIES AUTOMOC TRUE)
+endif()
 
-set_target_properties(pyenki PROPERTIES AUTOMOC TRUE)
+install(
+  TARGETS pyenki
+  DESTINATION pyenki
+  COMPONENT pyenki)
 
-install(TARGETS pyenki DESTINATION pyenki COMPONENT pyenki)
-
-# include(CheckIPOSupported)
-# check_ipo_supported(RESULT ipo_supported OUTPUT error)
-# if(ipo_supported)
-#   set_property(TARGET _pyenki PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-# endif()
+# include(CheckIPOSupported) check_ipo_supported(RESULT ipo_supported OUTPUT
+# error) if(ipo_supported) set_property(TARGET _pyenki PROPERTY
+# INTERPROCEDURAL_OPTIMIZATION TRUE) endif()
