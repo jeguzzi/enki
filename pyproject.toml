@@ -5,6 +5,15 @@ build-backend = "scikit_build_core.build"
 [project]
 name = "pyenki"
 version = "0.0.1.alpha"
+dependencies = [
+  "numpy>=1.21",
+]
+
+[project.optional-dependencies]
+all = [
+  "moviepy>=2",
+  "jupyter_rfb"
+]
 
 [tool.scikit-build]
 minimum-version = "build-system.requires"

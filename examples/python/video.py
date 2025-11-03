@@ -1,6 +1,5 @@
 import pyenki
-
-from video import make_video
+from pyenki.video import make_video
 
 world = pyenki.World()
 thymio = pyenki.Thymio2()
