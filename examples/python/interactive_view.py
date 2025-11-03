@@ -1,22 +1,22 @@
 import math
 
-from PyQt5 import QtCore
-
 import pyenki
 
 world = pyenki.World(100)
 thymio = pyenki.Thymio2()
 thymio.position = (0, 0)
-thymio.motor_left_target = -10
-thymio.motor_right_target = 10
+thymio.left_wheel_target_speed = -10
+thymio.right_wheel_target_speed = 10
 world.add_object(thymio)
 
-# Check if a QtApplication is running
-if not QtCore.QCoreApplication.instance():
-    print('No QtApplication active')
-else:
-    # Create a view --- which will also run ``world.step`` --- and display it
-    view = pyenki.WorldView(world, run_world_update=True, cam_position=(0, 0),
-                            cam_altitude=80, cam_pitch=-math.pi / 2, cam_yaw=math.pi / 2,
-                            orthographic=True)
-    view.show()
+pyenki.init_ui()
+view = pyenki.WorldView(world,
+                        update_world=True,
+                        camera_position=(0, 0),
+                        camera_altitude=80,
+                        camera_pitch=-math.pi / 2,
+                        camera_yaw=math.pi / 2,
+                        camera_is_ortho=True)
+view.show()
+pyenki.run_ui()
+pyenki.cleanup_ui()

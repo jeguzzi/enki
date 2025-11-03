@@ -209,22 +209,22 @@ private:                                                                       \
                            "controlStep", dt);                                 \
   }
 
-struct PyPhysicalObject : public PhysicalObject {
+struct PyPhysicalObject : public PhysicalObject, public py::trampoline_self_life_support  {
   using PhysicalObject::PhysicalObject;
   OVERRIDE_CONTROL_STEP(PhysicalObject, PyPhysicalObject)
 };
 
-struct PyMarxbot : public Marxbot {
+struct PyMarxbot : public Marxbot, public py::trampoline_self_life_support  {
   using Marxbot::Marxbot;
   OVERRIDE_CONTROL_STEP(Marxbot, PyMarxbot)
 };
 
-struct PyEPuck : public EPuck {
+struct PyEPuck : public EPuck, public py::trampoline_self_life_support  {
   using EPuck::EPuck;
   OVERRIDE_CONTROL_STEP(EPuck, PyEPuck)
 };
 
-struct PyThymio2 : public Thymio2 {
+struct PyThymio2 : public Thymio2, public py::trampoline_self_life_support  {
   using Thymio2::Thymio2;
   OVERRIDE_CONTROL_STEP(Thymio2, PyThymio2)
 };
@@ -544,16 +544,10 @@ void save_image(PyWorld &world, const std::string &path,
 // PYBIND11_MAKE_OPAQUE(Textures)
 
 PYBIND11_MODULE(pyenki, m) {
-  py::options options;
-#if PYBIND11_VERSION_MAJOR >= 2 && PYBIND11_VERSION_MINOR >= 10
-  py::options.disable_enum_members_docstring();
-#endif
-
-  // TODO: complete doc
 
 #if !(CONVERT_COLOR)
 
-  py::class_<Color>(m, "Color", R"doc(
+  py::classh<Color>(m, "Color", R"doc(
 Args:
     r (float): Red channel, in [0, 1], optional (default 0.0)
     g (float): Green channel, in [0, 1], optional (default 0.0)
@@ -645,7 +639,7 @@ Returns:
 
   // Physical objects
 
-  py::class_<PhysicalObject, PyPhysicalObject>(m, "PhysicalObject", R"doc(
+  py::classh<PhysicalObject, PyPhysicalObject>(m, "PhysicalObject", R"doc(
 The superclass of objects that can be simulated.
 
 Attributes:
@@ -839,9 +833,9 @@ Returns
 
   // Robots
 
-  py::class_<Robot, PhysicalObject>(m, "Robot", "Base class for all robots");
+  py::classh<Robot, PhysicalObject>(m, "Robot", "Base class for all robots");
 
-  py::class_<DifferentialWheeled, Robot, PhysicalObject>(
+  py::classh<DifferentialWheeled, Robot, PhysicalObject>(
       m, "DifferentialWheeled", R"doc(
 The virtual base class shared by all robots currently implemented in enki.
 
@@ -876,7 +870,7 @@ Attributes:
 Reset the odometry of both wheels.
 )doc");
 
-  py::class_<Marxbot, PyMarxbot, DifferentialWheeled, PhysicalObject>(
+  py::classh<Marxbot, PyMarxbot, DifferentialWheeled, PhysicalObject>(
       m, "Marxbot", R"doc(
         A :py:class:`DifferentialWheeled` Marxbot robot.
 
@@ -936,7 +930,7 @@ Reset the odometry of both wheels.
           },
           nullptr);
 
-  py::class_<EPuck, PyEPuck, DifferentialWheeled, PhysicalObject>(m, "EPuck",
+  py::classh<EPuck, PyEPuck, DifferentialWheeled, PhysicalObject>(m, "EPuck",
                                                                   R"doc(
 Args:
   proximity (bool): enable the proximity sensors
@@ -1030,7 +1024,7 @@ Args:
   value (bool): the desired LED state.
 )doc");
 
-  py::class_<IRCommEvent>(m, "IRCommEvent", R"doc( 
+  py::classh<IRCommEvent>(m, "IRCommEvent", R"doc( 
 This event is created each time a message is received by at least one proximity sensor.
 The sensors that do not receive the message, have the corresponding payloads and intensities set to zero.
 
@@ -1059,7 +1053,7 @@ Attributes:
           nullptr)
       .def_readonly("rx_value", &IRCommEvent::rx_value);
 
-  py::class_<Thymio2, PyThymio2, DifferentialWheeled, PhysicalObject>(
+  py::classh<Thymio2, PyThymio2, DifferentialWheeled, PhysicalObject>(
       m, "Thymio2", R"doc( 
 A :py:class:`DifferentialWheeled` Thymio2 robot.
 Attribute names mimic the aseba interface, see http://wiki.thymio.org/en:thymioapi.
@@ -1419,7 +1413,7 @@ Args:
     value (int): the desired intensity between 0 and 31.
 )doc");
 
-  py::class_<PyWorld>(m, "World", R"doc(
+  py::classh<PyWorld>(m, "World", R"doc(
 The world is the container of all objects and robots.
 It is either
 
@@ -1495,7 +1489,7 @@ Args:
     object (PhysicalObject): the object to remove.
 )doc")
       // TODO
-      .def("copy_random_generator", &PyWorld::copyRandom)
+      .def("copy_random_generator", &PyWorld::copyRandom, py::arg("world"))
       .def_property("random_seed", &PyWorld::getRandomSeed,
                     &PyWorld::setRandomSeed)
       .def_property("random_generator", &PyWorld::getRandom,
@@ -1592,7 +1586,7 @@ Args:
 
 )doc");
 
-  py::class_<PythonViewer>(m, "WorldView", R"doc( 
+  py::classh<PythonViewer>(m, "WorldView", R"doc( 
 A QOpenGLWidget that displays the world.
 
 Args:

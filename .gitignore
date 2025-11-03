@@ -8,3 +8,6 @@ notebooks
 __pycache__
 Makefile
 make.bat
+out
+video.mp4
+world.png

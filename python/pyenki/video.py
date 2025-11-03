@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 import moviepy as mpy  # type: ignore[import-untyped]
+import numpy.typing
 
 import pyenki
 
@@ -11,7 +12,7 @@ def make_video(world: pyenki.World,
                time_step: float,
                duration: float,
                factor: float = 1.0,
-               **kwargs: Any):
+               **kwargs: Any) -> mpy.VideoClip:
     """
     Generate a video by simulating the world for a while.
 
@@ -25,7 +26,7 @@ def make_video(world: pyenki.World,
     """
     time = 0.0
 
-    def make_frame(t: float):
+    def make_frame(t: float) -> numpy.typing.NDArray[numpy.uint8]:
         nonlocal time
         t = t * factor
         while time + time_step < t:

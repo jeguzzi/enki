@@ -2,16 +2,18 @@ from __future__ import annotations
 
 import asyncio
 import time
+from collections.abc import Collection
+from typing import Any
 
 import jupyter_rfb  # type: ignore[import-untyped]
-import numpy as np
-from collections.abc import Collection
+import numpy
+import numpy.typing
 
 import pyenki
 
 
-class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer):
-
+class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer  # type: ignore[misc]
+                            ):
     """
     Renders a world in a jupyter notebook by calling :py:meth:`pyenki.World.render`.
 
@@ -36,10 +38,10 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer):
 
     def __init__(self,
                  world: pyenki.World | None = None,
-                 camera_position: pyenki.Vector = np.zeros(2),  # type: ignore
+                 camera_position: pyenki.Vector = numpy.zeros(2),
                  camera_altitude: float = 30,
                  camera_yaw: float = 0,
-                 camera_pitch: float = -np.pi / 2,
+                 camera_pitch: float = -numpy.pi / 2,
                  camera_is_ortho: bool = False):
         """
         Constructs a new instance.
@@ -52,13 +54,14 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer):
         :param      camera_is_ortho:  Whether the camera uses an orthographic projection
         """
         super().__init__(resizable=True)
-        self._camera_position = np.array([*camera_position, camera_altitude],
-                                          dtype=np.float64)
+        self._camera_position: numpy.typing.NDArray[
+            numpy.float64] = numpy.array([*camera_position, camera_altitude],
+                                         dtype=numpy.float64)
         self.camera_yaw = camera_yaw
         self.camera_pitch = camera_pitch
         self.camera_is_ortho = camera_is_ortho
         self.world = world
-        self._p = None
+        self._p: tuple[float, float] | None = None
 
     @property
     def camera_position(self) -> pyenki.Vector:
@@ -70,17 +73,19 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer):
 
     @property
     def camera_altitude(self) -> float:
-        return self._camera_position[2]
+        return float(self._camera_position[2])
 
     @camera_altitude.setter
     def camera_altitude(self, value: float) -> None:
         self._camera_position[2] = value
 
-    async def run_async(self,
-                        time_step: float,
-                        duration: float,
-                        factor: float = 1,
-                        synch: Collection[EnkiRemoteFrameBuffer] = tuple()) -> None:
+    async def run_async(
+        self,
+        time_step: float,
+        duration: float,
+        factor: float = 1,
+        synch: Collection[EnkiRemoteFrameBuffer] = tuple()
+    ) -> None:
         """
         Runs a simulation and updates the view for a while.
 
@@ -99,11 +104,13 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer):
                 r.request_draw()
             await asyncio.sleep(time_step / factor)
 
-    def run(self,
-            time_step: float,
-            duration: float,
-            factor: float = 1,
-            synch: Collection[EnkiRemoteFrameBuffer] = tuple()) -> None:
+    def run(
+        self,
+        time_step: float,
+        duration: float,
+        factor: float = 1,
+        synch: Collection[EnkiRemoteFrameBuffer] = tuple()
+    ) -> None:
         """
         Runs a simulation and updates the view for a while.
 
@@ -165,16 +172,18 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer):
         if camera_yaw is not None:
             self.camera_yaw = camera_yaw
         if self.camera_is_ortho:
-            self._camera_position = np.array(
+            self._camera_position = numpy.array(
                 [*target_position, target_altitude + target_distance],
-                dtype=np.float64)
+                dtype=numpy.float64)
         else:
             if camera_pitch is not None:
                 self.camera_pitch = camera_pitch
-            e = np.array((np.cos(self.camera_yaw) * np.cos(self.camera_pitch),
-                          np.sin(self.camera_yaw) * np.cos(self.camera_pitch),
-                          np.sin(self.camera_pitch)))
-            p = np.array([*target_position, target_altitude], dtype=np.float64)
+            e = numpy.array(
+                (numpy.cos(self.camera_yaw) * numpy.cos(self.camera_pitch),
+                 numpy.sin(self.camera_yaw) * numpy.cos(self.camera_pitch),
+                 numpy.sin(self.camera_pitch)))
+            p = numpy.array([*target_position, target_altitude],
+                            dtype=numpy.float64)
             self._camera_position = p - target_distance * e
         self.request_draw()
 
@@ -197,13 +206,13 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer):
                 self.camera_position = position
             if altitude is not None:
                 self.camera_altitude = altitude
-            dp = np.array([*target_position, target_altitude],
-                          dtype=np.float64) - self._camera_position
-            self.camera_yaw = np.arctan2(dp[1], dp[0])
-            self.camera_pitch = np.arctan2(dp[2], np.linalg.norm(dp[:2]))
+            dp = numpy.array([*target_position, target_altitude],
+                             dtype=numpy.float64) - self._camera_position
+            self.camera_yaw = numpy.arctan2(dp[1], dp[0])
+            self.camera_pitch = numpy.arctan2(dp[2], numpy.linalg.norm(dp[:2]))
             self.request_draw()
 
-    def handle_event(self, event):
+    def handle_event(self, event: dict[str, Any]) -> None:
         event_type = event.get("event_type", None)
         if event_type == "resize":
             self.size = event["width"], event["height"], event["pixel_ratio"]
@@ -215,9 +224,10 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer):
             self.request_draw()
         elif event_type == "wheel":
             delta = event["dy"] / self.size[1] * 6
-            e = np.array((np.cos(self.camera_yaw) * np.cos(self.camera_pitch),
-                          np.sin(self.camera_yaw) * np.cos(self.camera_pitch),
-                          np.sin(self.camera_pitch))) * delta
+            e = numpy.array(
+                (numpy.cos(self.camera_yaw) * numpy.cos(self.camera_pitch),
+                 numpy.sin(self.camera_yaw) * numpy.cos(self.camera_pitch),
+                 numpy.sin(self.camera_pitch))) * delta
             self._camera_position -= e
             self.request_draw()
         elif event_type == "pointer_move" and self._p is not None:
@@ -228,7 +238,8 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer):
             self._p = (event["x"], event["y"])
             self.request_draw()
 
-    def get_frame(self):
+    def get_frame(self) -> numpy.typing.NDArray[numpy.uint8]:
+        assert self.world
         image = self.world.render(camera_position=self.camera_position,
                                   camera_altitude=self.camera_altitude,
                                   camera_yaw=self.camera_yaw,
