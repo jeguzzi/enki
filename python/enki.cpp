@@ -43,6 +43,7 @@
 #include <pybind11/stl.h>
 #include <pybind11/stl/filesystem.h>
 #include <pybind11/stl_bind.h>
+#include <stdexcept>
 
 #include "../enki/Geometry.h"
 #include "../enki/PhysicalEngine.h"
@@ -50,8 +51,10 @@
 #include "../enki/robots/e-puck/EPuck.h"
 #include "../enki/robots/marxbot/Marxbot.h"
 #include "../enki/robots/thymio2/Thymio2.h"
+#ifdef QT
 #include "../viewer/Viewer.h"
 #include <QImage>
+#endif // QT
 
 using namespace Enki;
 namespace py = pybind11;
@@ -154,6 +157,8 @@ void setColorComponents(Color &color, py::tuple values) {
   color.components[3] = values[3].cast<double>();
 }
 
+#ifdef QT
+
 static World::GroundTexture loadTexture(const std::string &fileName) {
   /*World::GroundTexture t;
 
@@ -193,6 +198,7 @@ static World::GroundTexture loadTexture(const std::string &fileName) {
   return World::GroundTexture(gt.width(), gt.height(), (uint32_t *)gt.bits());
 #endif
 }
+#endif // QT
 
 // wrappers for robots
 
@@ -209,22 +215,23 @@ private:                                                                       \
                            "controlStep", dt);                                 \
   }
 
-struct PyPhysicalObject : public PhysicalObject, public py::trampoline_self_life_support  {
+struct PyPhysicalObject : public PhysicalObject,
+                          public py::trampoline_self_life_support {
   using PhysicalObject::PhysicalObject;
   OVERRIDE_CONTROL_STEP(PhysicalObject, PyPhysicalObject)
 };
 
-struct PyMarxbot : public Marxbot, public py::trampoline_self_life_support  {
+struct PyMarxbot : public Marxbot, public py::trampoline_self_life_support {
   using Marxbot::Marxbot;
   OVERRIDE_CONTROL_STEP(Marxbot, PyMarxbot)
 };
 
-struct PyEPuck : public EPuck, public py::trampoline_self_life_support  {
+struct PyEPuck : public EPuck, public py::trampoline_self_life_support {
   using EPuck::EPuck;
   OVERRIDE_CONTROL_STEP(EPuck, PyEPuck)
 };
 
-struct PyThymio2 : public Thymio2, public py::trampoline_self_life_support  {
+struct PyThymio2 : public Thymio2, public py::trampoline_self_life_support {
   using Thymio2::Thymio2;
   OVERRIDE_CONTROL_STEP(Thymio2, PyThymio2)
 };
@@ -259,13 +266,6 @@ void set_thymio_leds(Thymio2 &thymio, Thymio2::LedIndex first_index, int number,
 void set_thymio_leds_i(Thymio2 &thymio, Thymio2::LedIndex first_index,
                        int number, int index, int value) {
   set_thymio_leds(thymio, first_index, number, index, value / 31.0);
-}
-
-py::array get_rbg_array(const QImage &image) {
-  const QImage fb = image.convertToFormat(QImage::Format_RGB888);
-  const unsigned char *vs = fb.bits();
-  const std::array<ssize_t, 3> shape{fb.height(), fb.width(), 3};
-  return py::array(shape, vs);
 }
 
 // void run(World &world, unsigned steps) {
@@ -338,6 +338,15 @@ struct PyWorld : public World {
     }
   }
 };
+
+#ifdef QT
+
+py::array get_rbg_array(const QImage &image) {
+  const QImage fb = image.convertToFormat(QImage::Format_RGB888);
+  const unsigned char *vs = fb.bits();
+  const std::array<ssize_t, 3> shape{fb.height(), fb.width(), 3};
+  return py::array(shape, vs);
+}
 
 struct PythonViewer : public ViewerWidget {
 
@@ -470,12 +479,15 @@ struct PythonViewer : public ViewerWidget {
   // py::capsule getCapsule() { return py::capsule(this); }
 };
 
+#endif // QT
+
 void runInViewer(PyWorld *world, double fps = 30, double worldTimeStep = 0,
                  double realTimeFactor = 1, bool helpers = true,
                  bool camReset = false, Vector camPos = Vector(0.0, 0.0),
                  double camAltitude = 0.0, double camYaw = 0.0,
                  double camPitch = 0.0, bool ortho = false,
                  double wallsHeight = 10.0, double duration = -1) {
+#ifdef QT
   EnkiApplication::init();
   PythonViewer viewer(world, fps, true, worldTimeStep, realTimeFactor, helpers,
                       camReset, camPos, camAltitude, camYaw, camPitch, ortho,
@@ -483,6 +495,48 @@ void runInViewer(PyWorld *world, double fps = 30, double worldTimeStep = 0,
   viewer.setWindowTitle("PyEnki Viewer");
   viewer.show();
   EnkiApplication::run(duration / realTimeFactor);
+#else
+  throw std::logic_error(
+      "Method not available: pyenki built without Qt support!");
+#endif // QT
+}
+
+py::array render(PyWorld &world, bool cameraReset = false,
+                 Vector camPos = Vector(0, 0), double camAltitude = 0,
+                 double camYaw = 0, double camPitch = 0,
+                 bool camIsOrtho = false, double wallsHeight = 10,
+                 double width = 640, double height = 360) {
+#ifdef QT
+  EnkiApplication::init();
+  PythonViewer viewer(&world, 0, false, 0, 1, false, cameraReset, camPos,
+                      camAltitude, camYaw, camPitch, camIsOrtho, wallsHeight);
+  viewer.cameraIsOrtho = camIsOrtho;
+  viewer.setFixedWidth(width);
+  viewer.setFixedHeight(height);
+  return viewer.getImage();
+#else
+  throw std::logic_error(
+      "Method not available: pyenki built without Qt support!");
+#endif // QT
+}
+
+void save_image(PyWorld &world, const std::string &path,
+                bool cameraReset = false, Vector camPos = Vector(0, 0),
+                double camAltitude = 0, double camYaw = 0, double camPitch = 0,
+                bool camIsOrtho = false, double wallsHeight = 10,
+                double width = 640, double height = 360) {
+#ifdef QT
+  EnkiApplication::init();
+  PythonViewer viewer(&world, 0, false, 0, 1, false, cameraReset, camPos,
+                      camAltitude, camYaw, camPitch, camIsOrtho, wallsHeight);
+  viewer.cameraIsOrtho = camIsOrtho;
+  viewer.setFixedWidth(width);
+  viewer.setFixedHeight(height);
+  return viewer.saveImage(path);
+#else
+  throw std::logic_error(
+      "Method not available: pyenki built without Qt support!");
+#endif // QT
 }
 
 Polygon make_polygon(const std::vector<Vector> &ps) {
@@ -510,34 +564,6 @@ PhysicalObject::Part _part(const py::tuple &obj) {
                                 make_textures(colors));
   }
   return PhysicalObject::Part(make_polygon(ps), height);
-}
-
-py::array render(PyWorld &world, bool cameraReset = false,
-                 Vector camPos = Vector(0, 0), double camAltitude = 0,
-                 double camYaw = 0, double camPitch = 0,
-                 bool camIsOrtho = false, double wallsHeight = 10,
-                 double width = 640, double height = 360) {
-  EnkiApplication::init();
-  PythonViewer viewer(&world, 0, false, 0, 1, false, cameraReset, camPos,
-                      camAltitude, camYaw, camPitch, camIsOrtho, wallsHeight);
-  viewer.cameraIsOrtho = camIsOrtho;
-  viewer.setFixedWidth(width);
-  viewer.setFixedHeight(height);
-  return viewer.getImage();
-}
-
-void save_image(PyWorld &world, const std::string &path,
-                bool cameraReset = false, Vector camPos = Vector(0, 0),
-                double camAltitude = 0, double camYaw = 0, double camPitch = 0,
-                bool camIsOrtho = false, double wallsHeight = 10,
-                double width = 640, double height = 360) {
-  EnkiApplication::init();
-  PythonViewer viewer(&world, 0, false, 0, 1, false, cameraReset, camPos,
-                      camAltitude, camYaw, camPitch, camIsOrtho, wallsHeight);
-  viewer.cameraIsOrtho = camIsOrtho;
-  viewer.setFixedWidth(width);
-  viewer.setFixedHeight(height);
-  return viewer.saveImage(path);
 }
 
 // PYBIND11_MAKE_OPAQUE(Texture)
@@ -1586,6 +1612,7 @@ Args:
 
 )doc");
 
+#ifdef QT
   py::classh<PythonViewer>(m, "WorldView", R"doc( 
 A QOpenGLWidget that displays the world.
 
@@ -1761,4 +1788,10 @@ Args:
   m.def("cleanup_ui", &EnkiApplication::cleanup, R"doc( 
 Cleanup the Qt runtime.
 )doc");
+#else
+  struct PythonViewer {};
+  py::classh<PythonViewer>(m, "WorldView", R"doc( 
+Class not available: pyenki built without Qt support!
+)doc");
+#endif // QT
 }
