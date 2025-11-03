@@ -15,11 +15,11 @@ jobs:
         run: pip install build
       - name: build wheel
         run: |
-          cd src/pyenki
+          cd src/enki
           python -m build -w --config-setting cmake.define.WITH_QT=
       - name: install navground
         run: |
-          wheels=( src/pyenki/dist/*.whl )
+          wheels=( src/enki/dist/*.whl )
           pip install ${wheels[0]}[all]
       - name: install mypy
         run: pip install mypy
