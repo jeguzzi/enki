@@ -39,6 +39,7 @@
 #include "RandomWithSeed.h"
 #include "Interaction.h"
 #include "BluetoothBase.h"
+#include <functional>
 #include <iostream>
 #include <set>
 #include <vector>

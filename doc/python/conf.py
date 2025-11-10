@@ -68,10 +68,6 @@ def f_docstring(app, what, name, obj, options, lines):
         for k, v in _replace.items():
             if k in lines[i]:
                 lines[i] = lines[i].replace(k, v)
-        if ':py:class:`Vector2`' in lines[i]:
-            lines[i] = lines[i].replace(
-                ':py:class:`Vector2`',
-                ':py:class:`Vector2 <navground.core.Vector2>`')
 
 
 def f_signature(app, what, name, obj, options, signature, return_annotation):
@@ -87,6 +83,7 @@ def f_signature(app, what, name, obj, options, signature, return_annotation):
             if k in return_annotation:
                 return_annotation = return_annotation.replace(k, v)
     return (signature, return_annotation)
+
 
 def setup(app):
     app.connect('autodoc-process-docstring', f_docstring)

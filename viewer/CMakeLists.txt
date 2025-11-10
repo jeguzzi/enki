@@ -34,6 +34,12 @@ target_compile_definitions(enkiviewer PUBLIC
   GL_SILENCE_DEPRECATION
 )
 
+include(CheckIPOSupported)
+check_ipo_supported(RESULT ipo_supported OUTPUT error)
+if(ipo_supported)
+  set_property(TARGET enkiviewer PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+endif()
+
 set(ENKI_VIEWER_HDR
 	Viewer.h
 )
