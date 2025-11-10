@@ -16,6 +16,7 @@ v = make_video(world,
                duration=20,
                camera_position=(0, -20),
                camera_altitude=20,
-               camera_pitch=-0.7)
+               camera_pitch=-0.7,
+               camera_yaw=1.5)
 
 v.write_videofile('video.mp4', fps=30)
