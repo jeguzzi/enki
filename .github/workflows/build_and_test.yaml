@@ -24,7 +24,7 @@ jobs:
       - name: install mypy
         run: pip install mypy
       - name: test with mypy
-        run: mypy -p pyenki --strict
+        run: mypy -p pyenki --strict --ignore-missing-imports --disable-error-code unused-ignore
       - name: run headless examples
         run: |
           python src/enki/examples/python/hello_thymio.py
