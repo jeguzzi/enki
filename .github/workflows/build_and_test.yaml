@@ -20,7 +20,7 @@ jobs:
       - name: install wheel
         run: |
           wheels=( src/enki/dist/*.whl )
-          pip install ${wheels[0]}[all]
+          pip install ${wheels[0]}
       - name: install mypy
         run: pip install mypy
       - name: test with mypy
