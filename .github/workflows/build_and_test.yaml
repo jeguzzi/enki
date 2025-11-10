@@ -17,7 +17,7 @@ jobs:
         run: |
           cd src/enki
           python -m build -w --config-setting cmake.define.WITH_QT=
-      - name: install navground
+      - name: install wheel
         run: |
           wheels=( src/enki/dist/*.whl )
           pip install ${wheels[0]}[all]
