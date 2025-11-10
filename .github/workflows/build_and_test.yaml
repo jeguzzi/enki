@@ -20,11 +20,11 @@ jobs:
       - name: install wheel
         run: |
           wheels=( src/enki/dist/*.whl )
-          pip install ${wheels[0]}
+          pip install ${wheels[0]}[all]
       - name: install mypy
         run: pip install mypy
       - name: test with mypy
-        run: mypy -p pyenki --strict --ignore-missing-imports --disable-error-code unused-ignore
+        run: mypy -p pyenki --strict
       - name: run headless examples
         run: |
           python src/enki/examples/python/hello_thymio.py
