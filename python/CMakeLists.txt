@@ -1,7 +1,7 @@
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(Python3_FIND_STRATEGY LOCATION)
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
-find_package(pybind11 QUIET)
+find_package(pybind11 3 QUIET)
 if(NOT pybind11_FOUND)
   include(FetchContent)
   FetchContent_Declare(
@@ -18,11 +18,18 @@ endif()
 
 pybind11_add_module(pyenki enki.cpp)
 include_directories(${PROJECT_SOURCE_DIR})
-target_link_libraries(pyenki PRIVATE enki enkiviewer)
+target_link_libraries(pyenki PRIVATE enki)
 target_compile_definitions(pyenki PRIVATE PYBIND11_DETAILED_ERROR_MESSAGES=1)
 if(Qt6_FOUND OR Qt5_FOUND)
   target_compile_definitions(pyenki PRIVATE QT)
   set_target_properties(pyenki PROPERTIES AUTOMOC TRUE)
+  target_link_libraries(pyenki PRIVATE enkiviewer)
+endif()
+
+include(CheckIPOSupported)
+check_ipo_supported(RESULT ipo_supported OUTPUT error)
+if(ipo_supported)
+  set_property(TARGET pyenki PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 endif()
 
 install(
@@ -30,6 +37,3 @@ install(
   DESTINATION pyenki
   COMPONENT pyenki)
 
-# include(CheckIPOSupported) check_ipo_supported(RESULT ipo_supported OUTPUT
-# error) if(ipo_supported) set_property(TARGET _pyenki PROPERTY
-# INTERPROCEDURAL_OPTIMIZATION TRUE) endif()
