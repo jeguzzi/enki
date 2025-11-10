@@ -26,6 +26,11 @@ target_include_directories (enki PUBLIC ${PROJECT_SOURCE_DIR})
 set_target_properties(enki PROPERTIES VERSION ${LIB_VERSION_STRING}
 										SOVERSION ${LIB_VERSION_MAJOR}
 										POSITION_INDEPENDENT_CODE ON)
+include(CheckIPOSupported)
+check_ipo_supported(RESULT ipo_supported OUTPUT error)
+if(ipo_supported)
+  set_property(TARGET enki PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+endif()
 
 install(DIRECTORY . 
 	DESTINATION include/enki/
