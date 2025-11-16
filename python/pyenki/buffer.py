@@ -10,12 +10,13 @@ import numpy
 import numpy.typing
 
 import pyenki
+from pyenki.viewer import render
 
 
 class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer  # type: ignore[misc]
                             ):
     """
-    Renders a world in a jupyter notebook by calling :py:meth:`pyenki.World.render`.
+    Renders a world in a jupyter notebook by calling :py:func:`pyenki.viewer.render`.
 
     Attributes:
         world (pyenki.World | None): The world to display
@@ -36,6 +37,8 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer  # type: ignore[misc]
         >>> view
     """
 
+    _rfb_draw_requested: bool
+
     def __init__(self,
                  world: pyenki.World | None = None,
                  camera_position: pyenki.Vector = numpy.zeros(2),
@@ -43,6 +46,7 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer  # type: ignore[misc]
                  camera_yaw: float = 0,
                  camera_pitch: float = -numpy.pi / 2,
                  camera_is_ortho: bool = False):
+
         """
         Constructs a new instance.
 
@@ -148,7 +152,7 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer  # type: ignore[misc]
         Similar to :py:meth:`jupyter_rfb.RemoteFrameBuffer.request_draw`
         but works outside of an even loop.
         """
-        if not self._rfb_draw_requested:  # type: ignore[has-type]
+        if not self._rfb_draw_requested:
             self._rfb_draw_requested = True
             self._rfb_cancel_lossless_draw()
             self._rfb_maybe_draw()
@@ -214,6 +218,8 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer  # type: ignore[misc]
 
     def handle_event(self, event: dict[str, Any]) -> None:
         event_type = event.get("event_type", None)
+        if event_type == "close":
+            print('closing')
         if event_type == "resize":
             self.size = event["width"], event["height"], event["pixel_ratio"]
         elif event_type == "pointer_down" and event["button"] == 1:
@@ -240,11 +246,15 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer  # type: ignore[misc]
 
     def get_frame(self) -> numpy.typing.NDArray[numpy.uint8]:
         assert self.world
-        image = self.world.render(camera_position=self.camera_position,
-                                  camera_altitude=self.camera_altitude,
-                                  camera_yaw=self.camera_yaw,
-                                  camera_pitch=self.camera_pitch,
-                                  camera_is_ortho=self.camera_is_ortho,
-                                  width=self.size[0],
-                                  height=self.size[1])
+
+        image = render(
+            self.world,
+            camera_position=self.camera_position,
+            camera_altitude=self.camera_altitude,
+            camera_yaw=self.camera_yaw,
+            camera_pitch=self.camera_pitch,
+            camera_is_ortho=self.camera_is_ortho,
+            width=int(self.size[0] * self.size[2]),
+            height=int(self.size[1] * self.size[2]))
+        self._last_image = image
         return image
