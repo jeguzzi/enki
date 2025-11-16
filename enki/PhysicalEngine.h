@@ -211,6 +211,17 @@ namespace Enki
 			inline const Textures& getTextures() const { return textures; }
 			inline bool isTextured() const { return !textures.empty(); }
 			
+            bool operator==(const Part& rhs) const
+            {
+               return (height == rhs.getHeight())
+               && (shape == rhs.getShape())
+               && (textures == rhs.getTextures());
+            }
+            bool operator!=(const Part& rhs) const
+            {
+              return !operator==(rhs);
+            } 
+
 		private:
 			friend class PhysicalObject;
 
