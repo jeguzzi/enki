@@ -1,6 +1,7 @@
 import pyenki
+import pyenki.viewer
 
-pyenki.init_ui()
+pyenki.viewer.init()
 world = pyenki.World(radius=100)
 epuck = pyenki.EPuck()
 epuck.set_led_ring(True)
@@ -18,3 +19,5 @@ world.save_image("world.png",
                  camera_altitude=20,
                  camera_yaw=2.6,
                  camera_pitch=-0.487)
+pyenki.viewer.cleanup()
+print('saved world.png')

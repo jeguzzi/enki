@@ -1,5 +1,6 @@
 import pyenki
 from pyenki.video import make_video
+from pyenki.viewer import cleanup
 
 world = pyenki.World()
 thymio = pyenki.Thymio2()
@@ -17,6 +18,7 @@ v = make_video(world,
                camera_position=(0, -20),
                camera_altitude=20,
                camera_pitch=-0.7,
-               camera_yaw=1.5)
+               camera_yaw=1.5, width=1280, height=720)
 
 v.write_videofile('video.mp4', fps=30)
+cleanup()

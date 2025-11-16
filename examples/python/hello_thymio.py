@@ -2,7 +2,7 @@ import math
 import sys
 
 import pyenki
-
+import pyenki.viewer
 
 # We sublass `pyenki.Thymio2`. This way, the world update step will automatically call
 # also the Thymio `controlStep`.
@@ -20,8 +20,8 @@ class ControlledThymio2(pyenki.Thymio2):
         else:
             speed = 10.0
             self.set_led_top(green=1.0)
-        self.motor_left_target = speed
-        self.motor_right_target = speed
+        self.left_wheel_target_speed = speed
+        self.right_wheel_target_speed = speed
 
 
 def setup() -> pyenki.World:
@@ -34,11 +34,11 @@ def setup() -> pyenki.World:
     thymio.angle = 0
     world.add_object(thymio)
     # and a wall a bit in forward, in front of the Thymio.
-    wall = pyenki.RectangularObject(l1=10,
-                                    l2=50,
-                                    height=5,
-                                    mass=1,
-                                    color=pyenki.Color(0.5, 0.3, 0.3))
+    wall = pyenki.PhysicalObject(l1=10,
+                                 l2=50,
+                                 height=5,
+                                 mass=1,
+                                 color=pyenki.Color(0.5, 0.3, 0.3))
     wall.position = (30, 0)
     world.add_object(wall)
     return world
@@ -57,7 +57,8 @@ def run(world: pyenki.World,
                             camera_yaw=0.0,
                             camera_pitch=-math.pi / 2,
                             walls_height=10,
-                            camera_is_ortho=orthographic)
+                            camera_is_ortho=orthographic,
+                            duration=-1)
     else:
         # or we can write our own loop that run the simulaion as fast as possible.
         steps = int(T // dt)
