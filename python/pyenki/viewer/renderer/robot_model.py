@@ -11,8 +11,6 @@ from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram,
 from shiboken6 import VoidPtr
 
 from ... import Robot
-from .. import textures  # noqa
-from . import objects  # noqa
 from .utils import (create_vao_with_indices_and_vertices, functions,
                     load_numpy_array, switch_context)
 

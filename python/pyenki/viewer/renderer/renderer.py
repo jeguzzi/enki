@@ -122,7 +122,7 @@ class Renderer(QOpenGLFunctions):
         self.initializeOpenGLFunctions()
         self.glClearColor(0, 0, 0, 1)
         is_core = QSurfaceFormat.defaultFormat().profile(
-        ) == QSurfaceFormat.OpenGLContextProfile.CoreProfile  # noqa: E501
+        ) == QSurfaceFormat.OpenGLContextProfile.CoreProfile
         assert is_core
         self._program = load_program(vs='default', fs='default')
         assert self._program
