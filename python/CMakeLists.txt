@@ -25,7 +25,8 @@ if(Qt6_FOUND OR Qt5_FOUND)
   pybind11_add_module(pyenki_viewer enki_viewer.cpp)
   include_directories(${PROJECT_SOURCE_DIR})
   target_link_libraries(pyenki_viewer PRIVATE enki enkiviewer)
-  target_compile_definitions(pyenki_viewer PRIVATE PYBIND11_DETAILED_ERROR_MESSAGES=1)
+  target_compile_definitions(pyenki_viewer
+                             PRIVATE PYBIND11_DETAILED_ERROR_MESSAGES=1)
   set_target_properties(pyenki_viewer PROPERTIES AUTOMOC TRUE)
 endif()
 
@@ -36,7 +37,13 @@ if(ipo_supported)
 endif()
 
 install(
-  TARGETS pyenki pyenki_viewer
+  TARGETS pyenki
   DESTINATION pyenki
   COMPONENT pyenki)
 
+if(Qt6_FOUND OR Qt5_FOUND)
+  install(
+    TARGETS pyenki_viewer
+    DESTINATION pyenki
+    COMPONENT pyenki)
+endif()
