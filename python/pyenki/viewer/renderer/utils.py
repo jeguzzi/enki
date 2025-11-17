@@ -135,7 +135,7 @@ Shader Version: {f.glGetString(GL.GL_SHADING_LANGUAGE_VERSION)}
 def load_program(vs: str, fs: str) -> QOpenGLShaderProgram:
     shaders = pathlib.Path(__file__).parent / "shaders"
     vertex_shader = shaders / f'{vs}.vs'
-    fragment_shader = shaders / f'{vs}.fs'
+    fragment_shader = shaders / f'{fs}.fs'
     program = QOpenGLShaderProgram()
     program.addShaderFromSourceFile(QOpenGLShader.ShaderTypeBit.Vertex,
                                     str(vertex_shader))
