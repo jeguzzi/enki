@@ -220,7 +220,9 @@ namespace Enki
             bool operator!=(const Part& rhs) const
             {
               return !operator==(rhs);
-            } 
+            }
+
+            bool contains(const Vector & position, double tolerance = 0) const; 
 
 		private:
 			friend class PhysicalObject;
@@ -320,6 +322,8 @@ namespace Enki
 		inline double getMomentOfInertia() const { return momentOfInertia; }
 		inline double getInterlacedDistance() const { return interlacedDistance; }
 		
+		bool contains(const Vector & position, double tolerance = 0) const; 
+
 		// setters
 		
 		//! Make the object cylindric with a given mass
@@ -364,6 +368,24 @@ namespace Enki
 
 		World * getWorld() const {
 			return world;
+		}
+
+		const Vector & getPosition() const {
+			return pos;
+		}
+
+		void setPosition(const Vector & value) {
+			pos = value;
+			computeTransformedShape();
+		}
+
+		double getAngle() const {
+			return angle;
+		}
+
+		void setAngle(double value) {
+			angle = value;
+			computeTransformedShape();
 		}
 
 	private:		// setup methods

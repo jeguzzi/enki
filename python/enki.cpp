@@ -190,7 +190,12 @@ void set_thymio_leds_i(Thymio2 &thymio, Thymio2::LedIndex first_index,
 
 Polygon make_polygon(const std::vector<Vector> &ps) {
   Polygon p;
-  p.assign(ps.begin(), ps.end());
+  bool orient = (ps[1] - ps[0]).cross(ps[2] - ps[1]) > 0;
+  if (orient) {
+    p.assign(ps.begin(), ps.end());
+  } else {
+    p.assign(ps.rbegin(), ps.rend());
+  }
   return p;
 }
 
@@ -204,16 +209,16 @@ Textures make_textures(const std::vector<Color> &colors) {
   return textures;
 }
 
-PhysicalObject::Part _part(const py::tuple &obj) {
-  double height = obj[1].cast<double>();
-  const auto ps = obj[0].cast<std::vector<Vector>>();
-  if (py::len(obj) > 2) {
-    auto colors = obj[2].cast<std::vector<Color>>();
-    return PhysicalObject::Part(make_polygon(ps), height,
-                                make_textures(colors));
-  }
-  return PhysicalObject::Part(make_polygon(ps), height);
-}
+// PhysicalObject::Part _part(const py::tuple &obj) {
+//   double height = obj[1].cast<double>();
+//   const auto ps = obj[0].cast<std::vector<Vector>>();
+//   if (py::len(obj) > 2) {
+//     auto colors = obj[2].cast<std::vector<Color>>();
+//     return PhysicalObject::Part(make_polygon(ps), height,
+//                                 make_textures(colors));
+//   }
+//   return PhysicalObject::Part(make_polygon(ps), height);
+// }
 
 // PYBIND11_MAKE_OPAQUE(Texture)
 // PYBIND11_MAKE_OPAQUE(Textures)
@@ -423,7 +428,9 @@ Arguments:
              }
            })
       .def(py::self == py::self)
-      .def(py::self != py::self);
+      .def(py::self != py::self)
+      .def("contains", &PhysicalObject::Part::contains, py::arg("point"),
+           py::arg("tolerance") = 0);
 
   po.def(py::init([](const std::vector<PhysicalObject::Part> &parts,
                      double mass, const Color &color) {
@@ -543,8 +550,10 @@ Arguments:
                      &PhysicalObject::viscousFrictionCoefficient)
       .def_readwrite("viscous_moment_friction_coefficient",
                      &PhysicalObject::viscousMomentFrictionCoefficient)
-      .def_readwrite("position", &PhysicalObject::pos)
-      .def_readwrite("angle", &PhysicalObject::angle)
+      .def_property("position", &PhysicalObject::getPosition,
+                    &PhysicalObject::setPosition)
+      .def_property("angle", &PhysicalObject::getAngle,
+                    &PhysicalObject::setAngle)
       .def_readwrite("velocity", &PhysicalObject::speed)
       .def_readwrite("angular_speed", &PhysicalObject::angSpeed)
       .def_property("collision_callback", &PhysicalObject::getCollisionCallback,
@@ -571,7 +580,9 @@ Arguments:
       // viewer from the non-gui thread will lead to a crash because it will do
       // an OpenGL call from that thread
       .def_property("color", &PhysicalObject::getColor,
-                    &PhysicalObject::setColor);
+                    &PhysicalObject::setColor)
+      .def("contains", &PhysicalObject::contains, py::arg("point"),
+           py::arg("tolerance") = 0);
 
 #if 0
   m.def(

@@ -144,9 +144,41 @@ namespace Enki
 		}
 		centroid = rot * centroid + trans;
 	}
-	
-	
-	
+
+	bool PhysicalObject::Part::contains(const Vector & position, double tolerance) const 
+	{
+		const auto tshape = getTransformedShape();
+		for (size_t i = 0; i < tshape.size(); i++)
+		{
+			if (tshape.getSegment(i).dist(position) < -tolerance)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	bool PhysicalObject::contains(const Vector & point, double tolerance) const
+	{
+		const auto delta = pos - point;
+        const auto max_distance = tolerance + r;
+        if (delta.norm2() > max_distance * max_distance) 
+        {
+        	return false;
+        }
+		if (hull.empty())
+		{
+			return true;
+		}
+		for (const auto & part : hull) 
+		{
+			if (part.contains(point, tolerance)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	// Hull
 	
 	Polygon PhysicalObject::Hull::getConvexHull() const
