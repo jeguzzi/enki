@@ -2,22 +2,28 @@ from __future__ import annotations
 
 import threading
 import typing
+import weakref
+from collections.abc import Iterator
+from contextlib import contextmanager
 
 from PySide6.QtGui import (QImage, QOffscreenSurface, QOpenGLContext,
                            QSurfaceFormat)
 from PySide6.QtOpenGL import (QOpenGLFramebufferObject,
                               QOpenGLFramebufferObjectFormat)
 
-from .. import Image, VectorLike, World
-from .camera import Camera
+from .. import Image, PhysicalObject, World
+from .camera import CameraConfig, HasCamera, Vector3
 from .renderer import Renderer
-from .utils import init, to_3d, to_numpy_image
-import weakref
+from .utils import get_position_of_pixel as _get_position_of_pixel
+from .utils import init, to_numpy_image
 
 
-class OffScreenRenderer:
+class OffScreenRenderer(HasCamera):
 
-    def __init__(self, share: bool = False) -> None:
+    def __init__(self,
+                 share: bool = False,
+                 **camera_config: typing.Unpack[CameraConfig]) -> None:
+        HasCamera.__init__(self, **camera_config)
         # Add a check that we initialized
         if threading.current_thread() is not threading.main_thread():
             share = False
@@ -25,15 +31,23 @@ class OffScreenRenderer:
         self.context: QOpenGLContext | None = QOpenGLContext()
         if share:
             self.context.setShareContext(QOpenGLContext.globalShareContext())
-        self.context.setFormat(QSurfaceFormat.defaultFormat())
+        fmt = QSurfaceFormat.defaultFormat()
+        # fmt.setDepthBufferSize(32)
+        self.context.setFormat(fmt)
         self.context.create()
         if not self.context.isValid():
             raise RuntimeError("Unable to create context")
         self.surface = QOffscreenSurface()
-        self.surface.setFormat(QSurfaceFormat.defaultFormat())
+        self.surface.setFormat(fmt)
         self.surface.create()
         if not self.surface.isValid():
             raise RuntimeError("Unable to create offscreen surface")
+        self.fbo_format = QOpenGLFramebufferObjectFormat()
+        self.fbo_format.setAttachment(
+            QOpenGLFramebufferObject.Attachment.CombinedDepthStencil)
+        self.fbo: QOpenGLFramebufferObject | None = None
+        # width, height
+        self.size: tuple[int, int] | None = None
         self.renderer = Renderer.get(self.context)
         self.context.destroyed.connect(self.context_destroyed)
         # self.context.aboutToBeDestroyed.connect(self.context_will_destroy)
@@ -42,83 +56,84 @@ class OffScreenRenderer:
         self.context = None
 
     def __del__(self) -> None:
-        print('OffScreenRenderer.__del__')
-        if self._thread_id == threading.current_thread().native_id and self.context:
+        # print('OffScreenRenderer.__del__')
+        if self._thread_id == threading.current_thread(
+        ).native_id and self.context:
             self.context.makeCurrent(self.surface)
             self.renderer.context_will_be_destroyed(self.context)
             self.context.doneCurrent()
 
+    def _update_size(self, width: int, height: int) -> None:
+        size = (width, height)
+        if size != self.size:
+            self.size = size
+            self.fbo = QOpenGLFramebufferObject(width, height, self.fbo_format)
+            self.camera.set_viewport(width, height)
+
+    @contextmanager
+    def bind(self) -> Iterator[None]:
+        assert self.context
+        self.context.makeCurrent(self.surface)
+        assert self.fbo
+        self.fbo.bind()
+        try:
+            yield
+        finally:
+            self.fbo.release()
+            self.context.doneCurrent()
+
     def draw(self,
              world: World,
-             camera_reset: bool = False,
-             camera_position: VectorLike = (0, 0),
-             camera_altitude: typing.SupportsFloat = 0,
-             camera_yaw: typing.SupportsFloat = 0,
-             camera_pitch: typing.SupportsFloat = 0,
-             camera_is_ortho: bool = False,
              walls_height: typing.SupportsFloat = 10,
              width: typing.SupportsInt = 640,
-             height: typing.SupportsInt = 360) -> QImage:
+             height: typing.SupportsInt = 360,
+             selected_object: PhysicalObject | None = None,
+             **camera_config: typing.Unpack[CameraConfig]) -> QImage:
         assert self.context
         assert self._thread_id == threading.current_thread().native_id
         width = int(width)
         height = int(height)
         self.context.makeCurrent(self.surface)
-        fbo_format = QOpenGLFramebufferObjectFormat()
-        fbo_format.setAttachment(
-            QOpenGLFramebufferObject.Attachment.CombinedDepthStencil)
-        fbo = QOpenGLFramebufferObject(width, height, fbo_format)
+        self._update_size(width, height)
+        assert self.fbo
+        self.fbo.bind()
         self.context.functions().glViewport(0, 0, width, height)
-        fbo.bind()
-        camera = Camera()
-        camera.set_viewport(width, height)
-        camera.is_ortho = camera_is_ortho
-        if camera_reset:
-            camera.reset(world)
-        else:
-            camera.position = to_3d(camera_position, camera_altitude)
-            camera.yaw = float(camera_yaw)
-            camera.pitch = float(camera_pitch)
-        self.renderer.draw(world, float(walls_height), camera.matrix,
-                           camera.projection)
-        image = fbo.toImage()
-        fbo.release()
+        self.update_camera(**camera_config)
+        self.renderer.draw(world, float(walls_height), self.camera.matrix,
+                           self.camera.projection, selected_object)
+        image = self.fbo.toImage()
+        self.fbo.release()
         self.context.doneCurrent()
         return image
 
     def render(self,
                world: World,
-               camera_reset: bool = False,
-               camera_position: VectorLike = (0, 0),
-               camera_altitude: typing.SupportsFloat = 0,
-               camera_yaw: typing.SupportsFloat = 0,
-               camera_pitch: typing.SupportsFloat = 0,
-               camera_is_ortho: bool = False,
                walls_height: typing.SupportsFloat = 10,
                width: typing.SupportsInt = 640,
-               height: typing.SupportsInt = 360) -> Image:
+               height: typing.SupportsInt = 360,
+               selected_object: PhysicalObject | None = None,
+               **camera_config: typing.Unpack[CameraConfig]) -> Image:
 
-        im = self.draw(world, camera_reset, camera_position, camera_altitude,
-                       camera_yaw, camera_pitch, camera_is_ortho, walls_height,
-                       width, height)
+        im = self.draw(world, walls_height, width, height, selected_object,
+                       **camera_config)
         return to_numpy_image(im)
 
     def save_image(self,
                    world: World,
                    path: str,
-                   camera_reset: bool = False,
-                   camera_position: VectorLike = (0, 0),
-                   camera_altitude: typing.SupportsFloat = 0,
-                   camera_yaw: typing.SupportsFloat = 0,
-                   camera_pitch: typing.SupportsFloat = 0,
-                   camera_is_ortho: bool = False,
                    walls_height: typing.SupportsFloat = 10,
                    width: typing.SupportsInt = 640,
-                   height: typing.SupportsInt = 360) -> None:
-        im = self.draw(world, camera_reset, camera_position, camera_altitude,
-                       camera_yaw, camera_pitch, camera_is_ortho, walls_height,
-                       width, height)
+                   height: typing.SupportsInt = 360,
+                   selected_object: PhysicalObject | None = None,
+                   **camera_config: typing.Unpack[CameraConfig]) -> None:
+        im = self.draw(world, walls_height, width, height, selected_object,
+                       **camera_config)
         im.save(path)
+
+    def get_position_of_pixel(self, pixel: tuple[int, int]) -> Vector3 | None:
+        assert self.size
+        with self.bind():
+            return _get_position_of_pixel(pixel, *self.size, self.camera)
 
 
 _renderers: weakref.WeakKeyDictionary[
@@ -140,32 +155,25 @@ def get_renderer() -> OffScreenRenderer:
 
 
 def render(world: World,
-           camera_reset: bool = False,
-           camera_position: VectorLike = (0, 0),
-           camera_altitude: typing.SupportsFloat = 0,
-           camera_yaw: typing.SupportsFloat = 0,
-           camera_pitch: typing.SupportsFloat = 0,
-           camera_is_ortho: bool = False,
            walls_height: typing.SupportsFloat = 10,
            width: typing.SupportsInt = 640,
-           height: typing.SupportsInt = 360) -> Image:
-    return get_renderer().render(world, camera_reset, camera_position,
-                                 camera_altitude, camera_yaw, camera_pitch,
-                                 camera_is_ortho, walls_height, width, height)
+           height: typing.SupportsInt = 360,
+           selected_object: PhysicalObject | None = None,
+           **camera_config: typing.Unpack[CameraConfig]) -> Image:
+    return get_renderer().render(world, walls_height, width, height,
+                                 selected_object, **camera_config)
 
 
 def save_image(world: World,
                path: str,
-               camera_reset: bool = False,
-               camera_position: VectorLike = (0, 0),
-               camera_altitude: typing.SupportsFloat = 0,
-               camera_yaw: typing.SupportsFloat = 0,
-               camera_pitch: typing.SupportsFloat = 0,
-               camera_is_ortho: bool = False,
                walls_height: typing.SupportsFloat = 10,
                width: typing.SupportsInt = 640,
-               height: typing.SupportsInt = 360) -> None:
-    return get_renderer().save_image(world, path, camera_reset,
-                                     camera_position, camera_altitude,
-                                     camera_yaw, camera_pitch, camera_is_ortho,
-                                     walls_height, width, height)
+               height: typing.SupportsInt = 360,
+               selected_object: PhysicalObject | None = None,
+               **camera_config: typing.Unpack[CameraConfig]) -> None:
+    return get_renderer().save_image(world, path, walls_height, width, height,
+                                     selected_object, **camera_config)
+
+
+def get_position_of_pixel(pixel: tuple[int, int]) -> Vector3 | None:
+    return get_renderer().get_position_of_pixel(pixel)

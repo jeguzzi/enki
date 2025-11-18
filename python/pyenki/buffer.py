@@ -2,19 +2,24 @@ from __future__ import annotations
 
 import asyncio
 import time
+import typing
 from collections.abc import Collection
 from typing import Any
 
 import jupyter_rfb  # type: ignore[import-untyped]
-import numpy
+import numpy as np
 import numpy.typing
 
 import pyenki
 from pyenki.viewer import render
+from pyenki.viewer.camera import CameraConfig, HasCamera
+from pyenki.viewer.offscreen_renderer import get_position_of_pixel
+from pyenki.viewer.utils import get_object_at
 
 
-class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer  # type: ignore[misc]
-                            ):
+class EnkiRemoteFrameBuffer(
+        jupyter_rfb.RemoteFrameBuffer,  # type: ignore[misc]
+        HasCamera):
     """
     Renders a world in a jupyter notebook by calling :py:func:`pyenki.viewer.render`.
 
@@ -41,12 +46,7 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer  # type: ignore[misc]
 
     def __init__(self,
                  world: pyenki.World | None = None,
-                 camera_position: pyenki.Vector = numpy.zeros(2),
-                 camera_altitude: float = 30,
-                 camera_yaw: float = 0,
-                 camera_pitch: float = -numpy.pi / 2,
-                 camera_is_ortho: bool = False):
-
+                 **camera_config: typing.Unpack[CameraConfig]):
         """
         Constructs a new instance.
 
@@ -57,36 +57,18 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer  # type: ignore[misc]
         :param      camera_pitch:     The camera pitch
         :param      camera_is_ortho:  Whether the camera uses an orthographic projection
         """
-        super().__init__(resizable=True)
-        self._camera_position: numpy.typing.NDArray[
-            numpy.float64] = numpy.array([*camera_position, camera_altitude],
-                                         dtype=numpy.float64)
-        self.camera_yaw = camera_yaw
-        self.camera_pitch = camera_pitch
-        self.camera_is_ortho = camera_is_ortho
+        # super().__init__(resizable=True)
+        jupyter_rfb.RemoteFrameBuffer.__init__(self, resizable=True)
+        HasCamera.__init__(self, world=world, **camera_config)
         self.world = world
         self._p: tuple[float, float] | None = None
-
-    @property
-    def camera_position(self) -> pyenki.Vector:
-        return self._camera_position[:2]
-
-    @camera_position.setter
-    def camera_position(self, value: pyenki.Vector) -> None:
-        self._camera_position[:2] = value
-
-    @property
-    def camera_altitude(self) -> float:
-        return float(self._camera_position[2])
-
-    @camera_altitude.setter
-    def camera_altitude(self, value: float) -> None:
-        self._camera_position[2] = value
+        self.selected_object: pyenki.PhysicalObject | None = None
+        self.size: tuple[int, int, int] = (0, 0, 1)
 
     async def run_async(
         self,
         time_step: float,
-        duration: float,
+        duration: float = -1,
         factor: float = 1,
         synch: Collection[EnkiRemoteFrameBuffer] = tuple()
     ) -> None:
@@ -101,17 +83,19 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer  # type: ignore[misc]
         """
         if not self.world:
             return
-        for _ in range(int(duration / time_step)):
+        t = 0.0
+        while duration <= 0 or t < duration:
             self.world.step(time_step)
             self.request_draw()
             for r in synch:
                 r.request_draw()
             await asyncio.sleep(time_step / factor)
+            t += time_step
 
     def run(
         self,
         time_step: float,
-        duration: float,
+        duration: float = -1,
         factor: float = 1,
         synch: Collection[EnkiRemoteFrameBuffer] = tuple()
     ) -> None:
@@ -126,12 +110,14 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer  # type: ignore[misc]
         """
         if not self.world:
             return
-        for _ in range(int(duration / time_step)):
+        t = 0.0
+        while duration <= 0 or t < duration:
             self.world.step(time_step)
             self.request_draw_sync()
             for r in synch:
                 r.request_draw_sync()
             time.sleep(time_step / factor)
+            t += time_step
 
     async def tick_async(self, fps: float) -> None:
         """
@@ -157,104 +143,88 @@ class EnkiRemoteFrameBuffer(jupyter_rfb.RemoteFrameBuffer  # type: ignore[misc]
             self._rfb_cancel_lossless_draw()
             self._rfb_maybe_draw()
 
-    def move_camera(self,
-                    target_position: pyenki.Vector,
-                    target_altitude: float = 0,
-                    target_distance: float = 100,
-                    camera_yaw: float | None = None,
-                    camera_pitch: float | None = None) -> None:
-        """
-        Move the camera so to point towards the target.
-        Same interface as :py:meth:`pyenki.WorldView.move_camera`.
+    def width(self) -> int:
+        return self.size[0]
 
-        :param      target_position:  The target horizontal position in cm.
-        :param      target_altitude:  The target vertical position in cm.
-        :param      target_distance:  The distance to the target.
-        :param      camera_yaw:       Optionally sets the camera yaw.
-        :param      camera_pitch:     Optionally sets the camera pitch.
-        """
-        if camera_yaw is not None:
-            self.camera_yaw = camera_yaw
-        if self.camera_is_ortho:
-            self._camera_position = numpy.array(
-                [*target_position, target_altitude + target_distance],
-                dtype=numpy.float64)
-        else:
-            if camera_pitch is not None:
-                self.camera_pitch = camera_pitch
-            e = numpy.array(
-                (numpy.cos(self.camera_yaw) * numpy.cos(self.camera_pitch),
-                 numpy.sin(self.camera_yaw) * numpy.cos(self.camera_pitch),
-                 numpy.sin(self.camera_pitch)))
-            p = numpy.array([*target_position, target_altitude],
-                            dtype=numpy.float64)
-            self._camera_position = p - target_distance * e
-        self.request_draw()
-
-    def point_camera(self,
-                     target_position: pyenki.Vector,
-                     target_altitude: float = 0,
-                     position: pyenki.Vector | None = None,
-                     altitude: float | None = None) -> None:
-        """
-        Rotate the camera so to point towards the target.
-        Same interface as :py:meth:`pyenki.WorldView.point_camera`.
-
-        :param      target_position:  The target horizontal position in cm.
-        :param      target_altitude:  The target vertical position in cm.
-        :param      position:       Optionally sets the camera position.
-        :param      altitude:     Optionally sets the camera altitude.
-        """
-        if not self.camera_is_ortho:
-            if position is not None:
-                self.camera_position = position
-            if altitude is not None:
-                self.camera_altitude = altitude
-            dp = numpy.array([*target_position, target_altitude],
-                             dtype=numpy.float64) - self._camera_position
-            self.camera_yaw = numpy.arctan2(dp[1], dp[0])
-            self.camera_pitch = numpy.arctan2(dp[2], numpy.linalg.norm(dp[:2]))
-            self.request_draw()
+    def height(self) -> int:
+        return self.size[1]
 
     def handle_event(self, event: dict[str, Any]) -> None:
         event_type = event.get("event_type", None)
         if event_type == "close":
             print('closing')
         if event_type == "resize":
-            self.size = event["width"], event["height"], event["pixel_ratio"]
+            self.size = int(event["width"]), int(event["height"]), int(event["pixel_ratio"])
+            w, h, _ = self.size
+            self.camera.set_viewport(int(w), int(h))
         elif event_type == "pointer_down" and event["button"] == 1:
             self._p = event["x"], event["y"]
-            self.request_draw()
+            if self.world:
+                x = int(event["x"]) * self.size[2]
+                y = int(event["y"]) * self.size[2]
+                p = get_position_of_pixel((x, y))
+                if p is not None:
+                    print(p)
+                    obj = get_object_at(self.world, p[:2], tolerance=0.2)
+                    if obj:
+                        self.selected_object = obj
+                        self.request_draw()
         elif event_type == "pointer_up":
             self._p = None
+            self.selected_object = None
             self.request_draw()
         elif event_type == "wheel":
             delta = event["dy"] / self.size[1] * 6
-            e = numpy.array(
-                (numpy.cos(self.camera_yaw) * numpy.cos(self.camera_pitch),
-                 numpy.sin(self.camera_yaw) * numpy.cos(self.camera_pitch),
-                 numpy.sin(self.camera_pitch))) * delta
-            self._camera_position -= e
+            e = self.camera.forward * delta
+            self.camera.position -= e
             self.request_draw()
         elif event_type == "pointer_move" and self._p is not None:
             dx = event["x"] - self._p[0]
             dy = event["y"] - self._p[1]
-            self.camera_yaw += dx / self.size[0] * 3
-            self.camera_pitch += dy / self.size[1] * 3
             self._p = (event["x"], event["y"])
+            if self.selected_object:
+                if 'Control' in event['modifiers']:
+                    sensitivity = 10 / (1 + self.size[0])
+                    self.selected_object.angle -= sensitivity * dx
+                else:
+                    x = int(event["x"]) * self.size[2]
+                    y = int(event["y"]) * self.size[2]
+                    p = get_position_of_pixel((x, y))
+                    if p is not None:
+                        self.selected_object.position = p[:2]
+                        self.selected_object.velocity = (0, 0)
+                        self.selected_object.angular_speed = 0
+            else:
+                if 'Shift' in event['modifiers']:
+                    sensitivity = -(1 + 0.1 * self.camera_altitude) * 0.1
+                    self.camera.position += sensitivity * dy * self.camera.forward
+                elif 'Control' not in event['modifiers']:
+                    sensibility = 20.0 + 2. * self.camera_altitude
+                    size_factor = 1.0 + (self.size[0] + self.size[1]) / 2
+                    self.camera.position -= sensibility * (
+                        dx * self.camera.left +
+                        dy * self.camera.up) / size_factor
+                else:
+                    sensitivity = 4.0
+                    self.camera_yaw -= sensitivity * dx / (1 + self.size[0])
+                    delta = 0.01
+                    self.camera_pitch = np.clip(
+                        self.camera_pitch - sensitivity * dy /
+                        (1 + self.size[1]), -np.pi / 2 + delta,
+                        np.pi / 2 - delta)
+
+                    # self.camera_yaw += dx / self.size[0] * 3
+                    # self.camera_pitch += dy / self.size[1] * 3
+
             self.request_draw()
 
-    def get_frame(self) -> numpy.typing.NDArray[numpy.uint8]:
+    def get_frame(self) -> numpy.typing.NDArray[np.uint8]:
         assert self.world
 
-        image = render(
-            self.world,
-            camera_position=self.camera_position,
-            camera_altitude=self.camera_altitude,
-            camera_yaw=self.camera_yaw,
-            camera_pitch=self.camera_pitch,
-            camera_is_ortho=self.camera_is_ortho,
-            width=int(self.size[0] * self.size[2]),
-            height=int(self.size[1] * self.size[2]))
+        image = render(self.world,
+                       width=self.size[0] * self.size[2],
+                       height=self.size[1] * self.size[2],
+                       selected_object=self.selected_object,
+                       **self.camera_config)
         self._last_image = image
         return image

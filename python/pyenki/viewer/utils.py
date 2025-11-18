@@ -5,14 +5,12 @@ import numpy.typing
 from OpenGL import GL  # type: ignore[import-untyped]
 from PySide6.QtCore import QCoreApplication, QEventLoop, Qt, QTimer
 from PySide6.QtGui import (QImage, QOpenGLContext, QOpenGLFunctions,
-                           QSurfaceFormat)
+                           QSurfaceFormat, QVector4D)
 from PySide6.QtWidgets import QApplication
 
-from .. import Image, VectorLike
+from .. import Image, PhysicalObject, VectorLike, World
+from .camera import Camera, Vector3
 from .renderer import Renderer
-
-Vector3: typing.TypeAlias = typing.Annotated[np.typing.NDArray[np.float64],
-                                             '[3, 1]']
 
 
 def init(share: bool = True) -> None:
@@ -42,15 +40,12 @@ def cleanup() -> None:
     Renderer.cleanup()
 
 
-def to_3d(xy: VectorLike, z: typing.SupportsFloat) -> Vector3:
-    return np.concatenate([np.asarray(xy), [float(z)]])
-
-
 def to_numpy_image(image: QImage) -> Image:
     image = image.convertToFormat(QImage.Format.Format_RGB888)
     buffer = image.bits()
     shape = (image.height(), image.width(), 3)
     return np.copy(np.frombuffer(buffer, np.uint8).reshape(shape))
+
 
 def setup_context() -> None:
     fmt = QSurfaceFormat()
@@ -71,3 +66,46 @@ Shader Version: {f.glGetString(GL.GL_SHADING_LANGUAGE_VERSION)}
 
 def functions() -> QOpenGLFunctions:
     return QOpenGLContext.currentContext().functions()
+
+
+def get_object_at(world: World,
+                  position: VectorLike,
+                  tolerance: float = 0) -> PhysicalObject | None:
+    position = np.asarray(position)
+    for obj in world.objects:
+        if obj.contains(position, tolerance):
+            return obj
+    return None
+
+
+def get_position_of_pixel(pixel: tuple[int, int], width: int, height: int,
+                          camera: Camera) -> Vector3 | None:
+    depth = get_depth_of_pixel(pixel, width, height)
+    if depth is None:
+        return None
+    m = camera.projection * camera.matrix
+    m, _ = m.inverted()
+    x = (pixel[0] - width * 0.5) / (width * 0.5)
+    y = (height - pixel[1] - height * 0.5) / (height * 0.5)
+    p = m.map(QVector4D(x, y, 2 * depth - 1, 1))
+    if p.w():
+        return np.array((p.x(), p.y(), p.z())) / p.w()
+    return None
+
+
+def get_depth_of_pixel(pixel: tuple[int, int], width: int,
+                       height: int) -> float | None:
+    f = functions()
+    data = np.zeros(1, np.float32)
+    if pixel[0] < width and pixel[1] < height:
+        f.glReadPixels(
+            pixel[0],
+            height - pixel[1],
+            1,
+            1,
+            GL.GL_DEPTH_COMPONENT,
+            GL.GL_FLOAT,
+            data.data  # type: ignore
+        )
+        return float(data[0])
+    return None

@@ -8,7 +8,7 @@ from collections.abc import Callable
 
 import numpy as np
 
-from .. import Image, Vector, VectorLike, World
+from .. import PhysicalObject, Image, Vector, VectorLike, World
 
 
 class WorldViewProtocol(typing.Protocol):
@@ -22,13 +22,13 @@ class WorldViewProtocol(typing.Protocol):
                  time_step: typing.SupportsFloat = 0.0,
                  factor: typing.SupportsFloat = 1.0,
                  helpers: bool = True,
+                 walls_height: typing.SupportsFloat = 10.0,
                  camera_reset: bool = False,
                  camera_position: VectorLike = np.zeros(2),
                  camera_altitude: typing.SupportsFloat = 0.0,
                  camera_yaw: typing.SupportsFloat = 0.0,
                  camera_pitch: typing.SupportsFloat = 0.0,
-                 camera_is_ortho: bool = False,
-                 walls_height: typing.SupportsFloat = 10.0) -> None:
+                 camera_is_ortho: bool = False) -> None:
         ...
 
     @property
@@ -164,15 +164,16 @@ class RenderType(typing.Protocol):
     def __call__(self,
                  /,
                  world: World,
-                 camera_reset: bool = False,
+                 walls_height: typing.SupportsFloat = 10,
+                 width: typing.SupportsInt = 640,
+                 height: typing.SupportsInt = 360,
+                 selected_object: PhysicalObject | None = None,
                  camera_position: VectorLike = (0, 0),
                  camera_altitude: typing.SupportsFloat = 0,
                  camera_yaw: typing.SupportsFloat = 0,
                  camera_pitch: typing.SupportsFloat = 0,
                  camera_is_ortho: bool = False,
-                 walls_height: typing.SupportsFloat = 10,
-                 width: typing.SupportsInt = 640,
-                 height: typing.SupportsInt = 360) -> Image:
+                 camera_reset: bool = False) -> Image:
         ...
 
 
@@ -182,15 +183,16 @@ class SaveImageType(typing.Protocol):
                  world: World,
                  path: str,
                  /,
-                 camera_reset: bool = False,
+                 walls_height: typing.SupportsFloat = 10,
+                 width: typing.SupportsInt = 640,
+                 height: typing.SupportsInt = 360,
+                 selected_object: PhysicalObject | None = None,
                  camera_position: VectorLike = (0, 0),
                  camera_altitude: typing.SupportsFloat = 0,
                  camera_yaw: typing.SupportsFloat = 0,
                  camera_pitch: typing.SupportsFloat = 0,
                  camera_is_ortho: bool = False,
-                 walls_height: typing.SupportsFloat = 10,
-                 width: typing.SupportsInt = 640,
-                 height: typing.SupportsInt = 360) -> None:
+                 camera_reset: bool = False) -> None:
         ...
 
 
@@ -203,16 +205,15 @@ class RunInViewerType(typing.Protocol):
                  time_step: typing.SupportsFloat = 0,
                  factor: typing.SupportsFloat = 1,
                  helpers: bool = True,
-                 camera_reset: bool = False,
+                 walls_height: typing.SupportsFloat = 10,
+                 duration: typing.SupportsFloat = -1,
                  camera_position: VectorLike = (0, 0),
                  camera_altitude: typing.SupportsFloat = 0,
                  camera_yaw: typing.SupportsFloat = 0,
                  camera_pitch: typing.SupportsFloat = 0,
                  camera_is_ortho: bool = False,
-                 walls_height: typing.SupportsFloat = 10,
-                 duration: typing.SupportsFloat = -1) -> None:
+                 camera_reset: bool = False) -> None:
         ...
-
 
 _use_native_viewer: bool | None = None
 WorldView: type[WorldViewProtocol]
@@ -324,9 +325,9 @@ def use_native_viewer(value: bool) -> None:
             init = utils.init
             run = utils.run
             cleanup = utils.cleanup
-            save_image = offscreen_renderer.save_image
-            run_in_viewer = widget.run_in_viewer
-            render = offscreen_renderer.render
+            save_image = offscreen_renderer.save_image  # type: ignore[assignment]
+            run_in_viewer = widget.run_in_viewer  # type: ignore[assignment]
+            render = offscreen_renderer.render  # type: ignore[assignment]
 
         patch_world()
 

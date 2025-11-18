@@ -2,17 +2,17 @@ import typing
 
 import numpy as np
 from PySide6.QtCore import QEvent, QPointF, QSize, Qt, Slot
-from PySide6.QtGui import QHideEvent, QImage, QMouseEvent, QWheelEvent
+from PySide6.QtGui import QCursor, QHideEvent, QImage, QMouseEvent, QWheelEvent
 from PySide6.QtOpenGLWidgets import QOpenGLWidget
 from PySide6.QtWidgets import QWidget
 
-from .. import Image, Vector, VectorLike, World
-from .camera import Camera
+from .. import Image, PhysicalObject, World
+from .camera import CameraConfig, HasCamera, Vector3
 from .renderer import Renderer
-from .utils import init, run, to_3d
+from .utils import get_object_at, get_position_of_pixel, init, run
 
 
-class WorldView(QOpenGLWidget):
+class WorldView(QOpenGLWidget, HasCamera):
 
     def __init__(self,
                  parent: QWidget | None = None,
@@ -23,24 +23,12 @@ class WorldView(QOpenGLWidget):
                  time_step: typing.SupportsFloat = 0.0,
                  factor: typing.SupportsFloat = 1.0,
                  helpers: bool = True,
-                 camera_reset: bool = False,
-                 camera_position: VectorLike = np.zeros(2),
-                 camera_altitude: typing.SupportsFloat = 0.0,
-                 camera_yaw: typing.SupportsFloat = 0.0,
-                 camera_pitch: typing.SupportsFloat = 0.0,
-                 camera_is_ortho: bool = False,
-                 walls_height: typing.SupportsFloat = 10.0) -> None:
+                 walls_height: typing.SupportsFloat = 10.0,
+                 **camera_config: typing.Unpack[CameraConfig]) -> None:
         QOpenGLWidget.__init__(self, parent)
-        self._last_pos = QPointF()
         self._world = world
-        self.camera = Camera()
-        self.camera.is_ortho = camera_is_ortho
-        if camera_reset:
-            self.camera.reset(world)
-        else:
-            self.camera.position = to_3d(camera_position, camera_altitude)
-            self.camera_yaw = camera_yaw
-            self.camera_pitch = camera_pitch
+        HasCamera.__init__(self, world=world, **camera_config)
+        self._last_pos = QPointF()
         self._update_world = update_world
         self._factor = float(factor)
         self.renderer: Renderer | None = None
@@ -51,96 +39,16 @@ class WorldView(QOpenGLWidget):
         self._world_time_step = 0.0
         self._timer_period = 0.0
         self._rt_factor = 1.0
+        self.callback = None
+        self.selected_object: PhysicalObject | None = None
+        self.pointed_object: PhysicalObject | None = None
+        self.cursor_position: Vector3 | None = None
         fps = float(fps)
         if fps > 0:
             self._timer_period = 1.0 / fps
             self.startTimer(int(self._timer_period * 1e3))
         if update_world:
             self.start_updating_world(time_step, factor)
-
-    @property
-    def camera_altitude(self) -> float:
-        return float(self.camera.position[2])
-
-    @camera_altitude.setter
-    def camera_altitude(self, value: typing.SupportsFloat) -> None:
-        self.camera.position[2] = float(value)
-
-    @property
-    def camera_is_ortho(self) -> bool:
-        return self.camera.is_ortho
-
-    @camera_is_ortho.setter
-    def camera_is_ortho(self, value: bool) -> None:
-        self.camera.is_ortho = True
-
-    @property
-    def camera_pitch(self) -> float:
-        return self.camera.pitch
-
-    @camera_pitch.setter
-    def camera_pitch(self, value: typing.SupportsFloat) -> None:
-        if not self.camera.is_ortho:
-            self.camera.pitch = float(value)
-
-    @property
-    def camera_yaw(self) -> float:
-        return self.camera.yaw
-
-    @camera_yaw.setter
-    def camera_yaw(self, value: typing.SupportsFloat) -> None:
-        self.camera.user_yaw = self.camera.yaw = float(value)
-
-    @property
-    def camera_pose(self) -> tuple[Vector, float, float, float]:
-        return (self.camera.position[:2], self.camera.position[2],
-                self.camera.yaw, self.camera.pitch)
-
-    @camera_pose.setter
-    def camera_pose(
-        self, value: tuple[VectorLike, typing.SupportsFloat,
-                           typing.SupportsFloat, typing.SupportsFloat]
-    ) -> None:
-        self.camera.position = to_3d(*value[:2])
-        self.camera_yaw = value[2]
-        self.camera.pitch = float(value[3])
-
-    @property
-    def camera_position(self) -> Vector:
-        return self.camera.position[:2]
-
-    @camera_position.setter
-    def camera_position(self, value: VectorLike) -> None:
-        self.camera.position[:2] = np.asarray(value)
-
-    def move_camera(self,
-                    target_position: VectorLike,
-                    target_altitude: typing.SupportsFloat = 0.0,
-                    target_distance: typing.SupportsFloat = 30.0,
-                    yaw: typing.SupportsFloat | None = None,
-                    pitch: typing.SupportsFloat | None = None) -> None:
-        if yaw is not None:
-            self.camera_yaw = yaw
-        if pitch is not None:
-            self.camera_pitch = pitch
-        self.camera.move(to_3d(target_position, target_altitude),
-                         float(target_distance))
-
-    def point_camera(self,
-                     target_position: VectorLike,
-                     target_altitude: typing.SupportsFloat = 0.0,
-                     position: VectorLike | None = None,
-                     altitude: typing.SupportsFloat | None = None) -> None:
-        if self.camera.is_ortho:
-            return
-        if position is not None:
-            self.camera.position[:2] = np.asarray(position)
-        if altitude is not None:
-            self.camera.position[2] = float(altitude)
-        self.camera.point(to_3d(target_position, target_altitude))
-
-    def reset_camera(self) -> None:
-        self.camera.reset(self.world)
 
     def save_image(self, path: str) -> None:
         fb = self.grabFramebuffer()
@@ -214,9 +122,14 @@ class WorldView(QOpenGLWidget):
     def paintGL(self) -> None:
         if self.world and self.renderer:
             self.renderer.draw(self.world, self.walls_height,
-                               self.camera.matrix, self.camera.projection)
+                               self.camera.matrix, self.camera.projection,
+                               self.selected_object)
+            self.update_cursor()
+            if self.callback:
+                self.callback(self)
 
     def resizeGL(self, width: int, height: int) -> None:
+        # print("resizeGL", width, height)
         self.camera.set_viewport(width, height)
 
     def hideEvent(self, event: QHideEvent) -> None:
@@ -225,11 +138,30 @@ class WorldView(QOpenGLWidget):
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
         self._last_pos = event.position()
+        if not self.selected_object:
+            self.selected_object = self.pointed_object
+
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
+        self.selected_object = None
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         pos = event.position()
         dx = pos.x() - self._last_pos.x()
         dy = pos.y() - self._last_pos.y()
+        self._last_pos = pos
+
+        if self.selected_object:
+            if event.buttons() & Qt.MouseButton.RightButton:
+                sensitivity = 10 / (1 + self.width())
+                self.selected_object.angle -= sensitivity * dx
+                return
+            p = self.cursor_position
+            if (event.buttons() & Qt.MouseButton.LeftButton) and p is not None:
+                self.selected_object.position = p[:2]
+                self.selected_object.velocity = (0, 0)
+                self.selected_object.angular_speed = 0
+                return
+
         if event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
             sensitivity = -(1 + 0.1 * self.camera_altitude) * 0.1
             self.camera.position += sensitivity * dy * self.camera.forward
@@ -245,8 +177,6 @@ class WorldView(QOpenGLWidget):
             self.camera_pitch = np.clip(
                 self.camera_pitch - sensitivity * dy / (1 + self.height()),
                 -np.pi / 2 + delta, np.pi / 2 - delta)
-
-        self._last_pos = pos
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         delta = event.angleDelta().y()
@@ -269,6 +199,34 @@ class WorldView(QOpenGLWidget):
         raise RuntimeError(
             "Cannot convert PySide6.QOpenGLWidget to PyQt6.QOpenGLWidget")
 
+    def get_cursor_position(self) -> Vector3 | None:
+        p = self.mapFromGlobal(QCursor.pos())
+        if not self.rect().contains(p, True):
+            return None
+        r = int(self.devicePixelRatio())
+        return get_position_of_pixel((r * p.x(), r * p.y()),
+                                     width=int(self.width() * r),
+                                     height=int(self.height() * r),
+                                     camera=self.camera)
+
+    def get_object_at_cursor(self,
+                             tolerance: float = 0.2) -> PhysicalObject | None:
+        if self.world:
+            p = self.get_cursor_position()
+            if p is not None:
+                return get_object_at(self.world, p[:2], tolerance=tolerance)
+        return None
+
+    def update_cursor(self, tolerance: float = 2) -> None:
+        self.pointed_object = None
+        self.cursor_position = None
+        if self.world:
+            self.cursor_position = self.get_cursor_position()
+            if self.cursor_position is not None:
+                self.pointed_object = get_object_at(self.world,
+                                                    self.cursor_position[:2],
+                                                    tolerance=tolerance)
+
 
 def run_in_viewer(self: World,
                   /,
@@ -276,14 +234,9 @@ def run_in_viewer(self: World,
                   time_step: typing.SupportsFloat = 0,
                   factor: typing.SupportsFloat = 1,
                   helpers: bool = True,
-                  camera_reset: bool = False,
-                  camera_position: VectorLike = (0, 0),
-                  camera_altitude: typing.SupportsFloat = 0,
-                  camera_yaw: typing.SupportsFloat = 0,
-                  camera_pitch: typing.SupportsFloat = 0,
-                  camera_is_ortho: bool = False,
                   walls_height: typing.SupportsFloat = 10,
-                  duration: typing.SupportsFloat = -1) -> None:
+                  duration: typing.SupportsFloat = -1,
+                  **camera_config: typing.Unpack[CameraConfig]) -> None:
     init()
     viewer = WorldView(world=self,
                        fps=fps,
@@ -291,13 +244,8 @@ def run_in_viewer(self: World,
                        time_step=time_step,
                        factor=factor,
                        helpers=helpers,
-                       camera_reset=camera_reset,
-                       camera_position=camera_position,
-                       camera_altitude=camera_altitude,
-                       camera_yaw=camera_yaw,
-                       camera_pitch=camera_pitch,
-                       camera_is_ortho=camera_is_ortho,
-                       walls_height=walls_height)
+                       walls_height=walls_height,
+                       **camera_config)
     viewer.setWindowTitle("PyEnki Viewer")
     viewer.show()
     run(float(duration) / float(factor))

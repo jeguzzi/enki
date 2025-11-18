@@ -17,6 +17,7 @@ from .thymio2_model import Thymio2Model
 from .utils import (forward_color, forward_transform, load_program,
                     setup_program, switch_context)
 from .world_model import WorldModel
+from .selection_model import SelectionModel
 
 
 class Model(Protocol):
@@ -86,6 +87,7 @@ class Renderer(QOpenGLFunctions):
         }
         self.world_model = WorldModel()
         self.object_model = ObjectModel()
+        self.selection_model = SelectionModel()
 
     # def try_to_destroy(self, context: QOpenGLContext | None) -> None:
     #     try:
@@ -152,13 +154,18 @@ class Renderer(QOpenGLFunctions):
             self.robot_models.clear()
             self.object_model.destroy()
             self.world_model.destroy()
+            self.selection_model.destroy()
             if self._program:
                 del self._program
             self._program = None
             self._initialized = False
 
-    def draw(self, world: World, wall_height: float, camera: QMatrix4x4,
-             proj: QMatrix4x4) -> None:
+    def draw(self,
+             world: World,
+             wall_height: float,
+             camera: QMatrix4x4,
+             proj: QMatrix4x4,
+             selected_object: PhysicalObject | None = None) -> None:
         if not self._initialized:
             self.init()
         assert self._program
@@ -187,7 +194,12 @@ class Renderer(QOpenGLFunctions):
                            program=self._program,
                            projection=proj,
                            ctx=self._shared_context)
-
-        log = self._program.log()
-        if log:
-            print(log)
+        if selected_object:
+            self.selection_model.draw(selected_object,
+                                      camera=camera,
+                                      program=self._program,
+                                      projection=proj,
+                                      ctx=self._shared_context)
+        # log = self._program.log()
+        # if log:
+        #     print(log)
