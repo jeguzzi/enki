@@ -12,6 +12,8 @@ from .. import Image, PhysicalObject, VectorLike, World
 from .camera import Camera, Vector3
 from .renderer import Renderer
 
+Pixel = tuple[int, int]
+
 
 def init(share: bool = True) -> None:
     if not QApplication.instanceExists():
@@ -78,7 +80,7 @@ def get_object_at(world: World,
     return None
 
 
-def get_position_of_pixel(pixel: tuple[int, int], width: int, height: int,
+def get_position_of_pixel(pixel: Pixel, width: int, height: int,
                           camera: Camera) -> Vector3 | None:
     depth = get_depth_of_pixel(pixel, width, height)
     if depth is None:
@@ -93,8 +95,7 @@ def get_position_of_pixel(pixel: tuple[int, int], width: int, height: int,
     return None
 
 
-def get_depth_of_pixel(pixel: tuple[int, int], width: int,
-                       height: int) -> float | None:
+def get_depth_of_pixel(pixel: Pixel, width: int, height: int) -> float | None:
     f = functions()
     data = np.zeros(1, np.float32)
     if pixel[0] < width and pixel[1] < height:

@@ -1,15 +1,16 @@
 import typing
 
 import numpy as np
-from PySide6.QtCore import QEvent, QPointF, QSize, Qt, Slot
-from PySide6.QtGui import QCursor, QHideEvent, QImage, QMouseEvent, QWheelEvent
+from PySide6.QtCore import QEvent, QSize, Qt, Slot
+from PySide6.QtGui import QHideEvent, QImage, QMouseEvent, QWheelEvent
 from PySide6.QtOpenGLWidgets import QOpenGLWidget
 from PySide6.QtWidgets import QWidget
 
-from .. import Image, PhysicalObject, World
+from .. import Image, World
 from .camera import CameraConfig, HasCamera, Vector3
 from .renderer import Renderer
-from .utils import get_object_at, get_position_of_pixel, init, run
+from .utils import get_position_of_pixel, init, run
+from .ui import UI, Pixel
 
 
 class WorldView(QOpenGLWidget, HasCamera):
@@ -28,7 +29,7 @@ class WorldView(QOpenGLWidget, HasCamera):
         QOpenGLWidget.__init__(self, parent)
         self._world = world
         HasCamera.__init__(self, world=world, **camera_config)
-        self._last_pos = QPointF()
+        self._ui = UI(self.camera)
         self._update_world = update_world
         self._factor = float(factor)
         self.renderer: Renderer | None = None
@@ -40,8 +41,6 @@ class WorldView(QOpenGLWidget, HasCamera):
         self._timer_period = 0.0
         self._rt_factor = 1.0
         self.callback = None
-        self.selected_object: PhysicalObject | None = None
-        self.pointed_object: PhysicalObject | None = None
         self.cursor_position: Vector3 | None = None
         fps = float(fps)
         if fps > 0:
@@ -123,66 +122,40 @@ class WorldView(QOpenGLWidget, HasCamera):
         if self.world and self.renderer:
             self.renderer.draw(self.world, self.walls_height,
                                self.camera.matrix, self.camera.projection,
-                               self.selected_object)
-            self.update_cursor()
+                               self._ui.selected_object)
             if self.callback:
                 self.callback(self)
 
     def resizeGL(self, width: int, height: int) -> None:
-        # print("resizeGL", width, height)
-        self.camera.set_viewport(width, height)
+        self._ui.on_resize(width, height)
 
     def hideEvent(self, event: QHideEvent) -> None:
         self.cleanup()
         super().hideEvent(event)
 
+    @staticmethod
+    def get_pixel(event: QMouseEvent) -> Pixel:
+        p = event.position()
+        return int(p.x()), int(p.y())
+
     def mousePressEvent(self, event: QMouseEvent) -> None:
-        self._last_pos = event.position()
-        if not self.selected_object:
-            self.selected_object = self.pointed_object
+        self._ui.on_mouse_press(self.get_pixel(event), self.world,
+                                self.get_position_of_pixel)
 
     def mouseReleaseEvent(self, event: QMouseEvent) -> None:
-        self.selected_object = None
+        self._ui.on_mouse_release()
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
-        pos = event.position()
-        dx = pos.x() - self._last_pos.x()
-        dy = pos.y() - self._last_pos.y()
-        self._last_pos = pos
-
-        if self.selected_object:
-            if event.buttons() & Qt.MouseButton.RightButton:
-                sensitivity = 10 / (1 + self.width())
-                self.selected_object.angle -= sensitivity * dx
-                return
-            p = self.cursor_position
-            if (event.buttons() & Qt.MouseButton.LeftButton) and p is not None:
-                self.selected_object.position = p[:2]
-                self.selected_object.velocity = (0, 0)
-                self.selected_object.angular_speed = 0
-                return
-
-        if event.modifiers() & Qt.KeyboardModifier.ShiftModifier:
-            sensitivity = -(1 + 0.1 * self.camera_altitude) * 0.1
-            self.camera.position += sensitivity * dy * self.camera.forward
-        elif event.buttons() & Qt.MouseButton.LeftButton:
-            sensibility = 20.0 + 2. * self.camera_altitude
-            size_factor = 1.0 + (self.width() + self.height()) / 2
-            self.camera.position -= sensibility * (
-                dx * self.camera.left + dy * self.camera.up) / size_factor
-        else:
-            sensitivity = 4.0
-            self.camera_yaw -= sensitivity * dx / (1 + self.width())
-            delta = 0.01
-            self.camera_pitch = np.clip(
-                self.camera_pitch - sensitivity * dy / (1 + self.height()),
-                -np.pi / 2 + delta, np.pi / 2 - delta)
+        self._ui.on_mouse_move(
+            self.get_pixel(event),
+            self.get_position_of_pixel,
+            left_button=bool(event.buttons() & Qt.MouseButton.LeftButton),
+            right_button=bool(event.buttons() & Qt.MouseButton.RightButton),
+            shift=bool(event.modifiers() & Qt.KeyboardModifier.ShiftModifier))
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         delta = event.angleDelta().y()
-        sensitivity = (1 + 0.1 * self.camera_altitude) * 0.003
-        self.camera.position += sensitivity * delta * self.camera.forward
-        self.camera.position[2] = max(0, self.camera.position[2])
+        self._ui.on_wheel(delta)
 
     def minimumSizeHint(self) -> QSize:
         return QSize(50, 50)
@@ -199,33 +172,20 @@ class WorldView(QOpenGLWidget, HasCamera):
         raise RuntimeError(
             "Cannot convert PySide6.QOpenGLWidget to PyQt6.QOpenGLWidget")
 
-    def get_cursor_position(self) -> Vector3 | None:
-        p = self.mapFromGlobal(QCursor.pos())
-        if not self.rect().contains(p, True):
-            return None
-        r = int(self.devicePixelRatio())
-        return get_position_of_pixel((r * p.x(), r * p.y()),
-                                     width=int(self.width() * r),
-                                     height=int(self.height() * r),
-                                     camera=self.camera)
-
-    def get_object_at_cursor(self,
-                             tolerance: float = 0.2) -> PhysicalObject | None:
+    def get_position_of_pixel(self, pixel: Pixel) -> Vector3 | None:
         if self.world:
-            p = self.get_cursor_position()
-            if p is not None:
-                return get_object_at(self.world, p[:2], tolerance=tolerance)
+            r = self.devicePixelRatio()
+            pixel = int(pixel[0] * r), int(pixel[1] * r)
+            width = int(self.width() * r)
+            height = int(self.height() * r)
+            self.makeCurrent()
+            p = get_position_of_pixel(pixel,
+                                      width=width,
+                                      height=height,
+                                      camera=self.camera)
+            self.doneCurrent()
+            return p
         return None
-
-    def update_cursor(self, tolerance: float = 2) -> None:
-        self.pointed_object = None
-        self.cursor_position = None
-        if self.world:
-            self.cursor_position = self.get_cursor_position()
-            if self.cursor_position is not None:
-                self.pointed_object = get_object_at(self.world,
-                                                    self.cursor_position[:2],
-                                                    tolerance=tolerance)
 
 
 def run_in_viewer(self: World,

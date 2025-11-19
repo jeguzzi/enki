@@ -12,9 +12,9 @@ import numpy.typing
 
 import pyenki
 from pyenki.viewer import render
-from pyenki.viewer.camera import CameraConfig, HasCamera
+from pyenki.viewer.camera import CameraConfig, HasCamera, Vector3
 from pyenki.viewer.offscreen_renderer import get_position_of_pixel
-from pyenki.viewer.utils import get_object_at
+from pyenki.viewer.ui import UI, Pixel
 
 
 class EnkiRemoteFrameBuffer(
@@ -61,8 +61,7 @@ class EnkiRemoteFrameBuffer(
         jupyter_rfb.RemoteFrameBuffer.__init__(self, resizable=True)
         HasCamera.__init__(self, world=world, **camera_config)
         self.world = world
-        self._p: tuple[float, float] | None = None
-        self.selected_object: pyenki.PhysicalObject | None = None
+        self._ui = UI(self.camera)
         self.size: tuple[int, int, int] = (0, 0, 1)
 
     async def run_async(
@@ -149,74 +148,47 @@ class EnkiRemoteFrameBuffer(
     def height(self) -> int:
         return self.size[1]
 
+    def get_pixel(self, event: dict[str, Any]) -> Pixel:
+        return int(event["x"]), int(event["y"])
+
+    def get_position_of_pixel(self, pixel: Pixel) -> Vector3 | None:
+        if self.world:
+            x = pixel[0] * self.size[2]
+            y = pixel[1] * self.size[2]
+            return get_position_of_pixel((x, y))
+        return None
+
     def handle_event(self, event: dict[str, Any]) -> None:
         event_type = event.get("event_type", None)
         if event_type == "close":
-            print('closing')
+            # print('closing')
+            pass
         if event_type == "resize":
-            self.size = int(event["width"]), int(event["height"]), int(event["pixel_ratio"])
+            self.size = int(event["width"]), int(event["height"]), int(
+                event["pixel_ratio"])
             w, h, _ = self.size
-            self.camera.set_viewport(int(w), int(h))
+            self._ui.on_resize(int(w), int(h))
         elif event_type == "pointer_down" and event["button"] == 1:
-            self._p = event["x"], event["y"]
-            if self.world:
-                x = int(event["x"]) * self.size[2]
-                y = int(event["y"]) * self.size[2]
-                p = get_position_of_pixel((x, y))
-                if p is not None:
-                    print(p)
-                    obj = get_object_at(self.world, p[:2], tolerance=0.2)
-                    if obj:
-                        self.selected_object = obj
-                        self.request_draw()
+            if self._ui.on_mouse_press(self.get_pixel(event), self.world,
+                                       self.get_position_of_pixel):
+                self.request_draw()
         elif event_type == "pointer_up":
-            self._p = None
-            self.selected_object = None
-            self.request_draw()
+            if self._ui.on_mouse_release():
+                self.request_draw()
         elif event_type == "wheel":
-            delta = event["dy"] / self.size[1] * 6
-            e = self.camera.forward * delta
-            self.camera.position -= e
-            self.request_draw()
-        elif event_type == "pointer_move" and self._p is not None:
-            dx = event["x"] - self._p[0]
-            dy = event["y"] - self._p[1]
-            self._p = (event["x"], event["y"])
-            if self.selected_object:
-                if 'Control' in event['modifiers']:
-                    sensitivity = 10 / (1 + self.size[0])
-                    self.selected_object.angle -= sensitivity * dx
-                else:
-                    x = int(event["x"]) * self.size[2]
-                    y = int(event["y"]) * self.size[2]
-                    p = get_position_of_pixel((x, y))
-                    if p is not None:
-                        self.selected_object.position = p[:2]
-                        self.selected_object.velocity = (0, 0)
-                        self.selected_object.angular_speed = 0
-            else:
-                if 'Shift' in event['modifiers']:
-                    sensitivity = -(1 + 0.1 * self.camera_altitude) * 0.1
-                    self.camera.position += sensitivity * dy * self.camera.forward
-                elif 'Control' not in event['modifiers']:
-                    sensibility = 20.0 + 2. * self.camera_altitude
-                    size_factor = 1.0 + (self.size[0] + self.size[1]) / 2
-                    self.camera.position -= sensibility * (
-                        dx * self.camera.left +
-                        dy * self.camera.up) / size_factor
-                else:
-                    sensitivity = 4.0
-                    self.camera_yaw -= sensitivity * dx / (1 + self.size[0])
-                    delta = 0.01
-                    self.camera_pitch = np.clip(
-                        self.camera_pitch - sensitivity * dy /
-                        (1 + self.size[1]), -np.pi / 2 + delta,
-                        np.pi / 2 - delta)
-
-                    # self.camera_yaw += dx / self.size[0] * 3
-                    # self.camera_pitch += dy / self.size[1] * 3
-
-            self.request_draw()
+            delta = -event["dy"] * 5
+            if self._ui.on_wheel(delta):
+                self.request_draw()
+        elif event_type == "pointer_move":
+            button = len(event['buttons']) > 0
+            right_button = button and 'Control' in event['modifiers']
+            left_button = not right_button and button
+            if self._ui.on_mouse_move(self.get_pixel(event),
+                                      self.get_position_of_pixel,
+                                      left_button=left_button,
+                                      right_button=right_button,
+                                      shift='Shift' in event['modifiers']):
+                self.request_draw()
 
     def get_frame(self) -> numpy.typing.NDArray[np.uint8]:
         assert self.world
@@ -224,7 +196,7 @@ class EnkiRemoteFrameBuffer(
         image = render(self.world,
                        width=self.size[0] * self.size[2],
                        height=self.size[1] * self.size[2],
-                       selected_object=self.selected_object,
+                       selected_object=self._ui.selected_object,
                        **self.camera_config)
         self._last_image = image
         return image
