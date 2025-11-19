@@ -5,9 +5,9 @@ import weakref
 from typing import Protocol, cast
 
 from OpenGL import GL  # type: ignore[import-untyped]
-from PySide6.QtGui import (QMatrix4x4, QOpenGLContext, QOpenGLContextGroup,
+from PySide6.QtGui import (QImage, QColor, QMatrix4x4, QOpenGLContext, QOpenGLContextGroup,
                            QOpenGLFunctions, QSurfaceFormat)
-from PySide6.QtOpenGL import QOpenGLShaderProgram
+from PySide6.QtOpenGL import QOpenGLShaderProgram, QOpenGLTexture
 
 from ... import Color, EPuck, Marxbot, PhysicalObject, Thymio2, World
 from .epuck_model import EPuckModel
@@ -88,6 +88,7 @@ class Renderer(QOpenGLFunctions):
         self.world_model = WorldModel()
         self.object_model = ObjectModel()
         self.selection_model = SelectionModel()
+        self.default_texture: QOpenGLTexture | None = None
 
     # def try_to_destroy(self, context: QOpenGLContext | None) -> None:
     #     try:
@@ -130,6 +131,9 @@ class Renderer(QOpenGLFunctions):
         assert self._program
         self._program.bind()
         # print(self._program.isLinked(), self._program.log())
+        i = QImage(1, 1, QImage.Format_RGB888)
+        i.fill(QColor(255, 255, 255, 255))
+        self.default_texture = QOpenGLTexture(i)
         self._initialized = True
 
     def remove_world(self, world: World) -> None:
@@ -145,12 +149,15 @@ class Renderer(QOpenGLFunctions):
             self.destroy(context.shareContext())
 
     def destroy(self, context: QOpenGLContext | None = None) -> None:
-        print('Renderer.destroy', self._initialized)
+        # print('Renderer.destroy', self._initialized)
         if not self._initialized:
             return
         with switch_context(context or self._shared_context or self._context):
             for model in self.robot_models.values():
                 model.destroy()
+            if self.default_texture:
+                self.default_texture.destroy()
+            self.default_texture = None
             self.robot_models.clear()
             self.object_model.destroy()
             self.world_model.destroy()
@@ -169,10 +176,12 @@ class Renderer(QOpenGLFunctions):
         if not self._initialized:
             self.init()
         assert self._program
+        assert self.default_texture
         self.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
         self.glEnable(GL.GL_DEPTH_TEST)
         self.glEnable(GL.GL_CULL_FACE)
         self._program.bind()
+        self.default_texture.bind()
         setup_program(proj, self._program)
         forward_color(Color(1, 1, 1, 1), self._program)
         forward_transform(camera, self._program)
