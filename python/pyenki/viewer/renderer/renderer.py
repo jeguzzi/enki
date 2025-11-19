@@ -131,7 +131,7 @@ class Renderer(QOpenGLFunctions):
         assert self._program
         self._program.bind()
         # print(self._program.isLinked(), self._program.log())
-        i = QImage(1, 1, QImage.Format_RGB888)
+        i = QImage(1, 1, QImage.Format.Format_RGB888)
         i.fill(QColor(255, 255, 255, 255))
         self.default_texture = QOpenGLTexture(i)
         self._initialized = True

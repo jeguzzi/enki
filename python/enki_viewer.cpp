@@ -52,6 +52,7 @@
 
 using namespace Enki;
 namespace py = pybind11;
+using namespace pybind11::literals;
 
 py::array get_rbg_array(const QImage &image) {
   const QImage fb = image.convertToFormat(QImage::Format_RGB888);
@@ -64,10 +65,10 @@ struct PythonViewer : public ViewerWidget {
 
   PythonViewer(PyWorld *world, double fps = 30, bool updateWorld = true,
                double worldTimeStep = 0, double realTimeFactor = 1,
-               bool helpers = true, bool camReset = false,
+               bool helpers = true, double wallsHeight_ = 10.0,
                Vector camPos = Vector(0.0, 0.0), double camAltitude = 0.0,
                double camYaw = 0.0, double camPitch = 0.0, bool ortho = false,
-               double wallsHeight_ = 10.0)
+               bool camReset = false)
       : ViewerWidget(world, nullptr, (fps > 0) ? int(1000 / fps) : 0,
                      updateWorld, worldTimeStep, realTimeFactor, helpers) {
     cameraIsOrtho = ortho;
@@ -85,12 +86,18 @@ struct PythonViewer : public ViewerWidget {
     setWindowTitle("PyEnki Viewer");
   }
 
+  void setSelectedObject(PhysicalObject *value) { selectedObject = value; }
+
   void timerEvent(QTimerEvent *event) {
     py::gil_scoped_acquire acquire;
     ViewerWidget::timerEvent(event);
   }
 
   py::array getImage() { return get_rbg_array(grabFramebuffer()); }
+
+  // void setWallsHeight(double value) { wallsHeight = value; }
+
+  double getWallsHeight() const { return wallsHeight; }
 
   Vector getCameraPosition() const {
     return Vector(camera.pos.x(), camera.pos.y());
@@ -101,9 +108,52 @@ struct PythonViewer : public ViewerWidget {
     camera.pos.setY(value.y);
   }
 
-  // void setWallsHeight(double value) { wallsHeight = value; }
+  double getCameraAltitude() const { return camera.altitude; }
 
-  double getWallsHeight() const { return wallsHeight; }
+  void setCameraAltitude(double value) { camera.altitude = value; }
+
+  double getCameraYaw() const { return camera.yaw; }
+
+  void setCameraYaw(double value) {
+    camera.yaw = value;
+    camera.userYaw = value;
+  }
+
+  double getCameraPitch() const { return camera.pitch; }
+
+  void setCameraPitch(double value) { camera.pitch = value; }
+
+  py::typing::Dict<py::str, py::object> getCameraConfig() const {
+    py::dict config("camera_position"_a = py::cast(getCameraPosition()),
+                    "camera_altitude"_a = py::cast(getCameraAltitude()),
+                    "camera_yaw"_a = py::cast(getCameraYaw()),
+                    "camera_pitch"_a = py::cast(getCameraPitch()),
+                    "camera_is_ortho"_a = py::cast(cameraIsOrtho));
+    return config;
+  }
+
+  void updateCameraConfig(const py::typing::Dict<py::str, py::object> &config) {
+    if (config.contains("camera_position")) {
+      setCameraPosition(config["camera_position"].cast<Vector>());
+    }
+    if (config.contains("camera_altitude")) {
+      setCameraAltitude(config["camera_altitude"].cast<double>());
+    }
+    if (config.contains("camera_yaw")) {
+      setCameraYaw(config["camera_yaw"].cast<double>());
+    }
+    if (config.contains("camera_pitch")) {
+      setCameraPitch(config["camera_pitch"].cast<double>());
+    }
+    if (config.contains("camera_is_ortho")) {
+      cameraIsOrtho = config["camera_is_ortho"].cast<bool>();
+    }
+    if (config.contains("camera_reset")) {
+      if (config["camera_reset"].cast<bool>()) {
+        resetCamera();
+      }
+    }
+  }
 
   void moveCamera(const Vector &targetPosition, double targetAltitude,
                   double targetDistance, std::optional<double> yaw,
@@ -146,33 +196,6 @@ struct PythonViewer : public ViewerWidget {
     camera.pitch = atan2(z, sqrt(x * x + y * y));
   }
 
-  double getCameraAltitude() const { return camera.altitude; }
-
-  void setCameraAltitude(double value) { camera.altitude = value; }
-
-  double getCameraYaw() const { return camera.yaw; }
-
-  void setCameraYaw(double value) {
-    camera.yaw = value;
-    camera.userYaw = value;
-  }
-
-  double getCameraPitch() const { return camera.pitch; }
-
-  void setCameraPitch(double value) { camera.pitch = value; }
-
-  py::tuple getCameraPose() const {
-    return py::make_tuple(getCameraPosition(), getCameraAltitude(),
-                          getCameraYaw(), getCameraPitch());
-  }
-
-  void setCameraPose(const py::tuple &value) {
-    setCameraPosition(value[0].cast<Vector>());
-    setCameraAltitude(value[1].cast<double>());
-    setCameraYaw(value[2].cast<double>());
-    setCameraPitch(value[3].cast<double>());
-  }
-
   // TODO: add https://doc.qt.io/qtforpython-6/shiboken6/shibokenmodule.html
   // TODO: fix Qt5
   py::object asPyQtWidget() const {
@@ -210,27 +233,30 @@ struct PythonViewer : public ViewerWidget {
 
 void runInViewer(PyWorld *world, double fps = 30, double worldTimeStep = 0,
                  double realTimeFactor = 1, bool helpers = true,
-                 bool camReset = false, Vector camPos = Vector(0.0, 0.0),
-                 double camAltitude = 0.0, double camYaw = 0.0,
-                 double camPitch = 0.0, bool ortho = false,
-                 double wallsHeight = 10.0, double duration = -1) {
+                 double wallsHeight = 10.0, double duration = -1,
+                 Vector camPos = Vector(0.0, 0.0), double camAltitude = 0.0,
+                 double camYaw = 0.0, double camPitch = 0.0, bool ortho = false,
+                 bool camReset = false) {
   EnkiApplication::init();
   PythonViewer viewer(world, fps, true, worldTimeStep, realTimeFactor, helpers,
-                      camReset, camPos, camAltitude, camYaw, camPitch, ortho,
-                      wallsHeight);
+                      wallsHeight, camPos, camAltitude, camYaw, camPitch, ortho,
+                      camReset);
   viewer.setWindowTitle("PyEnki Viewer");
   viewer.show();
   EnkiApplication::run(duration / realTimeFactor);
 }
 
-py::array render(PyWorld &world, bool cameraReset = false,
+py::array render(PyWorld &world, double wallsHeight = 10, int width = 640,
+                 int height = 360, PhysicalObject *selectedObject = nullptr,
                  Vector camPos = Vector(0, 0), double camAltitude = 0,
                  double camYaw = 0, double camPitch = 0,
-                 bool camIsOrtho = false, double wallsHeight = 10,
-                 int width = 640, int height = 360) {
+                 bool camIsOrtho = false, bool cameraReset = false) {
   EnkiApplication::init();
-  PythonViewer viewer(&world, 0, false, 0, 1, false, cameraReset, camPos,
-                      camAltitude, camYaw, camPitch, camIsOrtho, wallsHeight);
+  PythonViewer viewer(&world, 0, false, 0, 1, false, wallsHeight, camPos,
+                      camAltitude, camYaw, camPitch, camIsOrtho, cameraReset);
+  if (selectedObject) {
+    viewer.setSelectedObject(selectedObject);
+  }
   viewer.cameraIsOrtho = camIsOrtho;
   viewer.setFixedWidth(width);
   viewer.setFixedHeight(height);
@@ -238,13 +264,17 @@ py::array render(PyWorld &world, bool cameraReset = false,
 }
 
 void save_image(PyWorld &world, const std::string &path,
-                bool cameraReset = false, Vector camPos = Vector(0, 0),
-                double camAltitude = 0, double camYaw = 0, double camPitch = 0,
-                bool camIsOrtho = false, double wallsHeight = 10,
-                double width = 640, double height = 360) {
+                double wallsHeight = 10, double width = 640,
+                double height = 360, PhysicalObject *selectedObject = nullptr,
+                Vector camPos = Vector(0, 0), double camAltitude = 0,
+                double camYaw = 0, double camPitch = 0, bool camIsOrtho = false,
+                bool cameraReset = false) {
   EnkiApplication::init();
-  PythonViewer viewer(&world, 0, false, 0, 1, false, cameraReset, camPos,
-                      camAltitude, camYaw, camPitch, camIsOrtho, wallsHeight);
+  PythonViewer viewer(&world, 0, false, 0, 1, false, wallsHeight, camPos,
+                      camAltitude, camYaw, camPitch, camIsOrtho, cameraReset);
+  if (selectedObject) {
+    viewer.setSelectedObject(selectedObject);
+  }
   viewer.cameraIsOrtho = camIsOrtho;
   viewer.setFixedWidth(width);
   viewer.setFixedHeight(height);
@@ -253,75 +283,82 @@ void save_image(PyWorld &world, const std::string &path,
 
 PYBIND11_MODULE(pyenki_viewer, m) {
 
-  m.def("render", &render, py::arg("world"), py::arg("camera_reset") = false,
+  m.def("render", &render, py::arg("world"), py::kw_only(),
+        py::arg("walls_height") = 10.0, py::arg("width") = 640,
+        py::arg("height") = 360, py::arg("selected_object") = py::none(),
         py::arg("camera_position") = Vector(0.0, 0.0),
         py::arg("camera_altitude") = 0.0, py::arg("camera_yaw") = 0.0,
         py::arg("camera_pitch") = 0.0, py::arg("camera_is_ortho") = false,
-        py::arg("walls_height") = 10.0, py::arg("width") = 640,
-        py::arg("height") = 360, R"doc( 
-Render a world to an RGB image array.
+        py::arg("camera_reset") = false,
+        R"doc( 
+Renders a world to an RGB image array.
 
 Args:
-    camera_reset (bool): whether to set the camera in the default pose.
+    world (World): the world to render.
+    walls_height (float): the height of the world boundary in cm.
+    width (int): the width of the image in pixels.
+    height (int): the height of the image in pixels.
+    selected_object (PhysicalObject | None): an optional object to select.
     camera_position (Vector): the horizontal position of the camera.
     camera_altitude (float): the vertical position of the camera.
     camera_yaw (float): the camera rotation around the vertical axis.
     camera_pitch (float): the camera vertical rotation.
     camera_is_ortho (bool): whether the camera uses an orthographic projection.
-    walls_height (float): the height of the world boundary in cm.
-    width (int): the width of the image in pixels.
-    height (int): the height of the image in pixels.
+    camera_reset (bool): whether to set the camera in the default pose.
 
 Returns:
     numpy.ndarray[tuple[int, int, int], numpy.dtype[numpy.uint8]]: An array of shape ``(height, width, 3)`` and type ``uint8``.
 )doc");
   m.def("save_image", &save_image, py::arg("world"), py::arg("path"),
-        py::arg("camera_reset") = false,
+        py::kw_only(), py::arg("walls_height") = 10.0, py::arg("width") = 640,
+        py::arg("height") = 360, py::arg("selected_object") = py::none(),
         py::arg("camera_position") = Vector(0.0, 0.0),
         py::arg("camera_altitude") = 0.0, py::arg("camera_yaw") = 0.0,
         py::arg("camera_pitch") = 0.0, py::arg("camera_is_ortho") = false,
-        py::arg("walls_height") = 10.0, py::arg("width") = 640,
-        py::arg("height") = 360, R"doc( 
-Render a world to an RGB image array.
+        py::arg("camera_reset") = false, R"doc( 
+Renders a world to an RGB image array.
 
 Args:
+    world (World): the world to render.
     path (string): The file path where to save the image.
-    camera_reset (bool): whether to set the camera in the default pose.
+    walls_height (float): the height of the world boundary in cm.
+    width (int): the width of the image in pixels.
+    height (int): the height of the image in pixels.
+    selected_object (PhysicalObject | None): an optional object to select.
     camera_position (Vector): the horizontal position of the camera.
     camera_altitude (float): the vertical position of the camera.
     camera_yaw (float): the camera rotation around the vertical axis.
     camera_pitch (float): the camera vertical rotation.
     camera_is_ortho (bool): whether the camera uses an orthographic projection.
-    walls_height (float): the height of the world boundary in cm.
-    width (int): the width of the image in pixels.
-    height (int): the height of the image in pixels.
+    camera_reset (bool): whether to set the camera in the default pose.
 
 )doc");
-  m.def("run_in_viewer", &runInViewer, py::arg("world"), py::arg("fps") = 30,
-        py::arg("time_step") = 0, py::arg("factor") = 1,
-        py::arg("helpers") = true, py::arg("camera_reset") = false,
-        py::arg("camera_position") = Vector(0.0, 0.0),
+  m.def("run_in_viewer", &runInViewer, py::arg("world"), py::kw_only(),
+        py::arg("fps") = 30, py::arg("time_step") = 0, py::arg("factor") = 1,
+        py::arg("helpers") = true, py::arg("walls_height") = 10.0,
+        py::arg("duration") = 0, py::arg("camera_position") = Vector(0.0, 0.0),
         py::arg("camera_altitude") = 0.0, py::arg("camera_yaw") = 0.0,
         py::arg("camera_pitch") = 0.0, py::arg("camera_is_ortho") = false,
-        py::arg("walls_height") = 10.0, py::arg("duration") = 0,
+        py::arg("camera_reset") = false,
         py::call_guard<py::gil_scoped_release>(), R"doc( 
-Render a world to an RGB image array.
+Renders a world to an RGB image array.
 
 Args:
+    world (World): the world to display and run.
     fps (float): The framerate of the viewer in frames per second.
     time_step (float): The simulation time step in seconds.
     factor (bool): The real-time factor. If larger than one, the simulation 
                    will run faster then real-time.
     helpers (bool): Whether to display the helpers widgets.
-    camera_reset (bool): whether to set the camera in the default pose.
+    walls_height (float): the height of the world boundary in cm.
+    duration (float): duration of the simulation in simulated time. 
+                      Negative values are interpreted as infinite duration.
     camera_position (Vector): the horizontal position of the camera.
     camera_altitude (float): the vertical position of the camera.
     camera_yaw (float): the camera rotation around the vertical axis.
     camera_pitch (float): the camera vertical rotation.
     camera_is_ortho (bool): whether the camera uses an orthographic projection.
-    walls_height (float): the height of the world boundary in cm.
-    duration (float): duration of the simulation in simulated time. 
-                      Negative values are interpreted as infinite duration.
+    camera_reset (bool): whether to set the camera in the default pose.
 
 )doc");
 
@@ -336,13 +373,13 @@ Args:
     factor (bool): The real-time factor. If larger than one, the simulation 
                    will run faster then real-time.
     helpers (bool): Whether to display the helpers widgets.
-    camera_reset (bool): whether to set the camera in the default pose.
+    walls_height (float): the height of the world boundary in cm.
     camera_position (Vector): the horizontal position of the camera.
     camera_altitude (float): the vertical position of the camera.
     camera_yaw (float): the camera rotation around the vertical axis.
     camera_pitch (float): the camera vertical rotation.
     camera_is_ortho (bool): whether the camera uses an orthographic projection.
-    walls_height (float): the height of the world boundary in cm.
+    camera_reset (bool): whether to set the camera in the default pose.
 
 Example without PyQt::
 
@@ -355,7 +392,7 @@ Example without PyQt::
     >>> world.add_object(epuck)
     >>> # setup Qt: needs to be called before creating the first view
     >>> pyenki.init_ui()
-    >>> viewer = pyenki.WorldView(world)
+    >>> viewer = pyenki.WorldView(world=world)
     >>> viewer.show()
     >>> viewer.start_updating_world(0.1)
     >>> # executes the Qt runloop for a while
@@ -376,9 +413,9 @@ Example with PyQt (composition of two views of the same world)::
     >>> epuck.left_wheel_target_speed = 10.0
     >>> epuck.set_led_ring(True)
     >>> world.add_object(epuck)
-    >>> viewer_1 = pyenki.WorldView(world, camera_position=(-20, -20), camera_altitude=20)
+    >>> viewer_1 = pyenki.WorldView(world=world, camera_position=(-20, -20), camera_altitude=20)
     >>> viewer_1.point_camera(target_position=(0, 0), target_altitude=5)
-    >>> viewer_2 = pyenki.WorldView(world, helpers=False, camera_altitude=30, camera_is_ortho=True)
+    >>> viewer_2 = pyenki.WorldView(world=world, helpers=False, camera_altitude=30, camera_is_ortho=True)
     >>> viewer_2.camera_is_ortho = True
     >>> window = QWidget()
     >>> hbox = QHBoxLayout(window)
@@ -395,36 +432,43 @@ Attributes:
     camera_altitude (float): The camera vertical position.
     camera_yaw (float): the camera rotation around the vertical axis.
     camera_pitch (float): the camera vertical rotation.
-    camera_pose (tuple[Vector, float, float, float]): the camera pose as ``(position, altitude, yaw, pitch)``.
     camera_is_ortho (bool): whether the camera uses an orthographic projection.
+    camera_config (CameraConfig): the camera configuration (readonly). 
     walls_height (float): the height of the world boundary in cm (readonly).
     tracking (bool): whether tracking is active.
     helpers (bool): whether to display the helpers widgets.
-    image (numpy.ndarray[tuple[int, int, int], numpy.dtype[numpy.uint8]]): the currently rendered image.
-    widget (QOpenGLWidget): this view sip-wrapped so to be manipulable by PyQt.
+    image (numpy.ndarray[tuple[int, int, int], numpy.dtype[numpy.uint8]]): the currently rendered image (readonly).
+    qt_widget (QOpenGLWidget): this view sip-wrapped so to be manipulable by PyQt (readonly).
+    pyside_widget (QOpenGLWidget): this view sip-wrapped so to be manipulable by PyQt (readonly).
 )doc")
-      .def(py::init<PyWorld *, double, bool, double, double, bool, bool, Vector,
-                    double, double, double, bool, double>(),
-           py::arg("world") = py::none(), py::arg("fps") = 30,
+      .def(py::init<PyWorld *, double, bool, double, double, bool, double,
+                    Vector, double, double, double, bool, bool>(),
+           py::kw_only(), py::arg("world") = py::none(), py::arg("fps") = 30,
            py::arg("update_world") = false, py::arg("time_step") = 0,
            py::arg("factor") = 1, py::arg("helpers") = true,
-           py::arg("camera_reset") = false,
+           py::arg("walls_height") = 10.0,
            py::arg("camera_position") = Vector(0.0, 0.0),
            py::arg("camera_altitude") = 0.0, py::arg("camera_yaw") = 0.0,
            py::arg("camera_pitch") = 0.0, py::arg("camera_is_ortho") = false,
-           py::arg("walls_height") = 10.0)
+           py::arg("camera_reset") = false)
       .def("show", &PythonViewer::show, R"doc( 
 Shows the view
 )doc")
       .def("hide", &PythonViewer::hide, R"doc( 
-Hide the view
+Hides the view
 )doc")
       .def("reset_camera", &PythonViewer::resetCamera, R"doc( 
-Reset the camera pose
+Resets the camera pose
+)doc")
+      .def("update_camera_config", &PythonViewer::updateCameraConfig, R"doc( 
+Updates the camera configuration.
+    
+Args:
+    **camera_config (CameraConfig): the desired (possibly partial) camera configuration
 )doc")
       .def("start_updating_world", &PythonViewer::startUpdatingWorld,
            py::arg("time_step") = 0, py::arg("factor") = 1, R"doc( 
-Start updating the world before redrawing the view.
+Starts updating the world before redrawing the view.
 
 Args:
     time_step (float): The simulation time step in seconds.
@@ -432,12 +476,12 @@ Args:
                    will run faster then real-time.
 )doc")
       .def("stop_updating_world", &PythonViewer::stopUpdatingWorld, R"doc( 
-Stop updating the world before redrawing the view.
+Stops updating the world before redrawing the view.
 )doc")
       .def("move_camera", &PythonViewer::moveCamera, py::arg("target_position"),
            py::arg("target_altitude") = 0, py::arg("target_distance") = 30,
            py::arg("yaw") = py::none(), py::arg("pitch") = py::none(), R"doc( 
-Move the camera so to point towards the target.
+Moves the camera so to point towards the target.
 
 Args:
     target_position (Vector): The target horizontal position in cm.
@@ -450,7 +494,7 @@ Args:
            py::arg("target_position"), py::arg("target_altitude") = 0,
            py::arg("position") = py::none(), py::arg("altitude") = py::none(),
            R"doc( 
-Rotate the camera so to point towards the target.
+Rotates the camera so to point towards the target.
 
 Args:
     target_position (Vector): The target horizontal position in cm.
@@ -459,6 +503,8 @@ Args:
     altitude (float | None): Optionally sets the camera vertical position in cm.
 )doc")
       .def_property("walls_height", &PythonViewer::getWallsHeight, nullptr)
+      .def_property("selected_object", &PythonViewer::getSelectedObject,
+                    &PythonViewer::setSelectedObject)
       .def_property("camera_position", &PythonViewer::getCameraPosition,
                     &PythonViewer::setCameraPosition)
       .def_property("camera_altitude", &PythonViewer::getCameraAltitude,
@@ -467,8 +513,7 @@ Args:
                     &PythonViewer::setCameraYaw)
       .def_property("camera_pitch", &PythonViewer::getCameraPitch,
                     &PythonViewer::setCameraPitch)
-      .def_property("camera_pose", &PythonViewer::getCameraPose,
-                    &PythonViewer::setCameraPose)
+      .def_property("camera_config", &PythonViewer::getCameraConfig, nullptr)
       .def_property("world", &PythonViewer::getWorld,
                     [](PythonViewer &v, PyWorld *world) { v.setWorld(world); })
       .def_readwrite("camera_is_ortho", &PythonViewer::cameraIsOrtho)
@@ -479,14 +524,14 @@ Args:
       .def_property("pyside_widget", &PythonViewer::asPySideWidget, nullptr)
       .def_property("pyqt_widget", &PythonViewer::asPyQtWidget, nullptr)
       .def("save_image", &PythonViewer::saveImage, R"doc( 
-Save the image to a file.
+Saves the image to a file.
 
 Args:
     path (string): file path where to save the image.
 )doc");
 
   m.def("init", &EnkiApplication::init, py::arg("share") = true, R"doc( 
-Initialize the Qt runtime.
+Initializes the Qt runtime.
 
 Args:
     share (bool): Whether to share all OpenGL contexts.
@@ -495,13 +540,13 @@ Should be called before creating any py:class:`WorldView`.
 )doc");
   m.def("run", &EnkiApplication::run, py::arg("duration") = -1,
         py::call_guard<py::gil_scoped_release>(), R"doc( 
-Run the Qt run-loop for a while.
+Runs the Qt run-loop for a while.
 
 Args:
     duration (float): The duration in seconds. 
                       Negative values are interpreted as infinite duration.
 )doc");
   m.def("cleanup", &EnkiApplication::cleanup, R"doc( 
-Cleanup the Qt runtime.
+Cleans up the Qt runtime.
 )doc");
 }

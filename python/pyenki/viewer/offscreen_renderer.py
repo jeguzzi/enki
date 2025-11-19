@@ -12,12 +12,11 @@ from PySide6.QtOpenGL import (QOpenGLFramebufferObject,
                               QOpenGLFramebufferObjectFormat)
 
 from .. import Image, PhysicalObject, World
-from .camera import CameraConfig, HasCamera, Vector3
+from .camera import HasCamera
 from .renderer import Renderer
+from .types import CameraConfig, Pixel, Vector3
 from .utils import get_position_of_pixel as _get_position_of_pixel
 from .utils import init, to_numpy_image
-
-Pixel = tuple[int, int]
 
 
 class OffScreenRenderer(HasCamera):
@@ -100,7 +99,9 @@ class OffScreenRenderer(HasCamera):
         assert self.fbo
         self.fbo.bind()
         self.context.functions().glViewport(0, 0, width, height)
-        self.update_camera(**camera_config)
+        self.world = world
+        self.update_camera_config(**camera_config)
+        self.world = None
         self.renderer.draw(world, float(walls_height), self.camera.matrix,
                            self.camera.projection, selected_object)
         image = self.fbo.toImage()

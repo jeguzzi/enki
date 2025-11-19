@@ -12,9 +12,10 @@ import numpy.typing
 
 import pyenki
 from pyenki.viewer import render
-from pyenki.viewer.camera import CameraConfig, HasCamera, Vector3
+from pyenki.viewer.camera import HasCamera
 from pyenki.viewer.offscreen_renderer import get_position_of_pixel
-from pyenki.viewer.ui import UI, Pixel
+from pyenki.viewer.types import CameraConfig, Pixel, Vector3
+from pyenki.viewer.ui import UI
 
 
 class EnkiRemoteFrameBuffer(

@@ -2,226 +2,22 @@ from __future__ import annotations
 
 import importlib.util
 import os
-import typing
 import warnings
 from collections.abc import Callable
+from typing import SupportsFloat, SupportsInt, Unpack
 
-import numpy as np
-
-from .. import PhysicalObject, Image, Vector, VectorLike, World
-
-
-class WorldViewProtocol(typing.Protocol):
-
-    def __init__(self,
-                 parent: typing.Any = None,
-                 /,
-                 world: World | None = None,
-                 fps: typing.SupportsFloat = 30.0,
-                 update_world: bool = False,
-                 time_step: typing.SupportsFloat = 0.0,
-                 factor: typing.SupportsFloat = 1.0,
-                 helpers: bool = True,
-                 walls_height: typing.SupportsFloat = 10.0,
-                 camera_reset: bool = False,
-                 camera_position: VectorLike = np.zeros(2),
-                 camera_altitude: typing.SupportsFloat = 0.0,
-                 camera_yaw: typing.SupportsFloat = 0.0,
-                 camera_pitch: typing.SupportsFloat = 0.0,
-                 camera_is_ortho: bool = False) -> None:
-        ...
-
-    @property
-    def camera_altitude(self) -> float:
-        ...
-
-    @camera_altitude.setter
-    def camera_altitude(self, value: typing.SupportsFloat) -> None:
-        ...
-
-    @property
-    def camera_is_ortho(self) -> bool:
-        ...
-
-    @camera_is_ortho.setter
-    def camera_is_ortho(self, value: bool) -> None:
-        ...
-
-    @property
-    def camera_pitch(self) -> float:
-        ...
-
-    @camera_pitch.setter
-    def camera_pitch(self, value: typing.SupportsFloat) -> None:
-        ...
-
-    @property
-    def camera_yaw(self) -> float:
-        ...
-
-    @camera_yaw.setter
-    def camera_yaw(self, value: typing.SupportsFloat) -> None:
-        ...
-
-    @property
-    def camera_pose(self) -> tuple[Vector, float, float, float]:
-        ...
-
-    @camera_pose.setter
-    def camera_pose(
-        self, value: tuple[VectorLike, typing.SupportsFloat,
-                           typing.SupportsFloat, typing.SupportsFloat]
-    ) -> None:
-        ...
-
-    @property
-    def camera_position(self) -> Vector:
-        ...
-
-    @camera_position.setter
-    def camera_position(self, value: VectorLike) -> None:
-        ...
-
-    def move_camera(self,
-                    target_position: VectorLike,
-                    target_altitude: typing.SupportsFloat = 0.0,
-                    target_distance: typing.SupportsFloat = 30.0,
-                    yaw: typing.SupportsFloat | None = None,
-                    pitch: typing.SupportsFloat | None = None) -> None:
-        ...
-
-    def point_camera(self,
-                     target_position: VectorLike,
-                     target_altitude: typing.SupportsFloat = 0.0,
-                     position: VectorLike | None = None,
-                     altitude: typing.SupportsFloat | None = None) -> None:
-        ...
-
-    def reset_camera(self) -> None:
-        ...
-
-    def save_image(self, path: str) -> None:
-        ...
-
-    @property
-    def image(self) -> Image:
-        ...
-
-    @property
-    def walls_height(self) -> float:
-        ...
-
-    @walls_height.setter
-    def walls_height(self, value: float) -> None:
-        ...
-
-    @property
-    def widget(self) -> typing.Self:
-        ...
-
-    @property
-    def world(self) -> World | None:
-        ...
-
-    @world.setter
-    def world(self, value: World | None) -> None:
-        ...
-
-    def start_updating_world(self,
-                             time_step: typing.SupportsFloat = 0.0,
-                             factor: typing.SupportsFloat = 1.0) -> None:
-        ...
-
-    def show(self) -> None:
-        ...
-
-    def hide(self) -> None:
-        ...
-
-    @property
-    def pyside_widget(self) -> object:
-        ...
-
-    @property
-    def pyqt_widget(self) -> object:
-        ...
-
-
-class InitType(typing.Protocol):
-
-    def __call__(self, share: bool = True) -> None:
-        ...
-
-
-class RunType(typing.Protocol):
-
-    def __call__(self, duration: typing.SupportsFloat = -1) -> None:
-        ...
-
-
-class RenderType(typing.Protocol):
-
-    def __call__(self,
-                 /,
-                 world: World,
-                 walls_height: typing.SupportsFloat = 10,
-                 width: typing.SupportsInt = 640,
-                 height: typing.SupportsInt = 360,
-                 selected_object: PhysicalObject | None = None,
-                 camera_position: VectorLike = (0, 0),
-                 camera_altitude: typing.SupportsFloat = 0,
-                 camera_yaw: typing.SupportsFloat = 0,
-                 camera_pitch: typing.SupportsFloat = 0,
-                 camera_is_ortho: bool = False,
-                 camera_reset: bool = False) -> Image:
-        ...
-
-
-class SaveImageType(typing.Protocol):
-
-    def __call__(self,
-                 world: World,
-                 path: str,
-                 /,
-                 walls_height: typing.SupportsFloat = 10,
-                 width: typing.SupportsInt = 640,
-                 height: typing.SupportsInt = 360,
-                 selected_object: PhysicalObject | None = None,
-                 camera_position: VectorLike = (0, 0),
-                 camera_altitude: typing.SupportsFloat = 0,
-                 camera_yaw: typing.SupportsFloat = 0,
-                 camera_pitch: typing.SupportsFloat = 0,
-                 camera_is_ortho: bool = False,
-                 camera_reset: bool = False) -> None:
-        ...
-
-
-class RunInViewerType(typing.Protocol):
-
-    def __call__(self,
-                 world: World,
-                 /,
-                 fps: typing.SupportsFloat = 30,
-                 time_step: typing.SupportsFloat = 0,
-                 factor: typing.SupportsFloat = 1,
-                 helpers: bool = True,
-                 walls_height: typing.SupportsFloat = 10,
-                 duration: typing.SupportsFloat = -1,
-                 camera_position: VectorLike = (0, 0),
-                 camera_altitude: typing.SupportsFloat = 0,
-                 camera_yaw: typing.SupportsFloat = 0,
-                 camera_pitch: typing.SupportsFloat = 0,
-                 camera_is_ortho: bool = False,
-                 camera_reset: bool = False) -> None:
-        ...
+from .. import Image, PhysicalObject, World
+from .types import (CameraConfig, InitProtocol, RenderProtocol,
+                    RunInViewerProtocol, RunProtocol, SaveImageProtocol,
+                    WorldViewProtocol)
 
 _use_native_viewer: bool | None = None
 WorldView: type[WorldViewProtocol]
-init: InitType
-run: RunType
-render: RenderType
-save_image: SaveImageType
-run_in_viewer: RunInViewerType
+init: InitProtocol
+run: RunProtocol
+render: RenderProtocol
+save_image: SaveImageProtocol
+run_in_viewer: RunInViewerProtocol
 cleanup: Callable[[], None]
 
 
@@ -238,9 +34,9 @@ def _get_env_native_viewer() -> bool:
 
 
 def patch_world() -> None:
-    World.save_image = save_image  # type: ignore
-    World.render = render  # type: ignore
-    World.run_in_viewer = run_in_viewer  # type: ignore
+    World.save_image = save_image  # type: ignore[attr-defined]
+    World.render = render  # type: ignore[attr-defined]
+    World.run_in_viewer = run_in_viewer  # type: ignore[attr-defined]
 
 
 def use_native_viewer(value: bool) -> None:
@@ -264,53 +60,50 @@ def use_native_viewer(value: bool) -> None:
             def save_image(world: World,
                            path: str,
                            /,
-                           camera_reset: bool = False,
-                           camera_position: VectorLike = (0, 0),
-                           camera_altitude: typing.SupportsFloat = 0,
-                           camera_yaw: typing.SupportsFloat = 0,
-                           camera_pitch: typing.SupportsFloat = 0,
-                           camera_is_ortho: bool = False,
-                           walls_height: typing.SupportsFloat = 10,
-                           width: typing.SupportsInt = 640,
-                           height: typing.SupportsInt = 360) -> None:
-                native.save_image(world, path, camera_reset, camera_position,
-                                  camera_altitude, camera_yaw, camera_pitch,
-                                  camera_is_ortho, walls_height, width, height)
+                           walls_height: SupportsFloat = 10,
+                           width: SupportsInt = 640,
+                           height: SupportsInt = 360,
+                           selected_object: PhysicalObject | None = None,
+                           **config: Unpack[CameraConfig]) -> None:
+                native.save_image(world,
+                                  path,
+                                  walls_height=walls_height,
+                                  width=width,
+                                  height=height,
+                                  selected_object=selected_object,
+                                  **config)
 
             def render(world: World,
                        /,
-                       camera_reset: bool = False,
-                       camera_position: VectorLike = (0, 0),
-                       camera_altitude: typing.SupportsFloat = 0,
-                       camera_yaw: typing.SupportsFloat = 0,
-                       camera_pitch: typing.SupportsFloat = 0,
-                       camera_is_ortho: bool = False,
-                       walls_height: typing.SupportsFloat = 10,
-                       width: typing.SupportsInt = 640,
-                       height: typing.SupportsInt = 360) -> Image:
-                return native.render(world, camera_reset, camera_position,
-                                     camera_altitude, camera_yaw, camera_pitch,
-                                     camera_is_ortho, walls_height, width,
-                                     height)
+                       walls_height: SupportsFloat = 10,
+                       width: SupportsInt = 640,
+                       height: SupportsInt = 360,
+                       selected_object: PhysicalObject | None = None,
+                       **config: Unpack[CameraConfig]) -> Image:
+                return native.render(world,
+                                     walls_height=walls_height,
+                                     width=width,
+                                     height=height,
+                                     selected_object=selected_object,
+                                     **config)
 
             def run_in_viewer(world: World,
                               /,
-                              fps: typing.SupportsFloat = 30,
-                              time_step: typing.SupportsFloat = 0,
-                              factor: typing.SupportsFloat = 1,
+                              fps: SupportsFloat = 30,
+                              time_step: SupportsFloat = 0,
+                              factor: SupportsFloat = 1,
                               helpers: bool = True,
-                              camera_reset: bool = False,
-                              camera_position: VectorLike = (0, 0),
-                              camera_altitude: typing.SupportsFloat = 0,
-                              camera_yaw: typing.SupportsFloat = 0,
-                              camera_pitch: typing.SupportsFloat = 0,
-                              camera_is_ortho: bool = False,
-                              walls_height: typing.SupportsFloat = 10,
-                              duration: typing.SupportsFloat = -1) -> None:
-                native.run_in_viewer(world, fps, time_step, factor, helpers,
-                                     camera_reset, camera_position,
-                                     camera_altitude, camera_yaw, camera_pitch,
-                                     camera_is_ortho, walls_height, duration)
+                              walls_height: SupportsFloat = 10,
+                              duration: SupportsFloat = -1,
+                              **config: Unpack[CameraConfig]) -> None:
+                native.run_in_viewer(world,
+                                     fps=fps,
+                                     time_step=time_step,
+                                     factor=factor,
+                                     helpers=helpers,
+                                     walls_height=walls_height,
+                                     duration=duration,
+                                     **config)
 
             WorldView = native.WorldView  # type: ignore[assignment]
             init = native.init
@@ -325,9 +118,9 @@ def use_native_viewer(value: bool) -> None:
             init = utils.init
             run = utils.run
             cleanup = utils.cleanup
-            save_image = offscreen_renderer.save_image  # type: ignore[assignment]
-            run_in_viewer = widget.run_in_viewer  # type: ignore[assignment]
-            render = offscreen_renderer.render  # type: ignore[assignment]
+            save_image = offscreen_renderer.save_image
+            run_in_viewer = widget.run_in_viewer
+            render = offscreen_renderer.render
 
         patch_world()
 

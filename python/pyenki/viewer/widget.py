@@ -7,10 +7,11 @@ from PySide6.QtOpenGLWidgets import QOpenGLWidget
 from PySide6.QtWidgets import QWidget
 
 from .. import Image, World
-from .camera import CameraConfig, HasCamera, Vector3
+from .camera import HasCamera
 from .renderer import Renderer
+from .types import CameraConfig, Pixel, Vector3
+from .ui import UI
 from .utils import get_position_of_pixel, init, run
-from .ui import UI, Pixel
 
 
 class WorldView(QOpenGLWidget, HasCamera):

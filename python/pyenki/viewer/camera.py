@@ -1,17 +1,13 @@
 from __future__ import annotations
 
-from typing import (Annotated, NotRequired, SupportsFloat, TypeAlias,
-                    TypedDict, Unpack, cast)
+from typing import SupportsFloat, Unpack, cast
 
 import numpy as np
 import numpy.typing
 from PySide6.QtGui import QMatrix4x4
 
 from .. import Vector, VectorLike, World
-
-Vector3: TypeAlias = Annotated[numpy.typing.NDArray[numpy.float64], '[3, 1]']
-Vector3Like: TypeAlias = Annotated[numpy.typing.ArrayLike, numpy.float64,
-                                   '[3, 1]']
+from .types import CameraConfig, Vector3, Vector3Like
 
 
 def to_3d(xy: VectorLike, z: SupportsFloat) -> Vector3:
@@ -121,15 +117,6 @@ class Camera:
             (self.far_distance - self.near_distance))
 
 
-class CameraConfig(TypedDict):
-    camera_position: NotRequired[VectorLike]
-    camera_altitude: NotRequired[SupportsFloat]
-    camera_yaw: NotRequired[SupportsFloat]
-    camera_pitch: NotRequired[SupportsFloat]
-    camera_is_ortho: NotRequired[bool]
-    camera_reset: NotRequired[bool]
-
-
 class HasCamera:
 
     world: World | None = None
@@ -139,7 +126,7 @@ class HasCamera:
                  world: World | None = None,
                  **config: Unpack[CameraConfig]) -> None:
         self.camera = Camera()
-        self.update_camera(**config)
+        self.update_camera_config(**config)
 
     @property
     def camera_config(self) -> CameraConfig:
@@ -151,10 +138,7 @@ class HasCamera:
             'camera_is_ortho': self.camera.is_ortho
         }
 
-    def update_camera(self,
-                      /,
-                      world: World | None = None,
-                      **config: Unpack[CameraConfig]) -> None:
+    def update_camera_config(self, **config: Unpack[CameraConfig]) -> None:
         if 'camera_position' in config:
             self.camera.position[:2] = np.asarray(config['camera_position'])
         if 'camera_altitude' in config:
@@ -166,8 +150,8 @@ class HasCamera:
             self.camera.pitch = float(config['camera_pitch'])
         if 'camera_is_ortho' in config:
             self.camera.is_ortho = config['camera_is_ortho']
-        if config.get('camera_reset', False) and world:
-            self.camera.reset(world)
+        if config.get('camera_reset', False):
+            self.reset_camera()
 
     @property
     def camera_altitude(self) -> float:
@@ -203,26 +187,26 @@ class HasCamera:
         self.camera.user_yaw = self.camera.yaw = float(value)
 
     @property
-    def camera_pose(self) -> tuple[Vector, float, float, float]:
-        return (self.camera.position[:2], self.camera.position[2],
-                self.camera.yaw, self.camera.pitch)
-
-    @camera_pose.setter
-    def camera_pose(
-        self, value: tuple[VectorLike, SupportsFloat, SupportsFloat,
-                           SupportsFloat]
-    ) -> None:
-        self.camera.position = to_3d(*value[:2])
-        self.camera_yaw = value[2]
-        self.camera.pitch = float(value[3])
-
-    @property
     def camera_position(self) -> Vector:
         return self.camera.position[:2]
 
     @camera_position.setter
     def camera_position(self, value: VectorLike) -> None:
         self.camera.position[:2] = np.asarray(value)
+
+    # @property
+    # def camera_pose(self) -> tuple[Vector, float, float, float]:
+    #     return (self.camera.position[:2], self.camera.position[2],
+    #             self.camera.yaw, self.camera.pitch)
+
+    # @camera_pose.setter
+    # def camera_pose(
+    #     self, value: tuple[VectorLike, SupportsFloat, SupportsFloat,
+    #                        SupportsFloat]
+    # ) -> None:
+    #     self.camera.position = to_3d(*value[:2])
+    #     self.camera_yaw = value[2]
+    #     self.camera.pitch = float(value[3])
 
     def move_camera(self,
                     target_position: VectorLike,

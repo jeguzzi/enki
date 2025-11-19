@@ -9,10 +9,9 @@ from PySide6.QtGui import (QImage, QOpenGLContext, QOpenGLFunctions,
 from PySide6.QtWidgets import QApplication
 
 from .. import Image, PhysicalObject, VectorLike, World
-from .camera import Camera, Vector3
+from .camera import Camera
 from .renderer import Renderer
-
-Pixel = tuple[int, int]
+from .types import Pixel, Vector3
 
 
 def init(share: bool = True) -> None:

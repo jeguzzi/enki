@@ -1,13 +1,9 @@
-from collections.abc import Callable
-
 import numpy as np
 
 from .. import PhysicalObject, World
-from .camera import Camera, Vector3
+from .camera import Camera
+from .types import Pixel, PixelPositionGetter
 from .utils import get_object_at
-
-Pixel = tuple[int, int]
-PixelPositionGetter = Callable[[Pixel], Vector3 | None]
 
 
 class UI:
