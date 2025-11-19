@@ -17,6 +17,8 @@ from .renderer import Renderer
 from .utils import get_position_of_pixel as _get_position_of_pixel
 from .utils import init, to_numpy_image
 
+Pixel = tuple[int, int]
+
 
 class OffScreenRenderer(HasCamera):
 
@@ -130,7 +132,7 @@ class OffScreenRenderer(HasCamera):
                        **camera_config)
         im.save(path)
 
-    def get_position_of_pixel(self, pixel: tuple[int, int]) -> Vector3 | None:
+    def get_position_of_pixel(self, pixel: Pixel) -> Vector3 | None:
         assert self.size
         with self.bind():
             return _get_position_of_pixel(pixel, *self.size, self.camera)
@@ -175,5 +177,5 @@ def save_image(world: World,
                                      selected_object, **camera_config)
 
 
-def get_position_of_pixel(pixel: tuple[int, int]) -> Vector3 | None:
+def get_position_of_pixel(pixel: Pixel) -> Vector3 | None:
     return get_renderer().get_position_of_pixel(pixel)
