@@ -10,3 +10,4 @@ Makefile
 make.bat
 out
 archive
+.ipynb_checkpoints
