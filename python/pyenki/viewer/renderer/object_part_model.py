@@ -11,6 +11,7 @@ from ... import PhysicalObject, Vector
 from .utils import (create_vao_with_vertices, enable_texture, functions,
                     switch_context)
 
+
 def part_texture(part: PhysicalObject.Part) -> QOpenGLTexture | None:
     colors = sum([[c.components[:3] for c in x] for x in part.textures], [])
     if colors:
