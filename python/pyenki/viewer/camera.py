@@ -33,12 +33,16 @@ def rotate(v: Vector3, delta: float) -> Vector3:
 
 class Camera:
 
-    def __init__(self) -> None:
-        self.position: Vector3 = cast('Vector3', np.zeros(3))
+    def __init__(self,
+                 position: Vector3 = cast('Vector3', np.zeros(3)),
+                 yaw: float = 0,
+                 pitch: float = 0,
+                 is_ortho: bool = False) -> None:
+        self.position = position
         self._viewport: tuple[float, float] | None = None
-        self.yaw = 0.0
-        self.pitch = 0.0
-        self.is_ortho = False
+        self.yaw = yaw
+        self.pitch = pitch
+        self.is_ortho = is_ortho
         self.fov = 1.0
         self.near_distance = 1.0
         self.far_distance = 1000.0
@@ -121,6 +125,16 @@ class Camera:
             self.far_distance - depth *
             (self.far_distance - self.near_distance))
 
+    @property
+    def config(self) -> CameraConfig:
+        return {
+            'camera_position': self.position[:2],
+            'camera_altitude': self.position[2],
+            'camera_yaw': self.yaw,
+            'camera_pitch': self.pitch,
+            'camera_is_ortho': self.is_ortho
+        }
+
 
 CameraCallback = Callable[[Camera, World], None]
 
@@ -150,13 +164,7 @@ class HasCamera:
 
     @property
     def camera_config(self) -> CameraConfig:
-        return {
-            'camera_position': self.camera.position[:2],
-            'camera_altitude': self.camera.position[2],
-            'camera_yaw': self.camera.yaw,
-            'camera_pitch': self.camera.pitch,
-            'camera_is_ortho': self.camera.is_ortho
-        }
+        return self.camera.config
 
     def update_camera_config(self, **config: Unpack[CameraConfig]) -> None:
         if 'camera_position' in config:
