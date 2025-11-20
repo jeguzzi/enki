@@ -2,9 +2,15 @@ from __future__ import annotations
 
 import importlib.util
 import os
+import sys
 import warnings
 from collections.abc import Callable
-from typing import SupportsFloat, SupportsInt, Unpack
+from typing import SupportsFloat, SupportsInt
+
+if sys.version_info >= (3, 11):
+    from typing import Unpack
+else:
+    from typing_extensions import Unpack
 
 from .. import Image, PhysicalObject, World
 from .types import (CameraConfig, InitProtocol, PositionOfPixelGetterProtocol,

@@ -1,7 +1,15 @@
+import sys
+from typing import Annotated, SupportsFloat, SupportsInt, TypeAlias, TypedDict
+
 import numpy
 import numpy.typing
-from typing import Unpack, SupportsFloat, SupportsInt, Annotated, TypeAlias, TypedDict, NotRequired
-from .pyenki import World, PhysicalObject
+
+if sys.version_info >= (3, 11):
+    from typing import NotRequired, Unpack
+else:
+    from typing_extensions import Unpack, NotRequired
+
+from .pyenki import PhysicalObject, World
 
 Vector: TypeAlias = Annotated[numpy.typing.NDArray[numpy.float64], '[2, 1]']
 VectorLike: TypeAlias = Annotated[numpy.typing.ArrayLike, numpy.float64, '[2, 1]']

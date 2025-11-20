@@ -1,7 +1,13 @@
 from __future__ import annotations
 
+import sys
 from collections.abc import Callable
-from typing import SupportsFloat, Unpack, cast, TYPE_CHECKING
+from typing import TYPE_CHECKING, SupportsFloat, cast
+
+if sys.version_info >= (3, 11):
+    from typing import Unpack
+else:
+    from typing_extensions import Unpack
 
 import numpy as np
 import numpy.typing

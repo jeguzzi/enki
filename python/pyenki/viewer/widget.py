@@ -1,6 +1,12 @@
 from __future__ import annotations
 
-import typing
+import sys
+from typing import TYPE_CHECKING, SupportsFloat
+
+if sys.version_info >= (3, 11):
+    from typing import Unpack
+else:
+    from typing_extensions import Unpack
 
 import numpy as np
 from PySide6.QtCore import QSize, Qt, Slot
@@ -14,10 +20,10 @@ from .types import CameraConfig, Pixel, Vector3
 from .ui import UI
 from .utils import get_position_of_pixel, init, run
 
-if typing.TYPE_CHECKING:
-    from PySide6.QtWidgets import QWidget
-    from PySide6.QtGui import QHideEvent, QMouseEvent, QWheelEvent
+if TYPE_CHECKING:
     from PySide6.QtCore import QEvent
+    from PySide6.QtGui import QHideEvent, QMouseEvent, QWheelEvent
+    from PySide6.QtWidgets import QWidget
 
 
 class WorldView(QOpenGLWidget, HasCamera):
@@ -26,13 +32,13 @@ class WorldView(QOpenGLWidget, HasCamera):
                  parent: QWidget | None = None,
                  /,
                  world: World | None = None,
-                 fps: typing.SupportsFloat = 30.0,
+                 fps: SupportsFloat = 30.0,
                  update_world: bool = False,
-                 time_step: typing.SupportsFloat = 0.0,
-                 factor: typing.SupportsFloat = 1.0,
+                 time_step: SupportsFloat = 0.0,
+                 factor: SupportsFloat = 1.0,
                  helpers: bool = True,
-                 walls_height: typing.SupportsFloat = 10.0,
-                 **camera_config: typing.Unpack[CameraConfig]) -> None:
+                 walls_height: SupportsFloat = 10.0,
+                 **camera_config: Unpack[CameraConfig]) -> None:
         QOpenGLWidget.__init__(self, parent)
         self._world = world
         HasCamera.__init__(self, world=world, **camera_config)
@@ -77,10 +83,6 @@ class WorldView(QOpenGLWidget, HasCamera):
         self._wall_height = max(0, value)
 
     @property
-    def widget(self) -> typing.Self:
-        return self
-
-    @property
     def world(self) -> World | None:
         return self._world
 
@@ -94,8 +96,8 @@ class WorldView(QOpenGLWidget, HasCamera):
             self._world = value
 
     def start_updating_world(self,
-                             time_step: typing.SupportsFloat = 0.0,
-                             factor: typing.SupportsFloat = 1.0) -> None:
+                             time_step: SupportsFloat = 0.0,
+                             factor: SupportsFloat = 1.0) -> None:
         self._update_world = True
         self._rt_factor = float(factor)
         time_step = float(time_step)
@@ -202,13 +204,13 @@ class WorldView(QOpenGLWidget, HasCamera):
 
 def run_in_viewer(self: World,
                   /,
-                  fps: typing.SupportsFloat = 30,
-                  time_step: typing.SupportsFloat = 0,
-                  factor: typing.SupportsFloat = 1,
+                  fps: SupportsFloat = 30,
+                  time_step: SupportsFloat = 0,
+                  factor: SupportsFloat = 1,
                   helpers: bool = True,
-                  walls_height: typing.SupportsFloat = 10,
-                  duration: typing.SupportsFloat = -1,
-                  **camera_config: typing.Unpack[CameraConfig]) -> None:
+                  walls_height: SupportsFloat = 10,
+                  duration: SupportsFloat = -1,
+                  **camera_config: Unpack[CameraConfig]) -> None:
     init()
     viewer = WorldView(world=self,
                        fps=fps,

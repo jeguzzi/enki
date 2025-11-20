@@ -1,7 +1,14 @@
 from __future__ import annotations
 
+import sys
 import threading
-import typing
+from typing import TYPE_CHECKING, SupportsFloat, SupportsInt
+
+if sys.version_info >= (3, 11):
+    from typing import Unpack
+else:
+    from typing_extensions import Unpack
+
 import weakref
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -17,7 +24,7 @@ from .types import CameraConfig, Pixel, Vector3
 from .utils import get_position_of_pixel as _get_position_of_pixel
 from .utils import init, to_numpy_image
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from PySide6.QtGui import QImage
 
 
@@ -25,7 +32,7 @@ class OffScreenRenderer(HasCamera):
 
     def __init__(self,
                  share: bool = False,
-                 **camera_config: typing.Unpack[CameraConfig]) -> None:
+                 **camera_config: Unpack[CameraConfig]) -> None:
         HasCamera.__init__(self, **camera_config)
         # Add a check that we initialized
         if threading.current_thread() is not threading.main_thread():
@@ -87,11 +94,11 @@ class OffScreenRenderer(HasCamera):
 
     def draw(self,
              world: World,
-             walls_height: typing.SupportsFloat = 10,
-             width: typing.SupportsInt = 640,
-             height: typing.SupportsInt = 360,
+             walls_height: SupportsFloat = 10,
+             width: SupportsInt = 640,
+             height: SupportsInt = 360,
              selected_object: PhysicalObject | None = None,
-             **camera_config: typing.Unpack[CameraConfig]) -> QImage:
+             **camera_config: Unpack[CameraConfig]) -> QImage:
         assert self.context
         assert self._thread_id == threading.current_thread().native_id
         width = int(width)
@@ -113,11 +120,11 @@ class OffScreenRenderer(HasCamera):
 
     def render(self,
                world: World,
-               walls_height: typing.SupportsFloat = 10,
-               width: typing.SupportsInt = 640,
-               height: typing.SupportsInt = 360,
+               walls_height: SupportsFloat = 10,
+               width: SupportsInt = 640,
+               height: SupportsInt = 360,
                selected_object: PhysicalObject | None = None,
-               **camera_config: typing.Unpack[CameraConfig]) -> Image:
+               **camera_config: Unpack[CameraConfig]) -> Image:
 
         im = self.draw(world, walls_height, width, height, selected_object,
                        **camera_config)
@@ -126,11 +133,11 @@ class OffScreenRenderer(HasCamera):
     def save_image(self,
                    world: World,
                    path: str,
-                   walls_height: typing.SupportsFloat = 10,
-                   width: typing.SupportsInt = 640,
-                   height: typing.SupportsInt = 360,
+                   walls_height: SupportsFloat = 10,
+                   width: SupportsInt = 640,
+                   height: SupportsInt = 360,
                    selected_object: PhysicalObject | None = None,
-                   **camera_config: typing.Unpack[CameraConfig]) -> None:
+                   **camera_config: Unpack[CameraConfig]) -> None:
         im = self.draw(world, walls_height, width, height, selected_object,
                        **camera_config)
         im.save(path)
@@ -160,22 +167,22 @@ def get_renderer() -> OffScreenRenderer:
 
 
 def render(world: World,
-           walls_height: typing.SupportsFloat = 10,
-           width: typing.SupportsInt = 640,
-           height: typing.SupportsInt = 360,
+           walls_height: SupportsFloat = 10,
+           width: SupportsInt = 640,
+           height: SupportsInt = 360,
            selected_object: PhysicalObject | None = None,
-           **camera_config: typing.Unpack[CameraConfig]) -> Image:
+           **camera_config: Unpack[CameraConfig]) -> Image:
     return get_renderer().render(world, walls_height, width, height,
                                  selected_object, **camera_config)
 
 
 def save_image(world: World,
                path: str,
-               walls_height: typing.SupportsFloat = 10,
-               width: typing.SupportsInt = 640,
-               height: typing.SupportsInt = 360,
+               walls_height: SupportsFloat = 10,
+               width: SupportsInt = 640,
+               height: SupportsInt = 360,
                selected_object: PhysicalObject | None = None,
-               **camera_config: typing.Unpack[CameraConfig]) -> None:
+               **camera_config: Unpack[CameraConfig]) -> None:
     return get_renderer().save_image(world, path, walls_height, width, height,
                                      selected_object, **camera_config)
 

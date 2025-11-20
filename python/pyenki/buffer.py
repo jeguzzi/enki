@@ -1,22 +1,28 @@
 from __future__ import annotations
 
 import asyncio
+import sys
 import time
 import typing
 from collections.abc import Collection
 from typing import Any
 
+if sys.version_info >= (3, 11):
+    from typing import Unpack
+else:
+    from typing_extensions import Unpack
+
 import jupyter_rfb  # type: ignore[import-untyped]
 
 import pyenki
-from pyenki.viewer import render, get_position_of_pixel
+from pyenki.viewer import get_position_of_pixel, render
 from pyenki.viewer.camera import HasCamera
 from pyenki.viewer.types import CameraConfig, Pixel, Vector3
 from pyenki.viewer.ui import UI
 
 if typing.TYPE_CHECKING:
-    import numpy.typing
     import numpy as np
+    import numpy.typing
 
 
 class EnkiRemoteFrameBuffer(
@@ -48,7 +54,7 @@ class EnkiRemoteFrameBuffer(
 
     def __init__(self,
                  world: pyenki.World | None = None,
-                 **camera_config: typing.Unpack[CameraConfig]):
+                 **camera_config: Unpack[CameraConfig]):
         """
         Constructs a new instance.
 

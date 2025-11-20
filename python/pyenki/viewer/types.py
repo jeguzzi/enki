@@ -1,8 +1,14 @@
 from __future__ import annotations
 
+import sys
 from collections.abc import Callable
-from typing import (Annotated, Any, NotRequired, Protocol, SupportsFloat,
-                    SupportsInt, TypeAlias, TypedDict, Unpack)
+from typing import (Annotated, Any, Protocol, SupportsFloat, SupportsInt,
+                    TypeAlias, TypedDict)
+
+if sys.version_info >= (3, 11):
+    from typing import NotRequired, Unpack
+else:
+    from typing_extensions import Unpack, NotRequired
 
 import numpy
 import numpy.typing
