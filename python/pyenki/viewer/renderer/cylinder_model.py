@@ -2,13 +2,16 @@ from __future__ import annotations
 
 import numpy as np
 from OpenGL import GL  # type: ignore[import-untyped]
-from PySide6.QtGui import QMatrix4x4, QOpenGLContext
-from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram,
-                              QOpenGLVertexArrayObject)
+from PySide6.QtOpenGL import (QOpenGLVertexArrayObject)
 
 from ... import PhysicalObject
 from .utils import (functions, circle, create_vao_with_vertices, enable_texture,
                     forward_transform, get_transform, switch_context)
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram)
+    from PySide6.QtGui import QMatrix4x4, QOpenGLContext
 
 
 def cylinder_data(n: int = 60) -> np.ndarray:

@@ -1,14 +1,18 @@
 from __future__ import annotations
 
 from OpenGL import GL  # type: ignore[import-untyped]
-from PySide6.QtGui import QMatrix4x4, QOpenGLContext
-from PySide6.QtOpenGL import QOpenGLShaderProgram
+from PySide6.QtGui import QMatrix4x4
 
 from ... import Thymio2
 from .robot_model import RobotModel
 from .utils import (enable_texture, forward_color, forward_transform, get_transform,
                     get_wheel_angles, load_program, setup_program,
                     switch_context, functions)
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from PySide6.QtOpenGL import QOpenGLShaderProgram
+    from PySide6.QtGui import QOpenGLContext
 
 
 class Thymio2Model(RobotModel[Thymio2]):

@@ -6,8 +6,7 @@ import weakref
 from collections.abc import Iterator
 from contextlib import contextmanager
 
-from PySide6.QtGui import (QImage, QOffscreenSurface, QOpenGLContext,
-                           QSurfaceFormat)
+from PySide6.QtGui import QOffscreenSurface, QOpenGLContext, QSurfaceFormat
 from PySide6.QtOpenGL import (QOpenGLFramebufferObject,
                               QOpenGLFramebufferObjectFormat)
 
@@ -17,6 +16,9 @@ from .renderer import Renderer
 from .types import CameraConfig, Pixel, Vector3
 from .utils import get_position_of_pixel as _get_position_of_pixel
 from .utils import init, to_numpy_image
+
+if typing.TYPE_CHECKING:
+    from PySide6.QtGui import QImage
 
 
 class OffScreenRenderer(HasCamera):

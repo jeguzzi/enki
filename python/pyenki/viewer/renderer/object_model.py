@@ -2,13 +2,16 @@ from __future__ import annotations
 
 from collections import defaultdict
 
-from PySide6.QtGui import QMatrix4x4, QOpenGLContext
-from PySide6.QtOpenGL import QOpenGLShaderProgram
 
 from ... import PhysicalObject, World
 from .cylinder_model import CylinderModel
 from .object_part_model import ObjectPartModel
 from .utils import forward_color, forward_transform, get_transform
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from PySide6.QtOpenGL import QOpenGLShaderProgram
+    from PySide6.QtGui import QMatrix4x4, QOpenGLContext
 
 
 class ObjectModel:
@@ -54,10 +57,10 @@ class ObjectModel:
             forward_transform(t, program)
             for part in obj.parts:
                 if hasattr(part, "_model_key"):
-                    key = getattr(part, "_model_key")
+                    key = part._model_key
                 else:
                     key = hash(part)
-                    setattr(part, "_model_key", key)
+                    part._model_key = key  # type: ignore[attr-defined]
                 if key not in self.parts:
                     self.parts[key] = ObjectPartModel(part)
                 self.parts[key].render(program, ctx)

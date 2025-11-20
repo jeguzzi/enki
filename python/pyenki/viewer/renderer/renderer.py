@@ -2,12 +2,11 @@ from __future__ import annotations
 
 import threading
 import weakref
-from typing import Protocol, cast
+from typing import Protocol, cast, TYPE_CHECKING
 
 from OpenGL import GL  # type: ignore[import-untyped]
-from PySide6.QtGui import (QImage, QColor, QMatrix4x4, QOpenGLContext, QOpenGLContextGroup,
-                           QOpenGLFunctions, QSurfaceFormat)
-from PySide6.QtOpenGL import QOpenGLShaderProgram, QOpenGLTexture
+from PySide6.QtGui import (QImage, QColor, QOpenGLFunctions, QSurfaceFormat)
+from PySide6.QtOpenGL import QOpenGLTexture
 
 from ... import Color, EPuck, Marxbot, PhysicalObject, Thymio2, World
 from .epuck_model import EPuckModel
@@ -18,6 +17,10 @@ from .utils import (forward_color, forward_transform, load_program,
                     setup_program, switch_context)
 from .world_model import WorldModel
 from .selection_model import SelectionModel
+
+if TYPE_CHECKING:
+    from PySide6.QtGui import (QMatrix4x4, QOpenGLContext, QOpenGLContextGroup)
+    from PySide6.QtOpenGL import QOpenGLShaderProgram
 
 
 class Model(Protocol):
@@ -52,7 +55,7 @@ class Renderer(QOpenGLFunctions):
     @classmethod
     def cleanup(cls) -> None:
         thread_id = threading.current_thread().native_id
-        for ctx, renderer in cls._renderers.items():
+        for _ctx, renderer in cls._renderers.items():
             if renderer._thread_id == thread_id:
                 renderer.destroy()
 
@@ -82,7 +85,7 @@ class Renderer(QOpenGLFunctions):
             self._context = weakref.proxy(context)
         self._program: QOpenGLShaderProgram | None = None
         self.robot_models: dict[type, Model] = {
-            cls: cast(Model, model_cls())
+            cls: cast('Model', model_cls())
             for cls, model_cls in self.ROBOT_MODEL_CLASSES.items()
         }
         self.world_model = WorldModel()
@@ -109,7 +112,8 @@ class Renderer(QOpenGLFunctions):
     #     print('__del__')
     #     # try:
     #     #     if self._shared_context:
-    #     #         self._shared_context.aboutToBeDestroyed.disconnect(self.shared_context_about_to_be_destroyed)
+    #     #         self._shared_context.aboutToBeDestroyed.disconnect(
+    #                   self.shared_context_about_to_be_destroyed)
     #     # except ReferenceError:
     #     #     pass
     #     # try:

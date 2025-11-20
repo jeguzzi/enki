@@ -3,16 +3,20 @@ from __future__ import annotations
 from pathlib import Path
 
 import numpy as np
-from numpy.typing import NDArray
 from OpenGL import GL  # type: ignore[import-untyped]
-from PySide6.QtGui import QImage, QMatrix4x4, QOpenGLContext
-from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram,
-                              QOpenGLVertexArrayObject, QOpenGLTexture)
+from PySide6.QtGui import QImage
+from PySide6.QtOpenGL import (QOpenGLVertexArrayObject, QOpenGLTexture)
 
 from ... import PhysicalObject, Color
 from .utils import (create_vao_with_vertices, enable_texture,
                     forward_color, forward_transform, functions, get_transform,
                     switch_context)
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram)
+    from PySide6.QtGui import QMatrix4x4, QOpenGLContext
+    from numpy.typing import NDArray
 
 
 def data() -> NDArray[np.float32]:

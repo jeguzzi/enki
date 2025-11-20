@@ -1,15 +1,19 @@
 from __future__ import annotations
 
 import numpy as np
-from numpy.typing import NDArray
 from OpenGL import GL  # type: ignore[import-untyped]
-from PySide6.QtGui import QMatrix4x4, QOpenGLContext
-from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram,
-                              QOpenGLVertexArrayObject)
+from PySide6.QtGui import QMatrix4x4
+from PySide6.QtOpenGL import (QOpenGLVertexArrayObject)
 
 from ... import World
 from .utils import (create_vao_with_vertices, enable_texture,
                     forward_transform, functions, switch_context)
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram)
+    from PySide6.QtGui import QOpenGLContext
+    from numpy.typing import NDArray
 
 
 def square_world_data() -> NDArray[np.float32]:
@@ -26,20 +30,22 @@ def square_world_data() -> NDArray[np.float32]:
     top = rs + delta
     top_far = 5 * rs + delta
     top = np.stack([top, top_far], axis=1).reshape(-1, 3)
-    vertices = np.concatenate([bottom, side, top]).astype(np.float32) + np.array([0.5, 0.5, 0], dtype=np.float32)
+    vertices = (np.concatenate([bottom, side, top]).astype(np.float32) +
+                np.array([0.5, 0.5, 0], dtype=np.float32))
     e = np.array([0, 0, 1], dtype=np.float32)
     side = 6 * [[0, 1, 0]] + 6 * [[-1, 0, 0]] + 6 * [[0, -1, 0]
                                                      ] + 6 * [[1, 0, 0]]
     normals = np.concatenate([[e] * 4, side, [e] * 10]).astype(np.float32)
-    textures_bottom = np.array(
-        [[0, 0], [1, 0], [1, 1], [0, 1]],
-        dtype=np.float32)
-    textures_face = np.array(
-        [[0, 0], [0, 1], [1, 0], [1, 0], [0, 1], [1, 1]],
-        dtype=np.float32)
+    textures_bottom = np.array([[0, 0], [1, 0], [1, 1], [0, 1]],
+                               dtype=np.float32)
+    textures_face = np.array([[0, 0], [0, 1], [1, 0], [1, 0], [0, 1], [1, 1]],
+                             dtype=np.float32)
     textures_top = np.zeros((10, 2), dtype=np.float32)
     print(textures_bottom.shape, textures_face.shape, textures_top.shape)
-    textures = np.concatenate([textures_bottom, textures_face, textures_face, textures_face, textures_face, textures_top])
+    textures = np.concatenate([
+        textures_bottom, textures_face, textures_face, textures_face,
+        textures_face, textures_top
+    ])
     # textures = np.zeros((38, 2), dtype=np.float32)
 
     data = np.concatenate([vertices, textures, normals], axis=1).reshape(-1, 8)

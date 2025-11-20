@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 import abc
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, TYPE_CHECKING
 
-import numpy as np
 from OpenGL import GL  # type: ignore[import-untyped]
-from PySide6.QtGui import QImage, QMatrix4x4, QOpenGLContext
-from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram,
-                              QOpenGLTexture, QOpenGLVertexArrayObject)
+from PySide6.QtGui import QImage
+from PySide6.QtOpenGL import (QOpenGLTexture, QOpenGLVertexArrayObject)
 from shiboken6 import VoidPtr
 
 from ... import Robot
@@ -15,6 +13,11 @@ from .utils import (create_vao_with_indices_and_vertices, functions,
                     load_numpy_array, switch_context)
 
 from pathlib import Path
+
+if TYPE_CHECKING:
+    from PySide6.QtGui import QMatrix4x4, QOpenGLContext
+    import numpy as np
+    from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram)
 
 RobotType = TypeVar("RobotType", bound=Robot)
 

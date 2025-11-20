@@ -4,19 +4,23 @@ import ctypes
 import pathlib
 from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Annotated, TypeAlias, cast
+from typing import Annotated, TypeAlias, cast, TYPE_CHECKING
 
 import numpy as np
-from numpy.typing import ArrayLike, NDArray
+from numpy.typing import ArrayLike
 from OpenGL import GL  # type: ignore[import-untyped]
 from PySide6.QtGui import (QImage, QMatrix4x4, QOffscreenSurface,
-                           QOpenGLContext, QOpenGLFunctions, QSurfaceFormat,
+                           QOpenGLContext, QSurfaceFormat,
                            QVector3D)
 from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShader,
                               QOpenGLShaderProgram, QOpenGLVertexArrayObject)
 from shiboken6 import VoidPtr
 
 from ... import Color, DifferentialWheeled, PhysicalObject
+
+if TYPE_CHECKING:
+    from PySide6.QtGui import (QOpenGLFunctions)
+    from numpy.typing import NDArray
 
 ARGBImageLike: TypeAlias = Annotated[ArrayLike, np.uint8, '[n, m, 4]']
 
@@ -103,7 +107,7 @@ def to_vector(color: Color) -> QVector3D:
 
 
 def load_numpy_array(resource: pathlib.Path) -> NDArray[np.float64]:
-    return cast(NDArray[np.float64], np.load(resource))
+    return cast('NDArray[np.float64]', np.load(resource))
 
 
 # def load_numpy_array(resource: str) -> NDArray[np.float64]:

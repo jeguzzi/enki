@@ -1,15 +1,19 @@
 from __future__ import annotations
 
 import numpy as np
-from numpy.typing import NDArray
 from OpenGL import GL  # type: ignore[import-untyped]
-from PySide6.QtGui import QMatrix4x4, QOpenGLContext
-from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram,
-                              QOpenGLVertexArrayObject)
+from PySide6.QtGui import QMatrix4x4
+from PySide6.QtOpenGL import (QOpenGLVertexArrayObject)
 
 from ... import World
 from .utils import (create_vao_with_vertices, forward_transform, functions,
                     switch_context)
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram)
+    from PySide6.QtGui import QOpenGLContext
+    from numpy.typing import NDArray
 
 
 def flat_world_data() -> NDArray[np.float32]:

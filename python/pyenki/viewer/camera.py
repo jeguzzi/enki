@@ -1,14 +1,16 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import SupportsFloat, Unpack, cast
+from typing import SupportsFloat, Unpack, cast, TYPE_CHECKING
 
 import numpy as np
 import numpy.typing
-from PySide6.QtGui import QMatrix4x4
 
 from .. import PhysicalObject, Vector, VectorLike, World
 from .types import CameraConfig, Pixel, Vector3, Vector3Like
+
+if TYPE_CHECKING:
+    from PySide6.QtGui import QMatrix4x4
 
 
 def to_3d(xy: VectorLike, z: SupportsFloat) -> Vector3:
@@ -26,7 +28,7 @@ def rotate(v: Vector3, delta: float) -> Vector3:
 class Camera:
 
     def __init__(self) -> None:
-        self.position: Vector3 = cast(Vector3, np.zeros(3))
+        self.position: Vector3 = cast('Vector3', np.zeros(3))
         self._viewport: tuple[float, float] | None = None
         self.yaw = 0.0
         self.pitch = 0.0
@@ -47,10 +49,12 @@ class Camera:
                 (world.width * 0.5, max(0, -world.radius * 0.9),
                  max(world.radius * 2, world.width, world.height)))
         else:
-            self.position = cast(Vector3, np.zeros(3))
+            self.position = cast('Vector3', np.zeros(3))
 
     @property
     def matrix(self) -> QMatrix4x4:
+        from PySide6.QtGui import QMatrix4x4
+
         m = QMatrix4x4()
         m.rotate(-self.pitch * 180 / np.pi - 90, 1, 0, 0)
         m.rotate(-self.yaw * 180 / np.pi + 90, 0, 0, 1)
@@ -62,6 +66,8 @@ class Camera:
 
     @property
     def projection(self) -> QMatrix4x4:
+        from PySide6.QtGui import QMatrix4x4
+
         assert self._viewport is not None
         p = QMatrix4x4()
         aspect_ratio = self._viewport[0] / self._viewport[1]
@@ -89,7 +95,7 @@ class Camera:
 
     @property
     def up(self) -> Vector3:
-        return cast(Vector3, np.cross(self.forward, self.left))
+        return cast('Vector3', np.cross(self.forward, self.left))
 
     def move(self,
              target_position: Vector3Like,

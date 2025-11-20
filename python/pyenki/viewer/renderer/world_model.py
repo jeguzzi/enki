@@ -1,13 +1,17 @@
 from __future__ import annotations
 
-from PySide6.QtGui import QMatrix4x4, QOpenGLContext
-from PySide6.QtOpenGL import QOpenGLShaderProgram, QOpenGLTexture
+from PySide6.QtOpenGL import QOpenGLTexture
 
 from ... import World
 from .circular_world_model import CircularWorldModel
 from .flat_world_model import FlatWorldModel
 from .square_world_model import SquareWorldModel
 from .utils import enable_texture, forward_color, from_numpy_image
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from PySide6.QtOpenGL import QOpenGLShaderProgram
+    from PySide6.QtGui import QMatrix4x4, QOpenGLContext
 
 
 class WorldModel:

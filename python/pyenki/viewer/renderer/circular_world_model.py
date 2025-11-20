@@ -1,15 +1,20 @@
 from __future__ import annotations
 
 import numpy as np
-from numpy.typing import NDArray
 from OpenGL import GL  # type: ignore[import-untyped]
-from PySide6.QtGui import QMatrix4x4, QOpenGLContext
-from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram,
-                              QOpenGLTexture, QOpenGLVertexArrayObject)
+from PySide6.QtGui import QMatrix4x4
+from PySide6.QtOpenGL import (QOpenGLVertexArrayObject)
 
 from ... import World
 from .utils import (circle, create_vao_with_vertices, enable_texture,
                     forward_transform, functions, switch_context)
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram,
+                                  QOpenGLTexture)
+    from PySide6.QtGui import QOpenGLContext
+    from numpy.typing import NDArray
 
 
 def circular_world_data(n: int = 60) -> NDArray[np.float32]:

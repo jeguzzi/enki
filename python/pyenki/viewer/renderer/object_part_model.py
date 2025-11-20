@@ -1,15 +1,19 @@
 from __future__ import annotations
 
 import numpy as np
-from numpy.typing import NDArray
 from OpenGL import GL  # type: ignore[import-untyped]
-from PySide6.QtGui import QImage, QOpenGLContext
-from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram,
-                              QOpenGLTexture, QOpenGLVertexArrayObject)
+from PySide6.QtGui import QImage
+from PySide6.QtOpenGL import (QOpenGLTexture, QOpenGLVertexArrayObject)
 
 from ... import PhysicalObject, Vector
 from .utils import (create_vao_with_vertices, enable_texture, functions,
                     switch_context)
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from PySide6.QtOpenGL import (QOpenGLBuffer, QOpenGLShaderProgram)
+    from PySide6.QtGui import QOpenGLContext
+    from numpy.typing import NDArray
 
 
 def part_texture(part: PhysicalObject.Part) -> QOpenGLTexture | None:

@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
 import moviepy as mpy  # type: ignore[import-untyped]
-import numpy.typing
 
 import pyenki
 from pyenki.viewer import render
+
+if TYPE_CHECKING:
+    import numpy.typing
 
 
 def make_video(world: pyenki.World,
