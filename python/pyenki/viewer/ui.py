@@ -10,6 +10,10 @@ def position_relative_to_object(obj: PhysicalObject, p: Vector3) -> Vector3:
     return rotate(p - to_3d(obj.position, 0), -obj.angle)
 
 
+def manhattan_distance(p1: Pixel, p2: Pixel) -> int:
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+
+
 class UI:
 
     def __init__(self, widget: HasCamera) -> None:
@@ -81,21 +85,26 @@ class UI:
             return False
         dx = pixel[0] - self.last_pixel[0]
         dy = pixel[1] - self.last_pixel[1]
-        self.last_pixel = pixel
         if self.selected_object and not self.widget.tracked_object:
-            self.is_moving_object = True
             if right_button:
+                self.is_moving_object = True
                 sensitivity = 10 / (1 + self.width)
                 self.selected_object.angle -= sensitivity * dx
+                self.last_pixel = pixel
                 return True
-            p = self.widget.get_position_of_pixel(pixel)
-            if left_button and p is not None:
-                self.selected_object.position = p[:2]
-                self.selected_object.velocity = (0, 0)
-                self.selected_object.angular_speed = 0
-                return True
+            if left_button:
+                if not self.is_moving_object and manhattan_distance(pixel, self.last_pixel) > 10:
+                    self.is_moving_object = True
+                if self.is_moving_object:
+                    self.last_pixel = pixel
+                    p = self.widget.get_position_of_pixel(pixel)
+                    if p is not None:
+                        self.selected_object.position = p[:2]
+                        self.selected_object.velocity = (0, 0)
+                        self.selected_object.angular_speed = 0
+                        return True
             return False
-
+        self.last_pixel = pixel
         if left_button and not self.widget.tracked_object:
             if shift:
                 sensitivity = -(1 + 0.1 * self.camera.position[2]) * 0.1
