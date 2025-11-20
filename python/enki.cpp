@@ -216,29 +216,6 @@ Polygon make_polygon(const std::vector<Vector> &ps) {
   return p;
 }
 
-Texture make_texture(const Color &color) { return Texture(1, color); }
-
-Textures make_textures(const std::vector<Color> &colors) {
-  Textures textures;
-  for (const auto &color : colors) {
-    textures.push_back(make_texture(color));
-  }
-  return textures;
-}
-
-// PhysicalObject::Part _part(const py::tuple &obj) {
-//   double height = obj[1].cast<double>();
-//   const auto ps = obj[0].cast<std::vector<Vector>>();
-//   if (py::len(obj) > 2) {
-//     auto colors = obj[2].cast<std::vector<Color>>();
-//     return PhysicalObject::Part(make_polygon(ps), height,
-//                                 make_textures(colors));
-//   }
-//   return PhysicalObject::Part(make_polygon(ps), height);
-// }
-
-// PYBIND11_MAKE_OPAQUE(Texture)
-// PYBIND11_MAKE_OPAQUE(Textures)
 PYBIND11_MAKE_OPAQUE(PhysicalObject::Hull)
 
 PYBIND11_MODULE(pyenki, m) {
@@ -383,10 +360,10 @@ Attributes:
 Right prism that can be composed to define the geometry of a :py:class:`PhysicalObject`.
 
 Attributes:
-    shape (list[Vector]): The convex 2D polygon (positively oriented) at the base of the prism [cm].
+    shape (Sequence[Vector]): The convex 2D polygon (positively oriented) at the base of the prism [cm].
     height (float): The height [cm].
-    textures (list[list[Color]]): A list of textures: each texture is a list of colors for one vertical face of the prism. 
-                                  Must be either empty or have contains at least one color for each face.
+    textures (Sequence[Sequence[Color]]): A list of textures: each texture is a list of colors for one vertical face of the prism. 
+                                          Must be either empty or have contains at least one color for each face.
 )doc")
       .def(py::init<double, double, double>(), py::arg("l1"), py::arg("l2"),
            py::arg("height"), R"doc(
@@ -505,35 +482,30 @@ Arguments:
 )doc")
       .def(py::init([](const std::vector<Vector> &shape, double height,
                        double mass, const Color &color = Color(),
-                       const std::vector<Color> &colors = {}) {
+                       const Textures &textures = {}) {
              auto c = std::make_shared<PhysicalObject>();
-             if (colors.size() == 0) {
+             if (textures.size()) {
+               PhysicalObject::Part part(make_polygon(shape), height, textures);
+               c->setCustomHull(PhysicalObject::Hull(part), mass);
+             } else {
                c->setCustomHull(PhysicalObject::Hull(PhysicalObject::Part(
                                     make_polygon(shape), height)),
                                 mass);
-               c->setColor(color);
-             } else {
-               // TODO(Jerome): is not setting the colors correctly
-               c->setCustomHull(
-                   PhysicalObject::Hull(PhysicalObject::Part(
-                       make_polygon(shape), height, make_textures(colors))),
-                   mass);
              }
+             c->setColor(color);
              return c;
            }),
            py::arg("shape"), py::arg("height"), py::arg("mass"),
-           py::arg("color") = Color(),
-           py::arg("face_colors") = std::vector<Color>{},
+           py::arg("color") = Color(), py::arg("textures") = Textures{},
            R"doc(
 Creates an vertical prism with a convex polygonal base.
 
 Arguments:
-  shape (Sequence[Vector]): 
-    The vertices polygonal base in cm. Must be convex.
+  shape (Sequence[Vector]): The vertices polygonal base in cm. Must be convex.
   height (float): The height in cm.
   mass (float): The mass in kg.
   color (Color): The color.
-  face_colors (Sequence[Color]): if not empty, defines the colors of each face.
+  textures (Sequence[Color]): if not empty, defines the colors of each face.
 )doc")
       .def_readonly("uid", &PhysicalObject::uid)
       // .def_property(
@@ -637,113 +609,6 @@ Arguments:
       .def("contains", &PhysicalObject::contains, py::arg("point"),
            py::arg("tolerance") = 0);
 
-#if 0
-  m.def(
-      "CircularObject",
-      [](double radius, double height, double mass,
-         const Color &color = Color()) {
-        auto c = std::make_unique<PhysicalObject>();
-        c->setCylindric(radius, height, mass);
-        c->setColor(color);
-        return c;
-      },
-      py::arg("radius"), py::arg("height"), py::arg("mass"),
-      py::arg("color") = Color(), R"doc(
-Creates a cylinder.
-
-Arguments:
-  radius (float): The radius in cm.
-  height (float): The height in cm.
-  mass (float): The mass in kg.
-  color (Color): The color.
-Returns
-  PhysicalObject: A cylinder
-)doc");
-
-  m.def(
-      "RectangularObject",
-      [](double l1, double l2, double height, double mass,
-         const Color &color = Color()) {
-        auto c = std::make_unique<PhysicalObject>();
-        c->setRectangular(l1, l2, height, mass);
-        c->setColor(color);
-        return c;
-      },
-      py::arg("l1"), py::arg("l2"), py::arg("height"), py::arg("mass"),
-      py::arg("color") = Color(), R"doc(
-Creates a rectangular prism.
-
-Arguments:
-  l1 (float): the side length in cm (x).
-  l2 (float): the side length in cm (y).
-  height (float): The height in cm.
-  mass (float): The mass in kg.
-  color (Color): The color.
-Returns
-  PhysicalObject: A rectangular prism.
-)doc");
-
-  m.def(
-      "CompositeObject",
-      [](py::list &parts, double mass, const Color &color = Color()) {
-        auto c = std::make_unique<PhysicalObject>();
-        PhysicalObject::Hull hull;
-        for (const auto &part : parts) {
-          auto p = part.cast<py::tuple>();
-          hull += _part(p);
-        }
-        c->setCustomHull(hull, mass);
-        c->setColor(color);
-        return c;
-      },
-      py::arg("parts"), py::arg("mass"), py::arg("color") = Color(), R"doc(
-Creates an object composed of parts.
-
-Arguments:
-  parts (Sequence[:py:type:`pyenki.Part`]): A sequence of parts.
-  mass (float): The mass in kg.
-  color (Color): The color.
-Returns
-  PhysicalObject: A composed object.
-)doc");
-
-  m.def(
-      "ConvexObject",
-      [](const std::vector<Vector> &shape, double height, double mass,
-         const Color &color = Color(), const std::vector<Color> &colors = {}) {
-        auto c = std::make_unique<PhysicalObject>();
-        if (colors.size() == 0) {
-          c->setCustomHull(PhysicalObject::Hull(PhysicalObject::Part(
-                               make_polygon(shape), height)),
-                           mass);
-          c->setColor(color);
-        } else {
-          // TODO(Jerome): is not setting the colors correctly
-          c->setCustomHull(
-              PhysicalObject::Hull(PhysicalObject::Part(
-                  make_polygon(shape), height, make_textures(colors))),
-              mass);
-        }
-        return c;
-      },
-      py::arg("base"), py::arg("height"), py::arg("mass"),
-      py::arg("color") = Color(), py::arg("face_colors") = std::vector<Color>{},
-      R"doc(
-Creates an vertical prism with a convex polygonal base.
-
-Arguments:
-  base (:py:type:`pyenki.Polygon`): 
-    The vertices polygonal base in cm. Must be convex.
-  height (float): The height in cm.
-  mass (float): The mass in kg.
-  color (Color): The color.
-  face_colors (Sequence[Color]): if not empty, defines the colors of each face.
-
-Returns
-  PhysicalObject: A convex prism.
-)doc");
-
-#endif
   // Robots
 
   py::classh<Robot, PhysicalObject>(m, "Robot", "Base class for all robots");
