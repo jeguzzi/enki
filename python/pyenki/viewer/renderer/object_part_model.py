@@ -118,14 +118,12 @@ class ObjectPartModel:
         if not self.vao:
             self.init(ctx)
         assert self.vao
+        enable_texture(self.texture is not None, program)
         if self.texture:
             self.texture.bind()
-        else:
-            enable_texture(False, program)
         f = functions()
         with QOpenGLVertexArrayObject.Binder(self.vao):
             f.glDrawArrays(GL.GL_TRIANGLES, 0, self.number_of_sides * 6)
             enable_texture(False, program)
             f.glDrawArrays(GL.GL_TRIANGLE_FAN, self.number_of_sides * 6,
                            self.number_of_sides + 2)
-        # enable_texture(True, program)
