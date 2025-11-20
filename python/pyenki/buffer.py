@@ -159,6 +159,15 @@ class EnkiRemoteFrameBuffer(
             return get_position_of_pixel((x, y))
         return None
 
+    @staticmethod
+    def get_buttons(event: dict[str, Any]) -> tuple[bool, bool]:
+        control = 'Control' in event['modifiers']
+        button_1 = 1 in event['buttons'] or event['button'] == 1
+        button_2 = 2 in event['buttons'] or event['button'] == 2
+        left_button = button_1 and not control
+        right_button = (button_1 and control) or button_2
+        return left_button, right_button
+
     def handle_event(self, event: dict[str, Any]) -> None:
         event_type = event.get("event_type", None)
         if event_type == "close":
@@ -173,25 +182,19 @@ class EnkiRemoteFrameBuffer(
             w, h, _ = self.size
             self._ui.on_resize(int(w), int(h))
         elif event_type == "pointer_down":
-            left_button = event['button'] == 1 and 'Control' not in event[
-                'modifiers']
             if self._ui.on_mouse_press(self.get_pixel(event),
-                                       left_button=left_button):
+                                       *self.get_buttons(event)):
                 self.request_draw()
         elif event_type == "pointer_up":
-            if self._ui.on_mouse_release():
+            if self._ui.on_mouse_release(*self.get_buttons(event)):
                 self.request_draw()
         elif event_type == "wheel":
             delta = -event["dy"] * 5
             if self._ui.on_wheel(delta):
                 self.request_draw()
         elif event_type == "pointer_move":
-            button = len(event['buttons']) > 0
-            right_button = button and 'Control' in event['modifiers']
-            left_button = not right_button and button
             if self._ui.on_mouse_move(self.get_pixel(event),
-                                      left_button=left_button,
-                                      right_button=right_button,
+                                      *self.get_buttons(event),
                                       shift='Shift' in event['modifiers']):
                 self.request_draw()
 

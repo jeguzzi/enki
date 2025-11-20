@@ -151,6 +151,11 @@ namespace Enki
 				default: break;
 			}
 		}
+		buttonPosition[CENTER] = {4.8, 0, 5.3};
+		buttonPosition[FORWARD] = {6.3, 0, 5.3};
+		buttonPosition[BACKWARD] = {3.3, 0, 5.3};
+		buttonPosition[LEFT] = {4.8, 1.5, 5.3};
+		buttonPosition[RIGHT] = {4.8, -1.5, 5.3};
 		setName("thymio");
 	}
 	
@@ -196,6 +201,29 @@ namespace Enki
 			return Color(0,0,0,0);
 		else
 			return ledColor[ledIndex];
+	}
+
+	// Jerome: ported buttons from Aseba Playground
+	inline double distance(double x1, double y1, double z1, double x2, double y2, double z2)
+	{	
+		return sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) + (z1-z2)*(z1-z2));
+	}
+
+	void Thymio2::touchButton(Button index) {
+		const auto &p = buttonPosition[index];
+		touchEvent(true, 3, p[0], p[1], p[2]);
+	}
+
+	void Thymio2::mousePressEvent(unsigned button, double pointX, double pointY, double pointZ) {
+        for (int index = 0; index < BUTTON_COUNT; ++index)
+        {
+        	const auto &p = buttonPosition[index];
+        	if (distance(pointX, pointY, pointZ, p[0], p[1], p[2]) < 0.65) {
+        		hasTouchedButton(Button(index));
+        		break;
+        	}
+        }
+		PhysicalObject::mousePressEvent(button, pointX, pointY, pointZ);
 	}
 }
 

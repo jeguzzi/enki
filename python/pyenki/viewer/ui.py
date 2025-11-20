@@ -1,9 +1,13 @@
 import numpy as np
 
 from .. import PhysicalObject
-from .camera import HasCamera
-from .types import Pixel
+from .camera import HasCamera, to_3d, rotate
+from .types import Pixel, Vector3
 from .utils import get_object_at
+
+
+def position_relative_to_object(obj: PhysicalObject, p: Vector3) -> Vector3:
+    return rotate(p - to_3d(obj.position, 0), -obj.angle)
 
 
 class UI:
@@ -14,6 +18,7 @@ class UI:
         self.is_moving_object: bool = False
         self.widget = widget
         self.camera = widget.camera
+        self._touched_object: dict[int, PhysicalObject] = {}
 
     @property
     def selected_object(self) -> PhysicalObject | None:
@@ -26,22 +31,43 @@ class UI:
             if not self.is_moving_object:
                 self._selected_object = value
 
-    def on_mouse_press(self, pixel: Pixel, left_button: bool) -> bool:
+    def on_mouse_press(self, pixel: Pixel, left_button: bool,
+                       right_button: bool) -> bool:
         self.last_pixel = pixel
-        if not left_button:
-            return False
         if self.widget.world:
             p = self.widget.get_position_of_pixel(pixel)
             if p is not None:
-                self.selected_object = get_object_at(self.widget.world,
-                                                     p[:2],
-                                                     tolerance=0.2)
-                return True
+                pointed_object = get_object_at(self.widget.world,
+                                               p[:2],
+                                               tolerance=0.2)
+                r = False
+                if left_button:
+                    r = pointed_object is not self.selected_object
+                    self.selected_object = pointed_object
+                if pointed_object:
+                    p = position_relative_to_object(pointed_object, p)
+                    button = 2
+                    if left_button:
+                        button = 0
+                    if right_button:
+                        button = 1
+                    pointed_object.touch(True, button, *p)
+                    self._touched_object[button] = pointed_object
+                    r = True
+                return r
         return False
 
-    def on_mouse_release(self) -> bool:
+    def on_mouse_release(self, left_button: bool, right_button: bool) -> bool:
         self.is_moving_object = False
         self.last_pixel = None
+        button = 2
+        if left_button:
+            button = 0
+        if right_button:
+            button = 1
+        if button in self._touched_object:
+            self._touched_object[button].touch(False, button, 0, 0, 0)
+            del self._touched_object[button]
         return True
 
     def on_mouse_double_click(self) -> bool:

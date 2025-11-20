@@ -137,23 +137,27 @@ class WorldView(QOpenGLWidget, HasCamera):
         p = event.position()
         return int(p.x()), int(p.y())
 
+    @staticmethod
+    def get_buttons(event: QMouseEvent) -> tuple[bool, bool]:
+        left_button = bool(event.buttons() & Qt.MouseButton.LeftButton)
+        right_button = bool(event.buttons() & Qt.MouseButton.RightButton)
+        return left_button, right_button
+
     def mousePressEvent(self, event: QMouseEvent) -> None:
         self._ui.on_mouse_press(self.get_pixel(event),
-                                left_button=bool(event.buttons()
-                                                 & Qt.MouseButton.LeftButton))
+                                *self.get_buttons(event))
 
     def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:
         self._ui.on_mouse_double_click()
 
     def mouseReleaseEvent(self, event: QMouseEvent) -> None:
-        self._ui.on_mouse_release()
+        self._ui.on_mouse_release(*self.get_buttons(event))
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
-        self._ui.on_mouse_move(
-            self.get_pixel(event),
-            left_button=bool(event.buttons() & Qt.MouseButton.LeftButton),
-            right_button=bool(event.buttons() & Qt.MouseButton.RightButton),
-            shift=bool(event.modifiers() & Qt.KeyboardModifier.ShiftModifier))
+        shift = bool(event.modifiers() & Qt.KeyboardModifier.ShiftModifier)
+        self._ui.on_mouse_move(self.get_pixel(event),
+                               *self.get_buttons(event),
+                               shift=shift)
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         delta = event.angleDelta().y()

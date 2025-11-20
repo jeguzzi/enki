@@ -277,7 +277,7 @@ namespace Enki
 		std::string name;
 		std::function<void(PhysicalObject *, double)> cb;
 		std::function<void(PhysicalObject *, PhysicalObject *)> collisionCb;
-
+		std::function<void(PhysicalObject *, bool, unsigned, double, double, double)> touchCallback;
 		// Physics
 		
 		//! position before collision, used to compute interlacedDistance
@@ -343,10 +343,27 @@ namespace Enki
 			MOUSE_BUTTON_MIDDLE = 2
 		};
 		//! Called for robot if a mouse button is pressed while pointing to it, point is given in relative coordinates
-		virtual void mousePressEvent(unsigned button, double pointX, double pointY, double pointZ) {};
+		virtual void mousePressEvent(unsigned button, double pointX, double pointY, double pointZ) 
+		{
+			if (touchCallback) {
+				touchCallback(this, true, button, pointX, pointY, pointZ);
+			}
+		};
 		//! Called for a robot if a previously mouse button was pressed and is now released
-		virtual void mouseReleaseEvent(unsigned button) {};
-		
+		virtual void mouseReleaseEvent(unsigned button) 
+		{
+			if (touchCallback) {
+				touchCallback(this, false, button, 0, 0, 0);
+			}
+		}
+    void touchEvent(bool state, unsigned button, double pointX, double pointY, double pointZ) 
+    {                                            
+      if (state) {                                                              
+        mousePressEvent(button, pointX, pointY, pointZ);                        
+      } else {                                                                  
+        mouseReleaseEvent(button);                                              
+      }                                                                         
+    }  
 		void setName(const std::string &value) {
 			name = value;
 		}
@@ -365,7 +382,12 @@ namespace Enki
 		const std::function<void(PhysicalObject *, PhysicalObject *)> & getCollisionCallback() const {
 			return collisionCb;
 		}
-
+		void setTouchCallback(std::function<void(PhysicalObject *, bool, unsigned, double, double, double)> &value) {
+			touchCallback = value;
+		}
+		const std::function<void(PhysicalObject *, bool, unsigned, double, double, double)> & getTouchCallback() const {
+			return touchCallback;
+		}
 		World * getWorld() const {
 			return world;
 		}

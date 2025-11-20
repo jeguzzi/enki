@@ -110,33 +110,44 @@ void setColorComponents(Color &color, py::tuple values) {
 
 // wrappers for robots
 
-#define OVERRIDE_CONTROL_STEP(cname, dname)                                    \
+#define OVERRIDE_PO(cname, dname)                                              \
 public:                                                                        \
   void controlStep(double dt) override {                                       \
-    control_step(dt);                                                          \
     cname::controlStep(dt);                                                    \
+    PYBIND11_OVERRIDE_IMPL(PYBIND11_TYPE(void), PYBIND11_TYPE(dname),          \
+                           "control_step", dt);                                \
   }                                                                            \
                                                                                \
-private:                                                                       \
-  void control_step(double dt) {                                               \
+  void mousePressEvent(unsigned button, double pointX, double pointY,          \
+                       double pointZ) override {                               \
+    bool state = true;                                                         \
+    cname::mousePressEvent(button, pointX, pointY, pointZ);                    \
     PYBIND11_OVERRIDE_IMPL(PYBIND11_TYPE(void), PYBIND11_TYPE(dname),          \
-                           "controlStep", dt);                                 \
+                           "on_touch", state, button, pointX, pointY, pointZ); \
+  }                                                                            \
+                                                                               \
+  void mouseReleaseEvent(unsigned button) override {                           \
+    double pointX, pointY, pointZ = 0;                                         \
+    bool state = false;                                                        \
+    cname::mouseReleaseEvent(button);                                          \
+    PYBIND11_OVERRIDE_IMPL(PYBIND11_TYPE(void), PYBIND11_TYPE(dname),          \
+                           "on_touch", state, button, pointX, pointY, pointZ); \
   }
 
 struct PyPhysicalObject : public PhysicalObject,
                           public py::trampoline_self_life_support {
   using PhysicalObject::PhysicalObject;
-  OVERRIDE_CONTROL_STEP(PhysicalObject, PyPhysicalObject)
+  OVERRIDE_PO(PhysicalObject, PyPhysicalObject)
 };
 
 struct PyMarxbot : public Marxbot, public py::trampoline_self_life_support {
   using Marxbot::Marxbot;
-  OVERRIDE_CONTROL_STEP(Marxbot, PyMarxbot)
+  OVERRIDE_PO(Marxbot, PyMarxbot)
 };
 
 struct PyEPuck : public EPuck, public py::trampoline_self_life_support {
   using EPuck::EPuck;
-  OVERRIDE_CONTROL_STEP(EPuck, PyEPuck)
+  OVERRIDE_PO(EPuck, PyEPuck)
 };
 
 struct PyThymio2 : public Thymio2, public py::trampoline_self_life_support {
@@ -153,7 +164,13 @@ struct PyThymio2 : public Thymio2, public py::trampoline_self_life_support {
     return ts;
   }
 
-  OVERRIDE_CONTROL_STEP(Thymio2, PyThymio2)
+  void hasTouchedButton(Button button) override {
+    Thymio2::hasTouchedButton(button);
+    PYBIND11_OVERRIDE_IMPL(PYBIND11_TYPE(void), PYBIND11_TYPE(PyThymio2),
+                           "on_button_touch", button);
+  }
+
+  OVERRIDE_PO(Thymio2, PyThymio2)
 };
 
 void set_thymio_rgb_led(Thymio2 &thymio, Thymio2::LedIndex index, double red,
@@ -359,6 +376,7 @@ Attributes:
     angular_speed (float): The angular speed in the world frame in radians per second
     collision_callback (Callable[[PhysicalObject, PhysicalObject], None] | None): An optional function called when the object perform a control step. 
     control_step_callback (Callable[[PhysicalObject, float], None] | None): An optional function called when the object collides. 
+    touch_callback (Callable[[PhysicalObject], None] | None): An optional function called when touch events happen.
 )doc");
 
   py::classh<PhysicalObject::Part>(po, "Part", py::dynamic_attr(), R"doc(
@@ -434,7 +452,7 @@ Arguments:
 
   po.def(py::init([](const std::vector<PhysicalObject::Part> &parts,
                      double mass, const Color &color) {
-           auto obj = std::make_unique<PhysicalObject>();
+           auto obj = std::make_shared<PhysicalObject>();
            PhysicalObject::Hull hull;
            hull.assign(parts.begin(), parts.end());
            obj->setCustomHull(hull, mass);
@@ -452,7 +470,7 @@ Arguments:
 )doc")
       .def(py::init([](double radius, double height, double mass,
                        const Color &color = Color()) {
-             auto obj = std::make_unique<PhysicalObject>();
+             auto obj = std::make_shared<PyPhysicalObject>();
              obj->setCylindric(radius, height, mass);
              obj->setColor(color);
              return obj;
@@ -469,7 +487,7 @@ Arguments:
 )doc")
       .def(py::init([](double l1, double l2, double height, double mass,
                        const Color &color = Color()) {
-             auto obj = std::make_unique<PhysicalObject>();
+             auto obj = std::make_shared<PhysicalObject>();
              obj->setRectangular(l1, l2, height, mass);
              obj->setColor(color);
              return obj;
@@ -488,7 +506,7 @@ Arguments:
       .def(py::init([](const std::vector<Vector> &shape, double height,
                        double mass, const Color &color = Color(),
                        const std::vector<Color> &colors = {}) {
-             auto c = std::make_unique<PhysicalObject>();
+             auto c = std::make_shared<PhysicalObject>();
              if (colors.size() == 0) {
                c->setCustomHull(PhysicalObject::Hull(PhysicalObject::Part(
                                     make_polygon(shape), height)),
@@ -562,6 +580,8 @@ Arguments:
       .def_property("control_step_callback",
                     &PhysicalObject::getControlCallback,
                     &PhysicalObject::setControlCallback, py::keep_alive<1, 2>())
+      .def_property("touch_callback", &PhysicalObject::getTouchCallback,
+                    &PhysicalObject::setTouchCallback, py::keep_alive<1, 2>())
       .def(
           "control_step",
           [](PyPhysicalObject &o, double dt) { o.controlStep(dt); },
@@ -575,6 +595,39 @@ in particular for robots. Alternatively, users can assign a callback
 Arguments:
   time_step (float): The time step of the simulation.
 
+)doc")
+      .def(
+          "on_touch",
+          [](PyPhysicalObject &o, bool state, unsigned button, double x,
+             double y, double z) { o.touchEvent(state, button, x, y, z); },
+          py::arg("state"), py::arg("button"), py::arg("x"), py::arg("y"),
+          py::arg("z"), R"doc(
+Called after a touch event.
+
+Can be overridden by sub-classes to react to touch events. 
+Alternatively, users can assign a callback as :py:attr:`touch_callback`.
+
+Arguments:
+  state (bool): True for press, False for release.
+  button (int): mouse button index: 0 (left), 1 (right) or 2 (middle).
+  x (float): cursor x-coordinate (cm).
+  y (float): cursor y-coordinate (cm).
+  z (float): cursor z-coordinate (cm). 
+)doc")
+      .def(
+          "touch",
+          [](PyPhysicalObject &o, bool state, unsigned button, double x,
+             double y, double z) { o.touchEvent(state, button, x, y, z); },
+          py::arg("state"), py::arg("button"), py::arg("x"), py::arg("y"),
+          py::arg("z"), R"doc(
+Trigger a touch event.
+
+Arguments:
+  state (bool): True for press, False for release.
+  button (int): mouse button index: 0 (left), 1 (right) or 2 (middle).
+  x (float): cursor x-coordinate (cm).
+  y (float): cursor y-coordinate (cm).
+  z (float): cursor z-coordinate (cm). 
 )doc")
       // TODO(OLD): warning setting the "color" property at run time using the
       // viewer from the non-gui thread will lead to a crash because it will do
@@ -915,7 +968,7 @@ Attributes:
           nullptr)
       .def_readonly("rx_value", &IRCommEvent::rx_value);
 
-  py::classh<Thymio2, PyThymio2, DifferentialWheeled, PhysicalObject>(
+  py::classh<Thymio2, PyThymio2, DifferentialWheeled, PhysicalObject> thymio(
       m, "Thymio2", R"doc( 
 A :py:class:`DifferentialWheeled` Thymio2 robot.
 Attribute names mimic the aseba interface, see http://wiki.thymio.org/en:thymioapi.
@@ -966,8 +1019,47 @@ Attributes:
     right_wheel_encoder_speed_i (int): The current right wheel speed in ticks per second (readonly).
     left_wheel_odometry_i (int): The left wheel odometry integrated from measured wheel speeds in ticks (readonly).
     right_wheel_odometry_i (int): The right wheel odometry integrated from measured wheel speeds in ticks (readonly).
+    button_touch_callback (Callable[[Thymio2, int], None] | None): An optional function called when button touch events happen.
+)doc");
+
+  py::native_enum<Thymio2::Button>(thymio, "Button", "enum.Enum", R"doc(
+Identify one of the five touch button of the Thymio2.
 )doc")
-      .def(py::init<>(), "TEST")
+      .value("CENTER", Thymio2::Button::CENTER, R"doc(
+)doc")
+      .value("FORWARD", Thymio2::Button::FORWARD, R"doc(
+)doc")
+      .value("BACKWARD", Thymio2::Button::BACKWARD, R"doc(
+)doc")
+      .value("LEFT", Thymio2::Button::LEFT, R"doc(
+)doc")
+      .value("RIGHT", Thymio2::Button::RIGHT, R"doc(
+)doc")
+      .finalize();
+
+  thymio.def(py::init<>(), "Constructs an instance")
+      .def_property("button_touch_callback", &Thymio2::getButtonTouchCallback,
+                    &Thymio2::setButtonTouchCallback, py::keep_alive<1, 2>())
+      .def(
+          "on_button_touch",
+          [](PyThymio2 &t, Thymio2::Button button) {
+            t.hasTouchedButton(button);
+          },
+          py::arg("index"), R"doc(
+Called after a button is touched.
+
+Can be overridden by sub-classes to react to button touch events. 
+Alternatively, users can assign a callback as :py:attr:`button_touch_callback`.
+
+Arguments:
+  index (int): The button being touched.
+)doc")
+      .def("touch_button", &Thymio2::touchButton, py::arg("button"), R"doc( 
+Touches one of the buttons on top of the robot.
+
+Args:
+    index (int): the index of the button
+)doc")
       .def_property(
           "prox_distances",
           [](const Thymio2 &r) {
