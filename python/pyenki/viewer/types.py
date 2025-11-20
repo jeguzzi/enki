@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from collections.abc import Callable
 from typing import (Annotated, Any, NotRequired, Protocol, SupportsFloat,
                     SupportsInt, TypeAlias, TypedDict, Unpack)
 
@@ -13,7 +12,6 @@ Vector3: TypeAlias = Annotated[numpy.typing.NDArray[numpy.float64], '[3, 1]']
 Vector3Like: TypeAlias = Annotated[numpy.typing.ArrayLike, numpy.float64,
                                    '[3, 1]']
 Pixel: TypeAlias = tuple[int, int]
-PixelPositionGetter = Callable[[Pixel], Vector3 | None]
 
 
 class CameraConfig(TypedDict):

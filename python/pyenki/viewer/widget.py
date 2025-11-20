@@ -30,7 +30,7 @@ class WorldView(QOpenGLWidget, HasCamera):
         QOpenGLWidget.__init__(self, parent)
         self._world = world
         HasCamera.__init__(self, world=world, **camera_config)
-        self._ui = UI(self.camera)
+        self._ui = UI(self)
         self._update_world = update_world
         self._factor = float(factor)
         self.renderer: Renderer | None = None
@@ -41,7 +41,6 @@ class WorldView(QOpenGLWidget, HasCamera):
         self._world_time_step = 0.0
         self._timer_period = 0.0
         self._rt_factor = 1.0
-        self.callback = None
         self.cursor_position: Vector3 | None = None
         fps = float(fps)
         if fps > 0:
@@ -121,11 +120,10 @@ class WorldView(QOpenGLWidget, HasCamera):
 
     def paintGL(self) -> None:
         if self.world and self.renderer:
+            self.update_camera()
             self.renderer.draw(self.world, self.walls_height,
                                self.camera.matrix, self.camera.projection,
                                self._ui.selected_object)
-            if self.callback:
-                self.callback(self)
 
     def resizeGL(self, width: int, height: int) -> None:
         self._ui.on_resize(width, height)
@@ -140,8 +138,12 @@ class WorldView(QOpenGLWidget, HasCamera):
         return int(p.x()), int(p.y())
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
-        self._ui.on_mouse_press(self.get_pixel(event), self.world,
-                                self.get_position_of_pixel)
+        self._ui.on_mouse_press(self.get_pixel(event),
+                                left_button=bool(event.buttons()
+                                                 & Qt.MouseButton.LeftButton))
+
+    def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:
+        self._ui.on_mouse_double_click()
 
     def mouseReleaseEvent(self, event: QMouseEvent) -> None:
         self._ui.on_mouse_release()
@@ -149,7 +151,6 @@ class WorldView(QOpenGLWidget, HasCamera):
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         self._ui.on_mouse_move(
             self.get_pixel(event),
-            self.get_position_of_pixel,
             left_button=bool(event.buttons() & Qt.MouseButton.LeftButton),
             right_button=bool(event.buttons() & Qt.MouseButton.RightButton),
             shift=bool(event.modifiers() & Qt.KeyboardModifier.ShiftModifier))

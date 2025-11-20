@@ -62,7 +62,7 @@ class EnkiRemoteFrameBuffer(
         jupyter_rfb.RemoteFrameBuffer.__init__(self, resizable=True)
         HasCamera.__init__(self, world=world, **camera_config)
         self.world = world
-        self._ui = UI(self.camera)
+        self._ui = UI(self)
         self.size: tuple[int, int, int] = (0, 0, 1)
 
     async def run_async(
@@ -164,14 +164,19 @@ class EnkiRemoteFrameBuffer(
         if event_type == "close":
             # print('closing')
             pass
+        if event_type == "double_click":
+            if self._ui.on_mouse_double_click():
+                self.request_draw()
         if event_type == "resize":
             self.size = int(event["width"]), int(event["height"]), int(
                 event["pixel_ratio"])
             w, h, _ = self.size
             self._ui.on_resize(int(w), int(h))
-        elif event_type == "pointer_down" and event["button"] == 1:
-            if self._ui.on_mouse_press(self.get_pixel(event), self.world,
-                                       self.get_position_of_pixel):
+        elif event_type == "pointer_down":
+            left_button = event['button'] == 1 and 'Control' not in event[
+                'modifiers']
+            if self._ui.on_mouse_press(self.get_pixel(event),
+                                       left_button=left_button):
                 self.request_draw()
         elif event_type == "pointer_up":
             if self._ui.on_mouse_release():
@@ -185,7 +190,6 @@ class EnkiRemoteFrameBuffer(
             right_button = button and 'Control' in event['modifiers']
             left_button = not right_button and button
             if self._ui.on_mouse_move(self.get_pixel(event),
-                                      self.get_position_of_pixel,
                                       left_button=left_button,
                                       right_button=right_button,
                                       shift='Shift' in event['modifiers']):
@@ -193,7 +197,7 @@ class EnkiRemoteFrameBuffer(
 
     def get_frame(self) -> numpy.typing.NDArray[np.uint8]:
         assert self.world
-
+        self.update_camera()
         image = render(self.world,
                        width=self.size[0] * self.size[2],
                        height=self.size[1] * self.size[2],

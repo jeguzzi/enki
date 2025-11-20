@@ -1,38 +1,42 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import SupportsFloat, Unpack, cast
 
 import numpy as np
 import numpy.typing
 from PySide6.QtGui import QMatrix4x4
 
-from .. import Vector, VectorLike, World
-from .types import CameraConfig, Vector3, Vector3Like
+from .. import PhysicalObject, Vector, VectorLike, World
+from .types import CameraConfig, Pixel, Vector3, Vector3Like
 
 
 def to_3d(xy: VectorLike, z: SupportsFloat) -> Vector3:
     return np.concatenate([np.asarray(xy), [float(z)]])
 
 
+def rotate(v: Vector3, delta: float) -> Vector3:
+    if not delta:
+        return v
+    return np.array((np.cos(delta) * v[0] - np.sin(delta) * v[1],
+                     -np.sin(delta) * v[0] + np.cos(delta) * v[1], v[2]),
+                    dtype=v.dtype)
+
+
 class Camera:
 
     def __init__(self) -> None:
         self.position: Vector3 = cast(Vector3, np.zeros(3))
-        self._matrix = QMatrix4x4()
         self._viewport: tuple[float, float] | None = None
-        self._proj = QMatrix4x4()
         self.yaw = 0.0
-        self.user_yaw = 0.0
         self.pitch = 0.0
         self.is_ortho = False
         self.fov = 1.0
         self.near_distance = 1.0
         self.far_distance = 1000.0
-        # self.update_projection()
-        # self.update_matrix()
 
     def reset(self, world: World | None = None) -> None:
-        self.yaw = self.user_yaw = np.pi / 2
+        self.yaw = np.pi / 2
         if self.is_ortho:
             self.pitch = -np.pi / 2
         else:
@@ -47,37 +51,28 @@ class Camera:
 
     @property
     def matrix(self) -> QMatrix4x4:
-        self.update_matrix()
-        return self._matrix
-
-    def update_matrix(self) -> None:
-        self._matrix.setToIdentity()
-        self._matrix.rotate(-self.pitch * 180 / np.pi - 90, 1, 0, 0)
-        self._matrix.rotate(-self.yaw * 180 / np.pi + 90, 0, 0, 1)
-        self._matrix.translate(*(-self.position))
-
-    def update_projection(self) -> None:
-        if not self._viewport:
-            return
-        self._proj.setToIdentity()
-        aspect_ratio = self._viewport[0] / self._viewport[1]
-        if self.is_ortho:
-            s = 0.5 * np.tan(self.fov) * self.position[2]
-            # print(-s * aspect_ratio, s * aspect_ratio, -s, s, 1.0, 1000.0)
-            self._proj.ortho(-s * aspect_ratio, s * aspect_ratio, -s, s,
-                             self.near_distance, self.far_distance)
-        else:
-            self._proj.perspective(self.fov * 180 / np.pi, aspect_ratio,
-                                   self.near_distance, self.far_distance)
+        m = QMatrix4x4()
+        m.rotate(-self.pitch * 180 / np.pi - 90, 1, 0, 0)
+        m.rotate(-self.yaw * 180 / np.pi + 90, 0, 0, 1)
+        m.translate(*(-self.position))
+        return m
 
     def set_viewport(self, width: float, height: float) -> None:
         self._viewport = (width, height)
-        # self.update_projection()
 
     @property
     def projection(self) -> QMatrix4x4:
-        self.update_projection()
-        return self._proj
+        assert self._viewport is not None
+        p = QMatrix4x4()
+        aspect_ratio = self._viewport[0] / self._viewport[1]
+        if self.is_ortho:
+            s = 0.5 * np.tan(self.fov) * self.position[2]
+            p.ortho(-s * aspect_ratio, s * aspect_ratio, -s, s,
+                    self.near_distance, self.far_distance)
+        else:
+            p.perspective(self.fov * 180 / np.pi, aspect_ratio,
+                          self.near_distance, self.far_distance)
+        return p
 
     @property
     def forward(self) -> Vector3:
@@ -101,7 +96,6 @@ class Camera:
              target_distance: float = 30.0) -> None:
         self.position = np.asarray(
             target_position) - target_distance * self.forward
-        self.update_matrix()
 
     def point(self, target_position: Vector3Like) -> None:
         if self.is_ortho:
@@ -109,12 +103,14 @@ class Camera:
         delta = np.asarray(target_position) - self.position
         self.yaw = np.atan2(delta[1], delta[0])
         self.pitch = np.atan2(delta[2], np.linalg.norm(delta[:2]))
-        self.update_matrix()
 
     def depth_to_z(self, depth: float) -> float:
         return self.far_distance * self.near_distance / (
             self.far_distance - depth *
             (self.far_distance - self.near_distance))
+
+
+CameraCallback = Callable[[Camera, World], None]
 
 
 class HasCamera:
@@ -127,6 +123,18 @@ class HasCamera:
                  **config: Unpack[CameraConfig]) -> None:
         self.camera = Camera()
         self.update_camera_config(**config)
+        self._tracked_object: PhysicalObject | None = None
+        self._camera_callback: CameraCallback | None = None
+        self.tracking_distance = 0.0
+        self.tracking_angle = 0.0
+
+    @property
+    def camera_matrix(self) -> QMatrix4x4:
+        return self.camera.matrix
+
+    @property
+    def camera_projection(self) -> QMatrix4x4:
+        return self.camera.projection
 
     @property
     def camera_config(self) -> CameraConfig:
@@ -144,8 +152,7 @@ class HasCamera:
         if 'camera_altitude' in config:
             self.camera.position[2] = float(config['camera_altitude'])
         if 'camera_yaw' in config:
-            self.camera.user_yaw = self.camera.yaw = float(
-                config['camera_yaw'])
+            self.camera.yaw = float(config['camera_yaw'])
         if 'camera_pitch' in config:
             self.camera.pitch = float(config['camera_pitch'])
         if 'camera_is_ortho' in config:
@@ -184,7 +191,7 @@ class HasCamera:
 
     @camera_yaw.setter
     def camera_yaw(self, value: SupportsFloat) -> None:
-        self.camera.user_yaw = self.camera.yaw = float(value)
+        self.camera.yaw = float(value)
 
     @property
     def camera_position(self) -> Vector:
@@ -256,3 +263,37 @@ class HasCamera:
     def reset_camera(self) -> None:
         if self.world:
             self.camera.reset(self.world)
+
+    def get_position_of_pixel(self, pixel: Pixel) -> Vector3 | None:
+        return None
+
+    def update_tracking(self) -> None:
+        if self.tracked_object:
+            self.camera.yaw = self.tracked_object.angle + self.tracking_angle
+            self.camera.move(
+                to_3d(self.tracked_object.position,
+                      self.tracked_object.height), self.tracking_distance)
+
+    @property
+    def tracked_object(self) -> PhysicalObject | None:
+        return self._tracked_object
+
+    @tracked_object.setter
+    def tracked_object(self, value: PhysicalObject | None) -> None:
+        if self._tracked_object is value:
+            return
+        if not self._tracked_object and value:
+            self._previous_camera_config = self.camera_config
+            self.tracking_distance = value.radius * 5
+            self.tracking_angle = 0
+            self._tracked_object = value
+            self.update_tracking()
+        else:
+            if not value:
+                self.update_camera_config(**self._previous_camera_config)
+            self._tracked_object = value
+
+    def update_camera(self) -> None:
+        self.update_tracking()
+        if self._camera_callback and self.world:
+            self._camera_callback(self.camera, self.world)
