@@ -1,16 +1,27 @@
+from __future__ import annotations
+
 import numpy as np
 
-from .. import PhysicalObject
-from .camera import HasCamera, to_3d, rotate
+from .. import PhysicalObject, VectorLike, World
+from .camera import HasCamera, rotate, to_3d
 from .types import Pixel, Vector3
-from .utils import get_object_at
+
+
+def get_object_at(world: World,
+                  position: VectorLike,
+                  tolerance: float = 0) -> PhysicalObject | None:
+    position = np.asarray(position)
+    for obj in world.objects:
+        if obj.contains(position, tolerance):
+            return obj
+    return None
 
 
 def position_relative_to_object(obj: PhysicalObject, p: Vector3) -> Vector3:
     return rotate(p - to_3d(obj.position, 0), -obj.angle)
 
 
-def manhattan_distance(p1: Pixel, p2: Pixel) -> int:
+def manhattan_distance(p1: Pixel, p2: Pixel) -> float:
     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
 

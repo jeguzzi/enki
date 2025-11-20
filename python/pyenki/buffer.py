@@ -7,15 +7,16 @@ from collections.abc import Collection
 from typing import Any
 
 import jupyter_rfb  # type: ignore[import-untyped]
-import numpy as np
-import numpy.typing
 
 import pyenki
-from pyenki.viewer import render
+from pyenki.viewer import render, get_position_of_pixel
 from pyenki.viewer.camera import HasCamera
-from pyenki.viewer.offscreen_renderer import get_position_of_pixel
 from pyenki.viewer.types import CameraConfig, Pixel, Vector3
 from pyenki.viewer.ui import UI
+
+if typing.TYPE_CHECKING:
+    import numpy.typing
+    import numpy as np
 
 
 class EnkiRemoteFrameBuffer(
@@ -154,8 +155,8 @@ class EnkiRemoteFrameBuffer(
 
     def get_position_of_pixel(self, pixel: Pixel) -> Vector3 | None:
         if self.world:
-            x = pixel[0] * self.size[2]
-            y = pixel[1] * self.size[2]
+            x = pixel[0] / self.size[0]
+            y = pixel[1] / self.size[1]
             return get_position_of_pixel((x, y))
         return None
 
@@ -169,7 +170,7 @@ class EnkiRemoteFrameBuffer(
         return left_button, right_button
 
     def handle_event(self, event: dict[str, Any]) -> None:
-        event_type = event.get("event_type", None)
+        event_type = event.get("event_type")
         if event_type == "close":
             # print('closing')
             pass

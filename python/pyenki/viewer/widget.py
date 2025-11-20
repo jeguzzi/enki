@@ -1,10 +1,11 @@
+from __future__ import annotations
+
 import typing
 
 import numpy as np
-from PySide6.QtCore import QEvent, QSize, Qt, Slot
-from PySide6.QtGui import QHideEvent, QImage, QMouseEvent, QWheelEvent
+from PySide6.QtCore import QSize, Qt, Slot
+from PySide6.QtGui import QImage
 from PySide6.QtOpenGLWidgets import QOpenGLWidget
-from PySide6.QtWidgets import QWidget
 
 from .. import Image, World
 from .camera import HasCamera
@@ -12,6 +13,11 @@ from .renderer import Renderer
 from .types import CameraConfig, Pixel, Vector3
 from .ui import UI
 from .utils import get_position_of_pixel, init, run
+
+if typing.TYPE_CHECKING:
+    from PySide6.QtWidgets import QWidget
+    from PySide6.QtGui import QHideEvent, QMouseEvent, QWheelEvent
+    from PySide6.QtCore import QEvent
 
 
 class WorldView(QOpenGLWidget, HasCamera):
@@ -181,7 +187,7 @@ class WorldView(QOpenGLWidget, HasCamera):
     def get_position_of_pixel(self, pixel: Pixel) -> Vector3 | None:
         if self.world:
             r = self.devicePixelRatio()
-            pixel = int(pixel[0] * r), int(pixel[1] * r)
+            pixel = pixel[0] / self.width(), pixel[1] / self.height()
             width = int(self.width() * r)
             height = int(self.height() * r)
             self.makeCurrent()
