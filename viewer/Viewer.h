@@ -200,7 +200,7 @@ namespace Enki
 		double worldTimeStep;
 		double rtFactor;
 		
-		double getEffectiveCameraPitch() {
+		double getEffectiveCameraPitch() const {
 			if(cameraIsOrtho) return -M_PI/2;
 			return camera.pitch;
 		}
