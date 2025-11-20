@@ -8,7 +8,7 @@ class MyEPuck(pyenki.EPuck):
         super(MyEPuck, self).__init__(proximity=False)
         self.timeout = 10
 
-    def controlStep(self, dt):
+    def control_step(self, dt):
         if self.timeout == 0:
             self.left_wheel_target_speed = random.uniform(-100, 100)
             self.right_wheel_target_speed = random.uniform(-100, 100)

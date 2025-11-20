@@ -7,7 +7,7 @@ class MyEPuck(pyenki.EPuck):
     def __init__(self):
         super().__init__(proximity=True, camera=True)
 
-    def controlStep(self, dt):
+    def control_step(self, dt):
         self.left_wheel_target_speed = 0.1
         self.right_wheel_target_speed = 0.2
         print('Control step')

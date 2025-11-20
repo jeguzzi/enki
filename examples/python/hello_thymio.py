@@ -9,7 +9,7 @@ import pyenki.viewer
 class ControlledThymio2(pyenki.Thymio2):
 
     # This is the method we have to overwrite
-    def controlStep(self, dt: float) -> None:
+    def control_step(self, dt: float) -> None:
         # Check if there is an obstacle in front of us
         value = self.prox_values[2]
         if value > 3000:
