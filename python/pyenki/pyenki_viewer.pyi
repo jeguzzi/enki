@@ -6,6 +6,8 @@ from .pyenki import World, PhysicalObject
 Vector: TypeAlias = Annotated[numpy.typing.NDArray[numpy.float64], '[2, 1]']
 VectorLike: TypeAlias = Annotated[numpy.typing.ArrayLike, numpy.float64, '[2, 1]']
 Image: TypeAlias = Annotated[numpy.typing.NDArray[numpy.uint8], '[n, m, 3]']
+Pixel: TypeAlias = tuple[float, float]
+Vector3: TypeAlias = Annotated[numpy.typing.NDArray[numpy.float64], '[3, 1]']
 
 class CameraConfig(TypedDict):
     camera_position: NotRequired[VectorLike]
@@ -21,6 +23,7 @@ def run(duration: SupportsFloat = ...) -> None: ...
 def render(world: World, /, walls_height: SupportsFloat = ..., width: SupportsInt = ..., height: SupportsInt = ..., selected_object: PhysicalObject | None = ..., camera_position: VectorLike = ..., camera_altitude: SupportsFloat = ..., camera_yaw: SupportsFloat = ..., camera_pitch: SupportsFloat = ..., camera_is_ortho: bool = ..., camera_reset: bool = ...) -> Image: ...
 def run_in_viewer(world: World, /, fps: SupportsFloat = ..., time_step: SupportsFloat = ..., factor: SupportsFloat = ..., helpers: bool = ..., walls_height: SupportsFloat = ..., duration: SupportsFloat = ..., camera_position: VectorLike = ..., camera_altitude: SupportsFloat = ..., camera_yaw: SupportsFloat = ..., camera_pitch: SupportsFloat = ..., camera_is_ortho: bool = ..., camera_reset: bool = ...) -> None: ...
 def save_image(world: World, path: str, /, walls_height: SupportsFloat = ..., width: SupportsInt = ..., height: SupportsInt = ..., selected_object: PhysicalObject | None = ..., camera_position: VectorLike = ..., camera_altitude: SupportsFloat = ..., camera_yaw: SupportsFloat = ..., camera_pitch: SupportsFloat = ..., camera_is_ortho: bool = ..., camera_reset: bool = ...) -> None: ...
+def get_position_of_pixel(pixel: Pixel) -> Vector3 | None: ...
 
 class WorldView:
     @property

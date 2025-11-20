@@ -49,6 +49,8 @@
 #include "../viewer/Viewer.h"
 #include "./enki.h"
 #include <QImage>
+#include <QMatrix4x4>
+#include <QOpenGLFramebufferObject>
 
 using namespace Enki;
 namespace py = pybind11;
@@ -95,7 +97,7 @@ struct PythonViewer : public ViewerWidget {
 
   py::array getImage() { return get_rbg_array(grabFramebuffer()); }
 
-  // void setWallsHeight(double value) { wallsHeight = value; }
+  void setWallsHeight(double value) { wallsHeight = value; }
 
   double getWallsHeight() const { return wallsHeight; }
 
@@ -122,6 +124,10 @@ struct PythonViewer : public ViewerWidget {
   double getCameraPitch() const { return camera.pitch; }
 
   void setCameraPitch(double value) { camera.pitch = value; }
+
+  bool getCameraIsOrtho() const { return cameraIsOrtho; }
+
+  void setCameraIsOrtho(bool value) { cameraIsOrtho = value; }
 
   py::typing::Dict<py::str, py::object> getCameraConfig() const {
     py::dict config("camera_position"_a = py::cast(getCameraPosition()),
@@ -196,8 +202,6 @@ struct PythonViewer : public ViewerWidget {
     camera.pitch = atan2(z, sqrt(x * x + y * y));
   }
 
-  // TODO: add https://doc.qt.io/qtforpython-6/shiboken6/shibokenmodule.html
-  // TODO: fix Qt5
   py::object asPyQtWidget() const {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     const auto cls =
@@ -246,21 +250,167 @@ void runInViewer(PyWorld *world, double fps = 30, double worldTimeStep = 0,
   EnkiApplication::run(duration / realTimeFactor);
 }
 
+struct OffscreenRenderer : public PythonViewer {
+  std::unique_ptr<QOpenGLFramebufferObject> fbo;
+  std::unique_ptr<QOpenGLContext> context;
+  std::unique_ptr<QOffscreenSurface> surface;
+  bool initialized;
+
+  OffscreenRenderer()
+      : PythonViewer(nullptr, 0, false, 0, 0, false), fbo(nullptr),
+        context(nullptr), surface(nullptr), initialized(false) {}
+
+  void setWorld(World *value) {
+    if (value != world) {
+      world = value;
+      shouldInitWorld = true;
+    }
+  }
+
+  QImage render(PyWorld &world, double wallsHeight = 10, int width = 640,
+                int height = 360, PhysicalObject *selectedObject = nullptr,
+                Vector camPos = Vector(0, 0), double camAltitude = 0,
+                double camYaw = 0, double camPitch = 0, bool camIsOrtho = false,
+                bool cameraReset = false) {
+    const auto r = devicePixelRatio();
+    if (!initialized) {
+      resize(width, height);
+      context = std::make_unique<QOpenGLContext>();
+      context->setFormat(QSurfaceFormat::defaultFormat());
+      context->setShareContext(QOpenGLContext::globalShareContext());
+      context->create();
+      if (!context->isValid()) {
+        throw std::runtime_error("Unable to create context");
+      }
+      surface = std::make_unique<QOffscreenSurface>();
+      surface->setFormat(QSurfaceFormat::defaultFormat());
+      surface->create();
+      if (!surface->isValid()) {
+        throw std::runtime_error("Unable to create offscreen surface");
+      }
+      context->makeCurrent(surface.get());
+      initializeGL();
+      // std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
+      // std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+      // std::cout << "OpenGL Version: " << glGetString(GL_VERSION) <<
+      // std::endl;
+      context->doneCurrent();
+      initialized = true;
+    }
+    context->makeCurrent(surface.get());
+    if (!fbo || width != this->width() || height != this->height()) {
+      QOpenGLFramebufferObjectFormat format;
+      format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
+      fbo = std::make_unique<QOpenGLFramebufferObject>(width, height, format);
+      resize(width, height);
+    }
+    fbo->bind();
+    resizeGL(width / r, height / r);
+    setWallsHeight(wallsHeight);
+    setCameraPosition(camPos);
+    setCameraAltitude(camAltitude);
+    setCameraYaw(camYaw);
+    setCameraPitch(camPitch);
+    setCameraIsOrtho(camIsOrtho);
+    setWorld(&world);
+    if (cameraReset) {
+      resetCamera();
+    }
+    setSelectedObject(selectedObject);
+    paintGL();
+    QImage image = fbo->toImage();
+    fbo->release();
+    context->doneCurrent();
+    return image;
+  }
+
+#define rad2deg (180 / M_PI)
+
+  bool getPositionOfPixel(double x, double y, double *pos) const {
+    if (x < 0 || y < 0 || x > 1 || y > 1) {
+      return false;
+    }
+    const double aspectRatio = double(width()) / double(height());
+    const double zNear = 0.5;
+    const double zFar = 2000;
+    const double pitch = getEffectiveCameraPitch();
+    QMatrix4x4 projection;
+    projection.setToIdentity();
+    if (cameraIsOrtho) {
+      const double s = camera.altitude / abs(sin(pitch));
+      projection.ortho(-aspectRatio * 0.5 * s, aspectRatio * 0.5 * s, -0.5 * s,
+                       0.5 * s, zNear, s + zNear);
+    } else {
+      projection.frustum(-aspectRatio * 0.5 * zNear, aspectRatio * 0.5 * zNear,
+                         -0.5 * zNear, 0.5 * zNear, zNear, zFar);
+    }
+    QMatrix4x4 modelview;
+    modelview.setToIdentity();
+    modelview.rotate(-90, 1, 0, 0);
+    modelview.rotate(rad2deg * -pitch, 1, 0, 0);
+    modelview.rotate(90, 0, 0, 1);
+    modelview.rotate(rad2deg * -camera.yaw, 0, 0, 1);
+    modelview.translate(-camera.pos.x(), -camera.pos.y(), -camera.altitude);
+    const QMatrix4x4 transformMatrix = (projection * modelview).inverted();
+    float depth;
+    // const float r = devicePixelRatio();
+    const float r = 1;
+    const unsigned i = std::round(x * (r * width() - 1));
+    const unsigned j = std::round((1 - y) * (r * height() - 1));
+    glReadPixels(i, j, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+    const QVector4D p =
+        transformMatrix * QVector4D(2 * x - 1, 1 - 2 * y, 2 * depth - 1, 1);
+    if (p.w() != 0.0) // valid pointed point
+    {
+      pos[0] = p.x() / p.w();
+      pos[1] = p.y() / p.w();
+      pos[2] = p.z() / p.w();
+      return true;
+    }
+    return false;
+  }
+
+  std::optional<py::array>
+  getPositionOfPixelPy(const std::tuple<double, double> &pixel) {
+
+    double vs[3];
+    py::array_t<double> position(3);
+    py::buffer_info buf = position.request();
+    double *ps = static_cast<double *>(buf.ptr);
+    context->makeCurrent(surface.get());
+    fbo->bind();
+    bool r = getPositionOfPixel(std::get<0>(pixel), std::get<1>(pixel), ps);
+    fbo->release();
+    context->doneCurrent();
+    if (r) {
+      return position;
+    }
+    return std::nullopt;
+  }
+};
+
+static std::map<std::thread::id, std::unique_ptr<OffscreenRenderer>> renderers;
+
+OffscreenRenderer *get_renderer() {
+  EnkiApplication::init();
+  const auto id = std::this_thread::get_id();
+  // std::cerr << "Thread " << id << std::endl;
+  if (!renderers.count(id)) {
+    renderers.emplace(id, std::make_unique<OffscreenRenderer>());
+  }
+  return renderers.at(id).get();
+}
+
 py::array render(PyWorld &world, double wallsHeight = 10, int width = 640,
                  int height = 360, PhysicalObject *selectedObject = nullptr,
                  Vector camPos = Vector(0, 0), double camAltitude = 0,
                  double camYaw = 0, double camPitch = 0,
                  bool camIsOrtho = false, bool cameraReset = false) {
-  EnkiApplication::init();
-  PythonViewer viewer(&world, 0, false, 0, 1, false, wallsHeight, camPos,
-                      camAltitude, camYaw, camPitch, camIsOrtho, cameraReset);
-  if (selectedObject) {
-    viewer.setSelectedObject(selectedObject);
-  }
-  viewer.cameraIsOrtho = camIsOrtho;
-  viewer.setFixedWidth(width);
-  viewer.setFixedHeight(height);
-  return viewer.getImage();
+  auto renderer = get_renderer();
+  const auto image = renderer->render(
+      world, wallsHeight, width, height, selectedObject, camPos, camAltitude,
+      camYaw, camPitch, camIsOrtho, cameraReset);
+  return get_rbg_array(image);
 }
 
 void save_image(PyWorld &world, const std::string &path,
@@ -269,16 +419,19 @@ void save_image(PyWorld &world, const std::string &path,
                 Vector camPos = Vector(0, 0), double camAltitude = 0,
                 double camYaw = 0, double camPitch = 0, bool camIsOrtho = false,
                 bool cameraReset = false) {
-  EnkiApplication::init();
-  PythonViewer viewer(&world, 0, false, 0, 1, false, wallsHeight, camPos,
-                      camAltitude, camYaw, camPitch, camIsOrtho, cameraReset);
-  if (selectedObject) {
-    viewer.setSelectedObject(selectedObject);
-  }
-  viewer.cameraIsOrtho = camIsOrtho;
-  viewer.setFixedWidth(width);
-  viewer.setFixedHeight(height);
-  return viewer.saveImage(path);
+  auto renderer = get_renderer();
+  const auto image = renderer->render(
+      world, wallsHeight, width, height, selectedObject, camPos, camAltitude,
+      camYaw, camPitch, camIsOrtho, cameraReset);
+  image.save(QString(path.c_str()));
+}
+
+std::optional<py::array>
+getPositionOfPixelPy(const std::tuple<double, double> &pixel) {
+  std::thread::id this_id = std::this_thread::get_id();
+  if (!renderers.count(this_id))
+    return std::nullopt;
+  return renderers.at(this_id)->getPositionOfPixelPy(pixel);
 }
 
 PYBIND11_MODULE(pyenki_viewer, m) {
@@ -308,6 +461,16 @@ Args:
 
 Returns:
     numpy.ndarray[tuple[int, int, int], numpy.dtype[numpy.uint8]]: An array of shape ``(height, width, 3)`` and type ``uint8``.
+)doc");
+  m.def("get_position_of_pixel", &getPositionOfPixelPy, py::arg("pixel"),
+        R"doc( 
+Computes the world coordinates of a pixel in the *last* rendered image
+
+Args:
+    pixel (tuple[float, float]): the pixel in relative image coordinates in [0, 1].
+
+Returns:
+    Vector3 | None: The position of the pixel if contained in the image or None.
 )doc");
   m.def("save_image", &save_image, py::arg("world"), py::arg("path"),
         py::kw_only(), py::arg("walls_height") = 10.0, py::arg("width") = 640,
