@@ -272,7 +272,8 @@ struct OffscreenRenderer : public PythonViewer {
                 Vector camPos = Vector(0, 0), double camAltitude = 0,
                 double camYaw = 0, double camPitch = 0, bool camIsOrtho = false,
                 bool cameraReset = false) {
-    const auto r = devicePixelRatio();
+    // const auto r = devicePixelRatio();
+    const auto r = 1;
     if (!initialized) {
       resize(width, height);
       context = std::make_unique<QOpenGLContext>();
@@ -460,7 +461,7 @@ Args:
     camera_reset (bool): whether to set the camera in the default pose.
 
 Returns:
-    numpy.ndarray[tuple[int, int, int], numpy.dtype[numpy.uint8]]: An array of shape ``(height, width, 3)`` and type ``uint8``.
+    Image: An array of shape ``(height, width, 3)`` and type ``uint8``.
 )doc");
   m.def("get_position_of_pixel", &getPositionOfPixelPy, py::arg("pixel"),
         R"doc( 
@@ -479,7 +480,7 @@ Returns:
         py::arg("camera_altitude") = 0.0, py::arg("camera_yaw") = 0.0,
         py::arg("camera_pitch") = 0.0, py::arg("camera_is_ortho") = false,
         py::arg("camera_reset") = false, R"doc( 
-Renders a world to an RGB image array.
+Renders a world to an image file.
 
 Args:
     world (World): the world to render.
@@ -504,7 +505,7 @@ Args:
         py::arg("camera_pitch") = 0.0, py::arg("camera_is_ortho") = false,
         py::arg("camera_reset") = false,
         py::call_guard<py::gil_scoped_release>(), R"doc( 
-Renders a world to an RGB image array.
+Runs a simulation while displaying it in real-time in a viewer.
 
 Args:
     world (World): the world to display and run.
@@ -544,42 +545,28 @@ Args:
     camera_is_ortho (bool): whether the camera uses an orthographic projection.
     camera_reset (bool): whether to set the camera in the default pose.
 
-Example without PyQt::
+Example::
 
-    >>> import pyenki
-    >>> 
-    >>> world = pyenki.World(radius=100)
-    >>> epuck = pyenki.EPuck(camera=False)
-    >>> epuck.left_wheel_target_speed = 10.0
-    >>> epuck.set_led_ring(True)
-    >>> world.add_object(epuck)
+    >>> import pyenki.viewer
+    >>> # setup a world
+    >>> world = ...
     >>> # setup Qt: needs to be called before creating the first view
-    >>> pyenki.init_ui()
+    >>> pyenki.viewer.init()
     >>> viewer = pyenki.WorldView(world=world)
     >>> viewer.show()
     >>> viewer.start_updating_world(0.1)
     >>> # executes the Qt runloop for a while
-    >>> pyenki.run_ui(duration=10)
+    >>> pyenki.viewer.run(duration=10)
 
-Example with PyQt (composition of two views of the same world)::
+Example of composition of two views of the same world::
 
-    >>> import pyenki
-    >>> from PyQt6.QtCore import QCoreApplication, Qt
-    >>> from PyQt6.QtWidgets import QWidget, QApplication, QHBoxLayout
-    >>> 
-    >>> # replaces pyenki.init_ui(): needs to be called before creating any widget
-    >>> QCoreApplication.setAttribute(Qt.ApplicationAttribute.AA_ShareOpenGLContexts),
-    >>> app = QApplication([])
-    >>> 
-    >>> world = pyenki.World(radius=100)
-    >>> epuck = pyenki.EPuck(camera=False)
-    >>> epuck.left_wheel_target_speed = 10.0
-    >>> epuck.set_led_ring(True)
-    >>> world.add_object(epuck)
+    >>> import pyenki.viewer
+    >>> from PyQt6.QtWidgets import QHBoxLayout, QWidget
+    >>> # setup a world
+    >>> world = ...
     >>> viewer_1 = pyenki.WorldView(world=world, camera_position=(-20, -20), camera_altitude=20)
     >>> viewer_1.point_camera(target_position=(0, 0), target_altitude=5)
-    >>> viewer_2 = pyenki.WorldView(world=world, helpers=False, camera_altitude=30, camera_is_ortho=True)
-    >>> viewer_2.camera_is_ortho = True
+    >>> viewer_2 = pyenki.WorldView(world=world, helpers=False, camera_is_ortho=True, camera_altitude=30)
     >>> window = QWidget()
     >>> hbox = QHBoxLayout(window)
     >>> window.resize(960, 320)
@@ -587,8 +574,8 @@ Example with PyQt (composition of two views of the same world)::
     >>> hbox.addWidget(viewer_2.widget)
     >>> window.show()
     >>> viewer_1.start_updating_world(0.1)
-    >>> app.exec()
-
+    >>> pyenki.viewer.run(duration=10)
+a
 Attributes:
     world (World | None): the world to display.
     camera_position (Vector): The camera horizontal position.
@@ -598,11 +585,11 @@ Attributes:
     camera_is_ortho (bool): whether the camera uses an orthographic projection.
     camera_config (CameraConfig): the camera configuration (readonly). 
     walls_height (float): the height of the world boundary in cm (readonly).
-    tracking (bool): whether tracking is active.
+    is_tracking (bool): whether tracking is active.
     helpers (bool): whether to display the helpers widgets.
-    image (numpy.ndarray[tuple[int, int, int], numpy.dtype[numpy.uint8]]): the currently rendered image (readonly).
-    qt_widget (QOpenGLWidget): this view sip-wrapped so to be manipulable by PyQt (readonly).
-    pyside_widget (QOpenGLWidget): this view sip-wrapped so to be manipulable by PyQt (readonly).
+    image (Image): the currently rendered image (readonly).
+    qt_widget (QOpenGLWidget): a PyQt-compatible widget (readonly).
+    pyside_widget (QOpenGLWidget): a PySide-compatible widget (readonly).
 )doc")
       .def(py::init<PyWorld *, double, bool, double, double, bool, double,
                     Vector, double, double, double, bool, bool>(),
@@ -680,7 +667,7 @@ Args:
       .def_property("world", &PythonViewer::getWorld,
                     [](PythonViewer &v, PyWorld *world) { v.setWorld(world); })
       .def_readwrite("camera_is_ortho", &PythonViewer::cameraIsOrtho)
-      .def_property("tracking", &PythonViewer::isTrackingActivated,
+      .def_property("is_tracking", &PythonViewer::isTrackingActivated,
                     &PythonViewer::setTracking)
       .def_readwrite("helpers", &PythonViewer::displayHelpers)
       .def_property("image", &PythonViewer::getImage, nullptr)
@@ -699,7 +686,7 @@ Initializes the Qt runtime.
 Args:
     share (bool): Whether to share all OpenGL contexts.
 
-Should be called before creating any py:class:`WorldView`.
+Should be called before creating any py:class:`pyenki.viewer.WorldView`.
 )doc");
   m.def("run", &EnkiApplication::run, py::arg("duration") = -1,
         py::call_guard<py::gil_scoped_release>(), R"doc( 

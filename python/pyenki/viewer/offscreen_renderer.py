@@ -167,22 +167,50 @@ def get_renderer() -> OffScreenRenderer:
 
 
 def render(world: World,
+           /,
            walls_height: SupportsFloat = 10,
            width: SupportsInt = 640,
            height: SupportsInt = 360,
            selected_object: PhysicalObject | None = None,
            **camera_config: Unpack[CameraConfig]) -> Image:
+    """
+    Renders a world to an RGB image array.
+
+    Args:
+        world (World): the world to render.
+        walls_height (float): the height of the world boundary in cm.
+        width (int): the width of the image in pixels.
+        height (int): the height of the image in pixels.
+        selected_object (PhysicalObject | None): an optional object to select.
+        **camera_config (CameraConfig): the camera configuration.
+
+    Returns:
+        Image: An array of shape ``(height, width, 3)`` and type ``uint8``.
+    """
     return get_renderer().render(world, walls_height, width, height,
                                  selected_object, **camera_config)
 
 
 def save_image(world: World,
                path: str,
+               /,
                walls_height: SupportsFloat = 10,
                width: SupportsInt = 640,
                height: SupportsInt = 360,
                selected_object: PhysicalObject | None = None,
                **camera_config: Unpack[CameraConfig]) -> None:
+    """
+    Renders a world to an image file.
+
+    Args:
+        world (World): the world to render.
+        path (str): the file path.
+        walls_height (float): the height of the world boundary in cm.
+        width (int): the width of the image in pixels.
+        height (int): the height of the image in pixels.
+        selected_object (PhysicalObject | None): an optional object to select.
+        **camera_config (CameraConfig): the camera configuration.
+    """
     return get_renderer().save_image(world, path, walls_height, width, height,
                                      selected_object, **camera_config)
 

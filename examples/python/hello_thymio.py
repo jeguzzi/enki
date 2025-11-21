@@ -1,15 +1,17 @@
 import math
 import sys
+from typing import SupportsFloat
 
 import pyenki
 import pyenki.viewer
 
-# We sublass `pyenki.Thymio2`. This way, the world update step will automatically call
-# also the Thymio `controlStep`.
+
+# The world update step will call `control_step` automatically
 class ControlledThymio2(pyenki.Thymio2):
 
     # This is the method we have to overwrite
-    def control_step(self, dt: float) -> None:
+    # to implement a controller.
+    def control_step(self, time_step: SupportsFloat) -> None:
         # Check if there is an obstacle in front of us
         value = self.prox_values[2]
         if value > 3000:
@@ -44,30 +46,27 @@ def setup() -> pyenki.World:
     return world
 
 
-def run(world: pyenki.World,
-        gui: bool = False,
-        T: float = 10,
-        dt: float = 0.1,
-        orthographic: bool = False) -> None:
-
+def main(gui: bool = False,
+         duration: float = 10,
+         dt: float = 0.1,
+         ortho: bool = False) -> None:
+    world = setup()
     if gui:
         # We can either run a simulation [in real-time] inside a Qt application
-        world.run_in_viewer(camera_position=(0, 0),
-                            camera_altitude=70.0,
-                            camera_yaw=0.0,
-                            camera_pitch=-math.pi / 2,
-                            walls_height=10,
-                            camera_is_ortho=orthographic,
-                            duration=-1)
+        pyenki.viewer.run_in_viewer(world,
+                                    camera_position=(0, 0),
+                                    camera_altitude=70.0,
+                                    camera_yaw=0.0,
+                                    camera_pitch=-math.pi / 2,
+                                    walls_height=10,
+                                    camera_is_ortho=ortho,
+                                    duration=duration)
     else:
-        # or we can write our own loop that run the simulaion as fast as possible.
-        steps = int(T // dt)
+        # or we can write our own loop that run the simulation as fast as possible.
+        steps = int(duration // dt)
         for _ in range(steps):
             world.step(dt)
 
 
 if __name__ == '__main__':
-    world = setup()
-    run(world,
-        gui='--gui' in sys.argv,
-        orthographic='--orthographic' in sys.argv)
+    main(gui='--gui' in sys.argv, ortho='--ortho' in sys.argv)

@@ -20,26 +20,67 @@ if TYPE_CHECKING:
 
 
 def to_3d(xy: VectorLike, z: SupportsFloat) -> Vector3:
+    """
+    Concatenate a 2D vector and an vertical component as a 3D vector
+
+    :param      xy:   The horizontal vector ``(x, y)``
+    :param      z:    The vertical component
+
+    :returns:   The concatenation ``(x, y, z)``
+    """
     return np.concatenate([np.asarray(xy), [float(z)]])
 
 
-def rotate(v: Vector3, delta: float) -> Vector3:
-    if not delta:
-        return v
-    return np.array((np.cos(delta) * v[0] - np.sin(delta) * v[1],
-                     -np.sin(delta) * v[0] + np.cos(delta) * v[1], v[2]),
-                    dtype=v.dtype)
+def rotate(value: Vector3, angle: float) -> Vector3:
+    """
+    Rotates a 3D vector around the vertical axis
+
+    :param      value:      The vector
+    :param      angle:      The rotation angle in rad.
+
+    :returns:   The rotated vector
+    """
+    if not angle:
+        return value
+    return np.array(
+        (np.cos(angle) * value[0] - np.sin(angle) * value[1],
+         -np.sin(angle) * value[0] + np.cos(angle) * value[1], value[2]),
+        dtype=value.dtype)
 
 
 class Camera:
+    """
+    This class describes a camera.
+
+    Attributes:
+        position (Vector3): the position of the camera in cm.
+        yaw (float): the rotation around the vertical axis in rad.
+        pitch (float): the rotation around the lateral axis in rad.
+        is_ortho (bool): whether it uses orthographic projection.
+        fov (float): the vertical field of view in rad.
+        near_distance (float): the near clipping distance in cm.
+        far_distance (float): the far clipping distance in cm.
+        view_port (tuple[float, float] | None): the size of the viewport in pixels if set.
+        forward (Vector3): The unit vector in the forward direction (readonly).
+        up (Vector3): The unit vector in the up direction (readonly).
+        left (Vector3): The unit vector in the left direction (readonly).
+    """
 
     def __init__(self,
                  position: Vector3 = cast('Vector3', np.zeros(3)),
                  yaw: float = 0,
                  pitch: float = 0,
                  is_ortho: bool = False) -> None:
+        """
+        Constructs a new instance.
+
+        :param      position:  The position
+        :param      yaw:       The yaw
+        :param      pitch:     The pitch
+        :param      is_ortho:  Whether to use orthographic projection
+        """
         self.position = position
-        self._viewport: tuple[float, float] | None = None
+        self.viewport: tuple[float, float] | None = None
         self.yaw = yaw
         self.pitch = pitch
         self.is_ortho = is_ortho
@@ -48,6 +89,11 @@ class Camera:
         self.far_distance = 1000.0
 
     def reset(self, world: World | None = None) -> None:
+        """
+        Resets the camera to capture the world from a default POV.
+
+        :param      world:  An optional The world
+        """
         self.yaw = np.pi / 2
         if self.is_ortho:
             self.pitch = -np.pi / 2
@@ -72,15 +118,21 @@ class Camera:
         return m
 
     def set_viewport(self, width: float, height: float) -> None:
-        self._viewport = (width, height)
+        """
+        Sets the viewport.
+
+        :param      width:   The width in pixels
+        :param      height:  The height in pixels
+        """
+        self.viewport = (width, height)
 
     @property
     def projection(self) -> QMatrix4x4:
         from PySide6.QtGui import QMatrix4x4
 
-        assert self._viewport is not None
+        assert self.viewport is not None
         p = QMatrix4x4()
-        aspect_ratio = self._viewport[0] / self._viewport[1]
+        aspect_ratio = self.viewport[0] / self.viewport[1]
         if self.is_ortho:
             s = 0.5 * np.tan(self.fov) * self.position[2]
             p.ortho(-s * aspect_ratio, s * aspect_ratio, -s, s,
@@ -110,10 +162,23 @@ class Camera:
     def move(self,
              target_position: Vector3Like,
              target_distance: float = 30.0) -> None:
+        """
+        Translates the camera to point a target
+        while maintaining its attitude.
+
+        :param      target_position:  The target position
+        :param      target_distance:  The target distance
+        """
         self.position = np.asarray(
             target_position) - target_distance * self.forward
 
     def point(self, target_position: Vector3Like) -> None:
+        """
+        Rotates the camera to point a target while
+        maintaining its position.
+
+        :param      target_position:  The target position
+        """
         if self.is_ortho:
             return
         delta = np.asarray(target_position) - self.position
@@ -127,6 +192,11 @@ class Camera:
 
     @property
     def config(self) -> CameraConfig:
+        """
+        Returns the relevant camera attributes as a dictionary
+
+        :returns:   The camera configuration.
+        """
         return {
             'camera_position': self.position[:2],
             'camera_altitude': self.position[2],
@@ -140,6 +210,11 @@ CameraCallback = Callable[[Camera, World], None]
 
 
 class HasCamera:
+    """
+    Mixins for classes that hold and manipulate a camera, like
+    :py:class:`pyenki.viewer.WorldView` and
+    :py:class:`pyenki.buffer.EnkiRemoteFrameBuffer`
+    """
 
     world: World | None = None
 
@@ -156,17 +231,31 @@ class HasCamera:
 
     @property
     def camera_matrix(self) -> QMatrix4x4:
+        """
+        The transformation matrix between camera frame to world frame
+        """
         return self.camera.matrix
 
     @property
     def camera_projection(self) -> QMatrix4x4:
+        """
+        The projection matrix
+        """
         return self.camera.projection
 
     @property
     def camera_config(self) -> CameraConfig:
+        """
+        The camera configuration
+        """
         return self.camera.config
 
     def update_camera_config(self, **config: Unpack[CameraConfig]) -> None:
+        """
+        Updates the camera configuration
+
+        :param config:  The (potentially partial) configuration
+        """
         if 'camera_position' in config:
             self.camera.position[:2] = np.asarray(config['camera_position'])
         if 'camera_altitude' in config:
@@ -182,6 +271,9 @@ class HasCamera:
 
     @property
     def camera_altitude(self) -> float:
+        """
+        The camera vertical position (in cm).
+        """
         return float(self.camera.position[2])
 
     @camera_altitude.setter
@@ -190,6 +282,9 @@ class HasCamera:
 
     @property
     def camera_is_ortho(self) -> bool:
+        """
+        Whether the camera uses an orthographic projection
+        """
         return self.camera.is_ortho
 
     @camera_is_ortho.setter
@@ -198,6 +293,9 @@ class HasCamera:
 
     @property
     def camera_pitch(self) -> float:
+        """
+        The camera pitch (in rad).
+        """
         return self.camera.pitch
 
     @camera_pitch.setter
@@ -207,6 +305,9 @@ class HasCamera:
 
     @property
     def camera_yaw(self) -> float:
+        """
+        The camera yaw (in rad).
+        """
         return self.camera.yaw
 
     @camera_yaw.setter
@@ -215,6 +316,9 @@ class HasCamera:
 
     @property
     def camera_position(self) -> Vector:
+        """
+        The camera horizontal position (in cm).
+        """
         return self.camera.position[:2]
 
     @camera_position.setter
@@ -242,8 +346,8 @@ class HasCamera:
                     yaw: SupportsFloat | None = None,
                     pitch: SupportsFloat | None = None) -> None:
         """
-        Move the camera so to point towards the target.
-        Same interface as :py:meth:`pyenki.WorldView.move_camera`.
+        Translates the camera to point a target
+        while maintaining its attitude.
 
         :param      target_position:  The target horizontal position in cm.
         :param      target_altitude:  The target vertical position in cm.
@@ -264,13 +368,12 @@ class HasCamera:
                      position: VectorLike | None = None,
                      altitude: SupportsFloat | None = None) -> None:
         """
-        Rotate the camera so to point towards the target.
-        Same interface as :py:meth:`pyenki.WorldView.point_camera`.
+        Rotates the camera to point a target while maintaining its position.
 
         :param      target_position:  The target horizontal position in cm.
         :param      target_altitude:  The target vertical position in cm.
-        :param      position:       Optionally sets the camera position.
-        :param      altitude:     Optionally sets the camera altitude.
+        :param      position:         Optionally sets the camera position.
+        :param      altitude:         Optionally sets the camera altitude.
         """
         if self.camera.is_ortho:
             return
@@ -281,6 +384,9 @@ class HasCamera:
         self.camera.point(to_3d(target_position, target_altitude))
 
     def reset_camera(self) -> None:
+        """
+        Resets the camera configuration
+        """
         if self.world:
             self.camera.reset(self.world)
 
@@ -295,7 +401,17 @@ class HasCamera:
                       self.tracked_object.height), self.tracking_distance)
 
     @property
+    def is_tracking(self) -> bool:
+        """
+        Whether it is tracking an object
+        """
+        return self.tracked_object is not None
+
+    @property
     def tracked_object(self) -> PhysicalObject | None:
+        """
+        The object being tracked
+        """
         return self._tracked_object
 
     @tracked_object.setter

@@ -27,6 +27,48 @@ if TYPE_CHECKING:
 
 
 class WorldView(QOpenGLWidget, HasCamera):
+    """
+    A QOpenGLWidget that displays a world.
+
+    Basic example::
+
+        >>> import pyenki.viewer
+        >>> # setup a world
+        >>> world = ...
+        >>> # setup Qt: needs to be called before creating the first view
+        >>> pyenki.viewer.init()
+        >>> viewer = pyenki.WorldView(world=world)
+        >>> viewer.show()
+        >>> viewer.start_updating_world(0.1)
+        >>> # executes the Qt runloop for a while
+        >>> pyenki.viewer.run(duration=10)
+
+    Example of composition of two views of the same world::
+
+        >>> import pyenki.viewer
+        >>> from PySide6.QtWidgets import QHBoxLayout, QWidget
+        >>> # setup a world
+        >>> world = ...
+        >>> viewer_1 = pyenki.WorldView(world=world, camera_position=(-20, -20), camera_altitude=20)
+        >>> viewer_1.point_camera(target_position=(0, 0), target_altitude=5)
+        >>> viewer_2 = pyenki.WorldView(world=world, helpers=False, camera_is_ortho=True, camera_altitude=30)
+        >>> window = QWidget()
+        >>> hbox = QHBoxLayout(window)
+        >>> window.resize(960, 320)
+        >>> hbox.addWidget(viewer_1.widget)
+        >>> hbox.addWidget(viewer_2.widget)
+        >>> window.show()
+        >>> viewer_1.start_updating_world(0.1)
+        >>> pyenki.viewer.run(duration=10)
+
+    Attributes:
+        world (World | None): the world to display.
+        walls_height (float): the height of the world boundary in cm (readonly).
+        helpers (bool): whether to display the helpers widgets.
+        image (numpy.ndarray[tuple[int, int, int], numpy.dtype[numpy.uint8]]): the currently rendered image (readonly).
+        qt_widget (QOpenGLWidget): a PyQt-compatible widget (readonly).
+        pyside_widget (QOpenGLWidget): a PySide-compatible widget (readonly).
+    """
 
     def __init__(self,
                  parent: QWidget | None = None,
@@ -39,6 +81,20 @@ class WorldView(QOpenGLWidget, HasCamera):
                  helpers: bool = True,
                  walls_height: SupportsFloat = 10.0,
                  **camera_config: Unpack[CameraConfig]) -> None:
+        """
+        Constructs a new instance.
+
+        Args:
+            world (World | None): The world to display.
+            fps (float): The framerate of the viewer in frames per second.
+            update_world (bool): Whether to trigger world updates before redrawing.
+            time_step (float): The simulation time step in seconds.
+            factor (bool): The real-time factor. If larger than one, the simulation
+                           will run faster then real-time.
+            helpers (bool): Whether to display the helpers widgets.
+            walls_height (float): the height of the world boundary in cm.
+            **camera_config (CameraConfig): the camera configuration.
+        """
         QOpenGLWidget.__init__(self, parent)
         self._world = world
         HasCamera.__init__(self, world=world, **camera_config)
@@ -47,7 +103,6 @@ class WorldView(QOpenGLWidget, HasCamera):
         self._factor = float(factor)
         self.renderer: Renderer | None = None
         self.helpers = helpers
-        self.tracking = False
         self._wall_height = float(walls_height)
         self._next_update_time = 0.0
         self._world_time_step = 0.0
@@ -62,6 +117,11 @@ class WorldView(QOpenGLWidget, HasCamera):
             self.start_updating_world(time_step, factor)
 
     def save_image(self, path: str) -> None:
+        """
+        Saves an image.
+
+        :param      path:  The file path
+        """
         fb = self.grabFramebuffer()
         fb.save(path)
 
@@ -98,6 +158,12 @@ class WorldView(QOpenGLWidget, HasCamera):
     def start_updating_world(self,
                              time_step: SupportsFloat = 0.0,
                              factor: SupportsFloat = 1.0) -> None:
+        """
+        Starts updating the world in real-time.
+
+        :param      time_step:  The world time step
+        :param      factor:     The real time factor
+        """
         self._update_world = True
         self._rt_factor = float(factor)
         time_step = float(time_step)
@@ -105,6 +171,9 @@ class WorldView(QOpenGLWidget, HasCamera):
         self._next_update_time = self._world_time_step
 
     def stop_updating_world(self) -> None:
+        """
+        Stops updating the world.
+        """
         self._update_world = False
 
     @Slot()
@@ -202,7 +271,7 @@ class WorldView(QOpenGLWidget, HasCamera):
         return None
 
 
-def run_in_viewer(self: World,
+def run_in_viewer(world: World,
                   /,
                   fps: SupportsFloat = 30,
                   time_step: SupportsFloat = 0,
@@ -211,8 +280,23 @@ def run_in_viewer(self: World,
                   walls_height: SupportsFloat = 10,
                   duration: SupportsFloat = -1,
                   **camera_config: Unpack[CameraConfig]) -> None:
+    """
+    Runs a simulation while displaying it in real-time in a viewer.
+
+    Args:
+        world (World): the world to display and run.
+        fps (float): The framerate of the viewer in frames per second.
+        time_step (float): The simulation time step in seconds.
+        factor (bool): The real-time factor. If larger than one, the simulation
+                       will run faster then real-time.
+        helpers (bool): Whether to display the helpers widgets.
+        walls_height (float): the height of the world boundary in cm.
+        duration (float): duration of the simulation in simulated time.
+                          Negative values are interpreted as infinite duration.
+        **camera_config (CameraConfig): the camera configuration.
+    """
     init()
-    viewer = WorldView(world=self,
+    viewer = WorldView(world=world,
                        fps=fps,
                        update_world=True,
                        time_step=time_step,

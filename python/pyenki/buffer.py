@@ -33,16 +33,12 @@ class EnkiRemoteFrameBuffer(
 
     Attributes:
         world (pyenki.World | None): The world to display
-        camera_position (pyenki.Vector):  The camera position
-        camera_altitude (float): the vertical position of the camera.
-        camera_yaw (float): the camera rotation around the vertical axis.
-        camera_pitch (float): the camera vertical rotation.
-        camera_is_ortho (bool): whether the camera uses an orthographic projection.
 
     Example::
 
         >>> import pyenki
-        >>> world = pyenki.World()
+        >>> # configure a world
+        >>> world = ...
         >>> from pyenki.buffer import EnkiRemoteFrameBuffer
         >>> view = EnkiRemoteFrameBuffer(world=world)
         >>> view.move_camera(target_position=(0, 0), target_altitude=5,
@@ -58,14 +54,9 @@ class EnkiRemoteFrameBuffer(
         """
         Constructs a new instance.
 
-        :param      world:            The world
-        :param      camera_position:  The camera position
-        :param      camera_altitude:  The camera altitude
-        :param      camera_yaw:       The camera yaw
-        :param      camera_pitch:     The camera pitch
-        :param      camera_is_ortho:  Whether the camera uses an orthographic projection
+        :param         world:     The world
+        :param camera_config:     The camera configuration.
         """
-        # super().__init__(resizable=True)
         jupyter_rfb.RemoteFrameBuffer.__init__(self, resizable=True)
         HasCamera.__init__(self, world=world, **camera_config)
         self.world = world
@@ -151,10 +142,30 @@ class EnkiRemoteFrameBuffer(
             self._rfb_maybe_draw()
 
     def width(self) -> int:
+        """
+        Returns the current width
+
+        :returns:   The width in pixels
+        """
         return self.size[0]
 
     def height(self) -> int:
+        """
+        Returns the current height
+
+        :returns:   The height in pixels
+        """
         return self.size[1]
+
+    def resize(self, width: int, height: int) -> None:
+        """
+        Resizes the buffer
+
+        :param width:    The width in pixels
+        :param height:   The height in pixels
+        """
+        self.css_width = f'{width}px'
+        self.css_height = f'{height}px'
 
     def get_pixel(self, event: dict[str, Any]) -> Pixel:
         return int(event["x"]), int(event["y"])

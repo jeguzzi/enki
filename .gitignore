@@ -1,5 +1,6 @@
 *~
 build*
+_build
 install
 dist*
 venv*
@@ -11,3 +12,7 @@ make.bat
 out
 archive
 .ipynb_checkpoints
+playground
+.dmypy.json
+*.0.*
+__*

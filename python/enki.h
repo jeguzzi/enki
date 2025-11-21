@@ -62,16 +62,18 @@ struct PyWorld : public Enki::World {
 
   PyWorld(double width, double height,
           const Enki::Color &wallsColor = Enki::Color::gray,
-          const GroundTexture &groundTexture = GroundTexture(),
+          const std::optional<GroundTexture> & groundTexture = std::nullopt,
           unsigned long seed = 0)
-      : Enki::World(width, height, wallsColor, groundTexture, seed) {
+      : Enki::World(width, height, wallsColor,
+                    groundTexture.value_or(GroundTexture()), seed) {
     takeObjectOwnership = false;
   }
 
   PyWorld(double radius, const Enki::Color &wallsColor = Enki::Color::gray,
-          const GroundTexture &groundTexture = GroundTexture(),
+          const std::optional<GroundTexture> & groundTexture = std::nullopt,
           unsigned long seed = 0)
-      : Enki::World(radius, wallsColor, groundTexture, seed) {
+      : Enki::World(radius, wallsColor, groundTexture.value_or(GroundTexture()),
+                    seed) {
     takeObjectOwnership = false;
   }
 

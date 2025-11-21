@@ -19,6 +19,14 @@ if typing.TYPE_CHECKING:
 
 
 def init(share: bool = True) -> None:
+    """
+    Initializes the Qt runtime.
+
+    Args:
+        share (bool): Whether to share all OpenGL contexts.
+
+    Should be called before creating any py:class:`pyenki.viewer.WorldView`.
+    """
     if not QApplication.instanceExists():
         if share:
             QCoreApplication.setAttribute(
@@ -30,6 +38,13 @@ def init(share: bool = True) -> None:
 
 
 def run(duration: typing.SupportsFloat = -1) -> None:
+    """
+    Runs the Qt run-loop for a while.
+
+    Args:
+        duration (float): The duration in seconds.
+                          Negative values are interpreted as infinite duration.
+    """
     app = QApplication.instance()
     if app:
         duration = float(duration)
@@ -42,6 +57,9 @@ def run(duration: typing.SupportsFloat = -1) -> None:
 
 
 def cleanup() -> None:
+    """
+    Cleans up the Qt runtime.
+    """
     Renderer.cleanup()
 
 

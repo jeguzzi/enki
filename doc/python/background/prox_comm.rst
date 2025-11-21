@@ -1,4 +1,5 @@
-Proximity communication
+=======================
+Thymio IR communication
 =======================
 
 A Thymio can enable proximity communication and transmits an integer payload every 0.1 s.
@@ -6,7 +7,7 @@ The message is received by other Thymios if they have enabled proximity communic
 is visible by one of the emitter's [proximity] LEDs.
 
 Run-time
-~~~~~~~~~
+========
 
 At each control step, the simulation collect neighbors' messages sent after the last control step
 into :py:attr:`pyenki.Thymio2.prox_comm_events`.
@@ -22,9 +23,8 @@ slightly the timing of their emission in the 0.1 second long time-window. On the
 sent the messages immediately before the next control step and their messages do not incur into collisions.
 
 
-
 Simulated Response
-~~~~~~~~~~~~~~~~~~
+==================
 
 More precisely, given an emitting [proximity] LED at point :math:`p_e` and angle :math:`\alpha_e` and a receiving [proximity] sensor at point :math:`p_r` and angle :math:`\alpha_r`,
 a pulse from `e` to `r` is visible if the following criteria are met:
@@ -46,6 +46,6 @@ We set to 0 all responses not large enough (i.e., lower than the response caused
 Note that this is still a simplification because we ignore that the real intensities depends also on the orientations.
 
 
-Each received message in encoded as an :py:class:`pyenki.IRCommEvent` ``event``, where ``event.payloads`` and ``event.intensities`` contain the response of the seven proximity sensors:
+Each received message in encoded as an :py:class:`pyenki.Thymio2.IRCommEvent` ``event``, where ``event.payloads`` and ``event.intensities`` contain the response of the seven proximity sensors:
 the first five entries are from frontal sensors ordered from left to right and the last two entries are from rear sensors ordered from left to right.
 When a sensor doesn't receive the message (i.e., when the response is too weak), the corresponding payload and intensity are set to zero.

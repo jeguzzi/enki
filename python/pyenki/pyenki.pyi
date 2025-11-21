@@ -15,7 +15,6 @@ Polygon: TypeAlias = collections.abc.Sequence[Vector]
 ARGBImage: TypeAlias = Annotated[numpy.typing.NDArray[numpy.uint8], '[n, m, 4]']
 ARGBImageLike: TypeAlias = Annotated[numpy.typing.ArrayLike, numpy.uint8, '[n, m, 4]']
 
-
 class Color:
     black: ClassVar[Color] = ...  # read-only
     blue: ClassVar[Color] = ...  # read-only
@@ -23,6 +22,22 @@ class Color:
     green: ClassVar[Color] = ...  # read-only
     red: ClassVar[Color] = ...  # read-only
     white: ClassVar[Color] = ...  # read-only
+    lightgray: ClassVar[Color] = ...  # read-only
+    darkgray: ClassVar[Color] = ...  # read-only
+    lightred: ClassVar[Color] = ...  # read-only
+    darkred: ClassVar[Color] = ...  # read-only
+    lightgreen: ClassVar[Color] = ...  # read-only
+    darkgreen: ClassVar[Color] = ...  # read-only
+    lightblue: ClassVar[Color] = ...  # read-only
+    darkblue: ClassVar[Color] = ...  # read-only
+    lightyellow: ClassVar[Color] = ...  # read-only
+    yellow: ClassVar[Color] = ...  # read-only
+    darkyellow: ClassVar[Color] = ...  # read-only
+    orange: ClassVar[Color] = ...  # read-only
+    violet: ClassVar[Color] = ...  # read-only
+    purple: ClassVar[Color] = ...  # read-only
+    pink: ClassVar[Color] = ...  # read-only
+    cyan: ClassVar[Color] = ...  # read-only
     a: float
     b: float
     components: tuple[float, float, float, float]
@@ -83,14 +98,6 @@ class EPuck(DifferentialWheeled):
     def prox_values(self) -> Array1D: ...
     @property
     def scan(self) -> Array1D: ...
-
-class IRCommEvent:
-    @property
-    def intensities(self) -> IntArray1D: ...
-    @property
-    def payloads(self) -> IntArray1D: ...
-    @property
-    def rx_value(self) -> int: ...
 
 class Marxbot(DifferentialWheeled):
     scanner_range: float
@@ -181,6 +188,14 @@ class Thymio2(DifferentialWheeled):
         BACKWARD = ...
         LEFT = ...
         RIGHT = ...
+
+    class IRCommEvent:
+        @property
+        def intensities(self) -> IntArray1D: ...
+        @property
+        def payloads(self) -> IntArray1D: ...
+        @property
+        def rx_value(self) -> int: ...
 
     prox_comm_enabled: bool
     prox_comm_tx: int

@@ -232,12 +232,29 @@ Args:
 An RGBA color with values between 0.0 and 1.0.
 
 Attributes:
-    black (Color): Black color (readonly)
-    gray (Color) : Gray color (readonly)
-    white (Color) : White color (readonly)
-    red (Color) : Red color (readonly)
-    green (Color) : Green color (readonly)
-    blue (Color) : Blue color (readonly)
+    black (Color): readonly
+    gray (Color) : readonly
+    white (Color) : readonly
+    red (Color) : readonly
+    green (Color) : readonly
+    blue (Color) : readonly
+    lightgray (Color) : readonly
+    darkgray (Color) : readonly
+    lightred (Color) : readonly
+    darkred (Color) : readonly
+    lightgreen (Color) : readonly
+    darkgreen (Color) : readonly
+    lightblue (Color) : readonly
+    darkblue (Color) : readonly
+    lightyellow (Color) : readonly
+    yellow (Color) : readonly
+    darkyellow (Color) : readonly
+    orange (Color) : readonly
+    violet (Color) : readonly
+    purple (Color) : readonly
+    pink (Color) : readonly
+    cyan (Color) : readonly
+
     r (float): Red channel, in [0, 1]
     g (float): Green channel, in [0, 1]
     b (float): Blue channel, in [0, 1]
@@ -306,6 +323,39 @@ Returns:
           "green", [](py::object /* self */) { return Color::green; })
       .def_property_readonly_static(
           "blue", [](py::object /* self */) { return Color::blue; })
+      .def_property_readonly_static(
+          "lightgray", [](py::object /* self */) { return Color::lightGray; })
+      .def_property_readonly_static(
+          "darkgray", [](py::object /* self */) { return Color::darkGray; })
+      .def_property_readonly_static(
+          "lightred", [](py::object /* self */) { return Color::lightRed; })
+      .def_property_readonly_static(
+          "darkred", [](py::object /* self */) { return Color::darkRed; })
+      .def_property_readonly_static(
+          "lightgreen", [](py::object /* self */) { return Color::lightGreen; })
+      .def_property_readonly_static(
+          "darkgreen", [](py::object /* self */) { return Color::darkGreen; })
+      .def_property_readonly_static(
+          "lightblue", [](py::object /* self */) { return Color::lightBlue; })
+      .def_property_readonly_static(
+          "darkblue", [](py::object /* self */) { return Color::darkBlue; })
+      .def_property_readonly_static(
+          "lightyellow",
+          [](py::object /* self */) { return Color::lightYellow; })
+      .def_property_readonly_static(
+          "yellow", [](py::object /* self */) { return Color::yellow; })
+      .def_property_readonly_static(
+          "darkyellow", [](py::object /* self */) { return Color::darkYellow; })
+      .def_property_readonly_static(
+          "orange", [](py::object /* self */) { return Color::orange; })
+      .def_property_readonly_static(
+          "violet", [](py::object /* self */) { return Color::violet; })
+      .def_property_readonly_static(
+          "purple", [](py::object /* self */) { return Color::purple; })
+      .def_property_readonly_static(
+          "pink", [](py::object /* self */) { return Color::pink; })
+      .def_property_readonly_static(
+          "cyan", [](py::object /* self */) { return Color::cyan; })
       .def_property("r", &Color::r, &Color::setR)
       .def_property("g", &Color::g, &Color::setG)
       .def_property("b", &Color::b, &Color::setB)
@@ -357,7 +407,7 @@ Attributes:
 )doc");
 
   py::classh<PhysicalObject::Part>(po, "Part", py::dynamic_attr(), R"doc(
-Right prism that can be composed to define the geometry of a :py:class:`PhysicalObject`.
+Right prism that can be composed to define the geometry of a :py:class:`pyenki.PhysicalObject`.
 
 Attributes:
     shape (Sequence[Vector]): The convex 2D polygon (positively oriented) at the base of the prism [cm].
@@ -678,9 +728,9 @@ Reset the odometry of both wheels.
 
         Attributes:
             scanner_range (float): the range of the scanner. Default is infinite.
-            scanner_distances (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 180 radial distances,
+            scanner_distances (Array1D): An array of 180 radial distances,
                 ordered from -180 degrees to 180 degrees, in centimeters (readonly).
-            scanner_image (numpy.ndarray[tuple[int, int], numpy.dtype[numpy.float64]]): An rgba array between 0 and 1 of shape ``(180, 4)`` (readonly).
+            scanner_image (Array2D): An rgba array between 0 and 1 of shape ``(180, 4)`` (readonly).
       )doc")
       .def(py::init<>())
       .def_property(
@@ -740,11 +790,11 @@ Example::
 
 Attributes:
 
-    prox_values (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 8 proximity sensor readings, one for each sensors (readonly).
-    prox_distances (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 8 distances between proximity sensor and nearest obstacles, one for each sensors (readonly).
+    prox_values (Array1D): An array of 8 proximity sensor readings, one for each sensors (readonly).
+    prox_distances (Array1D): An array of 8 distances between proximity sensor and nearest obstacles, one for each sensors (readonly).
         please note that this value would *not* directly be accessible by a real robot (readonly).
-    scan (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 64 radial distances, ordered from -180 degrees to 180 degrees, in centimeters.
-    camera_image (numpy.ndarray[tuple[int, int], numpy.dtype[numpy.float64]]): An rgba array between 0 and 1 of shape ``(60, 4)`` (readonly).
+    scan (Array1D): An array of 64 radial distances, ordered from -180 degrees to 180 degrees, in centimeters.
+    camera_image (Array2D): An rgba array between 0 and 1 of shape ``(60, 4)`` (readonly).
 )doc")
       .def(py::init([](bool proximity = true, bool camera = false,
                        bool scanner = false) {
@@ -804,35 +854,6 @@ Args:
   value (bool): the desired LED state.
 )doc");
 
-  py::classh<IRCommEvent>(m, "IRCommEvent", R"doc( 
-This event is created each time a message is received by at least one proximity sensor.
-The sensors that do not receive the message, have the corresponding payloads and intensities set to zero.
-
-Attributes:
-    rx_value (int): The received message payload (readonly)
-    payloads (numpy.ndarray[tuple[int], numpy.dtype[numpy.int64]]): An array of 7 integer payloads, one for each sensors (readonly).
-        The first 5 entries are from frontal sensors ordered from left to right.
-        The last two entries are from rear sensors  ordered from left to right.
-    intensities (numpy.ndarray[tuple[int], numpy.dtype[numpy.int64]]): An array of 7 integer intensities, one for each sensors (readonly).
-        The first 5 entries are from frontal sensors ordered from left to right.
-        The last two entries are from rear sensors  ordered from left to right.
-)doc")
-      .def_property(
-          "intensities",
-          [](const IRCommEvent &e) {
-            const auto &vs = e.intensities;
-            return py::array(static_cast<ssize_t>(vs.size()), vs.data());
-          },
-          nullptr)
-      .def_property(
-          "payloads",
-          [](const IRCommEvent &e) {
-            const auto &vs = e.payloads;
-            return py::array(static_cast<ssize_t>(vs.size()), vs.data());
-          },
-          nullptr)
-      .def_readonly("rx_value", &IRCommEvent::rx_value);
-
   py::classh<Thymio2, PyThymio2, DifferentialWheeled, PhysicalObject> thymio(
       m, "Thymio2", R"doc( 
 A :py:class:`DifferentialWheeled` Thymio2 robot.
@@ -862,13 +883,13 @@ which uses integers in the same units used by aseba. For example,
   in :py:meth:`set_led_top`.
 
 Attributes:
-    prox_values (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 7 proximity sensor readings, one for each sensors (readonly).
+    prox_values (Array1D): An array of 7 proximity sensor readings, one for each sensors (readonly).
         The first 5 entries are from frontal sensors ordered from left to right.
         The last two entries are from rear sensors  ordered from left to right.
-    prox_values_i (numpy.ndarray[tuple[int], numpy.dtype[numpy.int64]]): An array of 7 proximity sensor readings, one for each sensors (readonly).
+    prox_values_i (IntArray1D): An array of 7 proximity sensor readings, one for each sensors (readonly).
         The first 5 entries are from frontal sensors ordered from left to right.
         The last two entries are from rear sensors  ordered from left to right.
-    prox_distances (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): A list of 7 distances between proximity sensor and nearest obstancle, one for each sensors;
+    prox_distances (Array1D): A list of 7 distances between proximity sensor and nearest obstancle, one for each sensors;
         please note that this value would *not* directly be accessible by a real robot (readonly).
         The first 5 entries are from frontal sensors ordered from left to right.
         The last two entries are from rear sensors  ordered from left to right.
@@ -876,8 +897,8 @@ Attributes:
         therefore to be compliant we should limit the value between 0 and 2047.
     prox_comm_enabled (bool): Enable/disable proximity communication.
     prox_comm_events (list[IRCommEvent]): A list of events, one for every received message during the last control step (readonly).
-    ground_values (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 2 ground sensor readings, one for each sensors (readonly)
-    ground_values_i (numpy.ndarray[tuple[int], numpy.dtype[numpy.int64]]): An array of 2 ground sensor readings, one for each sensors (readonly)
+    ground_values (Array1D): An array of 2 ground sensor readings, one for each sensors (readonly)
+    ground_values_i (IntArray1D): An array of 2 ground sensor readings, one for each sensors (readonly)
     left_wheel_target_speed_i (int): The target left wheel speed in ticks per second.
     right_wheel_target_speed_i (int): The target right wheel speed in ticks per second.
     left_wheel_encoder_speed_i (int): The current left wheel speed in ticks per second (readonly).
@@ -886,6 +907,35 @@ Attributes:
     right_wheel_odometry_i (int): The right wheel odometry integrated from measured wheel speeds in ticks (readonly).
     button_touch_callback (Callable[[Thymio2, int], None] | None): An optional function called when button touch events happen.
 )doc");
+
+  py::classh<IRCommEvent>(thymio, "IRCommEvent", R"doc( 
+This event is created each time a message is received by at least one proximity sensor.
+The sensors that do not receive the message, have the corresponding payloads and intensities set to zero.
+
+Attributes:
+    rx_value (int): The received message payload (readonly)
+    payloads (IntArray1D): An array of 7 integer payloads, one for each sensors (readonly).
+        The first 5 entries are from frontal sensors ordered from left to right.
+        The last two entries are from rear sensors  ordered from left to right.
+    intensities (IntArray1D): An array of 7 integer intensities, one for each sensors (readonly).
+        The first 5 entries are from frontal sensors ordered from left to right.
+        The last two entries are from rear sensors  ordered from left to right.
+)doc")
+      .def_property(
+          "intensities",
+          [](const IRCommEvent &e) {
+            const auto &vs = e.intensities;
+            return py::array(static_cast<ssize_t>(vs.size()), vs.data());
+          },
+          nullptr)
+      .def_property(
+          "payloads",
+          [](const IRCommEvent &e) {
+            const auto &vs = e.payloads;
+            return py::array(static_cast<ssize_t>(vs.size()), vs.data());
+          },
+          nullptr)
+      .def_readonly("rx_value", &IRCommEvent::rx_value);
 
   py::native_enum<Thymio2::Button>(thymio, "Button", "enum.Enum", R"doc(
 Identify one of the five touch button of the Thymio2.
@@ -1256,7 +1306,7 @@ Args:
     height (float): The rectangular world height in centimeters
     radius (float): The circular world radius in centimeters
     walls_color (Color): Optional wall color, default is ``Color.gray``
-    ground_texture (World.GroundTexture): Optional ground texture, default is an empty image.
+    ground_texture (World.GroundTexture | None): Optional ground texture, default is an empty image.
     seed (int): The random seed
 
 Example::
@@ -1326,8 +1376,8 @@ Attributes:
 Creates an ground texture with a copy of the ARGB data
 
 Args:
-  data (numpy.ndarray): A numpy array of shape ``(height, width, 4)``
-                        and type `numpy.uint_8` storing ARGB pixels.
+  data (ARGBImage): A numpy array of shape ``(height, width, 4)``
+                        and type :py:attr:`numpy.uint8` storing ARGB pixels.
 )doc")
       .def_buffer([](World::GroundTexture &c) -> py::buffer_info {
         const std::array<ssize_t, 3> shape{c.height, c.width, 4};
@@ -1357,17 +1407,17 @@ No boundary walls.
       .finalize();
 
   world.def(py::init<unsigned long>(), py::arg("seed") = 0)
-      .def(py::init<double, double, const Color &, const World::GroundTexture &,
+      .def(py::init<double, double, const Color &,
+                    const std::optional<World::GroundTexture> &,
                     unsigned long>(),
            py::arg("width"), py::arg("height"),
            py::arg("walls_color") = Color::gray,
-           py::arg("ground_texture") = World::GroundTexture(),
-           py::arg("seed") = 0)
-      .def(py::init<double, const Color &, const World::GroundTexture &,
+           py::arg("ground_texture") = std::nullopt, py::arg("seed") = 0)
+      .def(py::init<double, const Color &,
+                    const std::optional<World::GroundTexture> &,
                     unsigned long>(),
            py::arg("radius"), py::arg("walls_color") = Color::gray,
-           py::arg("ground_texture") = World::GroundTexture(),
-           py::arg("seed") = 0)
+           py::arg("ground_texture") = std::nullopt, py::arg("seed") = 0)
       .def("step", &World::step, py::arg("time_step"),
            py::arg("physics_oversampling") = 1, R"doc( 
 Simulate a timestep
@@ -1391,8 +1441,13 @@ Remove an object from the simulation.
 Args:
     object (PhysicalObject): the object to remove.
 )doc")
-      // TODO
-      .def("copy_random_generator", &PyWorld::copyRandom, py::arg("world"))
+      .def("copy_random_generator", &PyWorld::copyRandom, py::arg("world"),
+           R"doc( 
+Copy the random generator from another world
+
+Args:
+    world (World): the other world.
+)doc")
       .def_readonly("radius", &PyWorld::r)
       .def_readonly("width", &PyWorld::w)
       .def_readonly("height", &PyWorld::h)
@@ -1400,7 +1455,16 @@ Args:
       .def_readonly("walls_type", &PyWorld::wallsType)
       .def_readonly("ground_texture", &PyWorld::groundTexture)
       .def_property("has_ground_texture", &PyWorld::hasGroundTexture, nullptr)
-      .def("get_ground_color", &PyWorld::getGroundColor, py::arg("position"))
+      .def("get_ground_color", &PyWorld::getGroundColor, py::arg("position"),
+           R"doc( 
+Returns the color of the floor at a given position
+
+Args:
+    position (Vector): the position.
+
+Returns:
+    Color: the color at the position.
+)doc")
       .def_property("random_seed", &PyWorld::getRandomSeed,
                     &PyWorld::setRandomSeed)
       .def_property("random_generator", &PyWorld::getRandom,
