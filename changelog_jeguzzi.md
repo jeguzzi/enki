@@ -92,3 +92,46 @@ In C++:
 - Corrected distance from cylinders calculation in Circular camera.
 - Renamed ``EnkiApplication::init` to `EnkiApplication::setup`
 - Added `EnkiApplication::init`, `EnkiApplication::run`, `EnkiApplication::cleanup`.
+
+## Branch pyviewer
+
+It re-implements the world viewer class (and renderers) in Python using PySide6. OpenGL (v4) shaders and VAOs replace the C++ implementation based on OpenGL fixed pipeline. Shaders replaces dynamic textures to implement Thymio LEDs.
+
+The main advantages are:
+- more modern OpenGL (4 vs 1.X)
+- simplified Python wheels because rendering does not requires building/linking against Qt
+- can use rendering with any version of PySide6 (vs only the one linked against the same version of Qt6).
+
+### Added
+
+- added subpackage `pyenki.viewer` with Pyside6-based OpenGL renderer used by an offscreen renderer and an QOpenGLWidget subclass. `pyenki.viewer.__init__` selects whether to load the native or the python version depending on availability and the `PYENKI_NATIVE_VIEWER` environment variable.
+- exposed Thymio LEDs colors with `pyenki.Thymio2.led_colors`
+- exposed mouse/touch events (for physical objects)
+- exposed Thymio buttons
+- exposed world ground texture
+- exposed world dimensions
+- exposed world wall types
+- exposed PhysicalObject::Part as `pyenki.PhysicalObject.Part`
+- moved PhysicalObject factory constructors to init
+- added `share` argument to `pyenki.viewer.init`
+- added buffer protocol to `pyenki.Color`
+- exposed additional colors.
+- added `Camera` and `HasCamera`
+- added "proper" offscreen rendering to the native viewer
+- added methods to query the 3D position of a pixel in the world.
+- added interaction to `pyenki.buffer.EnkiRemoteFramebuffer` (select, move, track)
+
+### Removed
+
+- `pyenki.CircularObject`, `pyenki.RectangularObject`, `pyenki.CompositeObject`, `pyenki.ConvexObject`.
+
+### Changed
+
+- split pybind11 wrapper in two modules: the second requires Qt, exposes the native viewer, and is loaded in `pyenki.viewer.native`.
+- moved `pyenki.WorldView` to `pyenki.viewer.WorldView`
+- moved `pyenki.init_ui`, `pyenki.run_ui`, `pyenki.cleanup_ui` to `pyenki.viewer.init`, `pyenki.viewer.run`, `pyenki.viewer.cleanup`.
+- refactored docs.
+
+
+
+
