@@ -1,3 +1,5 @@
+from typing import cast
+
 import pyenki
 import pyenki.viewer
 
@@ -37,8 +39,8 @@ def main() -> None:
     window = QWidget()
     hbox = QHBoxLayout(window)
     window.resize(960, 320)
-    hbox.addWidget(viewer_1.pyside_widget)
-    hbox.addWidget(viewer_2.pyside_widget)
+    hbox.addWidget(cast(QWidget, viewer_1))
+    hbox.addWidget(cast(QWidget, viewer_2))
     window.show()
     viewer_1.start_updating_world(0.1)
     app.exec()

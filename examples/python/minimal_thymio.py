@@ -1,8 +1,10 @@
 import math
+from typing import cast
+
 import pyenki
 
 
-def log(thymio: pyenki.Thymio2, time: float):
+def log(thymio: pyenki.Thymio2, time: float) -> None:
     events = thymio.prox_comm_events
     if not events:
         return
@@ -13,10 +15,9 @@ def log(thymio: pyenki.Thymio2, time: float):
         )
 
 
-def main():
+def main() -> None:
     dt = 0.1
     world = pyenki.World(2000, 2000)
-    robots = []
     for i, (x, theta, tx) in enumerate(
             zip((100, 115, 130), (0, math.pi, 0), (111, 222, 333),
                 strict=True)):
@@ -27,12 +28,11 @@ def main():
         world.add_object(thymio)
         thymio.prox_comm_enabled = True
         thymio.prox_comm_tx = tx
-        robots.append(thymio)
     print("Start Simulation")
     for i in range(15):
         world.step(dt)
-        for thymio in world.robots:
-            log(thymio, dt * i)
+        for robot in world.robots:
+            log(cast('pyenki.Thymio2', robot), dt * i)
     print("End Simulation")
 
 
