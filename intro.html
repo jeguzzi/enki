@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Installation &#8212; pyenki 0.0.1 documentation</title>
+    <title>Introduction &#8212; pyenki 0.0.1 documentation</title>
   
   
   
@@ -16,29 +16,27 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-toolbox-code.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-toolbox-code.css?v=4ee5d529" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
   
-  <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=e645c8fa"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
@@ -47,11 +45,10 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="next" title="Installation" href="installation.html" />
     <link rel="prev" title="Welcome to pyenki’s documentation!" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -67,8 +64,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -76,6 +84,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -83,8 +92,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -100,8 +109,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -131,20 +139,60 @@
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/basics.html">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/visualization.html">Visualization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="visualization/index.html">How to visualize a simulation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="visualization/configuration.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization/rendering.html">Rendering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization/interactive.html">Interactive</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="background/index.html">Background knowledge</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="background/prox_comm.html">Thymio IR communication</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/object.html">Physical objects</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/robots.html">Robots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/base.html">Robot base classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/epuck.html">E-puck</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/marxbot.html">Marxbot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/thymio.html">Thymio</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="api/world.html">World</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/visualization.html">Visualization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/viewer.html">Viewer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/world_view.html">WorldView</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/renderer.html">Rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/notebook.html">Notebooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/video.html">Video</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prox_comm.html">Proximity communication</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 </ul>
 
     </div>
@@ -153,14 +201,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -257,16 +300,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -280,7 +331,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Installation</h1>
+    <h1>Introduction</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -290,8 +341,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">Requirements</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compiling-from-source">Compiling from source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#differences-with-the-original-version">Differences with the original version</a></li>
 </ul>
             </nav>
         </div>
@@ -303,26 +353,32 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
-<p>This package provides Python bindings to the enki simulator
-using <a class="reference external" href="https://pybind11.readthedocs.io/en/stable/">Pybind11</a>.</p>
-<p>This is a fork of <a class="github reference external" href="https://github.com/enki-community/enki">enki-community/enki</a> with the changes listed in the <a class="reference internal" href="changelog.html#changelog"><span class="std std-ref">Changelog</span></a>.
-We thank the authors of enki very much for their fantastic work.</p>
-<section id="requirements">
-<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h2>
-<p>You need to have Python installed. In case you want to visualize the simulation, you need to install Qt too (Qt5 and Qt6 are supported).</p>
-</section>
-<section id="compiling-from-source">
-<h2>Compiling from source<a class="headerlink" href="#compiling-from-source" title="Link to this heading">#</a></h2>
-<p>To build a wheel</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>build
-</pre></div>
-</div>
-<p>To install</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.
-</pre></div>
-</div>
+  <section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
+<p>This package provides Python bindings to the <strong>enki</strong> simulator
+using <a class="reference external" href="https://pybind11.readthedocs.io/en/stable/">Pybind11</a>. This is a fork of the <a class="reference external" href="https://github.com/enki-community/enki">original repository</a>. We thank the original authors of enki very much for their fantastic work.</p>
+<p>With <strong>pyenki</strong> users can create worlds populated with static objects and three types of robots (E-puck, Marxbot, and Thymio). They can define controllers for the robots: read sensors, move wheels, and change LEDs. They can run batch simulation or real-time simulation visualized in interactive views.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="_images/world.png"><img alt="_images/world.png" src="_images/world.png" style="width: 75%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">The three robot types implemented in pyenki.</span><a class="headerlink" href="#id1" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Enki is 2.5-dimensional: collisions and physics are computed based only on 2-dimensional geometry, while sensing is affected by the vertical dimension too. It is very computationally efficient and has no external requirements, except for the optional visualization.</p>
+<section id="differences-with-the-original-version">
+<h2>Differences with the original version<a class="headerlink" href="#differences-with-the-original-version" title="Link to this heading">#</a></h2>
+<p>We have modernized a bit the code, in particular adding support for Qt6 (the original supported Qt5 only which is now EOL) and switching from Boost-Python to Pybind11. We have also implemented an alternative renderer in Python, which makes the Qt dependency optional at build-time.
+We also changed names to comply with PEP8 and added docstrings.</p>
+<p>The other main changes are:</p>
+<ul class="simple">
+<li><p>random sampling is now completely determined by a random seed, allowing to reproduce simulations;</p></li>
+<li><p>implemented Thymio buttons and IR communication;</p></li>
+<li><p>exposed all robots and their sensors and actuators to Python;</p></li>
+<li><p>added callbacks as an alternative to sub-class robots;</p></li>
+<li><p>added off-screen rendering.</p></li>
+</ul>
+<p><a class="reference internal" href="changelog.html#changelog"><span class="std std-ref">Changelog</span></a> lists the complete changes.</p>
 </section>
 </section>
 
@@ -347,11 +403,11 @@ We thank the authors of enki very much for their fantastic work.</p>
       </div>
     </a>
     <a class="right-next"
-       href="changelog.html"
+       href="installation.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Changelog</p>
+        <p class="prev-next-title">Installation</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -362,8 +418,7 @@ We thank the authors of enki very much for their fantastic work.</p>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -372,8 +427,7 @@ We thank the authors of enki very much for their fantastic work.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">Requirements</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compiling-from-source">Compiling from source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#differences-with-the-original-version">Differences with the original version</a></li>
 </ul>
   </nav></div>
 
@@ -422,8 +476,8 @@ By Stéphane Magnenat and others. This version is maintained by Jerome Guzzi.
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

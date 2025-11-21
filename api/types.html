@@ -1,0 +1,959 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Types &#8212; pyenki 0.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-toolbox-code.css?v=4ee5d529" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/types';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Physical objects" href="object.html" />
+    <link rel="prev" title="Reference" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pyenki 0.0.1 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/basics.html">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/visualization.html">Visualization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../visualization/index.html">How to visualize a simulation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/configuration.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/rendering.html">Rendering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/interactive.html">Interactive</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../background/index.html">Background knowledge</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../background/prox_comm.html">Thymio IR communication</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="object.html">Physical objects</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="robots.html">Robots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="base.html">Robot base classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="epuck.html">E-puck</a></li>
+<li class="toctree-l3"><a class="reference internal" href="marxbot.html">Marxbot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="thymio.html">Thymio</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html">World</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="visualization.html">Visualization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="viewer.html">Viewer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="world_view.html">WorldView</a></li>
+<li class="toctree-l3"><a class="reference internal" href="renderer.html">Rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebook.html">Notebooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="video.html">Video</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/api/types.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Types</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aliases">Aliases</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Vector"><code class="docutils literal notranslate"><span class="pre">Vector</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.VectorLike"><code class="docutils literal notranslate"><span class="pre">VectorLike</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Array1D"><code class="docutils literal notranslate"><span class="pre">Array1D</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.IntArray1D"><code class="docutils literal notranslate"><span class="pre">IntArray1D</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Array2D"><code class="docutils literal notranslate"><span class="pre">Array2D</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Image"><code class="docutils literal notranslate"><span class="pre">Image</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.ARGBImage"><code class="docutils literal notranslate"><span class="pre">ARGBImage</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.ARGBImageLike"><code class="docutils literal notranslate"><span class="pre">ARGBImageLike</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.viewer.Vector3"><code class="docutils literal notranslate"><span class="pre">Vector3</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.viewer.Vector3Like"><code class="docutils literal notranslate"><span class="pre">Vector3Like</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#color">Color</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color"><code class="docutils literal notranslate"><span class="pre">Color</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.black"><code class="docutils literal notranslate"><span class="pre">Color.black</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.gray"><code class="docutils literal notranslate"><span class="pre">Color.gray</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.white"><code class="docutils literal notranslate"><span class="pre">Color.white</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.red"><code class="docutils literal notranslate"><span class="pre">Color.red</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.green"><code class="docutils literal notranslate"><span class="pre">Color.green</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.blue"><code class="docutils literal notranslate"><span class="pre">Color.blue</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.lightgray"><code class="docutils literal notranslate"><span class="pre">Color.lightgray</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.darkgray"><code class="docutils literal notranslate"><span class="pre">Color.darkgray</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.lightred"><code class="docutils literal notranslate"><span class="pre">Color.lightred</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.darkred"><code class="docutils literal notranslate"><span class="pre">Color.darkred</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.lightgreen"><code class="docutils literal notranslate"><span class="pre">Color.lightgreen</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.darkgreen"><code class="docutils literal notranslate"><span class="pre">Color.darkgreen</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.lightblue"><code class="docutils literal notranslate"><span class="pre">Color.lightblue</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.darkblue"><code class="docutils literal notranslate"><span class="pre">Color.darkblue</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.lightyellow"><code class="docutils literal notranslate"><span class="pre">Color.lightyellow</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.yellow"><code class="docutils literal notranslate"><span class="pre">Color.yellow</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.darkyellow"><code class="docutils literal notranslate"><span class="pre">Color.darkyellow</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.orange"><code class="docutils literal notranslate"><span class="pre">Color.orange</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.violet"><code class="docutils literal notranslate"><span class="pre">Color.violet</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.purple"><code class="docutils literal notranslate"><span class="pre">Color.purple</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.pink"><code class="docutils literal notranslate"><span class="pre">Color.pink</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.cyan"><code class="docutils literal notranslate"><span class="pre">Color.cyan</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.r"><code class="docutils literal notranslate"><span class="pre">Color.r</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.g"><code class="docutils literal notranslate"><span class="pre">Color.g</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.b"><code class="docutils literal notranslate"><span class="pre">Color.b</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.a"><code class="docutils literal notranslate"><span class="pre">Color.a</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.components"><code class="docutils literal notranslate"><span class="pre">Color.components</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.threshold"><code class="docutils literal notranslate"><span class="pre">Color.threshold()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.toGray"><code class="docutils literal notranslate"><span class="pre">Color.toGray()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="types">
+<h1>Types<a class="headerlink" href="#types" title="Link to this heading">#</a></h1>
+<section id="aliases">
+<h2>Aliases<a class="headerlink" href="#aliases" title="Link to this heading">#</a></h2>
+<dl class="py type">
+<dt class="sig sig-object py" id="pyenki.Vector">
+<em class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.</span></span><span class="sig-name descname"><span class="pre">Vector</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/typing.html#numpy.typing.NDArray" title="(in NumPy v2.3)"><span class="pre">numpy.typing.NDArray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="(in NumPy v2.3)"><span class="pre">numpy.float64</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[2,</span> <span class="pre">1]'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.Vector" title="Link to this definition">#</a></dt>
+<dd><p>A two dimensional vector in cm.</p>
+</dd></dl>
+
+<dl class="py type">
+<dt class="sig sig-object py" id="pyenki.VectorLike">
+<em class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.</span></span><span class="sig-name descname"><span class="pre">VectorLike</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/typing.html#numpy.typing.ArrayLike" title="(in NumPy v2.3)"><span class="pre">numpy.typing.ArrayLike</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="(in NumPy v2.3)"><span class="pre">numpy.float64</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[2,</span> <span class="pre">1]'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.VectorLike" title="Link to this definition">#</a></dt>
+<dd><p>Anything that can be converted to a <a class="reference internal" href="#pyenki.Vector" title="pyenki.Vector"><code class="xref py py-type docutils literal notranslate"><span class="pre">Vector</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py type">
+<dt class="sig sig-object py" id="pyenki.Array1D">
+<em class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.</span></span><span class="sig-name descname"><span class="pre">Array1D</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/typing.html#numpy.typing.NDArray" title="(in NumPy v2.3)"><span class="pre">numpy.typing.NDArray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="(in NumPy v2.3)"><span class="pre">numpy.float64</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[n]'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.Array1D" title="Link to this definition">#</a></dt>
+<dd><p>A one-dimensional array of floats</p>
+</dd></dl>
+
+<dl class="py type">
+<dt class="sig sig-object py" id="pyenki.IntArray1D">
+<em class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.</span></span><span class="sig-name descname"><span class="pre">IntArray1D</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/typing.html#numpy.typing.NDArray" title="(in NumPy v2.3)"><span class="pre">numpy.typing.NDArray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="(in NumPy v2.3)"><span class="pre">numpy.int64</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[n]'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.IntArray1D" title="Link to this definition">#</a></dt>
+<dd><p>A one-dimensional array of integers.</p>
+</dd></dl>
+
+<dl class="py type">
+<dt class="sig sig-object py" id="pyenki.Array2D">
+<em class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.</span></span><span class="sig-name descname"><span class="pre">Array2D</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/typing.html#numpy.typing.NDArray" title="(in NumPy v2.3)"><span class="pre">numpy.typing.NDArray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="(in NumPy v2.3)"><span class="pre">numpy.float64</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[n]'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.Array2D" title="Link to this definition">#</a></dt>
+<dd><p>A two-dimensional array of floats</p>
+</dd></dl>
+
+<dl class="py type">
+<dt class="sig sig-object py" id="pyenki.Image">
+<em class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.</span></span><span class="sig-name descname"><span class="pre">Image</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/typing.html#numpy.typing.NDArray" title="(in NumPy v2.3)"><span class="pre">numpy.typing.NDArray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint8" title="(in NumPy v2.3)"><span class="pre">numpy.uint8</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[n,</span> <span class="pre">m,</span> <span class="pre">3]'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.Image" title="Link to this definition">#</a></dt>
+<dd><p>An RGB image with 8 bits per color.</p>
+</dd></dl>
+
+<dl class="py type">
+<dt class="sig sig-object py" id="pyenki.ARGBImage">
+<em class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.</span></span><span class="sig-name descname"><span class="pre">ARGBImage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/typing.html#numpy.typing.NDArray" title="(in NumPy v2.3)"><span class="pre">numpy.typing.NDArray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint8" title="(in NumPy v2.3)"><span class="pre">numpy.uint8</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[n,</span> <span class="pre">m,</span> <span class="pre">4]'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.ARGBImage" title="Link to this definition">#</a></dt>
+<dd><p>An ARGB image with 8 bits per color.</p>
+</dd></dl>
+
+<dl class="py type">
+<dt class="sig sig-object py" id="pyenki.ARGBImageLike">
+<em class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.</span></span><span class="sig-name descname"><span class="pre">ARGBImageLike</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/typing.html#numpy.typing.ArrayLike" title="(in NumPy v2.3)"><span class="pre">numpy.typing.ArrayLike</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint8" title="(in NumPy v2.3)"><span class="pre">numpy.uint8</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[n,</span> <span class="pre">m,</span> <span class="pre">4]'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.ARGBImageLike" title="Link to this definition">#</a></dt>
+<dd><p>Anything that can be converted to a <a class="reference internal" href="#pyenki.ARGBImage" title="pyenki.ARGBImage"><code class="xref py py-type docutils literal notranslate"><span class="pre">ARGBImage</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py type">
+<dt class="sig sig-object py" id="pyenki.viewer.Vector3">
+<em class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.viewer.</span></span><span class="sig-name descname"><span class="pre">Vector3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/typing.html#numpy.typing.NDArray" title="(in NumPy v2.3)"><span class="pre">numpy.typing.NDArray</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="(in NumPy v2.3)"><span class="pre">numpy.float64</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[3,</span> <span class="pre">1]'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.viewer.Vector3" title="Link to this definition">#</a></dt>
+<dd><p>A three dimensional vector in cm.</p>
+</dd></dl>
+
+<dl class="py type">
+<dt class="sig sig-object py" id="pyenki.viewer.Vector3Like">
+<em class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.viewer.</span></span><span class="sig-name descname"><span class="pre">Vector3Like</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Annotated" title="(in Python v3.14)"><span class="pre">Annotated</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/typing.html#numpy.typing.ArrayLike" title="(in NumPy v2.3)"><span class="pre">numpy.typing.ArrayLike</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="(in NumPy v2.3)"><span class="pre">numpy.float64</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'[3,</span> <span class="pre">1]'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.viewer.Vector3Like" title="Link to this definition">#</a></dt>
+<dd><p>Anything that can be converted to a <a class="reference internal" href="#pyenki.viewer.Vector3" title="pyenki.viewer.Vector3"><code class="xref py py-type docutils literal notranslate"><span class="pre">Vector3</span></code></a>.</p>
+</dd></dl>
+
+</section>
+<section id="color">
+<h2>Color<a class="headerlink" href="#color" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyenki.Color">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.</span></span><span class="sig-name descname"><span class="pre">Color</span></span><a class="headerlink" href="#pyenki.Color" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Red channel, in [0, 1], optional (default 0.0)</p></li>
+<li><p><strong>g</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Green channel, in [0, 1], optional (default 0.0)</p></li>
+<li><p><strong>b</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Blue channel, in [0, 1], optional (default 0.0)</p></li>
+<li><p><strong>a</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Alpha channel, in [0, 1], optional (default 1.0)</p></li>
+</ul>
+</dd>
+</dl>
+<p>An RGBA color with values between 0.0 and 1.0.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.black">
+<span class="sig-name descname"><span class="pre">black</span></span><a class="headerlink" href="#pyenki.Color.black" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.gray">
+<span class="sig-name descname"><span class="pre">gray</span></span><a class="headerlink" href="#pyenki.Color.gray" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.white">
+<span class="sig-name descname"><span class="pre">white</span></span><a class="headerlink" href="#pyenki.Color.white" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.red">
+<span class="sig-name descname"><span class="pre">red</span></span><a class="headerlink" href="#pyenki.Color.red" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.green">
+<span class="sig-name descname"><span class="pre">green</span></span><a class="headerlink" href="#pyenki.Color.green" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.blue">
+<span class="sig-name descname"><span class="pre">blue</span></span><a class="headerlink" href="#pyenki.Color.blue" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.lightgray">
+<span class="sig-name descname"><span class="pre">lightgray</span></span><a class="headerlink" href="#pyenki.Color.lightgray" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.darkgray">
+<span class="sig-name descname"><span class="pre">darkgray</span></span><a class="headerlink" href="#pyenki.Color.darkgray" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.lightred">
+<span class="sig-name descname"><span class="pre">lightred</span></span><a class="headerlink" href="#pyenki.Color.lightred" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.darkred">
+<span class="sig-name descname"><span class="pre">darkred</span></span><a class="headerlink" href="#pyenki.Color.darkred" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.lightgreen">
+<span class="sig-name descname"><span class="pre">lightgreen</span></span><a class="headerlink" href="#pyenki.Color.lightgreen" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.darkgreen">
+<span class="sig-name descname"><span class="pre">darkgreen</span></span><a class="headerlink" href="#pyenki.Color.darkgreen" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.lightblue">
+<span class="sig-name descname"><span class="pre">lightblue</span></span><a class="headerlink" href="#pyenki.Color.lightblue" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.darkblue">
+<span class="sig-name descname"><span class="pre">darkblue</span></span><a class="headerlink" href="#pyenki.Color.darkblue" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.lightyellow">
+<span class="sig-name descname"><span class="pre">lightyellow</span></span><a class="headerlink" href="#pyenki.Color.lightyellow" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.yellow">
+<span class="sig-name descname"><span class="pre">yellow</span></span><a class="headerlink" href="#pyenki.Color.yellow" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.darkyellow">
+<span class="sig-name descname"><span class="pre">darkyellow</span></span><a class="headerlink" href="#pyenki.Color.darkyellow" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.orange">
+<span class="sig-name descname"><span class="pre">orange</span></span><a class="headerlink" href="#pyenki.Color.orange" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.violet">
+<span class="sig-name descname"><span class="pre">violet</span></span><a class="headerlink" href="#pyenki.Color.violet" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.purple">
+<span class="sig-name descname"><span class="pre">purple</span></span><a class="headerlink" href="#pyenki.Color.purple" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.pink">
+<span class="sig-name descname"><span class="pre">pink</span></span><a class="headerlink" href="#pyenki.Color.pink" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.cyan">
+<span class="sig-name descname"><span class="pre">cyan</span></span><a class="headerlink" href="#pyenki.Color.cyan" title="Link to this definition">#</a></dt>
+<dd><p>readonly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.r">
+<span class="sig-name descname"><span class="pre">r</span></span><a class="headerlink" href="#pyenki.Color.r" title="Link to this definition">#</a></dt>
+<dd><p>Red channel, in [0, 1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.g">
+<span class="sig-name descname"><span class="pre">g</span></span><a class="headerlink" href="#pyenki.Color.g" title="Link to this definition">#</a></dt>
+<dd><p>Green channel, in [0, 1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.b">
+<span class="sig-name descname"><span class="pre">b</span></span><a class="headerlink" href="#pyenki.Color.b" title="Link to this definition">#</a></dt>
+<dd><p>Blue channel, in [0, 1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.a">
+<span class="sig-name descname"><span class="pre">a</span></span><a class="headerlink" href="#pyenki.Color.a" title="Link to this definition">#</a></dt>
+<dd><p>Alpha channel, in [0, 1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Color.components">
+<span class="sig-name descname"><span class="pre">components</span></span><a class="headerlink" href="#pyenki.Color.components" title="Link to this definition">#</a></dt>
+<dd><p>Components, in [0, 1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.Color.threshold">
+<span class="sig-name descname"><span class="pre">threshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyenki.Color" title="pyenki.pyenki.Color"><span class="pre">pyenki.Color</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Color.threshold" title="Link to this definition">#</a></dt>
+<dd><p>Threshold the color using limit.
+For each component, if value is below limit, set it to 0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>limit</strong> (<a class="reference internal" href="#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – the threshold</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.Color.toGray">
+<span class="sig-name descname"><span class="pre">toGray</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#pyenki.Color.toGray" title="Link to this definition">#</a></dt>
+<dd><p>Return the grey level value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the average intensity of the channels.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Reference</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="object.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Physical objects</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aliases">Aliases</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Vector"><code class="docutils literal notranslate"><span class="pre">Vector</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.VectorLike"><code class="docutils literal notranslate"><span class="pre">VectorLike</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Array1D"><code class="docutils literal notranslate"><span class="pre">Array1D</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.IntArray1D"><code class="docutils literal notranslate"><span class="pre">IntArray1D</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Array2D"><code class="docutils literal notranslate"><span class="pre">Array2D</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Image"><code class="docutils literal notranslate"><span class="pre">Image</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.ARGBImage"><code class="docutils literal notranslate"><span class="pre">ARGBImage</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.ARGBImageLike"><code class="docutils literal notranslate"><span class="pre">ARGBImageLike</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.viewer.Vector3"><code class="docutils literal notranslate"><span class="pre">Vector3</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.viewer.Vector3Like"><code class="docutils literal notranslate"><span class="pre">Vector3Like</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#color">Color</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color"><code class="docutils literal notranslate"><span class="pre">Color</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.black"><code class="docutils literal notranslate"><span class="pre">Color.black</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.gray"><code class="docutils literal notranslate"><span class="pre">Color.gray</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.white"><code class="docutils literal notranslate"><span class="pre">Color.white</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.red"><code class="docutils literal notranslate"><span class="pre">Color.red</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.green"><code class="docutils literal notranslate"><span class="pre">Color.green</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.blue"><code class="docutils literal notranslate"><span class="pre">Color.blue</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.lightgray"><code class="docutils literal notranslate"><span class="pre">Color.lightgray</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.darkgray"><code class="docutils literal notranslate"><span class="pre">Color.darkgray</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.lightred"><code class="docutils literal notranslate"><span class="pre">Color.lightred</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.darkred"><code class="docutils literal notranslate"><span class="pre">Color.darkred</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.lightgreen"><code class="docutils literal notranslate"><span class="pre">Color.lightgreen</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.darkgreen"><code class="docutils literal notranslate"><span class="pre">Color.darkgreen</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.lightblue"><code class="docutils literal notranslate"><span class="pre">Color.lightblue</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.darkblue"><code class="docutils literal notranslate"><span class="pre">Color.darkblue</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.lightyellow"><code class="docutils literal notranslate"><span class="pre">Color.lightyellow</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.yellow"><code class="docutils literal notranslate"><span class="pre">Color.yellow</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.darkyellow"><code class="docutils literal notranslate"><span class="pre">Color.darkyellow</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.orange"><code class="docutils literal notranslate"><span class="pre">Color.orange</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.violet"><code class="docutils literal notranslate"><span class="pre">Color.violet</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.purple"><code class="docutils literal notranslate"><span class="pre">Color.purple</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.pink"><code class="docutils literal notranslate"><span class="pre">Color.pink</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.cyan"><code class="docutils literal notranslate"><span class="pre">Color.cyan</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.r"><code class="docutils literal notranslate"><span class="pre">Color.r</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.g"><code class="docutils literal notranslate"><span class="pre">Color.g</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.b"><code class="docutils literal notranslate"><span class="pre">Color.b</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.a"><code class="docutils literal notranslate"><span class="pre">Color.a</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.components"><code class="docutils literal notranslate"><span class="pre">Color.components</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.threshold"><code class="docutils literal notranslate"><span class="pre">Color.threshold()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Color.toGray"><code class="docutils literal notranslate"><span class="pre">Color.toGray()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Stéphane Magnenat and others. This version is maintained by Jerome Guzzi.
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2020, Stéphane Magnenat and others.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

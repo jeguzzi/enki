@@ -15,40 +15,38 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-toolbox-code.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-toolbox-code.css?v=4ee5d529" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
   
-  <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=e645c8fa"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/tabs.js?v=3030b3cb"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -64,8 +62,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -73,6 +82,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -80,8 +90,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -99,8 +109,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -130,20 +139,60 @@
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/basics.html">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/visualization.html">Visualization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="visualization/index.html">How to visualize a simulation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="visualization/configuration.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization/rendering.html">Rendering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization/interactive.html">Interactive</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="background/index.html">Background knowledge</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="background/prox_comm.html">Thymio IR communication</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/object.html">Physical objects</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/robots.html">Robots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/base.html">Robot base classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/epuck.html">E-puck</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/marxbot.html">Marxbot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/thymio.html">Thymio</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="api/world.html">World</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/visualization.html">Visualization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/viewer.html">Viewer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/world_view.html">WorldView</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/renderer.html">Rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/notebook.html">Notebooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/video.html">Video</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prox_comm.html">Proximity communication</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 </ul>
 
     </div>
@@ -152,14 +201,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -208,16 +252,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 
 </div></div>
       
@@ -253,6 +305,7 @@
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
@@ -261,29 +314,39 @@
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
+ | <a href="#Y"><strong>Y</strong></a>
  
 </div>
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.__init__">__init__() (EnkiRemoteFrameBuffer method)</a>
+      <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer.__init__">__init__() (pyenki.buffer.EnkiRemoteFrameBuffer method)</a>
 
       <ul>
-        <li><a href="api.html#pyenki.EPuck.__init__">(EPuck method)</a>
+        <li><a href="api/epuck.html#pyenki.EPuck.__init__">(pyenki.EPuck method)</a>
 </li>
-        <li><a href="api.html#pyenki.Marxbot.__init__">(Marxbot method)</a>
+        <li><a href="api/marxbot.html#pyenki.Marxbot.__init__">(pyenki.Marxbot method)</a>
 </li>
-        <li><a href="api.html#pyenki.Thymio2.__init__">(Thymio2 method)</a>
+        <li><a href="api/object.html#pyenki.PhysicalObject.__init__">(pyenki.PhysicalObject method)</a>
 </li>
-        <li><a href="api.html#pyenki.World.__init__">(World method)</a>
+        <li><a href="api/object.html#pyenki.PhysicalObject.Part.__init__">(pyenki.PhysicalObject.Part method)</a>
 </li>
-        <li><a href="api.html#pyenki.WorldView.__init__">(WorldView method)</a>
+        <li><a href="api/thymio.html#pyenki.Thymio2.__init__">(pyenki.Thymio2 method)</a>
+</li>
+        <li><a href="api/camera.html#pyenki.viewer.Camera.__init__">(pyenki.viewer.Camera method)</a>
+</li>
+        <li><a href="api/world_view.html#pyenki.viewer.WorldView.__init__">(pyenki.viewer.WorldView method)</a>
+</li>
+        <li><a href="api/world.html#pyenki.World.__init__">(pyenki.World method)</a>
+</li>
+        <li><a href="api/world.html#pyenki.World.GroundTexture.__init__">(pyenki.World.GroundTexture method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -292,15 +355,23 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.Color.a">a (Color attribute)</a>
+      <li><a href="api/types.html#pyenki.Color.a">a (pyenki.Color attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.World.add_object">add_object() (World method)</a>
+      <li><a href="api/world.html#pyenki.World.add_object">add_object() (pyenki.World method)</a>
+</li>
+      <li><a href="api/object.html#pyenki.PhysicalObject.angle">angle (pyenki.PhysicalObject attribute)</a>
+</li>
+      <li><a href="api/object.html#pyenki.PhysicalObject.angular_speed">angular_speed (pyenki.PhysicalObject attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.PhysicalObject.angle">angle (PhysicalObject attribute)</a>
+      <li><a href="api/types.html#pyenki.ARGBImage">ARGBImage (in module pyenki)</a>
 </li>
-      <li><a href="api.html#pyenki.PhysicalObject.angular_speed">angular_speed (PhysicalObject attribute)</a>
+      <li><a href="api/types.html#pyenki.ARGBImageLike">ARGBImageLike (in module pyenki)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Array1D">Array1D (in module pyenki)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Array2D">Array2D (in module pyenki)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -308,13 +379,17 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.Color.b">b (Color attribute)</a>
+      <li><a href="api/types.html#pyenki.Color.b">b (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/thymio.html#pyenki.Thymio2.Button.BACKWARD">BACKWARD (pyenki.Thymio2.Button attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.Color.black">black (Color attribute)</a>
+      <li><a href="api/types.html#pyenki.Color.black">black (pyenki.Color attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Color.blue">blue (Color attribute)</a>
+      <li><a href="api/types.html#pyenki.Color.blue">blue (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/thymio.html#pyenki.Thymio2.button_touch_callback">button_touch_callback (pyenki.Thymio2 attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -322,67 +397,87 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.camera_altitude">camera_altitude (EnkiRemoteFrameBuffer attribute)</a>
+      <li><a href="api/camera.html#pyenki.viewer.Camera">Camera (class in pyenki.viewer)</a>
+</li>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.camera_altitude">camera_altitude (pyenki.viewer.camera.HasCamera property)</a>
 
       <ul>
-        <li><a href="api.html#pyenki.WorldView.camera_altitude">(WorldView attribute)</a>
+        <li><a href="api/camera.html#pyenki.viewer.CameraConfig.camera_altitude">(pyenki.viewer.CameraConfig attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api.html#pyenki.EPuck.camera_image">camera_image (EPuck attribute)</a>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.camera_config">camera_config (pyenki.viewer.camera.HasCamera property)</a>
 </li>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.camera_is_ortho">camera_is_ortho (EnkiRemoteFrameBuffer attribute)</a>
+      <li><a href="api/epuck.html#pyenki.EPuck.camera_image">camera_image (pyenki.EPuck attribute)</a>
+</li>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.camera_is_ortho">camera_is_ortho (pyenki.viewer.camera.HasCamera property)</a>
 
       <ul>
-        <li><a href="api.html#pyenki.WorldView.camera_is_ortho">(WorldView attribute)</a>
+        <li><a href="api/camera.html#pyenki.viewer.CameraConfig.camera_is_ortho">(pyenki.viewer.CameraConfig attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.camera_pitch">camera_pitch (EnkiRemoteFrameBuffer attribute)</a>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.camera_matrix">camera_matrix (pyenki.viewer.camera.HasCamera property)</a>
+</li>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.camera_pitch">camera_pitch (pyenki.viewer.camera.HasCamera property)</a>
 
       <ul>
-        <li><a href="api.html#pyenki.WorldView.camera_pitch">(WorldView attribute)</a>
+        <li><a href="api/camera.html#pyenki.viewer.CameraConfig.camera_pitch">(pyenki.viewer.CameraConfig attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api.html#pyenki.WorldView.camera_pose">camera_pose (WorldView attribute)</a>
-</li>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.camera_position">camera_position (EnkiRemoteFrameBuffer attribute)</a>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.camera_position">camera_position (pyenki.viewer.camera.HasCamera property)</a>
 
       <ul>
-        <li><a href="api.html#pyenki.WorldView.camera_position">(WorldView attribute)</a>
+        <li><a href="api/camera.html#pyenki.viewer.CameraConfig.camera_position">(pyenki.viewer.CameraConfig attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.camera_yaw">camera_yaw (EnkiRemoteFrameBuffer attribute)</a>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.camera_projection">camera_projection (pyenki.viewer.camera.HasCamera property)</a>
+</li>
+      <li><a href="api/camera.html#pyenki.viewer.CameraConfig.camera_reset">camera_reset (pyenki.viewer.CameraConfig attribute)</a>
+</li>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.camera_yaw">camera_yaw (pyenki.viewer.camera.HasCamera property)</a>
 
       <ul>
-        <li><a href="api.html#pyenki.WorldView.camera_yaw">(WorldView attribute)</a>
+        <li><a href="api/camera.html#pyenki.viewer.CameraConfig.camera_yaw">(pyenki.viewer.CameraConfig attribute)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.CircularObject">CircularObject() (in module pyenki)</a>
+      <li><a href="api/camera.html#pyenki.viewer.CameraConfig">CameraConfig (class in pyenki.viewer)</a>
 </li>
-      <li><a href="api.html#pyenki.PhysicalObject.collision_callback">collision_callback (PhysicalObject attribute)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.Button.CENTER">CENTER (pyenki.Thymio2.Button attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.PhysicalObject.collision_elasticity">collision_elasticity (PhysicalObject attribute)</a>
+      <li><a href="api/world.html#pyenki.World.WallsType.CIRCULAR">CIRCULAR (pyenki.World.WallsType attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Color">Color (class in pyenki)</a>
+      <li><a href="api/viewer.html#pyenki.viewer.cleanup">cleanup() (in module pyenki.viewer)</a>
 </li>
-      <li><a href="api.html#pyenki.PhysicalObject.color">color (PhysicalObject attribute)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.collision_callback">collision_callback (pyenki.PhysicalObject attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Color.components">components (Color attribute)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.collision_elasticity">collision_elasticity (pyenki.PhysicalObject attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.CompositeObject">CompositeObject() (in module pyenki)</a>
+      <li><a href="api/types.html#pyenki.Color">Color (class in pyenki)</a>
 </li>
-      <li><a href="api.html#pyenki.PhysicalObject.control_step">control_step() (PhysicalObject method)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.color">color (pyenki.PhysicalObject attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.PhysicalObject.control_step_callback">control_step_callback (PhysicalObject attribute)</a>
+      <li><a href="api/types.html#pyenki.Color.components">components (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.config">config (pyenki.viewer.Camera property)</a>
+</li>
+      <li><a href="api/object.html#pyenki.PhysicalObject.contains">contains() (pyenki.PhysicalObject method)</a>
 
       <ul>
-        <li><a href="api.html#pyenki.World.control_step_callback">(World attribute)</a>
+        <li><a href="api/object.html#pyenki.PhysicalObject.Part.contains">(pyenki.PhysicalObject.Part method)</a>
 </li>
       </ul></li>
-      <li><a href="api.html#pyenki.ConvexObject">ConvexObject() (in module pyenki)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.control_step">control_step() (pyenki.PhysicalObject method)</a>
 </li>
-      <li><a href="api.html#pyenki.World.copy_random_generator">copy_random_generator() (World method)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.control_step_callback">control_step_callback (pyenki.PhysicalObject attribute)</a>
+
+      <ul>
+        <li><a href="api/world.html#pyenki.World.control_step_callback">(pyenki.World attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="api/world.html#pyenki.World.copy_random_generator">copy_random_generator() (pyenki.World method)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Color.cyan">cyan (pyenki.Color attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -390,11 +485,21 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.DifferentialWheeled">DifferentialWheeled (class in pyenki)</a>
+      <li><a href="api/types.html#pyenki.Color.darkblue">darkblue (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Color.darkgray">darkgray (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Color.darkgreen">darkgreen (pyenki.Color attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.PhysicalObject.dry_friction_coefficient">dry_friction_coefficient (PhysicalObject attribute)</a>
+      <li><a href="api/types.html#pyenki.Color.darkred">darkred (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Color.darkyellow">darkyellow (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/base.html#pyenki.DifferentialWheeled">DifferentialWheeled (class in pyenki)</a>
+</li>
+      <li><a href="api/object.html#pyenki.PhysicalObject.dry_friction_coefficient">dry_friction_coefficient (pyenki.PhysicalObject attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -402,11 +507,27 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer">EnkiRemoteFrameBuffer (class in pyenki.buffer)</a>
+      <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer">EnkiRemoteFrameBuffer (class in pyenki.buffer)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.EPuck">EPuck (class in pyenki)</a>
+      <li><a href="api/epuck.html#pyenki.EPuck">EPuck (class in pyenki)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.far_distance">far_distance (pyenki.viewer.Camera attribute)</a>
+</li>
+      <li><a href="api/thymio.html#pyenki.Thymio2.Button.FORWARD">FORWARD (pyenki.Thymio2.Button attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.forward">forward (pyenki.viewer.Camera attribute)</a>
+</li>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.fov">fov (pyenki.viewer.Camera attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -414,19 +535,23 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.Color.g">g (Color attribute)</a>
+      <li><a href="api/types.html#pyenki.Color.g">g (pyenki.Color attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.get_frame">get_frame() (EnkiRemoteFrameBuffer method)</a>
+      <li><a href="api/world.html#pyenki.World.get_ground_color">get_ground_color() (pyenki.World method)</a>
 </li>
-      <li><a href="api.html#pyenki.Color.gray">gray (Color attribute)</a>
+      <li><a href="api/types.html#pyenki.Color.gray">gray (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Color.green">green (pyenki.Color attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.Color.green">green (Color attribute)</a>
+      <li><a href="api/world.html#pyenki.World.ground_texture">ground_texture (pyenki.World attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.ground_values">ground_values (Thymio2 attribute)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.ground_values">ground_values (pyenki.Thymio2 attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.ground_values_i">ground_values_i (Thymio2 attribute)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.ground_values_i">ground_values_i (pyenki.Thymio2 attribute)</a>
+</li>
+      <li><a href="api/world.html#pyenki.World.GroundTexture">GroundTexture (class in pyenki.World)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -434,17 +559,25 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.handle_event">handle_event() (EnkiRemoteFrameBuffer method)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.has_collided">has_collided (pyenki.PhysicalObject attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.PhysicalObject.has_collided">has_collided (PhysicalObject attribute)</a>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera">HasCamera (class in pyenki.viewer.camera)</a>
 </li>
+      <li><a href="api/object.html#pyenki.PhysicalObject.height">height (pyenki.PhysicalObject attribute)</a>
+
+      <ul>
+        <li><a href="api/object.html#pyenki.PhysicalObject.Part.height">(pyenki.PhysicalObject.Part attribute)</a>
+</li>
+        <li><a href="api/world.html#pyenki.World.height">(pyenki.World attribute)</a>
+</li>
+        <li><a href="api/world.html#pyenki.World.GroundTexture.height">(pyenki.World.GroundTexture attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.PhysicalObject.height">height (PhysicalObject attribute)</a>
+      <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer.height">height() (pyenki.buffer.EnkiRemoteFrameBuffer method)</a>
 </li>
-      <li><a href="api.html#pyenki.WorldView.helpers">helpers (WorldView attribute)</a>
-</li>
-      <li><a href="api.html#pyenki.WorldView.hide">hide() (WorldView method)</a>
+      <li><a href="api/world_view.html#pyenki.viewer.WorldView.helpers">helpers (pyenki.viewer.WorldView attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -452,15 +585,25 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.WorldView.image">image (WorldView attribute)</a>
+      <li><a href="api/types.html#pyenki.Image">Image (in module pyenki)</a>
 </li>
-      <li><a href="api.html#pyenki.IRCommEvent.intensities">intensities (IRCommEvent attribute)</a>
+      <li><a href="api/world_view.html#pyenki.viewer.WorldView.image">image (pyenki.viewer.WorldView attribute)</a>
+</li>
+      <li><a href="api/viewer.html#pyenki.viewer.init">init() (in module pyenki.viewer)</a>
+</li>
+      <li><a href="api/types.html#pyenki.IntArray1D">IntArray1D (in module pyenki)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.IRCommEvent">IRCommEvent (class in pyenki)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.IRCommEvent.intensities">intensities (pyenki.Thymio2.IRCommEvent attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.PhysicalObject.is_cylindric">is_cylindric (PhysicalObject attribute)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.IRCommEvent">IRCommEvent (class in pyenki.Thymio2)</a>
+</li>
+      <li><a href="api/object.html#pyenki.PhysicalObject.is_cylindric">is_cylindric (pyenki.PhysicalObject attribute)</a>
+</li>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.is_ortho">is_ortho (pyenki.viewer.Camera attribute)</a>
+</li>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.is_tracking">is_tracking (pyenki.viewer.camera.HasCamera property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -468,19 +611,33 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.DifferentialWheeled.left_wheel_encoder_speed">left_wheel_encoder_speed (DifferentialWheeled attribute)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.Button.LEFT">LEFT (pyenki.Thymio2.Button attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.left_wheel_encoder_speed_i">left_wheel_encoder_speed_i (Thymio2 attribute)</a>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.left">left (pyenki.viewer.Camera attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.DifferentialWheeled.left_wheel_odometry">left_wheel_odometry (DifferentialWheeled attribute)</a>
+      <li><a href="api/base.html#pyenki.DifferentialWheeled.left_wheel_encoder_speed">left_wheel_encoder_speed (pyenki.DifferentialWheeled attribute)</a>
+</li>
+      <li><a href="api/thymio.html#pyenki.Thymio2.left_wheel_encoder_speed_i">left_wheel_encoder_speed_i (pyenki.Thymio2 attribute)</a>
+</li>
+      <li><a href="api/base.html#pyenki.DifferentialWheeled.left_wheel_odometry">left_wheel_odometry (pyenki.DifferentialWheeled attribute)</a>
+</li>
+      <li><a href="api/thymio.html#pyenki.Thymio2.left_wheel_odometry_i">left_wheel_odometry_i (pyenki.Thymio2 attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.Thymio2.left_wheel_odometry_i">left_wheel_odometry_i (Thymio2 attribute)</a>
+      <li><a href="api/base.html#pyenki.DifferentialWheeled.left_wheel_target_speed">left_wheel_target_speed (pyenki.DifferentialWheeled attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.DifferentialWheeled.left_wheel_target_speed">left_wheel_target_speed (DifferentialWheeled attribute)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.left_wheel_target_speed_i">left_wheel_target_speed_i (pyenki.Thymio2 attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.left_wheel_target_speed_i">left_wheel_target_speed_i (Thymio2 attribute)</a>
+      <li><a href="api/types.html#pyenki.Color.lightblue">lightblue (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Color.lightgray">lightgray (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Color.lightgreen">lightgreen (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Color.lightred">lightred (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Color.lightyellow">lightyellow (pyenki.Color attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -488,40 +645,44 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.video.make_video">make_video() (in module pyenki.video)</a>
+      <li><a href="api/video.html#pyenki.video.make_video">make_video() (in module pyenki.video)</a>
 </li>
-      <li><a href="api.html#pyenki.Marxbot">Marxbot (class in pyenki)</a>
+      <li><a href="api/marxbot.html#pyenki.Marxbot">Marxbot (class in pyenki)</a>
 </li>
-      <li><a href="api.html#pyenki.PhysicalObject.mass">mass (PhysicalObject attribute)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.mass">mass (pyenki.PhysicalObject attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.DifferentialWheeled.max_wheel_speed">max_wheel_speed (DifferentialWheeled attribute)</a>
+      <li><a href="api/base.html#pyenki.DifferentialWheeled.max_wheel_speed">max_wheel_speed (pyenki.DifferentialWheeled attribute)</a>
 </li>
       <li>
     module
 
       <ul>
-        <li><a href="api.html#module-pyenki.buffer">pyenki.buffer</a>
+        <li><a href="api/notebook.html#module-pyenki.buffer">pyenki.buffer</a>
 </li>
-        <li><a href="api.html#module-pyenki.video">pyenki.video</a>
+        <li><a href="api/video.html#module-pyenki.video">pyenki.video</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.PhysicalObject.moment_of_inertia">moment_of_inertia (PhysicalObject attribute)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.moment_of_inertia">moment_of_inertia (pyenki.PhysicalObject attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.move_camera">move_camera() (EnkiRemoteFrameBuffer method)</a>
-
-      <ul>
-        <li><a href="api.html#pyenki.WorldView.move_camera">(WorldView method)</a>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.move">move() (pyenki.viewer.Camera method)</a>
 </li>
-      </ul></li>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.move_camera">move_camera() (pyenki.viewer.camera.HasCamera method)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.PhysicalObject.name">name (PhysicalObject attribute)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.name">name (pyenki.PhysicalObject attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.near_distance">near_distance (pyenki.viewer.Camera attribute)</a>
+</li>
+      <li><a href="api/world.html#pyenki.World.WallsType.NONE">NONE (pyenki.World.WallsType attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -529,7 +690,15 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.World.objects">objects (World attribute)</a>
+      <li><a href="api/world.html#pyenki.World.objects">objects (pyenki.World attribute)</a>
+</li>
+      <li><a href="api/thymio.html#pyenki.Thymio2.on_button_touch">on_button_touch() (pyenki.Thymio2 method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/object.html#pyenki.PhysicalObject.on_touch">on_touch() (pyenki.PhysicalObject method)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Color.orange">orange (pyenki.Color attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -537,113 +706,151 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.Part">Part (in module pyenki)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.Part">Part (class in pyenki.PhysicalObject)</a>
 </li>
-      <li><a href="api.html#pyenki.IRCommEvent.payloads">payloads (IRCommEvent attribute)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.parts">parts (pyenki.PhysicalObject attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.PhysicalObject">PhysicalObject (class in pyenki)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.IRCommEvent.payloads">payloads (pyenki.Thymio2.IRCommEvent attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.point_camera">point_camera() (EnkiRemoteFrameBuffer method)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject">PhysicalObject (class in pyenki)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Color.pink">pink (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.pitch">pitch (pyenki.viewer.Camera attribute)</a>
+</li>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.point">point() (pyenki.viewer.Camera method)</a>
+</li>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.point_camera">point_camera() (pyenki.viewer.camera.HasCamera method)</a>
+</li>
+      <li><a href="api/object.html#pyenki.PhysicalObject.position">position (pyenki.PhysicalObject attribute)</a>
 
       <ul>
-        <li><a href="api.html#pyenki.WorldView.point_camera">(WorldView method)</a>
+        <li><a href="api/camera.html#pyenki.viewer.Camera.position">(pyenki.viewer.Camera attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api.html#pyenki.Polygon">Polygon (in module pyenki)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.prox_comm_enabled">prox_comm_enabled (pyenki.Thymio2 attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.PhysicalObject.position">position (PhysicalObject attribute)</a>
-</li>
-      <li><a href="api.html#pyenki.Thymio2.prox_comm_enabled">prox_comm_enabled (Thymio2 attribute)</a>
-</li>
-      <li><a href="api.html#pyenki.Thymio2.prox_comm_events">prox_comm_events (Thymio2 attribute)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.prox_comm_events">prox_comm_events (pyenki.Thymio2 attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.Thymio2.prox_comm_tx">prox_comm_tx (Thymio2 attribute)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.prox_comm_tx">prox_comm_tx (pyenki.Thymio2 attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.EPuck.prox_distances">prox_distances (EPuck attribute)</a>
+      <li><a href="api/epuck.html#pyenki.EPuck.prox_distances">prox_distances (pyenki.EPuck attribute)</a>
 
       <ul>
-        <li><a href="api.html#pyenki.Thymio2.prox_distances">(Thymio2 attribute)</a>
+        <li><a href="api/thymio.html#pyenki.Thymio2.prox_distances">(pyenki.Thymio2 attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api.html#pyenki.EPuck.prox_values">prox_values (EPuck attribute)</a>
+      <li><a href="api/epuck.html#pyenki.EPuck.prox_values">prox_values (pyenki.EPuck attribute)</a>
 
       <ul>
-        <li><a href="api.html#pyenki.Thymio2.prox_values">(Thymio2 attribute)</a>
+        <li><a href="api/thymio.html#pyenki.Thymio2.prox_values">(pyenki.Thymio2 attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api.html#pyenki.Thymio2.prox_values_i">prox_values_i (Thymio2 attribute)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.prox_values_i">prox_values_i (pyenki.Thymio2 attribute)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Color.purple">purple (pyenki.Color attribute)</a>
 </li>
       <li>
     pyenki.buffer
 
       <ul>
-        <li><a href="api.html#module-pyenki.buffer">module</a>
+        <li><a href="api/notebook.html#module-pyenki.buffer">module</a>
 </li>
       </ul></li>
       <li>
     pyenki.video
 
       <ul>
-        <li><a href="api.html#module-pyenki.video">module</a>
+        <li><a href="api/video.html#module-pyenki.video">module</a>
 </li>
       </ul></li>
+      <li><a href="api/world_view.html#pyenki.viewer.WorldView.pyside_widget">pyside_widget (pyenki.viewer.WorldView attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/world_view.html#pyenki.viewer.WorldView.qt_widget">qt_widget (pyenki.viewer.WorldView attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.Color.r">r (Color attribute)</a>
+      <li><a href="api/types.html#pyenki.Color.r">r (pyenki.Color attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.PhysicalObject.radius">radius (PhysicalObject attribute)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.radius">radius (pyenki.PhysicalObject attribute)</a>
+
+      <ul>
+        <li><a href="api/world.html#pyenki.World.radius">(pyenki.World attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.World.random_seed">random_seed (World attribute)</a>
+      </ul></li>
+      <li><a href="api/world.html#pyenki.World.random_seed">random_seed (pyenki.World attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.RectangularObject">RectangularObject() (in module pyenki)</a>
+      <li><a href="api/types.html#pyenki.Color.red">red (pyenki.Color attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Color.red">red (Color attribute)</a>
+      <li><a href="api/world.html#pyenki.World.remove_object">remove_object() (pyenki.World method)</a>
 </li>
-      <li><a href="api.html#pyenki.World.remove_object">remove_object() (World method)</a>
+      <li><a href="api/renderer.html#pyenki.viewer.render">render() (in module pyenki.viewer)</a>
+
+      <ul>
+        <li><a href="api/world.html#pyenki.World.render">(pyenki.World method)</a>
 </li>
-      <li><a href="api.html#pyenki.World.render">render() (World method)</a>
+      </ul></li>
+      <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer.request_draw_sync">request_draw_sync() (pyenki.buffer.EnkiRemoteFrameBuffer method)</a>
 </li>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.request_draw_sync">request_draw_sync() (EnkiRemoteFrameBuffer method)</a>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.reset">reset() (pyenki.viewer.Camera method)</a>
 </li>
-      <li><a href="api.html#pyenki.WorldView.reset_camera">reset_camera() (WorldView method)</a>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.reset_camera">reset_camera() (pyenki.viewer.camera.HasCamera method)</a>
 </li>
-      <li><a href="api.html#pyenki.DifferentialWheeled.reset_encoders">reset_encoders() (DifferentialWheeled method)</a>
+      <li><a href="api/base.html#pyenki.DifferentialWheeled.reset_encoders">reset_encoders() (pyenki.DifferentialWheeled method)</a>
 </li>
-      <li><a href="api.html#pyenki.DifferentialWheeled.right_wheel_encoder_speed">right_wheel_encoder_speed (DifferentialWheeled attribute)</a>
+      <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer.resize">resize() (pyenki.buffer.EnkiRemoteFrameBuffer method)</a>
+</li>
+      <li><a href="api/thymio.html#pyenki.Thymio2.Button.RIGHT">RIGHT (pyenki.Thymio2.Button attribute)</a>
+</li>
+      <li><a href="api/base.html#pyenki.DifferentialWheeled.right_wheel_encoder_speed">right_wheel_encoder_speed (pyenki.DifferentialWheeled attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.Thymio2.right_wheel_encoder_speed_i">right_wheel_encoder_speed_i (Thymio2 attribute)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.right_wheel_encoder_speed_i">right_wheel_encoder_speed_i (pyenki.Thymio2 attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.DifferentialWheeled.right_wheel_odometry">right_wheel_odometry (DifferentialWheeled attribute)</a>
+      <li><a href="api/base.html#pyenki.DifferentialWheeled.right_wheel_odometry">right_wheel_odometry (pyenki.DifferentialWheeled attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.right_wheel_odometry_i">right_wheel_odometry_i (Thymio2 attribute)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.right_wheel_odometry_i">right_wheel_odometry_i (pyenki.Thymio2 attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.DifferentialWheeled.right_wheel_target_speed">right_wheel_target_speed (DifferentialWheeled attribute)</a>
+      <li><a href="api/base.html#pyenki.DifferentialWheeled.right_wheel_target_speed">right_wheel_target_speed (pyenki.DifferentialWheeled attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.right_wheel_target_speed_i">right_wheel_target_speed_i (Thymio2 attribute)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.right_wheel_target_speed_i">right_wheel_target_speed_i (pyenki.Thymio2 attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Robot">Robot (class in pyenki)</a>
+      <li><a href="api/base.html#pyenki.Robot">Robot (class in pyenki)</a>
 </li>
-      <li><a href="api.html#pyenki.World.robots">robots (World attribute)</a>
+      <li><a href="api/world.html#pyenki.World.robots">robots (pyenki.World attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.run">run() (EnkiRemoteFrameBuffer method)</a>
+      <li><a href="api/camera.html#pyenki.viewer.rotate">rotate() (in module pyenki.viewer)</a>
+</li>
+      <li><a href="api/viewer.html#pyenki.viewer.run">run() (in module pyenki.viewer)</a>
 
       <ul>
-        <li><a href="api.html#pyenki.World.run">(World method)</a>
+        <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer.run">(pyenki.buffer.EnkiRemoteFrameBuffer method)</a>
+</li>
+        <li><a href="api/world.html#pyenki.World.run">(pyenki.World method)</a>
 </li>
       </ul></li>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.run_async">run_async() (EnkiRemoteFrameBuffer method)</a>
+      <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer.run_async">run_async() (pyenki.buffer.EnkiRemoteFrameBuffer method)</a>
 </li>
-      <li><a href="api.html#pyenki.World.run_in_viewer">run_in_viewer() (World method)</a>
+      <li><a href="api/viewer.html#pyenki.viewer.run_in_viewer">run_in_viewer() (in module pyenki.viewer)</a>
+
+      <ul>
+        <li><a href="api/world.html#pyenki.World.run_in_viewer">(pyenki.World method)</a>
 </li>
-      <li><a href="api.html#pyenki.IRCommEvent.rx_value">rx_value (IRCommEvent attribute)</a>
+      </ul></li>
+      <li><a href="api/thymio.html#pyenki.Thymio2.IRCommEvent.rx_value">rx_value (pyenki.Thymio2.IRCommEvent attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -651,73 +858,79 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.World.save_image">save_image() (World method)</a>
+      <li><a href="api/renderer.html#pyenki.viewer.save_image">save_image() (in module pyenki.viewer)</a>
 
       <ul>
-        <li><a href="api.html#pyenki.WorldView.save_image">(WorldView method)</a>
+        <li><a href="api/world_view.html#pyenki.viewer.WorldView.save_image">(pyenki.viewer.WorldView method)</a>
+</li>
+        <li><a href="api/world.html#pyenki.World.save_image">(pyenki.World method)</a>
 </li>
       </ul></li>
-      <li><a href="api.html#pyenki.EPuck.scan">scan (EPuck attribute)</a>
+      <li><a href="api/epuck.html#pyenki.EPuck.scan">scan (pyenki.EPuck attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Marxbot.scanner_distances">scanner_distances (Marxbot attribute)</a>
+      <li><a href="api/marxbot.html#pyenki.Marxbot.scanner_distances">scanner_distances (pyenki.Marxbot attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Marxbot.scanner_image">scanner_image (Marxbot attribute)</a>
+      <li><a href="api/marxbot.html#pyenki.Marxbot.scanner_image">scanner_image (pyenki.Marxbot attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Marxbot.scanner_range">scanner_range (Marxbot attribute)</a>
+      <li><a href="api/marxbot.html#pyenki.Marxbot.scanner_range">scanner_range (pyenki.Marxbot attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_bottom_left">set_led_bottom_left() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_bottom_left">set_led_bottom_left() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_bottom_left_i">set_led_bottom_left_i() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_bottom_left_i">set_led_bottom_left_i() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_bottom_right">set_led_bottom_right() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_bottom_right">set_led_bottom_right() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_bottom_right_i">set_led_bottom_right_i() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_bottom_right_i">set_led_bottom_right_i() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_buttons">set_led_buttons() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_buttons">set_led_buttons() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_buttons_i">set_led_buttons_i() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_buttons_i">set_led_buttons_i() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_circle">set_led_circle() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_circle">set_led_circle() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_circle_i">set_led_circle_i() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_circle_i">set_led_circle_i() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_left_blue">set_led_left_blue() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_left_blue">set_led_left_blue() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_left_blue_i">set_led_left_blue_i() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_left_blue_i">set_led_left_blue_i() (pyenki.Thymio2 method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.Thymio2.set_led_left_red">set_led_left_red() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_left_red">set_led_left_red() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_left_red_i">set_led_left_red_i() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_left_red_i">set_led_left_red_i() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_prox">set_led_prox() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_prox">set_led_prox() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_prox_i">set_led_prox_i() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_prox_i">set_led_prox_i() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_right_blue">set_led_right_blue() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_right_blue">set_led_right_blue() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_right_blue_i">set_led_right_blue_i() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_right_blue_i">set_led_right_blue_i() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_right_red">set_led_right_red() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_right_red">set_led_right_red() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_right_red_i">set_led_right_red_i() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_right_red_i">set_led_right_red_i() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.EPuck.set_led_ring">set_led_ring() (EPuck method)</a>
+      <li><a href="api/epuck.html#pyenki.EPuck.set_led_ring">set_led_ring() (pyenki.EPuck method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_top">set_led_top() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_top">set_led_top() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2.set_led_top_i">set_led_top_i() (Thymio2 method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.set_led_top_i">set_led_top_i() (pyenki.Thymio2 method)</a>
 </li>
-      <li><a href="api.html#pyenki.WorldView.show">show() (WorldView method)</a>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.set_viewport">set_viewport() (pyenki.viewer.Camera method)</a>
 </li>
-      <li><a href="api.html#pyenki.WorldView.start_updating_world">start_updating_world() (WorldView method)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.Part.shape">shape (pyenki.PhysicalObject.Part attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.World.static_objects">static_objects (World attribute)</a>
+      <li><a href="api/world.html#pyenki.World.WallsType.SQUARE">SQUARE (pyenki.World.WallsType attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.World.step">step() (World method)</a>
+      <li><a href="api/world_view.html#pyenki.viewer.WorldView.start_updating_world">start_updating_world() (pyenki.viewer.WorldView method)</a>
 </li>
-      <li><a href="api.html#pyenki.WorldView.stop_updating_world">stop_updating_world() (WorldView method)</a>
+      <li><a href="api/world.html#pyenki.World.static_objects">static_objects (pyenki.World attribute)</a>
+</li>
+      <li><a href="api/world.html#pyenki.World.step">step() (pyenki.World method)</a>
+</li>
+      <li><a href="api/world_view.html#pyenki.viewer.WorldView.stop_updating_world">stop_updating_world() (pyenki.viewer.WorldView method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -725,19 +938,29 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.Color.threshold">threshold() (Color method)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.Part.textures">textures (pyenki.PhysicalObject.Part attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Thymio2">Thymio2 (class in pyenki)</a>
+      <li><a href="api/types.html#pyenki.Color.threshold">threshold() (pyenki.Color method)</a>
 </li>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.tick">tick() (EnkiRemoteFrameBuffer method)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2">Thymio2 (class in pyenki)</a>
+</li>
+      <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer.tick">tick() (pyenki.buffer.EnkiRemoteFrameBuffer method)</a>
+</li>
+      <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer.tick_async">tick_async() (pyenki.buffer.EnkiRemoteFrameBuffer method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.tick_async">tick_async() (EnkiRemoteFrameBuffer method)</a>
+      <li><a href="api/camera.html#pyenki.viewer.to_3d">to_3d() (in module pyenki.viewer)</a>
 </li>
-      <li><a href="api.html#pyenki.Color.toGray">toGray() (Color method)</a>
+      <li><a href="api/types.html#pyenki.Color.toGray">toGray() (pyenki.Color method)</a>
 </li>
-      <li><a href="api.html#pyenki.WorldView.tracking">tracking (WorldView attribute)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.touch">touch() (pyenki.PhysicalObject method)</a>
+</li>
+      <li><a href="api/thymio.html#pyenki.Thymio2.touch_button">touch_button() (pyenki.Thymio2 method)</a>
+</li>
+      <li><a href="api/object.html#pyenki.PhysicalObject.touch_callback">touch_callback (pyenki.PhysicalObject attribute)</a>
+</li>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.tracked_object">tracked_object (pyenki.viewer.camera.HasCamera property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -745,7 +968,15 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.PhysicalObject.uid">uid (PhysicalObject attribute)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.uid">uid (pyenki.PhysicalObject attribute)</a>
+</li>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.up">up (pyenki.viewer.Camera attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.update_camera_config">update_camera_config() (pyenki.viewer.camera.HasCamera method)</a>
+</li>
+      <li><a href="api/viewer.html#pyenki.viewer.use_native">use_native (in module pyenki.viewer)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -753,15 +984,25 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.Vector">Vector (in module pyenki)</a>
+      <li><a href="api/types.html#pyenki.Vector">Vector (in module pyenki)</a>
 </li>
-      <li><a href="api.html#pyenki.PhysicalObject.velocity">velocity (PhysicalObject attribute)</a>
+      <li><a href="api/types.html#pyenki.viewer.Vector3">Vector3 (in module pyenki.viewer)</a>
+</li>
+      <li><a href="api/types.html#pyenki.viewer.Vector3Like">Vector3Like (in module pyenki.viewer)</a>
+</li>
+      <li><a href="api/types.html#pyenki.VectorLike">VectorLike (in module pyenki)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.PhysicalObject.viscous_friction_coefficient">viscous_friction_coefficient (PhysicalObject attribute)</a>
+      <li><a href="api/object.html#pyenki.PhysicalObject.velocity">velocity (pyenki.PhysicalObject attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.PhysicalObject.viscous_moment_friction_coefficient">viscous_moment_friction_coefficient (PhysicalObject attribute)</a>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.view_port">view_port (pyenki.viewer.Camera attribute)</a>
+</li>
+      <li><a href="api/types.html#pyenki.Color.violet">violet (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/object.html#pyenki.PhysicalObject.viscous_friction_coefficient">viscous_friction_coefficient (pyenki.PhysicalObject attribute)</a>
+</li>
+      <li><a href="api/object.html#pyenki.PhysicalObject.viscous_moment_friction_coefficient">viscous_moment_friction_coefficient (pyenki.PhysicalObject attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -769,29 +1010,51 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.WorldView.walls_height">walls_height (WorldView attribute)</a>
+      <li><a href="api/world_view.html#pyenki.viewer.WorldView.walls_height">walls_height (pyenki.viewer.WorldView attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.DifferentialWheeled.wheel_axis">wheel_axis (DifferentialWheeled attribute)</a>
+      <li><a href="api/world.html#pyenki.World.walls_type">walls_type (pyenki.World attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.DifferentialWheeled.wheel_speed_noise">wheel_speed_noise (DifferentialWheeled attribute)</a>
+      <li><a href="api/base.html#pyenki.DifferentialWheeled.wheel_axis">wheel_axis (pyenki.DifferentialWheeled attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.Color.white">white (Color attribute)</a>
+      <li><a href="api/base.html#pyenki.DifferentialWheeled.wheel_speed_noise">wheel_speed_noise (pyenki.DifferentialWheeled attribute)</a>
 </li>
-      <li><a href="api.html#pyenki.WorldView.widget">widget (WorldView attribute)</a>
+      <li><a href="api/types.html#pyenki.Color.white">white (pyenki.Color attribute)</a>
+</li>
+      <li><a href="api/world.html#pyenki.World.width">width (pyenki.World attribute)</a>
+
+      <ul>
+        <li><a href="api/world.html#pyenki.World.GroundTexture.width">(pyenki.World.GroundTexture attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer.width">width() (pyenki.buffer.EnkiRemoteFrameBuffer method)</a>
+</li>
+      <li><a href="api/world.html#pyenki.World">World (class in pyenki)</a>
+</li>
+      <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer.world">world (pyenki.buffer.EnkiRemoteFrameBuffer attribute)</a>
+
+      <ul>
+        <li><a href="api/object.html#pyenki.PhysicalObject.world">(pyenki.PhysicalObject attribute)</a>
+</li>
+        <li><a href="api/world_view.html#pyenki.viewer.WorldView.world">(pyenki.viewer.WorldView attribute)</a>
+</li>
+        <li><a href="api/world_view.html#id0">(pyenki.viewer.WorldView property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/world_view.html#pyenki.viewer.WorldView">WorldView (class in pyenki.viewer)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Y">Y</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/camera.html#pyenki.viewer.Camera.yaw">yaw (pyenki.viewer.Camera attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#pyenki.World">World (class in pyenki)</a>
-</li>
-      <li><a href="api.html#pyenki.buffer.EnkiRemoteFrameBuffer.world">world (EnkiRemoteFrameBuffer attribute)</a>
-
-      <ul>
-        <li><a href="api.html#pyenki.PhysicalObject.world">(PhysicalObject attribute)</a>
-</li>
-        <li><a href="api.html#pyenki.WorldView.world">(WorldView attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="api.html#pyenki.WorldView">WorldView (class in pyenki)</a>
+      <li><a href="api/types.html#pyenki.Color.yellow">yellow (pyenki.Color attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -858,8 +1121,8 @@ By Stéphane Magnenat and others. This version is maintained by Jerome Guzzi.
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -1,0 +1,1007 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Physical objects &#8212; pyenki 0.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-toolbox-code.css?v=4ee5d529" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/object';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Robots" href="robots.html" />
+    <link rel="prev" title="Types" href="types.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pyenki 0.0.1 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/basics.html">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/visualization.html">Visualization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../visualization/index.html">How to visualize a simulation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/configuration.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/rendering.html">Rendering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/interactive.html">Interactive</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../background/index.html">Background knowledge</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../background/prox_comm.html">Thymio IR communication</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="types.html">Types</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Physical objects</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="robots.html">Robots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="base.html">Robot base classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="epuck.html">E-puck</a></li>
+<li class="toctree-l3"><a class="reference internal" href="marxbot.html">Marxbot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="thymio.html">Thymio</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="world.html">World</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="visualization.html">Visualization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="viewer.html">Viewer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="world_view.html">WorldView</a></li>
+<li class="toctree-l3"><a class="reference internal" href="renderer.html">Rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebook.html">Notebooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="video.html">Video</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/api/object.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Physical objects</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part">Part</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.Part"><code class="docutils literal notranslate"><span class="pre">Part</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.Part.shape"><code class="docutils literal notranslate"><span class="pre">Part.shape</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.Part.height"><code class="docutils literal notranslate"><span class="pre">Part.height</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.Part.textures"><code class="docutils literal notranslate"><span class="pre">Part.textures</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.Part.__init__"><code class="docutils literal notranslate"><span class="pre">Part.__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.Part.contains"><code class="docutils literal notranslate"><span class="pre">Part.contains()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#physicalobject">PhysicalObject</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject"><code class="docutils literal notranslate"><span class="pre">PhysicalObject</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.uid"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.uid</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.world"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.world</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.has_collided"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.has_collided</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.name"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.radius"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.radius</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.height"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.height</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.is_cylindric"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.is_cylindric</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.parts"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.parts</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.mass"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.mass</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.moment_of_inertia"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.moment_of_inertia</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.color"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.color</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.collision_elasticity"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.collision_elasticity</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.dry_friction_coefficient"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.dry_friction_coefficient</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.viscous_friction_coefficient"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.viscous_friction_coefficient</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.viscous_moment_friction_coefficient"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.viscous_moment_friction_coefficient</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.position"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.position</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.angle"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.angle</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.velocity"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.velocity</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.angular_speed"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.angular_speed</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.collision_callback"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.collision_callback</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.control_step_callback"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.control_step_callback</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.touch_callback"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.touch_callback</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.__init__"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.contains"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.contains()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.control_step"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.control_step()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.on_touch"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.on_touch()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.touch"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.touch()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="physical-objects">
+<h1>Physical objects<a class="headerlink" href="#physical-objects" title="Link to this heading">#</a></h1>
+<section id="part">
+<h2>Part<a class="headerlink" href="#part" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.Part">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.PhysicalObject.</span></span><span class="sig-name descname"><span class="pre">Part</span></span><a class="headerlink" href="#pyenki.PhysicalObject.Part" title="Link to this definition">#</a></dt>
+<dd><p>Right prism that can be composed to define the geometry of a <a class="reference internal" href="#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyenki.PhysicalObject</span></code></a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.Part.shape">
+<span class="sig-name descname"><span class="pre">shape</span></span><a class="headerlink" href="#pyenki.PhysicalObject.Part.shape" title="Link to this definition">#</a></dt>
+<dd><p>The convex 2D polygon (positively oriented) at the base of the prism [cm].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.14)">Sequence</a>[<a class="reference internal" href="types.html#pyenki.Vector" title="pyenki.Vector">Vector</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.Part.height">
+<span class="sig-name descname"><span class="pre">height</span></span><a class="headerlink" href="#pyenki.PhysicalObject.Part.height" title="Link to this definition">#</a></dt>
+<dd><p>The height [cm].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.Part.textures">
+<span class="sig-name descname"><span class="pre">textures</span></span><a class="headerlink" href="#pyenki.PhysicalObject.Part.textures" title="Link to this definition">#</a></dt>
+<dd><p>A list of textures: each texture is a list of colors for one vertical face of the prism.
+Must be either empty or have contains at least one color for each face.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.14)">Sequence</a>[<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.14)">Sequence</a>[<a class="reference internal" href="types.html#pyenki.Color" title="pyenki.Color">Color</a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.Part.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.PhysicalObject.Part.__init__" title="Link to this definition">#</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(l1: SupportsFloat, l2: SupportsFloat, height: SupportsFloat) -&gt; None</p></li>
+</ol>
+<p>Creates a part with a rectangular base.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>l1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The x dimension [cm]</p></li>
+<li><p><strong>l2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The y dimension [cm]</p></li>
+<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The height [cm]</p></li>
+</ul>
+</dd>
+</dl>
+<ol class="arabic simple" start="2">
+<li><p>__init__(shape: Sequence[Vector], height: SupportsFloat, textures: Sequence[Sequence[pyenki.Color]] = []) -&gt; None</p></li>
+</ol>
+<p>Creates a part with a polygonal base.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference internal" href="types.html#pyenki.Vector" title="pyenki.Vector"><em>Vector</em></a><em>]</em>) – The convex 2D polygon (positively oriented) at the base of the prism [cm].</p></li>
+<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The height [cm]</p></li>
+<li><p><strong>textures</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference internal" href="types.html#pyenki.Color" title="pyenki.Color"><em>Color</em></a><em>]</em><em>]</em>) – A sequence of textures: each texture is a sequence of colors for one vertical face of the prism.
+Must be either empty or have contains at least one color for each face.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.Part.contains">
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="types.html#pyenki.Vector" title="pyenki.Vector"><span class="pre">Vector</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#pyenki.PhysicalObject.Part.contains" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="physicalobject">
+<h2>PhysicalObject<a class="headerlink" href="#physicalobject" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.</span></span><span class="sig-name descname"><span class="pre">PhysicalObject</span></span><a class="headerlink" href="#pyenki.PhysicalObject" title="Link to this definition">#</a></dt>
+<dd><p>The superclass of objects that can be simulated.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.uid">
+<span class="sig-name descname"><span class="pre">uid</span></span><a class="headerlink" href="#pyenki.PhysicalObject.uid" title="Link to this definition">#</a></dt>
+<dd><p>A unique identifier (readonly)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.world">
+<span class="sig-name descname"><span class="pre">world</span></span><a class="headerlink" href="#pyenki.PhysicalObject.world" title="Link to this definition">#</a></dt>
+<dd><p>The world the object belongs to (readonly)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="world.html#pyenki.World" title="pyenki.World">World</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.has_collided">
+<span class="sig-name descname"><span class="pre">has_collided</span></span><a class="headerlink" href="#pyenki.PhysicalObject.has_collided" title="Link to this definition">#</a></dt>
+<dd><p>Whether the object has collided
+in the last simulation step (readonly)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pyenki.PhysicalObject.name" title="Link to this definition">#</a></dt>
+<dd><p>The name (readonly)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.radius">
+<span class="sig-name descname"><span class="pre">radius</span></span><a class="headerlink" href="#pyenki.PhysicalObject.radius" title="Link to this definition">#</a></dt>
+<dd><p>The radius of the object’s enclosing circle in centimeters (readonly)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.height">
+<span class="sig-name descname"><span class="pre">height</span></span><a class="headerlink" href="#pyenki.PhysicalObject.height" title="Link to this definition">#</a></dt>
+<dd><p>The object height in centimeters (readonly)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.is_cylindric">
+<span class="sig-name descname"><span class="pre">is_cylindric</span></span><a class="headerlink" href="#pyenki.PhysicalObject.is_cylindric" title="Link to this definition">#</a></dt>
+<dd><p>True if the object is cylindrical shaped (readonly)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.parts">
+<span class="sig-name descname"><span class="pre">parts</span></span><a class="headerlink" href="#pyenki.PhysicalObject.parts" title="Link to this definition">#</a></dt>
+<dd><p>the parts the object is composed of.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="#pyenki.PhysicalObject.Part" title="pyenki.PhysicalObject.Part">PhysicalObject.Part</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.mass">
+<span class="sig-name descname"><span class="pre">mass</span></span><a class="headerlink" href="#pyenki.PhysicalObject.mass" title="Link to this definition">#</a></dt>
+<dd><p>The object mass in kilograms. If below zero, the object is static (readonly)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.moment_of_inertia">
+<span class="sig-name descname"><span class="pre">moment_of_inertia</span></span><a class="headerlink" href="#pyenki.PhysicalObject.moment_of_inertia" title="Link to this definition">#</a></dt>
+<dd><p>The object moment of inertial (readonly)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.color">
+<span class="sig-name descname"><span class="pre">color</span></span><a class="headerlink" href="#pyenki.PhysicalObject.color" title="Link to this definition">#</a></dt>
+<dd><p>The object color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="types.html#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.collision_elasticity">
+<span class="sig-name descname"><span class="pre">collision_elasticity</span></span><a class="headerlink" href="#pyenki.PhysicalObject.collision_elasticity" title="Link to this definition">#</a></dt>
+<dd><p>Elasticity of collisions of this object.
+If 0, soft collision, 100% energy dissipation; if 1, elastic collision,
+0% energy dissipation. Actual elasticity is the product of the elasticity of
+the two colliding objects. Walls are fully elastics</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.dry_friction_coefficient">
+<span class="sig-name descname"><span class="pre">dry_friction_coefficient</span></span><a class="headerlink" href="#pyenki.PhysicalObject.dry_friction_coefficient" title="Link to this definition">#</a></dt>
+<dd><p>The dry friction coefficient mu</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.viscous_friction_coefficient">
+<span class="sig-name descname"><span class="pre">viscous_friction_coefficient</span></span><a class="headerlink" href="#pyenki.PhysicalObject.viscous_friction_coefficient" title="Link to this definition">#</a></dt>
+<dd><p>The viscous friction coefficient.
+Premultiplied by mass. A value of k applies a force of <code class="docutils literal notranslate"><span class="pre">-k</span> <span class="pre">*</span> <span class="pre">speed</span> <span class="pre">*</span> <span class="pre">mass</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.viscous_moment_friction_coefficient">
+<span class="sig-name descname"><span class="pre">viscous_moment_friction_coefficient</span></span><a class="headerlink" href="#pyenki.PhysicalObject.viscous_moment_friction_coefficient" title="Link to this definition">#</a></dt>
+<dd><p>The viscous friction moment coefficient.
+Premultiplied by momentOfInertia. A value of k applies a force
+of <code class="docutils literal notranslate"><span class="pre">-k</span> <span class="pre">*</span> <span class="pre">speed</span> <span class="pre">*</span> <span class="pre">moment_of_inertia</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.position">
+<span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#pyenki.PhysicalObject.position" title="Link to this definition">#</a></dt>
+<dd><p>The position in the world frame in centimeters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="types.html#pyenki.Vector" title="pyenki.Vector">Vector</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.angle">
+<span class="sig-name descname"><span class="pre">angle</span></span><a class="headerlink" href="#pyenki.PhysicalObject.angle" title="Link to this definition">#</a></dt>
+<dd><p>The orientation in the world frame in radians</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.velocity">
+<span class="sig-name descname"><span class="pre">velocity</span></span><a class="headerlink" href="#pyenki.PhysicalObject.velocity" title="Link to this definition">#</a></dt>
+<dd><p>The velocity in the world frame in centimeters per second</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="types.html#pyenki.Vector" title="pyenki.Vector">Vector</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.angular_speed">
+<span class="sig-name descname"><span class="pre">angular_speed</span></span><a class="headerlink" href="#pyenki.PhysicalObject.angular_speed" title="Link to this definition">#</a></dt>
+<dd><p>The angular speed in the world frame in radians per second</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.collision_callback">
+<span class="sig-name descname"><span class="pre">collision_callback</span></span><a class="headerlink" href="#pyenki.PhysicalObject.collision_callback" title="Link to this definition">#</a></dt>
+<dd><p>An optional function called when the object perform a control step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)">Callable</a>[[<a class="reference internal" href="#pyenki.PhysicalObject" title="pyenki.PhysicalObject">PhysicalObject</a>, <a class="reference internal" href="#pyenki.PhysicalObject" title="pyenki.PhysicalObject">PhysicalObject</a>], None] | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.control_step_callback">
+<span class="sig-name descname"><span class="pre">control_step_callback</span></span><a class="headerlink" href="#pyenki.PhysicalObject.control_step_callback" title="Link to this definition">#</a></dt>
+<dd><p>An optional function called when the object collides.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)">Callable</a>[[<a class="reference internal" href="#pyenki.PhysicalObject" title="pyenki.PhysicalObject">PhysicalObject</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>], None] | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.touch_callback">
+<span class="sig-name descname"><span class="pre">touch_callback</span></span><a class="headerlink" href="#pyenki.PhysicalObject.touch_callback" title="Link to this definition">#</a></dt>
+<dd><p>An optional function called when touch events happen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)">Callable</a>[[<a class="reference internal" href="#pyenki.PhysicalObject" title="pyenki.PhysicalObject">PhysicalObject</a>], None] | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.PhysicalObject.__init__" title="Link to this definition">#</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(parts: Sequence[pyenki.PhysicalObject.Part], mass: SupportsFloat, color: pyenki.Color = Color(r=0.0, g=0.0, b=0.0, a=1.0)) -&gt; None</p></li>
+</ol>
+<p>Creates an object composed of parts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parts</strong> (<a class="reference internal" href="#pyenki.PhysicalObject.Part" title="pyenki.PhysicalObject.Part"><em>PhysicalObject.Part</em></a>) – The parts.</p></li>
+<li><p><strong>mass</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The mass in kg.</p></li>
+<li><p><strong>color</strong> (<a class="reference internal" href="types.html#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – The color.</p></li>
+</ul>
+</dd>
+</dl>
+<ol class="arabic simple" start="2">
+<li><p>__init__(radius: SupportsFloat, height: SupportsFloat, mass: SupportsFloat, color: pyenki.Color = Color(r=0.0, g=0.0, b=0.0, a=1.0)) -&gt; None</p></li>
+</ol>
+<p>Creates a cylinder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The radius in cm.</p></li>
+<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The height in cm.</p></li>
+<li><p><strong>mass</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The mass in kg.</p></li>
+<li><p><strong>color</strong> (<a class="reference internal" href="types.html#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – The color.</p></li>
+</ul>
+</dd>
+</dl>
+<ol class="arabic simple" start="3">
+<li><p>__init__(l1: SupportsFloat, l2: SupportsFloat, height: SupportsFloat, mass: SupportsFloat, color: pyenki.Color = Color(r=0.0, g=0.0, b=0.0, a=1.0)) -&gt; None</p></li>
+</ol>
+<p>Creates a rectangular prism.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>l1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the side length in cm (x).</p></li>
+<li><p><strong>l2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the side length in cm (y).</p></li>
+<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The height in cm.</p></li>
+<li><p><strong>mass</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The mass in kg.</p></li>
+<li><p><strong>color</strong> (<a class="reference internal" href="types.html#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – The color.</p></li>
+</ul>
+</dd>
+</dl>
+<ol class="arabic simple" start="4">
+<li><p>__init__(shape: Sequence[Vector], height: SupportsFloat, mass: SupportsFloat, color: pyenki.Color = Color(r=0.0, g=0.0, b=0.0, a=1.0), textures: Sequence[Sequence[pyenki.Color]] = []) -&gt; None</p></li>
+</ol>
+<p>Creates an vertical prism with a convex polygonal base.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference internal" href="types.html#pyenki.Vector" title="pyenki.Vector"><em>Vector</em></a><em>]</em>) – The vertices polygonal base in cm. Must be convex.</p></li>
+<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The height in cm.</p></li>
+<li><p><strong>mass</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The mass in kg.</p></li>
+<li><p><strong>color</strong> (<a class="reference internal" href="types.html#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – The color.</p></li>
+<li><p><strong>textures</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference internal" href="types.html#pyenki.Color" title="pyenki.Color"><em>Color</em></a><em>]</em>) – if not empty, defines the colors of each face.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.contains">
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="types.html#pyenki.Vector" title="pyenki.Vector"><span class="pre">Vector</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#pyenki.PhysicalObject.contains" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.control_step">
+<span class="sig-name descname"><span class="pre">control_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.PhysicalObject.control_step" title="Link to this definition">#</a></dt>
+<dd><p>The controller associated with the object.</p>
+<p>Should be overridden by sub-classes to implement controllers,
+in particular for robots. Alternatively, users can assign a callback
+<a class="reference internal" href="#pyenki.PhysicalObject.control_step_callback" title="pyenki.PhysicalObject.control_step_callback"><code class="xref py py-attr docutils literal notranslate"><span class="pre">control_step_callback</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>time_step</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The time step of the simulation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.on_touch">
+<span class="sig-name descname"><span class="pre">on_touch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">button</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.PhysicalObject.on_touch" title="Link to this definition">#</a></dt>
+<dd><p>Called after a touch event.</p>
+<p>Can be overridden by sub-classes to react to touch events.
+Alternatively, users can assign a callback as <a class="reference internal" href="#pyenki.PhysicalObject.touch_callback" title="pyenki.PhysicalObject.touch_callback"><code class="xref py py-attr docutils literal notranslate"><span class="pre">touch_callback</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – True for press, False for release.</p></li>
+<li><p><strong>button</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – mouse button index: 0 (left), 1 (right) or 2 (middle).</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – cursor x-coordinate (cm).</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – cursor y-coordinate (cm).</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – cursor z-coordinate (cm).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.PhysicalObject.touch">
+<span class="sig-name descname"><span class="pre">touch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">button</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.PhysicalObject.touch" title="Link to this definition">#</a></dt>
+<dd><p>Trigger a touch event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – True for press, False for release.</p></li>
+<li><p><strong>button</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – mouse button index: 0 (left), 1 (right) or 2 (middle).</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – cursor x-coordinate (cm).</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – cursor y-coordinate (cm).</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – cursor z-coordinate (cm).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Textures are used to compute the sensors (cameras) response. They are displayed by the Python-based viewer/renderer but ignored by the native viewer/renderer.</p>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="types.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Types</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="robots.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Robots</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part">Part</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.Part"><code class="docutils literal notranslate"><span class="pre">Part</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.Part.shape"><code class="docutils literal notranslate"><span class="pre">Part.shape</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.Part.height"><code class="docutils literal notranslate"><span class="pre">Part.height</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.Part.textures"><code class="docutils literal notranslate"><span class="pre">Part.textures</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.Part.__init__"><code class="docutils literal notranslate"><span class="pre">Part.__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.Part.contains"><code class="docutils literal notranslate"><span class="pre">Part.contains()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#physicalobject">PhysicalObject</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject"><code class="docutils literal notranslate"><span class="pre">PhysicalObject</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.uid"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.uid</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.world"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.world</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.has_collided"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.has_collided</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.name"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.radius"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.radius</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.height"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.height</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.is_cylindric"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.is_cylindric</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.parts"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.parts</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.mass"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.mass</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.moment_of_inertia"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.moment_of_inertia</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.color"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.color</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.collision_elasticity"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.collision_elasticity</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.dry_friction_coefficient"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.dry_friction_coefficient</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.viscous_friction_coefficient"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.viscous_friction_coefficient</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.viscous_moment_friction_coefficient"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.viscous_moment_friction_coefficient</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.position"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.position</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.angle"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.angle</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.velocity"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.velocity</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.angular_speed"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.angular_speed</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.collision_callback"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.collision_callback</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.control_step_callback"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.control_step_callback</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.touch_callback"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.touch_callback</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.__init__"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.contains"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.contains()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.control_step"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.control_step()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.on_touch"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.on_touch()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.PhysicalObject.touch"><code class="docutils literal notranslate"><span class="pre">PhysicalObject.touch()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Stéphane Magnenat and others. This version is maintained by Jerome Guzzi.
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2020, Stéphane Magnenat and others.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

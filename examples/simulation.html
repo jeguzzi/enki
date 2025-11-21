@@ -1,0 +1,643 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Simulation &#8212; pyenki 0.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-toolbox-code.css?v=4ee5d529" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/simulation';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Visualization" href="visualization.html" />
+    <link rel="prev" title="Basics" href="basics.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pyenki 0.0.1 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="basics.html">Basics</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html">Visualization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../visualization/index.html">How to visualize a simulation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/configuration.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/rendering.html">Rendering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/interactive.html">Interactive</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../background/index.html">Background knowledge</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../background/prox_comm.html">Thymio IR communication</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/index.html">Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/object.html">Physical objects</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/robots.html">Robots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/base.html">Robot base classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/epuck.html">E-puck</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/marxbot.html">Marxbot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/thymio.html">Thymio</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/world.html">World</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/visualization.html">Visualization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/viewer.html">Viewer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/world_view.html">WorldView</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/renderer.html">Rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/notebook.html">Notebooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/video.html">Video</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/examples/simulation.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Simulation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimal-thymio">Minimal Thymio</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hello-thymio">Hello Thymio</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thymio-buttons">Thymio Buttons</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="simulation">
+<h1>Simulation<a class="headerlink" href="#simulation" title="Link to this heading">#</a></h1>
+<p>In the most common case, you add appropriate controllers for one or more robots, either by sub-classing or by assigning callbacks.
+Then, you set up the world, adding as many objects as needed.
+Finally, you may run and visualize the simulation in real time, or in batch-mode with <a class="reference internal" href="../api/world.html#pyenki.World.run" title="pyenki.World.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pyenki.World.run()</span></code></a> or by calling <a class="reference internal" href="../api/world.html#pyenki.World.step" title="pyenki.World.step"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pyenki.World.step()</span></code></a> in a loop.</p>
+<section id="minimal-thymio">
+<h2>Minimal Thymio<a class="headerlink" href="#minimal-thymio" title="Link to this heading">#</a></h2>
+<p>In this example, two Thymio robots exchange IR messages,
+which we log at each time step. This is the Python equivalent to the <a class="reference external" href="https://github.com/jeguzzi/enki/blob/rolling/examples/minimal_thymio/enkiMinimalThymio.cpp">C++ example</a></p>
+<div class="code Python highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">cast</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyenki</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="n">thymio</span><span class="p">:</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">events</span> <span class="o">=</span> <span class="n">thymio</span><span class="o">.</span><span class="n">prox_comm_events</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">events</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;At time </span><span class="si">{</span><span class="n">time</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, Thymio </span><span class="si">{</span><span class="n">thymio</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> received msgs&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;- value: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">rx_value</span><span class="si">}</span><span class="s2">, payloads: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">payloads</span><span class="si">}</span><span class="s2">, intensities: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">intensities</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">tx</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+            <span class="nb">zip</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span> <span class="mi">130</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="mi">222</span><span class="p">,</span> <span class="mi">333</span><span class="p">),</span>
+                <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)):</span>
+        <span class="n">thymio</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">()</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">theta</span>
+        <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">prox_comm_enabled</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">prox_comm_tx</span> <span class="o">=</span> <span class="n">tx</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Start Simulation&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">):</span>
+        <span class="n">world</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">robot</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">robots</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">(</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;pyenki.Thymio2&#39;</span><span class="p">,</span> <span class="n">robot</span><span class="p">),</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">i</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;End Simulation&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="hello-thymio">
+<h2>Hello Thymio<a class="headerlink" href="#hello-thymio" title="Link to this heading">#</a></h2>
+<p>In this example, a Thymio will advance as long as there is not an obstacle (a wall) in front of it, when it will stop and switch the LED color to red from green.</p>
+<div class="code Python highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">SupportsFloat</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyenki</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.viewer</span>
+
+
+<span class="c1"># The world update step will call `control_step` automatically</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ControlledThymio2</span><span class="p">(</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">):</span>
+
+    <span class="c1"># This is the method we have to overwrite</span>
+    <span class="c1"># to implement a controller.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">control_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_step</span><span class="p">:</span> <span class="n">SupportsFloat</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Check if there is an obstacle in front of us</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prox_values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">3000</span><span class="p">:</span>
+            <span class="c1"># A lot of light is reflected =&gt; there is an obstacle,</span>
+            <span class="c1"># so we stop and switch the LED to red</span>
+            <span class="n">speed</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">speed</span> <span class="o">=</span> <span class="mf">10.0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="n">green</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left_wheel_target_speed</span> <span class="o">=</span> <span class="n">speed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right_wheel_target_speed</span> <span class="o">=</span> <span class="n">speed</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">:</span>
+    <span class="c1"># We create an unbounded world</span>
+    <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
+    <span class="c1"># We add a Thymio at the origin,</span>
+    <span class="c1"># which can optionally use Aseba-like units and types.</span>
+    <span class="n">thymio</span> <span class="o">=</span> <span class="n">ControlledThymio2</span><span class="p">()</span>
+    <span class="n">thymio</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">thymio</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
+    <span class="c1"># and a wall a bit in forward, in front of the Thymio.</span>
+    <span class="n">wall</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">PhysicalObject</span><span class="p">(</span><span class="n">l1</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                 <span class="n">l2</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                                 <span class="n">height</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                 <span class="n">mass</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                 <span class="n">color</span><span class="o">=</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">))</span>
+    <span class="n">wall</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">world</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">gui</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+         <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+         <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+         <span class="n">ortho</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">world</span> <span class="o">=</span> <span class="n">setup</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">gui</span><span class="p">:</span>
+        <span class="c1"># We can either run a simulation [in real-time] inside a Qt application</span>
+        <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">run_in_viewer</span><span class="p">(</span><span class="n">world</span><span class="p">,</span>
+                                    <span class="n">camera_position</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                                    <span class="n">camera_altitude</span><span class="o">=</span><span class="mf">70.0</span><span class="p">,</span>
+                                    <span class="n">camera_yaw</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                                    <span class="n">camera_pitch</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                                    <span class="n">walls_height</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                    <span class="n">camera_is_ortho</span><span class="o">=</span><span class="n">ortho</span><span class="p">,</span>
+                                    <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># or we can write our own loop that run the simulation as fast as possible.</span>
+        <span class="n">steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration</span> <span class="o">//</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+            <span class="n">world</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">(</span><span class="n">gui</span><span class="o">=</span><span class="s1">&#39;--gui&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">,</span> <span class="n">ortho</span><span class="o">=</span><span class="s1">&#39;--ortho&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Launching it with <code class="docutils literal notranslate"><span class="pre">--gui</span></code> will visualize a real-time simulation.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/hello.png"><img alt="../_images/hello.png" src="../_images/hello.png" style="width: 75%;" />
+</a>
+</figure>
+</section>
+<section id="thymio-buttons">
+<h2>Thymio Buttons<a class="headerlink" href="#thymio-buttons" title="Link to this heading">#</a></h2>
+<p>In this example, a Thymio will react to buttons. Try to press any button to change its color.</p>
+<div class="code Python highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyenki</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.viewer</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">on_button_touch</span><span class="p">(</span><span class="n">thymio</span><span class="p">:</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">,</span>
+                    <span class="n">button</span><span class="p">:</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="o">.</span><span class="n">Button</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">button</span> <span class="o">==</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="o">.</span><span class="n">Button</span><span class="o">.</span><span class="n">CENTER</span><span class="p">:</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">button</span> <span class="o">==</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="o">.</span><span class="n">Button</span><span class="o">.</span><span class="n">FORWARD</span><span class="p">:</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">button</span> <span class="o">==</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="o">.</span><span class="n">Button</span><span class="o">.</span><span class="n">BACKWARD</span><span class="p">:</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">button</span> <span class="o">==</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="o">.</span><span class="n">Button</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">button</span> <span class="o">==</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="o">.</span><span class="n">Button</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
+    <span class="n">thymio</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">()</span>
+    <span class="n">thymio</span><span class="o">.</span><span class="n">button_touch_callback</span> <span class="o">=</span> <span class="n">on_button_touch</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
+    <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+    <span class="n">viewer</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">WorldView</span><span class="p">(</span><span class="n">world</span><span class="o">=</span><span class="n">world</span><span class="p">)</span>
+    <span class="n">viewer</span><span class="o">.</span><span class="n">move_camera</span><span class="p">(</span><span class="n">target_distance</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                       <span class="n">target_position</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                       <span class="n">pitch</span><span class="o">=-</span><span class="mf">1.2</span><span class="p">,</span>
+                       <span class="n">yaw</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">viewer</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">viewer</span><span class="o">.</span><span class="n">start_updating_world</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/buttons.png"><img alt="../_images/buttons.png" src="../_images/buttons.png" style="width: 75%;" />
+</a>
+</figure>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="basics.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Basics</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="visualization.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Visualization</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimal-thymio">Minimal Thymio</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hello-thymio">Hello Thymio</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thymio-buttons">Thymio Buttons</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Stéphane Magnenat and others. This version is maintained by Jerome Guzzi.
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2020, Stéphane Magnenat and others.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

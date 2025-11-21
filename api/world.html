@@ -1,0 +1,931 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>World &#8212; pyenki 0.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-toolbox-code.css?v=4ee5d529" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/world';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Visualization" href="visualization.html" />
+    <link rel="prev" title="Thymio" href="thymio.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pyenki 0.0.1 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/basics.html">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/simulation.html">Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/visualization.html">Visualization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../visualization/index.html">How to visualize a simulation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/configuration.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/rendering.html">Rendering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/interactive.html">Interactive</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../background/index.html">Background knowledge</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../background/prox_comm.html">Thymio IR communication</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="object.html">Physical objects</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="robots.html">Robots</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="base.html">Robot base classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="epuck.html">E-puck</a></li>
+<li class="toctree-l3"><a class="reference internal" href="marxbot.html">Marxbot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="thymio.html">Thymio</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">World</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="visualization.html">Visualization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="viewer.html">Viewer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="world_view.html">WorldView</a></li>
+<li class="toctree-l3"><a class="reference internal" href="renderer.html">Rendering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebook.html">Notebooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="video.html">Video</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/api/world.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>World</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.WallsType"><code class="docutils literal notranslate"><span class="pre">WallsType</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.WallsType.SQUARE"><code class="docutils literal notranslate"><span class="pre">WallsType.SQUARE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.WallsType.CIRCULAR"><code class="docutils literal notranslate"><span class="pre">WallsType.CIRCULAR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.WallsType.NONE"><code class="docutils literal notranslate"><span class="pre">WallsType.NONE</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.GroundTexture"><code class="docutils literal notranslate"><span class="pre">GroundTexture</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.GroundTexture.width"><code class="docutils literal notranslate"><span class="pre">GroundTexture.width</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.GroundTexture.height"><code class="docutils literal notranslate"><span class="pre">GroundTexture.height</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.GroundTexture.__init__"><code class="docutils literal notranslate"><span class="pre">GroundTexture.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World"><code class="docutils literal notranslate"><span class="pre">World</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.objects"><code class="docutils literal notranslate"><span class="pre">World.objects</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.robots"><code class="docutils literal notranslate"><span class="pre">World.robots</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.static_objects"><code class="docutils literal notranslate"><span class="pre">World.static_objects</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.control_step_callback"><code class="docutils literal notranslate"><span class="pre">World.control_step_callback</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.random_seed"><code class="docutils literal notranslate"><span class="pre">World.random_seed</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.width"><code class="docutils literal notranslate"><span class="pre">World.width</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.height"><code class="docutils literal notranslate"><span class="pre">World.height</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.radius"><code class="docutils literal notranslate"><span class="pre">World.radius</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.walls_type"><code class="docutils literal notranslate"><span class="pre">World.walls_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.ground_texture"><code class="docutils literal notranslate"><span class="pre">World.ground_texture</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.__init__"><code class="docutils literal notranslate"><span class="pre">World.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.add_object"><code class="docutils literal notranslate"><span class="pre">World.add_object()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.copy_random_generator"><code class="docutils literal notranslate"><span class="pre">World.copy_random_generator()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.get_ground_color"><code class="docutils literal notranslate"><span class="pre">World.get_ground_color()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.remove_object"><code class="docutils literal notranslate"><span class="pre">World.remove_object()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.render"><code class="docutils literal notranslate"><span class="pre">World.render()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.run"><code class="docutils literal notranslate"><span class="pre">World.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.run_in_viewer"><code class="docutils literal notranslate"><span class="pre">World.run_in_viewer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.save_image"><code class="docutils literal notranslate"><span class="pre">World.save_image()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.step"><code class="docutils literal notranslate"><span class="pre">World.step()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="world">
+<h1>World<a class="headerlink" href="#world" title="Link to this heading">#</a></h1>
+<dl class="py class enum">
+<dt class="sig sig-object py" id="pyenki.World.WallsType">
+<em class="property"><span class="k"><span class="pre">enum</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.World.</span></span><span class="sig-name descname"><span class="pre">WallsType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.World.WallsType" title="Link to this definition">#</a></dt>
+<dd><p>Describes the type of boundary walls.</p>
+<p>Valid values are as follows:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.WallsType.SQUARE">
+<span class="sig-name descname"><span class="pre">SQUARE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;WallsType.SQUARE:</span> <span class="pre">0&gt;</span></em><a class="headerlink" href="#pyenki.World.WallsType.SQUARE" title="Link to this definition">#</a></dt>
+<dd><p>A rectangular boundary wall of size (<code class="xref py py-attr docutils literal notranslate"><span class="pre">World.width</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">World.height</span></code>).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.WallsType.CIRCULAR">
+<span class="sig-name descname"><span class="pre">CIRCULAR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;WallsType.CIRCULAR:</span> <span class="pre">1&gt;</span></em><a class="headerlink" href="#pyenki.World.WallsType.CIRCULAR" title="Link to this definition">#</a></dt>
+<dd><p>A circular boundary wall of radius <code class="xref py py-attr docutils literal notranslate"><span class="pre">World.radius</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.WallsType.NONE">
+<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;WallsType.NONE:</span> <span class="pre">2&gt;</span></em><a class="headerlink" href="#pyenki.World.WallsType.NONE" title="Link to this definition">#</a></dt>
+<dd><p>No boundary walls.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyenki.World.GroundTexture">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.World.</span></span><span class="sig-name descname"><span class="pre">GroundTexture</span></span><a class="headerlink" href="#pyenki.World.GroundTexture" title="Link to this definition">#</a></dt>
+<dd><p>2-D Texture for ground stored as a ARGB array (0xAARRGGBB in little endian).
+Users should access class data using the buffer protocol, i.e.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">200</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gt</span> <span class="o">=</span> <span class="n">World</span><span class="o">.</span><span class="n">GroundTexture</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gt</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">gt</span><span class="o">.</span><span class="n">height</span>
+<span class="go">(100, 200)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">gt</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="go">((100, 200, 4), np.uint8(0))</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.GroundTexture.width">
+<span class="sig-name descname"><span class="pre">width</span></span><a class="headerlink" href="#pyenki.World.GroundTexture.width" title="Link to this definition">#</a></dt>
+<dd><p>the width</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.GroundTexture.height">
+<span class="sig-name descname"><span class="pre">height</span></span><a class="headerlink" href="#pyenki.World.GroundTexture.height" title="Link to this definition">#</a></dt>
+<dd><p>the height</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.World.GroundTexture.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.World.GroundTexture.__init__" title="Link to this definition">#</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__() -&gt; None</p></li>
+</ol>
+<p>Creates an empty ground texture</p>
+<ol class="arabic simple" start="2">
+<li><p>__init__(data: Annotated[numpy.ArrayLike, numpy.uint8]) -&gt; None</p></li>
+</ol>
+<p>Creates an ground texture with a copy of the ARGB data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference internal" href="types.html#pyenki.ARGBImage" title="pyenki.ARGBImage"><em>ARGBImage</em></a>) – A numpy array of shape <code class="docutils literal notranslate"><span class="pre">(height,</span> <span class="pre">width,</span> <span class="pre">4)</span></code>
+and type <cite>numpy.uint_8</cite> storing ARGB pixels.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyenki.World">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.</span></span><span class="sig-name descname"><span class="pre">World</span></span><a class="headerlink" href="#pyenki.World" title="Link to this definition">#</a></dt>
+<dd><p>The world is the container of all objects and robots.
+It is either</p>
+<ul>
+<li><p>a rectangular arena with walls at all sides:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">World</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>a circular area with walls:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">World</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>or an infinite surface:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">World</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The rectangular world width in centimeters</p></li>
+<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The rectangular world height in centimeters</p></li>
+<li><p><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The circular world radius in centimeters</p></li>
+<li><p><strong>walls_color</strong> (<a class="reference internal" href="types.html#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – Optional wall color, default is <code class="docutils literal notranslate"><span class="pre">Color.gray</span></code></p></li>
+<li><p><strong>ground_texture</strong> (<a class="reference internal" href="#pyenki.World.GroundTexture" title="pyenki.World.GroundTexture"><em>World.GroundTexture</em></a><em> | </em><em>None</em>) – Optional ground texture, default is an empty image.</p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – The random seed</p></li>
+</ul>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyenki</span>
+
+<span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
+<span class="n">thymio</span> <span class="o">=</span> <span class="n">Thymio2</span><span class="p">()</span>
+<span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
+<span class="n">wall</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">PhysicalObject</span><span class="p">(</span><span class="n">l1</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">l2</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mass</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                             <span class="n">color</span><span class="o">=</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">))</span>
+<span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span>
+<span class="c1"># Run 100 times a 0.1 s long simulation step</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><a class="headerlink" href="#pyenki.World.objects" title="Link to this definition">#</a></dt>
+<dd><p>The list of all objects</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.PhysicalObject">PhysicalObject</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.robots">
+<span class="sig-name descname"><span class="pre">robots</span></span><a class="headerlink" href="#pyenki.World.robots" title="Link to this definition">#</a></dt>
+<dd><p>The list of all robots</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="base.html#pyenki.Robot" title="pyenki.Robot">Robot</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.static_objects">
+<span class="sig-name descname"><span class="pre">static_objects</span></span><a class="headerlink" href="#pyenki.World.static_objects" title="Link to this definition">#</a></dt>
+<dd><p>The list of all objects that are not robots</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.PhysicalObject">PhysicalObject</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.control_step_callback">
+<span class="sig-name descname"><span class="pre">control_step_callback</span></span><a class="headerlink" href="#pyenki.World.control_step_callback" title="Link to this definition">#</a></dt>
+<dd><p>A function called at each update step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)">Callable</a>[[<a class="reference internal" href="#pyenki.World" title="pyenki.World">World</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>], None] | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.random_seed">
+<span class="sig-name descname"><span class="pre">random_seed</span></span><a class="headerlink" href="#pyenki.World.random_seed" title="Link to this definition">#</a></dt>
+<dd><p>The random seed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator" title="(in NumPy v2.3)">numpy.random.Generator</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.width">
+<span class="sig-name descname"><span class="pre">width</span></span><a class="headerlink" href="#pyenki.World.width" title="Link to this definition">#</a></dt>
+<dd><p>the world width [cm]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.height">
+<span class="sig-name descname"><span class="pre">height</span></span><a class="headerlink" href="#pyenki.World.height" title="Link to this definition">#</a></dt>
+<dd><p>the world height [cm]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.radius">
+<span class="sig-name descname"><span class="pre">radius</span></span><a class="headerlink" href="#pyenki.World.radius" title="Link to this definition">#</a></dt>
+<dd><p>the world radius [cm]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.walls_type">
+<span class="sig-name descname"><span class="pre">walls_type</span></span><a class="headerlink" href="#pyenki.World.walls_type" title="Link to this definition">#</a></dt>
+<dd><p>the type of boundary walls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.World.WallsType" title="pyenki.World.WallsType">World.WallsType</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.ground_texture">
+<span class="sig-name descname"><span class="pre">ground_texture</span></span><a class="headerlink" href="#pyenki.World.ground_texture" title="Link to this definition">#</a></dt>
+<dd><p>an optional image to color the ground (readonly).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyenki.World.GroundTexture" title="pyenki.World.GroundTexture">World.GroundTexture</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.World.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.World.__init__" title="Link to this definition">#</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(seed: SupportsInt = 0) -&gt; None</p></li>
+<li><p>__init__(width: SupportsFloat, height: SupportsFloat, walls_color: pyenki.Color = Color(r=0.5, g=0.5, b=0.5, a=1.0), ground_texture: pyenki.World.GroundTexture | None = None, seed: SupportsInt = 0) -&gt; None</p></li>
+<li><p>__init__(radius: SupportsFloat, walls_color: pyenki.Color = Color(r=0.5, g=0.5, b=0.5, a=1.0), ground_texture: pyenki.World.GroundTexture | None = None, seed: SupportsInt = 0) -&gt; None</p></li>
+</ol>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.World.add_object">
+<span class="sig-name descname"><span class="pre">add_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.pyenki.PhysicalObject"><span class="pre">pyenki.PhysicalObject</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.World.add_object" title="Link to this definition">#</a></dt>
+<dd><p>Add an object to the simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>object</strong> (<a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><em>PhysicalObject</em></a>) – the object to add.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.World.copy_random_generator">
+<span class="sig-name descname"><span class="pre">copy_random_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">world</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyenki.World" title="pyenki.pyenki.World"><span class="pre">pyenki.World</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.World.copy_random_generator" title="Link to this definition">#</a></dt>
+<dd><p>Copy the random generator from another world</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>world</strong> (<a class="reference internal" href="#pyenki.World" title="pyenki.World"><em>World</em></a>) – the other world.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.World.get_ground_color">
+<span class="sig-name descname"><span class="pre">get_ground_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="types.html#pyenki.Vector" title="pyenki.Vector"><span class="pre">Vector</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="types.html#pyenki.Color" title="pyenki.pyenki.Color"><span class="pre">pyenki.Color</span></a></span></span><a class="headerlink" href="#pyenki.World.get_ground_color" title="Link to this definition">#</a></dt>
+<dd><p>Returns the color of the floor at a given position</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>position</strong> (<a class="reference internal" href="types.html#pyenki.Vector" title="pyenki.Vector"><em>Vector</em></a>) – the position.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the color at the position.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="types.html#pyenki.Color" title="pyenki.Color">Color</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.World.remove_object">
+<span class="sig-name descname"><span class="pre">remove_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.pyenki.PhysicalObject"><span class="pre">pyenki.PhysicalObject</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.World.remove_object" title="Link to this definition">#</a></dt>
+<dd><p>Remove an object from the simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>object</strong> (<a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><em>PhysicalObject</em></a>) – the object to remove.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.World.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">walls_height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">640</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">360</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.pyenki.PhysicalObject"><span class="pre">PhysicalObject</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">camera_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Unpack</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="camera.html#pyenki.viewer.CameraConfig" title="pyenki.viewer.types.CameraConfig"><span class="pre">CameraConfig</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="types.html#pyenki.Image" title="pyenki.Image"><span class="pre">Image</span></a></span></span><a class="headerlink" href="#pyenki.World.render" title="Link to this definition">#</a></dt>
+<dd><p>Renders a world to an RGB image array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>world</strong> (<a class="reference internal" href="#pyenki.World" title="pyenki.World"><em>World</em></a>) – the world to render.</p></li>
+<li><p><strong>walls_height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the height of the world boundary in cm.</p></li>
+<li><p><strong>width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the width of the image in pixels.</p></li>
+<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the height of the image in pixels.</p></li>
+<li><p><strong>selected_object</strong> (<a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><em>PhysicalObject</em></a><em> | </em><em>None</em>) – an optional object to select.</p></li>
+<li><p><strong>**camera_config</strong> (<a class="reference internal" href="camera.html#pyenki.viewer.CameraConfig" title="pyenki.viewer.CameraConfig"><em>CameraConfig</em></a>) – the camera configuration.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array of shape <code class="docutils literal notranslate"><span class="pre">(height,</span> <span class="pre">width,</span> <span class="pre">3)</span></code> and type <code class="docutils literal notranslate"><span class="pre">uint8</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="types.html#pyenki.Image" title="pyenki.Image">Image</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.World.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.03333333333333333</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">physics_oversampling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">termination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyenki.World" title="pyenki.pyenki.World"><span class="pre">pyenki.World</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pyenki.World" title="pyenki.pyenki.World"><span class="pre">pyenki.World</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.World.run" title="Link to this definition">#</a></dt>
+<dd><p>Run a simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>steps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the number of steps.</p></li>
+<li><p><strong>time_step</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the time step.</p></li>
+<li><p><strong>physics_oversampling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the number of times the physics is updated per step
+to get a more fine-grained physical simulation compared to the sensor-motor loop.</p></li>
+<li><p><strong>termination</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)"><em>Callable</em></a><em>[</em><em>[</em><a class="reference internal" href="#pyenki.World" title="pyenki.World"><em>World</em></a><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>] </em><em>| </em><em>None</em>) – an optional function that terminates the simulation when it returns True.</p></li>
+<li><p><strong>callback</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)"><em>Callable</em></a><em>[</em><em>[</em><a class="reference internal" href="#pyenki.World" title="pyenki.World"><em>World</em></a><em>]</em><em>, </em><em>None</em><em>] </em><em>| </em><em>None</em>) – An additional callback executed at each simulation step.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.World.run_in_viewer">
+<span class="sig-name descname"><span class="pre">run_in_viewer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">helpers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">walls_height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">camera_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Unpack</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="camera.html#pyenki.viewer.CameraConfig" title="pyenki.viewer.types.CameraConfig"><span class="pre">CameraConfig</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.World.run_in_viewer" title="Link to this definition">#</a></dt>
+<dd><p>Runs a simulation while displaying it in real-time in a viewer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>world</strong> (<a class="reference internal" href="#pyenki.World" title="pyenki.World"><em>World</em></a>) – the world to display and run.</p></li>
+<li><p><strong>fps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The framerate of the viewer in frames per second.</p></li>
+<li><p><strong>time_step</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The simulation time step in seconds.</p></li>
+<li><p><strong>factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – The real-time factor. If larger than one, the simulation
+will run faster then real-time.</p></li>
+<li><p><strong>helpers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Whether to display the helpers widgets.</p></li>
+<li><p><strong>walls_height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the height of the world boundary in cm.</p></li>
+<li><p><strong>duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – duration of the simulation in simulated time.
+Negative values are interpreted as infinite duration.</p></li>
+<li><p><strong>**camera_config</strong> (<a class="reference internal" href="camera.html#pyenki.viewer.CameraConfig" title="pyenki.viewer.CameraConfig"><em>CameraConfig</em></a>) – the camera configuration.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.World.save_image">
+<span class="sig-name descname"><span class="pre">save_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">walls_height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">640</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">360</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.pyenki.PhysicalObject"><span class="pre">PhysicalObject</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">camera_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Unpack</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="camera.html#pyenki.viewer.CameraConfig" title="pyenki.viewer.types.CameraConfig"><span class="pre">CameraConfig</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.World.save_image" title="Link to this definition">#</a></dt>
+<dd><p>Renders a world to an image file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>world</strong> (<a class="reference internal" href="#pyenki.World" title="pyenki.World"><em>World</em></a>) – the world to render.</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – the file path.</p></li>
+<li><p><strong>walls_height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the height of the world boundary in cm.</p></li>
+<li><p><strong>width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the width of the image in pixels.</p></li>
+<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the height of the image in pixels.</p></li>
+<li><p><strong>selected_object</strong> (<a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><em>PhysicalObject</em></a><em> | </em><em>None</em>) – an optional object to select.</p></li>
+<li><p><strong>**camera_config</strong> (<a class="reference internal" href="camera.html#pyenki.viewer.CameraConfig" title="pyenki.viewer.CameraConfig"><em>CameraConfig</em></a>) – the camera configuration.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.World.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">physics_oversampling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.World.step" title="Link to this definition">#</a></dt>
+<dd><p>Simulate a timestep</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time_step</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the update timestep in seconds, should be below 1 (typically .02-.1)</p></li>
+<li><p><strong>physics_oversampling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the amount of time the physics is run per step,
+as usual collisions require a more precise simulation
+than the sensor-motor loop frequency</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="thymio.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Thymio</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="visualization.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Visualization</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.WallsType"><code class="docutils literal notranslate"><span class="pre">WallsType</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.WallsType.SQUARE"><code class="docutils literal notranslate"><span class="pre">WallsType.SQUARE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.WallsType.CIRCULAR"><code class="docutils literal notranslate"><span class="pre">WallsType.CIRCULAR</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.WallsType.NONE"><code class="docutils literal notranslate"><span class="pre">WallsType.NONE</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.GroundTexture"><code class="docutils literal notranslate"><span class="pre">GroundTexture</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.GroundTexture.width"><code class="docutils literal notranslate"><span class="pre">GroundTexture.width</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.GroundTexture.height"><code class="docutils literal notranslate"><span class="pre">GroundTexture.height</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.GroundTexture.__init__"><code class="docutils literal notranslate"><span class="pre">GroundTexture.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World"><code class="docutils literal notranslate"><span class="pre">World</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.objects"><code class="docutils literal notranslate"><span class="pre">World.objects</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.robots"><code class="docutils literal notranslate"><span class="pre">World.robots</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.static_objects"><code class="docutils literal notranslate"><span class="pre">World.static_objects</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.control_step_callback"><code class="docutils literal notranslate"><span class="pre">World.control_step_callback</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.random_seed"><code class="docutils literal notranslate"><span class="pre">World.random_seed</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.width"><code class="docutils literal notranslate"><span class="pre">World.width</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.height"><code class="docutils literal notranslate"><span class="pre">World.height</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.radius"><code class="docutils literal notranslate"><span class="pre">World.radius</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.walls_type"><code class="docutils literal notranslate"><span class="pre">World.walls_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.ground_texture"><code class="docutils literal notranslate"><span class="pre">World.ground_texture</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.__init__"><code class="docutils literal notranslate"><span class="pre">World.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.add_object"><code class="docutils literal notranslate"><span class="pre">World.add_object()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.copy_random_generator"><code class="docutils literal notranslate"><span class="pre">World.copy_random_generator()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.get_ground_color"><code class="docutils literal notranslate"><span class="pre">World.get_ground_color()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.remove_object"><code class="docutils literal notranslate"><span class="pre">World.remove_object()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.render"><code class="docutils literal notranslate"><span class="pre">World.render()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.run"><code class="docutils literal notranslate"><span class="pre">World.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.run_in_viewer"><code class="docutils literal notranslate"><span class="pre">World.run_in_viewer()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.save_image"><code class="docutils literal notranslate"><span class="pre">World.save_image()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.step"><code class="docutils literal notranslate"><span class="pre">World.step()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Stéphane Magnenat and others. This version is maintained by Jerome Guzzi.
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2020, Stéphane Magnenat and others.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

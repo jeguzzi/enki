@@ -11,10 +11,12 @@ Welcome to pyenki's documentation!
    :caption: Contents:
 
    intro
+   installation
+   examples/index
+   visualization/index
+   background/index
+   api/index
    changelog
-   prox_comm
-   examples
-   api
 
 
 
