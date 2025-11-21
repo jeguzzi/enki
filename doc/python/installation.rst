@@ -12,7 +12,7 @@ To install the package without visualization capabilities, run
 
 .. code::
 
-   pip install git+ssh://git@github.com/jeguzzi/enki.git --config-settings=cmake.define.WITH_QT=
+   pip install git+https://github.com/jeguzzi/enki --config-settings=cmake.define.WITH_QT=
 
 Visualization
 =============
@@ -28,7 +28,8 @@ To enable visualization using the Python implementation of the renderer, run
 
 .. code::
 
-   pip install git+ssh://git@github.com/jeguzzi/enki.git[viewer] --config-settings=cmake.define.WITH_QT=
+   pip install "pyenki[viewer] @ git+https://github.com/jeguzzi/enki" --config-settings=cmake.define.WITH_QT=
+
 
 Native, C++-based
 -----------------
@@ -41,19 +42,22 @@ To enable visualization using the C++-implementation of the renderer, you need t
    
       .. code::
 
-         pip install git+ssh://git@github.com/jeguzzi/enki.git --config-settings=cmake.define.WITH_QT=5
+         pip install git+https://github.com/jeguzzi/enki --config-settings=cmake.define.WITH_QT=5
 
    .. tab:: Qt6
    
       .. code::
 
-         pip install git+ssh://git@github.com/jeguzzi/enki.git --config-settings=cmake.define.WITH_QT=6
+         pip install git+https://github.com/jeguzzi/enki --config-settings=cmake.define.WITH_QT=6
 
 Extras
 ======
 
-Add the extra ``[all]`` to be able to visualize the simulation in a notebook and to make videos from simulations.
+Add the extra to be able to visualize the simulation in a notebook and to make videos from simulations, for example:
 
+.. code::
+
+   pip install "pyenki[viewer,all] @ git+https://github.com/jeguzzi/enki" --config-settings=cmake.define.WITH_QT=
 
 
 

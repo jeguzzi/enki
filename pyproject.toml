@@ -23,5 +23,4 @@ viewer = [
 minimum-version = "build-system.requires"
 cmake.define = {BUILD_TESTS = "OFF", BUILD_EXAMPLES = "OFF"}
 install.components = ["pyenki"]
-wheel.packages = ["python/pyenki"]
 wheel.exclude = ["__pycache__"]
