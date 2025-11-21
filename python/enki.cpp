@@ -216,6 +216,15 @@ Polygon make_polygon(const std::vector<Vector> &ps) {
   return p;
 }
 
+static double from_thymio_i(int value) { return 16.6 * value / 500; }
+
+static double l16{std::pow(2, 16)};
+static double l15{std::pow(2, 15)};
+static int to_thymio_i(double value) {
+  const auto fvalue = std::fmod<double>(500 * value / 16.6 + l15, l16) - l15;
+  return static_cast<int>(std::floor(fvalue));
+}
+
 PYBIND11_MAKE_OPAQUE(PhysicalObject::Hull)
 
 PYBIND11_MODULE(pyenki, m) {
@@ -975,6 +984,31 @@ Touches one of the buttons on top of the robot.
 Args:
     index (int): the index of the button
 )doc")
+      .def_property(
+          "left_wheel_target_speed_i",
+          [](const Thymio2 &r) { return to_thymio_i(r.leftSpeed); },
+          [](Thymio2 &r, int value) {
+            return r.leftSpeed = from_thymio_i(value);
+          })
+      .def_property(
+          "right_wheel_target_speed_i",
+          [](const Thymio2 &r) { return to_thymio_i(r.rightSpeed); },
+          [](Thymio2 &r, int value) {
+            return r.rightSpeed = from_thymio_i(value);
+          })
+      .def_property(
+          "left_wheel_encoder_speed_i",
+          [](const Thymio2 &r) { return to_thymio_i(r.leftEncoder); }, nullptr)
+      .def_property(
+          "right_wheel_encoder_speed_i",
+          [](const Thymio2 &r) { return to_thymio_i(r.rightEncoder); }, nullptr)
+      .def_property(
+          "left_wheel_odometry_i",
+          [](const Thymio2 &r) { return to_thymio_i(r.leftOdometry); }, nullptr)
+      .def_property(
+          "right_wheel_odometry_i",
+          [](const Thymio2 &r) { return to_thymio_i(r.rightOdometry); },
+          nullptr)
       .def_property(
           "prox_distances",
           [](const Thymio2 &r) {
