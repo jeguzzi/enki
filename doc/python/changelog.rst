@@ -4,6 +4,8 @@ Changelog
 [Unreleased]
 ------------
 
+To be completed
+
 Added
 ~~~~~
 - Thymio2 proximity communication
