@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Annotated, TypeAlias
+from collections.abc import Callable
+from typing import Annotated, SupportsFloat, TypeAlias
 
 import numpy
 import numpy.typing
@@ -19,6 +20,8 @@ ARGBImage: TypeAlias = Annotated[numpy.typing.NDArray[numpy.uint8],
                                  '[n, m, 4]']
 ARGBImageLike: TypeAlias = Annotated[numpy.typing.ArrayLike, numpy.uint8,
                                      '[n, m, 4]']
+
+Controller: TypeAlias = Callable[[PhysicalObject, SupportsFloat], None]
 
 __all__ = [
     'Color', 'DifferentialWheeled', 'EPuck', 'Marxbot', 'PhysicalObject',
