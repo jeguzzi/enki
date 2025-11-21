@@ -1,22 +1,23 @@
-if (SDL2_FOUND)
-	message(STATUS "SDL2 found, enabling joystick support")
-	include_directories(${SDL2_INCLUDE_DIR})
-	set(EXTRA_LIBS ${SDL2_LIBRARY} ${EXTRA_LIBS})
-	add_definitions("-DUSE_SDL")
-endif ()
+find_package(SDL2)
 
-if(Qt6_FOUND OR Qt5_FOUND)
+if(SDL2_FOUND)
+  message(STATUS "SDL2 found, enabling joystick support")
+  include_directories(${SDL2_INCLUDE_DIR})
+  set(EXTRA_LIBS ${SDL2_LIBRARY} ${EXTRA_LIBS})
+  add_definitions("-DUSE_SDL")
+endif()
+
 set(CMAKE_AUTOMOC ON)
 set(viewer_playground_SRCS Playground.cpp)
 
 include_directories(${PROJECT_SOURCE_DIR})
 
 add_executable(enkiplayground ${viewer_playground_SRCS})
-target_link_libraries(enkiplayground enkiviewer enki ${OPENGL_gl_LIBRARY} ${EXTRA_LIBS})
+target_link_libraries(enkiplayground enkiviewer enki ${OPENGL_gl_LIBRARY}
+                      ${EXTRA_LIBS})
 if(Qt6_FOUND)
-target_link_libraries(enkiplayground Qt6::Widgets Qt6::OpenGL Qt6::OpenGLWidgets)
+  target_link_libraries(enkiplayground Qt6::Widgets Qt6::OpenGL
+                        Qt6::OpenGLWidgets)
 else()
-target_link_libraries(enkiplayground Qt5::OpenGL Qt5::Widgets)
+  target_link_libraries(enkiplayground Qt5::OpenGL Qt5::Widgets)
 endif()
-endif()
-

@@ -15,7 +15,7 @@ option(BUILD_PYTHON "Whether to build the python module" ON)
 
 enable_testing()
 
-set(WITH_QT "6" CACHE STRING "Which Qt version (5 or 6) to use. Leave empty not to use Qt.")
+set(WITH_QT "" CACHE STRING "Which Qt version (5 or 6) to use. Leave empty not to use Qt.")
 if(WITH_QT MATCHES "6")
 set(QT_VERSION_REQ "6")
 find_package(Qt6 COMPONENTS Core Gui Widgets OpenGL OpenGLWidgets)
@@ -42,7 +42,6 @@ add_subdirectory(enki)
 
 if (Qt6_FOUND OR Qt5_FOUND)
 	find_package(OpenGL REQUIRED)
-	find_package(SDL2)
 	add_subdirectory(viewer)
 endif()
 
