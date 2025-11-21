@@ -27,3 +27,14 @@ Launching it with ``--gui`` will visualize a real-time simulation.
 
 .. figure:: images/hello.png
    :width: 75%
+
+Thymio Buttons
+--------------
+
+In this example, a Thymio will react to buttons. Try to press any button to change its color.
+
+.. include:: ../../../examples/python/thymio_buttons.py
+   :code: Python
+
+.. figure:: images/buttons.png
+   :width: 75%

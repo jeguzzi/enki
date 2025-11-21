@@ -25,12 +25,12 @@ def main() -> None:
     viewer_1 = pyenki.viewer.WorldView(world=world,
                                        camera_position=(-20, -20),
                                        camera_altitude=20)
-    viewer_1.point_camera(target_position=(0, 0), target_altitude=5)
+    viewer_1.point_camera(target_position=(20, 20), target_altitude=5)
     viewer_2 = pyenki.viewer.WorldView(world=world,
                                        helpers=False,
                                        camera_altitude=30,
                                        camera_is_ortho=False)
-    viewer_2.move_camera(target_position=(0, 0),
+    viewer_2.move_camera(target_position=(20, 20),
                          target_altitude=10,
                          yaw=-1,
                          pitch=-0.5)

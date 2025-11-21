@@ -15,12 +15,16 @@ In this example, we instantiate a :py:class:`pyenki.viewer.WorldView` that shows
 .. include:: ../../../examples/python/world_view.py
   :code: Python
 
+.. figure:: images/view.png
+   :width: 75%
+
+
 Integrated in PySide or PyQt 
 ----------------------------
 
 The :py:class:`pyenki.viewer.WorldView` can be integrated as any other Qt widget in a more complex interface.  
 
-In these examples, we create a window with the world visualized from two different points of view:
+In these example, we manually create and run a Qt application, with a window that displays a world from two different points of view (using either PyQt6 or PySide6)
 
 .. tabs:: 
 
@@ -33,6 +37,9 @@ In these examples, we create a window with the world visualized from two differe
    
       .. include:: ../../../examples/python/world_view_pyside.py
          :code: Python
+
+.. figure:: images/composition.png
+   :width: 75%
 
 In a notebook
 =============
