@@ -49,9 +49,11 @@ class WorldView(QOpenGLWidget, HasCamera):
         >>> from PySide6.QtWidgets import QHBoxLayout, QWidget
         >>> # setup a world
         >>> world = ...
-        >>> viewer_1 = pyenki.WorldView(world=world, camera_position=(-20, -20), camera_altitude=20)
+        >>> viewer_1 = pyenki.WorldView(
+                world=world, camera_position=(-20, -20), camera_altitude=20)
         >>> viewer_1.point_camera(target_position=(0, 0), target_altitude=5)
-        >>> viewer_2 = pyenki.WorldView(world=world, helpers=False, camera_is_ortho=True, camera_altitude=30)
+        >>> viewer_2 = pyenki.WorldView(
+                world=world, helpers=False, camera_is_ortho=True, camera_altitude=30)
         >>> window = QWidget()
         >>> hbox = QHBoxLayout(window)
         >>> window.resize(960, 320)
@@ -65,7 +67,7 @@ class WorldView(QOpenGLWidget, HasCamera):
         world (World | None): the world to display.
         walls_height (float): the height of the world boundary in cm (readonly).
         helpers (bool): whether to display the helpers widgets.
-        image (numpy.ndarray[tuple[int, int, int], numpy.dtype[numpy.uint8]]): the currently rendered image (readonly).
+        image (Image): the currently rendered image (readonly).
         qt_widget (QOpenGLWidget): a PyQt-compatible widget (readonly).
         pyside_widget (QOpenGLWidget): a PySide-compatible widget (readonly).
     """

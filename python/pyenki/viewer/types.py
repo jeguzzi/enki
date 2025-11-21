@@ -167,8 +167,8 @@ class RunProtocol(Protocol):
 class RenderProtocol(Protocol):
 
     def __call__(self,
-                 /,
                  world: World,
+                 /,
                  walls_height: SupportsFloat = 10,
                  width: SupportsInt = 640,
                  height: SupportsInt = 360,
