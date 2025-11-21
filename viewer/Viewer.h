@@ -200,7 +200,7 @@ namespace Enki
 		double worldTimeStep;
 		double rtFactor;
 		
-		double getEffectiveCameraPitch() {
+		double getEffectiveCameraPitch() const {
 			if(cameraIsOrtho) return -M_PI/2;
 			return camera.pitch;
 		}
@@ -325,14 +325,14 @@ namespace Enki
 
     class EnkiApplication: public QApplication {
     public:
-    	EnkiApplication(int &argc, char **argv) :  QApplication(setup(argc), argv) {}
+    	EnkiApplication(int &argc, char **argv, bool share = true) :  QApplication(setup(argc, share), argv) {}
         ~EnkiApplication() { ViewerWidget::deinit(); }
-    	static void init() {
+    	static void init(bool share = true) {
             if (qApp == nullptr) {
               int argc(0);
               // char *argv[1] = {(char *)"Test"};
               // app = std::make_unique<EnkiApplication>(argc, argv);
-              app = std::make_unique<EnkiApplication>(argc, nullptr);
+              app = std::make_unique<EnkiApplication>(argc, nullptr, share);
               // app->setQuitOnLastWindowClosed(false);
               QEventLoop loop;
 			  QTimer::singleShot(1000, &loop,SLOT(quit()));
@@ -357,8 +357,10 @@ namespace Enki
   			}
     	}
     private:
-    	static int & setup(int &argc) {
-    		QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    	static int & setup(int &argc, bool share) {
+    		if (share) {
+    			QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    		}
     		return argc;
     	}
     	static inline std::unique_ptr<EnkiApplication> app = nullptr;

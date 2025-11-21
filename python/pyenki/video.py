@@ -1,11 +1,14 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
 import moviepy as mpy  # type: ignore[import-untyped]
-import numpy.typing
 
 import pyenki
+from pyenki.viewer import render
+
+if TYPE_CHECKING:
+    import numpy.typing
 
 
 def make_video(world: pyenki.World,
@@ -20,7 +23,7 @@ def make_video(world: pyenki.World,
     :param      time_step:  The time step of the simulation
     :param      duration:   The duration of the simulation
     :param      factor:     The real-time factor. If larger than one, it will speed up the video.
-    :param      kwargs:     The keywords arguments passed to :py:meth:`pyenki.World.render`
+    :param      kwargs:     The keywords arguments passed to :py:func:`pyenki.viewer.render`
 
     :returns:   The video clip.
     """
@@ -37,6 +40,6 @@ def make_video(world: pyenki.World,
             world.step(dt)
             time += dt
 
-        return world.render(**kwargs)
+        return render(world, **kwargs)
 
     return mpy.VideoClip(make_frame, duration=duration / factor)

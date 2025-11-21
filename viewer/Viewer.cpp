@@ -1163,7 +1163,8 @@ namespace Enki
 		const double fragmentX = double(cursorPosition.x() - width()/2) / (width()/2);
 		const double fragmentY = double(height() - cursorPosition.y() - height()/2) / (height()/2);
 		float depth;
-		glReadPixels( cursorPosition.x(), height() - cursorPosition.y(), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth );
+		const float r = devicePixelRatio();
+		glReadPixels( cursorPosition.x() * r, r * (height() - cursorPosition.y()), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth );
 
 		QVector4D input(fragmentX, fragmentY, 2*depth - 1, 1);
 		input = transformMatrix*input;

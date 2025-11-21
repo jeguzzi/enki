@@ -1,6 +1,7 @@
 import pyenki
+import pyenki.viewer
 
-pyenki.init_ui()
+pyenki.viewer.init()
 world = pyenki.World(radius=100)
 epuck = pyenki.EPuck()
 epuck.set_led_ring(True)
@@ -13,8 +14,13 @@ world.add_object(thymio)
 marxbot = pyenki.Marxbot()
 marxbot.position = (0, 20)
 world.add_object(marxbot)
-world.save_image("world.png",
-                 camera_position=(30, -10),
-                 camera_altitude=20,
-                 camera_yaw=2.6,
-                 camera_pitch=-0.487)
+pyenki.viewer.save_image(world,
+                         "world.png",
+                         camera_position=(30, -10),
+                         camera_altitude=20,
+                         camera_yaw=2.6,
+                         camera_pitch=-0.487,
+                         width=1280,
+                         height=720)
+pyenki.viewer.cleanup()
+print('saved world.png')

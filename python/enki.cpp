@@ -37,6 +37,7 @@
 #include <Python.h>
 
 #include <pybind11/functional.h>
+#include <pybind11/native_enum.h>
 #include <pybind11/numpy.h>
 #include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
@@ -51,64 +52,15 @@
 #include "../enki/robots/e-puck/EPuck.h"
 #include "../enki/robots/marxbot/Marxbot.h"
 #include "../enki/robots/thymio2/Thymio2.h"
-#ifdef QT
-#include "../viewer/Viewer.h"
-#include <QImage>
-#endif // QT
+#include "./enki.h"
 
 using namespace Enki;
 namespace py = pybind11;
 
-class PyWorld;
-
-using Termination = std::function<bool(const PyWorld &)>;
-using Callback = std::function<void(PyWorld &)>;
-
+#if CONVERT_COLOR
 namespace pybind11 {
 namespace detail {
-template <> struct type_caster<Vector> {
 
-  PYBIND11_TYPE_CASTER(Vector, const_name("Vector"));
-
-  static handle cast(const Vector &src, return_value_policy policy,
-                     handle parent) {
-    py::array_t<double> ts(2);
-    py::buffer_info buf = ts.request();
-#if 1
-    double *ds = static_cast<double *>(buf.ptr);
-    ds[0] = src.x;
-    ds[1] = src.y;
-#else
-    buf.ptr = (void *)(&(src.x));
-#endif
-    return type_caster<py::array_t<double>>::cast(&ts, policy, parent);
-  }
-
-  bool load(handle src, bool convert) {
-
-    if (isinstance<sequence>(src)) {
-      const auto seq = reinterpret_borrow<sequence>(src);
-      if (seq.size() != 2) {
-        return false;
-      }
-      value.x = seq[0].cast<double>();
-      value.y = seq[1].cast<double>();
-      return true;
-    }
-    if (isinstance<array>(src)) {
-      auto args = reinterpret_borrow<py::array_t<double>>(src);
-      // tuple args(src, true);
-      if (args.size() != 2)
-        return false;
-      value.x = args.data()[0];
-      value.y = args.data()[1];
-      return true;
-    }
-    return false;
-  }
-};
-
-#if CONVERT_COLOR
 template <> struct type_caster<Color> {
 
   PYBIND11_TYPE_CASTER(Color, const_name("Color"));
@@ -135,10 +87,9 @@ template <> struct type_caster<Color> {
     return true;
   }
 };
-#endif
-
 } // namespace detail
 } // namespace pybind11
+#endif
 
 // wrappers for world
 
@@ -157,83 +108,69 @@ void setColorComponents(Color &color, py::tuple values) {
   color.components[3] = values[3].cast<double>();
 }
 
-#ifdef QT
-
-static World::GroundTexture loadTexture(const std::string &fileName) {
-  /*World::GroundTexture t;
-
-  std::ifstream ifs(ppmFileName.c_str(), std::ifstream::in);
-  if (!ifs.good())
-          throw std::runtime_error("Cannot open file " + ppmFileName);
-  std::string magic;
-  ifs >> magic;
-  if (magic != "P3")
-          throw std::runtime_error("Not a PPM file: " + ppmFileName);
-  ifs >> t.width;
-  ifs >> t.height;
-  int valuesScale;
-  ifs >> valuesScale;
-  t.data.reserve(t.width*t.height);
-  for (int y = 0; y < t.height; ++y)
-  {
-          for (int x = 0; x < t.width; ++x)
-          {
-                  unsigned r, g, b;
-                  ifs >> r >> g >> b;
-                  if (ifs.eof())
-                          throw std::runtime_error("Early end-of-file: " +
-  ppmFileName); r = (r * 255) / valuesScale; g = (g * 255) / valuesScale; b = (b
-  * 255) / valuesScale; t.data.push_back(r|(g<<8)|(b<<16));
-          }
-  }
-
-  return t;*/
-  QImage image(fileName.c_str());
-  QImage gt(image.convertToFormat(QImage::Format_ARGB32));
-
-#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
-  return World::GroundTexture(gt.width(), gt.height(),
-                              (const uint32_t *)gt.constBits());
-#else
-  return World::GroundTexture(gt.width(), gt.height(), (uint32_t *)gt.bits());
-#endif
-}
-#endif // QT
-
 // wrappers for robots
 
-#define OVERRIDE_CONTROL_STEP(cname, dname)                                    \
+#define OVERRIDE_PO(cname, dname)                                              \
 public:                                                                        \
   void controlStep(double dt) override {                                       \
-    control_step(dt);                                                          \
     cname::controlStep(dt);                                                    \
+    PYBIND11_OVERRIDE_IMPL(PYBIND11_TYPE(void), PYBIND11_TYPE(dname),          \
+                           "control_step", dt);                                \
   }                                                                            \
                                                                                \
-private:                                                                       \
-  void control_step(double dt) {                                               \
+  void mousePressEvent(unsigned button, double pointX, double pointY,          \
+                       double pointZ) override {                               \
+    bool state = true;                                                         \
+    cname::mousePressEvent(button, pointX, pointY, pointZ);                    \
     PYBIND11_OVERRIDE_IMPL(PYBIND11_TYPE(void), PYBIND11_TYPE(dname),          \
-                           "controlStep", dt);                                 \
+                           "on_touch", state, button, pointX, pointY, pointZ); \
+  }                                                                            \
+                                                                               \
+  void mouseReleaseEvent(unsigned button) override {                           \
+    double pointX, pointY, pointZ = 0;                                         \
+    bool state = false;                                                        \
+    cname::mouseReleaseEvent(button);                                          \
+    PYBIND11_OVERRIDE_IMPL(PYBIND11_TYPE(void), PYBIND11_TYPE(dname),          \
+                           "on_touch", state, button, pointX, pointY, pointZ); \
   }
 
 struct PyPhysicalObject : public PhysicalObject,
                           public py::trampoline_self_life_support {
   using PhysicalObject::PhysicalObject;
-  OVERRIDE_CONTROL_STEP(PhysicalObject, PyPhysicalObject)
+  OVERRIDE_PO(PhysicalObject, PyPhysicalObject)
 };
 
 struct PyMarxbot : public Marxbot, public py::trampoline_self_life_support {
   using Marxbot::Marxbot;
-  OVERRIDE_CONTROL_STEP(Marxbot, PyMarxbot)
+  OVERRIDE_PO(Marxbot, PyMarxbot)
 };
 
 struct PyEPuck : public EPuck, public py::trampoline_self_life_support {
   using EPuck::EPuck;
-  OVERRIDE_CONTROL_STEP(EPuck, PyEPuck)
+  OVERRIDE_PO(EPuck, PyEPuck)
 };
 
 struct PyThymio2 : public Thymio2, public py::trampoline_self_life_support {
   using Thymio2::Thymio2;
-  OVERRIDE_CONTROL_STEP(Thymio2, PyThymio2)
+
+  py::array_t<double> get_led_color_array() const {
+    const double *data = static_cast<const double *>(ledColor[0].components);
+    const std::array<ssize_t, 2> shape{static_cast<ssize_t>(Thymio2::LED_COUNT),
+                                       4};
+    py::array_t<double> ts(shape, data);
+    py::buffer_info buf = ts.request();
+    py::detail::array_proxy(ts.ptr())->flags &=
+        ~py::detail::npy_api::NPY_ARRAY_WRITEABLE_;
+    return ts;
+  }
+
+  void hasTouchedButton(Button button) override {
+    Thymio2::hasTouchedButton(button);
+    PYBIND11_OVERRIDE_IMPL(PYBIND11_TYPE(void), PYBIND11_TYPE(PyThymio2),
+                           "on_button_touch", button);
+  }
+
+  OVERRIDE_PO(Thymio2, PyThymio2)
 };
 
 void set_thymio_rgb_led(Thymio2 &thymio, Thymio2::LedIndex index, double red,
@@ -268,312 +205,24 @@ void set_thymio_leds_i(Thymio2 &thymio, Thymio2::LedIndex first_index,
   set_thymio_leds(thymio, first_index, number, index, value / 31.0);
 }
 
-// void run(World &world, unsigned steps) {
-//   for (unsigned i = 0; i < steps; ++i)
-//     world.step(1. / 30., 3);
-// }
-
-class WorldWithTexturedGround : public World {
-  using World::World;
-};
-
-struct PyWorld : public World {
-
-  std::optional<py::object> numpy_rng;
-
-  PyWorld(double width, double height, const Color &wallsColor = Color::gray,
-          unsigned long seed = 0,
-          const GroundTexture &groundTexture = GroundTexture())
-      : World(width, height, wallsColor, groundTexture, seed) {
-    takeObjectOwnership = false;
-  }
-
-  PyWorld(double radius, const Color &wallsColor = Color::gray,
-          unsigned long seed = 0,
-          const GroundTexture &groundTexture = GroundTexture())
-      : World(radius, wallsColor, groundTexture, seed) {
-    takeObjectOwnership = false;
-  }
-
-  PyWorld(unsigned long seed = 0) : World(seed) { takeObjectOwnership = false; }
-
-  void setRandomSeed(unsigned long seed) {
-    if (seed != getRandomSeed()) {
-      py::module_ np = py::module_::import("numpy");
-      numpy_rng = np.attr("random").attr("default_rng")(seed);
-    }
-    World::setRandomSeed(seed);
-  }
-
-  void setRandom(py::object value) { numpy_rng = value; }
-
-  py::object getRandom() {
-    if (!numpy_rng) {
-      py::module_ np = py::module_::import("numpy");
-      numpy_rng = np.attr("random").attr("default_rng")(getRandomSeed());
-    }
-    return *numpy_rng;
-  }
-
-  void copyRandom(PyWorld &world) {
-    World::copyRandom(static_cast<World &>(world));
-    setRandom(world.getRandom());
-  }
-
-  void run(unsigned steps = 1, float time_step = 1. / 30.,
-           unsigned physics_oversampling = 3,
-           const std::optional<Termination> &termination = nullptr,
-           const std::optional<Callback> &cb = nullptr) {
-    while (true) {
-      step(time_step, physics_oversampling);
-      if (cb) {
-        (*cb)(*this);
-      }
-      if (std::isfinite(steps)) {
-        steps--;
-      }
-      if (steps == 0 || (termination && (*termination)(*this))) {
-        break;
-      }
-    }
-  }
-};
-
-#ifdef QT
-
-py::array get_rbg_array(const QImage &image) {
-  const QImage fb = image.convertToFormat(QImage::Format_RGB888);
-  const unsigned char *vs = fb.bits();
-  const std::array<ssize_t, 3> shape{fb.height(), fb.width(), 3};
-  return py::array(shape, vs);
-}
-
-struct PythonViewer : public ViewerWidget {
-
-  PythonViewer(PyWorld *world, double fps = 30, bool updateWorld = true,
-               double worldTimeStep = 0, double realTimeFactor = 1,
-               bool helpers = true, bool camReset = false,
-               Vector camPos = Vector(0.0, 0.0), double camAltitude = 0.0,
-               double camYaw = 0.0, double camPitch = 0.0, bool ortho = false,
-               double wallsHeight_ = 10.0)
-      : ViewerWidget(world, nullptr, (fps > 0) ? int(1000 / fps) : 0,
-                     updateWorld, worldTimeStep, realTimeFactor, helpers) {
-    cameraIsOrtho = ortho;
-    if (camReset) {
-      resetCamera();
-    } else {
-      camera.pos.setX(camPos.x);
-      camera.pos.setY(camPos.y);
-      camera.altitude = camAltitude;
-      camera.yaw = camYaw;
-      camera.userYaw = camYaw;
-      camera.pitch = camPitch;
-    }
-    wallsHeight = wallsHeight_;
-    setWindowTitle("PyEnki Viewer");
-  }
-
-  void timerEvent(QTimerEvent *event) {
-    py::gil_scoped_acquire acquire;
-    ViewerWidget::timerEvent(event);
-  }
-
-  py::array getImage() { return get_rbg_array(grabFramebuffer()); }
-
-  Vector getCameraPosition() const {
-    return Vector(camera.pos.x(), camera.pos.y());
-  }
-
-  void setCameraPosition(Vector value) {
-    camera.pos.setX(value.x);
-    camera.pos.setY(value.y);
-  }
-
-  // void setWallsHeight(double value) { wallsHeight = value; }
-
-  double getWallsHeight() const { return wallsHeight; }
-
-  void moveCamera(const Vector &targetPosition, double targetAltitude,
-                  double targetDistance, std::optional<double> yaw,
-                  std::optional<double> pitch) {
-    if (yaw) {
-      setCameraYaw(*yaw);
-    }
-    if (cameraIsOrtho) {
-      setCameraPosition(targetPosition);
-      camera.altitude = targetAltitude + targetDistance;
-    } else {
-
-      if (pitch) {
-        camera.pitch = *pitch;
-      }
-      const double x = cos(camera.yaw) * cos(camera.pitch);
-      const double y = sin(camera.yaw) * cos(camera.pitch);
-      camera.pos.rx() = targetPosition.x - targetDistance * x;
-      camera.pos.ry() = targetPosition.y - targetDistance * y;
-      camera.altitude = targetAltitude - targetDistance * sin(camera.pitch);
-    }
-  }
-
-  void pointCamera(const Vector &targetPosition, double targetAltitude,
-                   std::optional<Vector> position,
-                   std::optional<double> altitude) {
-    if (cameraIsOrtho) {
-      return;
-    }
-    if (position) {
-      setCameraPosition(*position);
-    }
-    if (altitude) {
-      camera.altitude = *altitude;
-    }
-    const double x = targetPosition.x - camera.pos.x();
-    const double y = targetPosition.y - camera.pos.y();
-    const double z = targetAltitude - camera.altitude;
-    setCameraYaw(atan2(y, x));
-    camera.pitch = atan2(z, sqrt(x * x + y * y));
-  }
-
-  double getCameraAltitude() const { return camera.altitude; }
-
-  void setCameraAltitude(double value) { camera.altitude = value; }
-
-  double getCameraYaw() const { return camera.yaw; }
-
-  void setCameraYaw(double value) {
-    camera.yaw = value;
-    camera.userYaw = value;
-  }
-
-  double getCameraPitch() const { return camera.pitch; }
-
-  void setCameraPitch(double value) { camera.pitch = value; }
-
-  py::tuple getCameraPose() const {
-    return py::make_tuple(getCameraPosition(), getCameraAltitude(),
-                          getCameraYaw(), getCameraPitch());
-  }
-
-  void setCameraPose(const py::tuple &value) {
-    setCameraPosition(value[0].cast<Vector>());
-    setCameraAltitude(value[1].cast<double>());
-    setCameraYaw(value[2].cast<double>());
-    setCameraPitch(value[3].cast<double>());
-  }
-
-  py::object asWidget() const {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    const auto cls =
-        py::module_::import("PyQt6.QtOpenGLWidgets").attr("QOpenGLWidget");
-    const auto wrapinstance =
-        py::module_::import("PyQt6.sip").attr("wrapinstance");
-#else
-    const auto cls =
-        py::module_::import("PyQt6.QtOpenGLWidgets").attr("QOpenGLWidget");
-    const auto wrapinstance =
-        py::module_::import("PyQt6.sip").attr("wrapinstance");
-#endif
-    return wrapinstance((long)(this), cls);
-  }
-
-  // py::capsule getCapsule() { return py::capsule(this); }
-};
-
-#endif // QT
-
-void runInViewer(PyWorld *world, double fps = 30, double worldTimeStep = 0,
-                 double realTimeFactor = 1, bool helpers = true,
-                 bool camReset = false, Vector camPos = Vector(0.0, 0.0),
-                 double camAltitude = 0.0, double camYaw = 0.0,
-                 double camPitch = 0.0, bool ortho = false,
-                 double wallsHeight = 10.0, double duration = -1) {
-#ifdef QT
-  EnkiApplication::init();
-  PythonViewer viewer(world, fps, true, worldTimeStep, realTimeFactor, helpers,
-                      camReset, camPos, camAltitude, camYaw, camPitch, ortho,
-                      wallsHeight);
-  viewer.setWindowTitle("PyEnki Viewer");
-  viewer.show();
-  EnkiApplication::run(duration / realTimeFactor);
-#else
-  throw std::logic_error(
-      "Method not available: pyenki built without Qt support!");
-#endif // QT
-}
-
-py::array render(PyWorld &world, bool cameraReset = false,
-                 Vector camPos = Vector(0, 0), double camAltitude = 0,
-                 double camYaw = 0, double camPitch = 0,
-                 bool camIsOrtho = false, double wallsHeight = 10,
-                 double width = 640, double height = 360) {
-#ifdef QT
-  EnkiApplication::init();
-  PythonViewer viewer(&world, 0, false, 0, 1, false, cameraReset, camPos,
-                      camAltitude, camYaw, camPitch, camIsOrtho, wallsHeight);
-  viewer.cameraIsOrtho = camIsOrtho;
-  viewer.setFixedWidth(width);
-  viewer.setFixedHeight(height);
-  return viewer.getImage();
-#else
-  throw std::logic_error(
-      "Method not available: pyenki built without Qt support!");
-#endif // QT
-}
-
-void save_image(PyWorld &world, const std::string &path,
-                bool cameraReset = false, Vector camPos = Vector(0, 0),
-                double camAltitude = 0, double camYaw = 0, double camPitch = 0,
-                bool camIsOrtho = false, double wallsHeight = 10,
-                double width = 640, double height = 360) {
-#ifdef QT
-  EnkiApplication::init();
-  PythonViewer viewer(&world, 0, false, 0, 1, false, cameraReset, camPos,
-                      camAltitude, camYaw, camPitch, camIsOrtho, wallsHeight);
-  viewer.cameraIsOrtho = camIsOrtho;
-  viewer.setFixedWidth(width);
-  viewer.setFixedHeight(height);
-  return viewer.saveImage(path);
-#else
-  throw std::logic_error(
-      "Method not available: pyenki built without Qt support!");
-#endif // QT
-}
-
 Polygon make_polygon(const std::vector<Vector> &ps) {
   Polygon p;
-  p.assign(ps.begin(), ps.end());
+  bool orient = (ps[1] - ps[0]).cross(ps[2] - ps[1]) > 0;
+  if (orient) {
+    p.assign(ps.begin(), ps.end());
+  } else {
+    p.assign(ps.rbegin(), ps.rend());
+  }
   return p;
 }
 
-Texture make_texture(const Color &color) { return Texture(1, color); }
-
-Textures make_textures(const std::vector<Color> &colors) {
-  Textures textures;
-  for (const auto &color : colors) {
-    textures.push_back(make_texture(color));
-  }
-  return textures;
-}
-
-PhysicalObject::Part _part(const py::tuple &obj) {
-  double height = obj[1].cast<double>();
-  const auto ps = obj[0].cast<std::vector<Vector>>();
-  if (py::len(obj) > 2) {
-    auto colors = obj[2].cast<std::vector<Color>>();
-    return PhysicalObject::Part(make_polygon(ps), height,
-                                make_textures(colors));
-  }
-  return PhysicalObject::Part(make_polygon(ps), height);
-}
-
-// PYBIND11_MAKE_OPAQUE(Texture)
-// PYBIND11_MAKE_OPAQUE(Textures)
+PYBIND11_MAKE_OPAQUE(PhysicalObject::Hull)
 
 PYBIND11_MODULE(pyenki, m) {
 
 #if !(CONVERT_COLOR)
 
-  py::classh<Color>(m, "Color", R"doc(
+  py::classh<Color>(m, "Color", py::buffer_protocol(), R"doc(
 Args:
     r (float): Red channel, in [0, 1], optional (default 0.0)
     g (float): Green channel, in [0, 1], optional (default 0.0)
@@ -583,12 +232,29 @@ Args:
 An RGBA color with values between 0.0 and 1.0.
 
 Attributes:
-    black (Color): Black color (readonly)
-    gray (Color) : Gray color (readonly)
-    white (Color) : White color (readonly)
-    red (Color) : Red color (readonly)
-    green (Color) : Green color (readonly)
-    blue (Color) : Blue color (readonly)
+    black (Color): readonly
+    gray (Color) : readonly
+    white (Color) : readonly
+    red (Color) : readonly
+    green (Color) : readonly
+    blue (Color) : readonly
+    lightgray (Color) : readonly
+    darkgray (Color) : readonly
+    lightred (Color) : readonly
+    darkred (Color) : readonly
+    lightgreen (Color) : readonly
+    darkgreen (Color) : readonly
+    lightblue (Color) : readonly
+    darkblue (Color) : readonly
+    lightyellow (Color) : readonly
+    yellow (Color) : readonly
+    darkyellow (Color) : readonly
+    orange (Color) : readonly
+    violet (Color) : readonly
+    purple (Color) : readonly
+    pink (Color) : readonly
+    cyan (Color) : readonly
+
     r (float): Red channel, in [0, 1]
     g (float): Green channel, in [0, 1]
     b (float): Blue channel, in [0, 1]
@@ -612,6 +278,11 @@ Attributes:
       .def(py::self - py::self)
       .def(py::self == py::self)
       .def(py::self != py::self)
+      .def_buffer([](Color &c) -> py::buffer_info {
+        return py::buffer_info(c.components, sizeof(double),
+                               py::format_descriptor<double>::format(), 1, {4},
+                               {sizeof(double)});
+      })
       // .def("__repr__", &Color::toString)
       .def("__repr__",
            [](const Color &color) {
@@ -652,6 +323,39 @@ Returns:
           "green", [](py::object /* self */) { return Color::green; })
       .def_property_readonly_static(
           "blue", [](py::object /* self */) { return Color::blue; })
+      .def_property_readonly_static(
+          "lightgray", [](py::object /* self */) { return Color::lightGray; })
+      .def_property_readonly_static(
+          "darkgray", [](py::object /* self */) { return Color::darkGray; })
+      .def_property_readonly_static(
+          "lightred", [](py::object /* self */) { return Color::lightRed; })
+      .def_property_readonly_static(
+          "darkred", [](py::object /* self */) { return Color::darkRed; })
+      .def_property_readonly_static(
+          "lightgreen", [](py::object /* self */) { return Color::lightGreen; })
+      .def_property_readonly_static(
+          "darkgreen", [](py::object /* self */) { return Color::darkGreen; })
+      .def_property_readonly_static(
+          "lightblue", [](py::object /* self */) { return Color::lightBlue; })
+      .def_property_readonly_static(
+          "darkblue", [](py::object /* self */) { return Color::darkBlue; })
+      .def_property_readonly_static(
+          "lightyellow",
+          [](py::object /* self */) { return Color::lightYellow; })
+      .def_property_readonly_static(
+          "yellow", [](py::object /* self */) { return Color::yellow; })
+      .def_property_readonly_static(
+          "darkyellow", [](py::object /* self */) { return Color::darkYellow; })
+      .def_property_readonly_static(
+          "orange", [](py::object /* self */) { return Color::orange; })
+      .def_property_readonly_static(
+          "violet", [](py::object /* self */) { return Color::violet; })
+      .def_property_readonly_static(
+          "purple", [](py::object /* self */) { return Color::purple; })
+      .def_property_readonly_static(
+          "pink", [](py::object /* self */) { return Color::pink; })
+      .def_property_readonly_static(
+          "cyan", [](py::object /* self */) { return Color::cyan; })
       .def_property("r", &Color::r, &Color::setR)
       .def_property("g", &Color::g, &Color::setG)
       .def_property("b", &Color::b, &Color::setB)
@@ -662,10 +366,11 @@ Returns:
 
   // py::bind_vector<Texture>(m, "Texture");
   // py::bind_vector<Textures>(m, "Textures");
+  py::bind_vector<PhysicalObject::Hull>(m, "Hull");
 
   // Physical objects
 
-  py::classh<PhysicalObject, PyPhysicalObject>(m, "PhysicalObject", R"doc(
+  py::classh<PhysicalObject, PyPhysicalObject> po(m, "PhysicalObject", R"doc(
 The superclass of objects that can be simulated.
 
 Attributes:
@@ -677,6 +382,7 @@ Attributes:
     radius (float): The radius of the object's enclosing circle in centimeters (readonly)
     height (float): The object height in centimeters (readonly)
     is_cylindric (bool): True if the object is cylindrical shaped (readonly)
+    parts (list[PhysicalObject.Part]): the parts the object is composed of.
     mass (float): The object mass in kilograms. If below zero, the object is static (readonly)
     moment_of_inertia (float): The object moment of inertial (readonly)
 
@@ -697,8 +403,170 @@ Attributes:
     angular_speed (float): The angular speed in the world frame in radians per second
     collision_callback (Callable[[PhysicalObject, PhysicalObject], None] | None): An optional function called when the object perform a control step. 
     control_step_callback (Callable[[PhysicalObject, float], None] | None): An optional function called when the object collides. 
+    touch_callback (Callable[[PhysicalObject], None] | None): An optional function called when touch events happen.
+)doc");
+
+  py::classh<PhysicalObject::Part>(po, "Part", py::dynamic_attr(), R"doc(
+Right prism that can be composed to define the geometry of a :py:class:`pyenki.PhysicalObject`.
+
+Attributes:
+    shape (Sequence[Vector]): The convex 2D polygon (positively oriented) at the base of the prism [cm].
+    height (float): The height [cm].
+    textures (Sequence[Sequence[Color]]): A list of textures: each texture is a list of colors for one vertical face of the prism. 
+                                          Must be either empty or have contains at least one color for each face.
+)doc")
+      .def(py::init<double, double, double>(), py::arg("l1"), py::arg("l2"),
+           py::arg("height"), R"doc(
+Creates a part with a rectangular base.
+
+Arguments:
+  l1 (float): The x dimension [cm]
+  l2 (float): The y dimension [cm]
+  height (float): The height [cm]
+)doc")
+      .def(py::init([](const std::vector<Vector> &shape, double height,
+                       const Textures &textures) {
+             if (textures.size()) {
+               return std::make_unique<PhysicalObject::Part>(
+                   make_polygon(shape), height, textures);
+             } else {
+               return std::make_unique<PhysicalObject::Part>(
+                   make_polygon(shape), height);
+             }
+           }),
+           py::arg("shape"), py::arg("height"),
+           py::arg("textures") = Textures{}, R"doc(
+Creates a part with a polygonal base.
+
+Arguments:
+  shape (Sequence[Vector]): The convex 2D polygon (positively oriented) at the base of the prism [cm].
+  height (float): The height [cm]
+  textures (Sequence[Sequence[Color]]): A sequence of textures: each texture is a sequence of colors for one vertical face of the prism. 
+                                        Must be either empty or have contains at least one color for each face.
+)doc")
+      .def_property(
+          "shape",
+          [](const PhysicalObject::Part &part) {
+            const std::vector<Vector> &shape = part.getShape();
+            return shape;
+          },
+          nullptr)
+      .def_property("height", &PhysicalObject::Part::getHeight, nullptr)
+      .def_property("textures", &PhysicalObject::Part::getTextures, nullptr)
+      .def("__hash__",
+           [](const PhysicalObject::Part &part) {
+             const std::vector<Vector> &shape = part.getShape();
+             py::module_ np = py::module_::import("numpy");
+             const auto shape_bytes =
+                 np.attr("asarray")(py::cast(shape)).attr("tobytes")();
+             const auto ts = part.getTextures();
+             if (ts.size()) {
+               const auto textures_bytes =
+                   np.attr("concat")(py::cast(ts)).attr("tobytes")();
+               const auto t = py::make_tuple(part.getHeight(), shape_bytes,
+                                             textures_bytes);
+               return py::hash(t);
+
+             } else {
+               const auto t = py::make_tuple(part.getHeight(), shape_bytes);
+               return py::hash(t);
+             }
+           })
+      .def(py::self == py::self)
+      .def(py::self != py::self)
+      .def("contains", &PhysicalObject::Part::contains, py::arg("point"),
+           py::arg("tolerance") = 0);
+
+  po.def(py::init([](const std::vector<PhysicalObject::Part> &parts,
+                     double mass, const Color &color) {
+           auto obj = std::make_shared<PhysicalObject>();
+           PhysicalObject::Hull hull;
+           hull.assign(parts.begin(), parts.end());
+           obj->setCustomHull(hull, mass);
+           obj->setColor(color);
+           return obj;
+         }),
+         py::arg("parts"), py::arg("mass"), py::arg("color") = Color::black,
+         R"doc(
+Creates an object composed of parts.
+
+Arguments:
+  parts (PhysicalObject.Part): The parts.
+  mass (float): The mass in kg.
+  color (Color): The color.
+)doc")
+      .def(py::init([](double radius, double height, double mass,
+                       const Color &color = Color()) {
+             auto obj = std::make_shared<PyPhysicalObject>();
+             obj->setCylindric(radius, height, mass);
+             obj->setColor(color);
+             return obj;
+           }),
+           py::arg("radius"), py::arg("height"), py::arg("mass"),
+           py::arg("color") = Color(), R"doc(
+Creates a cylinder.
+
+Arguments:
+  radius (float): The radius in cm.
+  height (float): The height in cm.
+  mass (float): The mass in kg.
+  color (Color): The color.
+)doc")
+      .def(py::init([](double l1, double l2, double height, double mass,
+                       const Color &color = Color()) {
+             auto obj = std::make_shared<PhysicalObject>();
+             obj->setRectangular(l1, l2, height, mass);
+             obj->setColor(color);
+             return obj;
+           }),
+           py::arg("l1"), py::arg("l2"), py::arg("height"), py::arg("mass"),
+           py::arg("color") = Color(), R"doc(
+Creates a rectangular prism.
+
+Arguments:
+  l1 (float): the side length in cm (x).
+  l2 (float): the side length in cm (y).
+  height (float): The height in cm.
+  mass (float): The mass in kg.
+  color (Color): The color.
+)doc")
+      .def(py::init([](const std::vector<Vector> &shape, double height,
+                       double mass, const Color &color = Color(),
+                       const Textures &textures = {}) {
+             auto c = std::make_shared<PhysicalObject>();
+             if (textures.size()) {
+               PhysicalObject::Part part(make_polygon(shape), height, textures);
+               c->setCustomHull(PhysicalObject::Hull(part), mass);
+             } else {
+               c->setCustomHull(PhysicalObject::Hull(PhysicalObject::Part(
+                                    make_polygon(shape), height)),
+                                mass);
+             }
+             c->setColor(color);
+             return c;
+           }),
+           py::arg("shape"), py::arg("height"), py::arg("mass"),
+           py::arg("color") = Color(), py::arg("textures") = Textures{},
+           R"doc(
+Creates an vertical prism with a convex polygonal base.
+
+Arguments:
+  shape (Sequence[Vector]): The vertices polygonal base in cm. Must be convex.
+  height (float): The height in cm.
+  mass (float): The mass in kg.
+  color (Color): The color.
+  textures (Sequence[Color]): if not empty, defines the colors of each face.
 )doc")
       .def_readonly("uid", &PhysicalObject::uid)
+      // .def_property(
+      //     "parts",
+      //     // &PhysicalObject::getHull,
+      //     [](const PhysicalObject &obj) {
+      //       const std::vector<PhysicalObject::Part> &ps = obj.getHull();
+      //       return ps;
+      //     },
+      //     nullptr)
+      .def_property("parts", &PhysicalObject::getHull, nullptr)
       .def_property("world", &PhysicalObject::getWorld, nullptr,
                     py::return_value_policy::reference)
       .def_property(
@@ -722,8 +590,10 @@ Attributes:
                      &PhysicalObject::viscousFrictionCoefficient)
       .def_readwrite("viscous_moment_friction_coefficient",
                      &PhysicalObject::viscousMomentFrictionCoefficient)
-      .def_readwrite("position", &PhysicalObject::pos)
-      .def_readwrite("angle", &PhysicalObject::angle)
+      .def_property("position", &PhysicalObject::getPosition,
+                    &PhysicalObject::setPosition)
+      .def_property("angle", &PhysicalObject::getAngle,
+                    &PhysicalObject::setAngle)
       .def_readwrite("velocity", &PhysicalObject::speed)
       .def_readwrite("angular_speed", &PhysicalObject::angSpeed)
       .def_property("collision_callback", &PhysicalObject::getCollisionCallback,
@@ -732,6 +602,8 @@ Attributes:
       .def_property("control_step_callback",
                     &PhysicalObject::getControlCallback,
                     &PhysicalObject::setControlCallback, py::keep_alive<1, 2>())
+      .def_property("touch_callback", &PhysicalObject::getTouchCallback,
+                    &PhysicalObject::setTouchCallback, py::keep_alive<1, 2>())
       .def(
           "control_step",
           [](PyPhysicalObject &o, double dt) { o.controlStep(dt); },
@@ -746,116 +618,46 @@ Arguments:
   time_step (float): The time step of the simulation.
 
 )doc")
+      .def(
+          "on_touch",
+          [](PyPhysicalObject &o, bool state, unsigned button, double x,
+             double y, double z) { o.touchEvent(state, button, x, y, z); },
+          py::arg("state"), py::arg("button"), py::arg("x"), py::arg("y"),
+          py::arg("z"), R"doc(
+Called after a touch event.
+
+Can be overridden by sub-classes to react to touch events. 
+Alternatively, users can assign a callback as :py:attr:`touch_callback`.
+
+Arguments:
+  state (bool): True for press, False for release.
+  button (int): mouse button index: 0 (left), 1 (right) or 2 (middle).
+  x (float): cursor x-coordinate (cm).
+  y (float): cursor y-coordinate (cm).
+  z (float): cursor z-coordinate (cm). 
+)doc")
+      .def(
+          "touch",
+          [](PyPhysicalObject &o, bool state, unsigned button, double x,
+             double y, double z) { o.touchEvent(state, button, x, y, z); },
+          py::arg("state"), py::arg("button"), py::arg("x"), py::arg("y"),
+          py::arg("z"), R"doc(
+Trigger a touch event.
+
+Arguments:
+  state (bool): True for press, False for release.
+  button (int): mouse button index: 0 (left), 1 (right) or 2 (middle).
+  x (float): cursor x-coordinate (cm).
+  y (float): cursor y-coordinate (cm).
+  z (float): cursor z-coordinate (cm). 
+)doc")
       // TODO(OLD): warning setting the "color" property at run time using the
       // viewer from the non-gui thread will lead to a crash because it will do
       // an OpenGL call from that thread
       .def_property("color", &PhysicalObject::getColor,
-                    &PhysicalObject::setColor);
-
-  m.def(
-      "CircularObject",
-      [](double radius, double height, double mass,
-         const Color &color = Color()) {
-        auto c = std::make_unique<PhysicalObject>();
-        c->setCylindric(radius, height, mass);
-        c->setColor(color);
-        return c;
-      },
-      py::arg("radius"), py::arg("height"), py::arg("mass"),
-      py::arg("color") = Color(), R"doc(
-Creates a cylinder.
-
-Arguments:
-  radius (float): The radius in cm.
-  height (float): The height in cm.
-  mass (float): The mass in kg.
-  color (Color): The color.
-Returns
-  PhysicalObject: A cylinder
-)doc");
-
-  m.def(
-      "RectangularObject",
-      [](double l1, double l2, double height, double mass,
-         const Color &color = Color()) {
-        auto c = std::make_unique<PhysicalObject>();
-        c->setRectangular(l1, l2, height, mass);
-        c->setColor(color);
-        return c;
-      },
-      py::arg("l1"), py::arg("l2"), py::arg("height"), py::arg("mass"),
-      py::arg("color") = Color(), R"doc(
-Creates a rectangular prism.
-
-Arguments:
-  l1 (float): the side length in cm (x).
-  l2 (float): the side length in cm (y).
-  height (float): The height in cm.
-  mass (float): The mass in kg.
-  color (Color): The color.
-Returns
-  PhysicalObject: A rectangular prism.
-)doc");
-
-  m.def(
-      "CompositeObject",
-      [](py::list &parts, double mass, const Color &color = Color()) {
-        auto c = std::make_unique<PhysicalObject>();
-        PhysicalObject::Hull hull;
-        for (const auto &part : parts) {
-          auto p = part.cast<py::tuple>();
-          hull += _part(p);
-        }
-        c->setCustomHull(hull, mass);
-        c->setColor(color);
-        return c;
-      },
-      py::arg("parts"), py::arg("mass"), py::arg("color") = Color(), R"doc(
-Creates an object composed of parts.
-
-Arguments:
-  parts (Sequence[:py:type:`pyenki.Part`]): A sequence of parts.
-  mass (float): The mass in kg.
-  color (Color): The color.
-Returns
-  PhysicalObject: A composed object.
-)doc");
-
-  m.def(
-      "ConvexObject",
-      [](const std::vector<Vector> &shape, double height, double mass,
-         const Color &color = Color(), const std::vector<Color> &colors = {}) {
-        auto c = std::make_unique<PhysicalObject>();
-        if (colors.size() == 0) {
-          c->setCustomHull(PhysicalObject::Hull(PhysicalObject::Part(
-                               make_polygon(shape), height)),
-                           mass);
-          c->setColor(color);
-        } else {
-          // TODO(Jerome): is not setting the colors correcly
-          c->setCustomHull(
-              PhysicalObject::Hull(PhysicalObject::Part(
-                  make_polygon(shape), height, make_textures(colors))),
-              mass);
-        }
-        return c;
-      },
-      py::arg("base"), py::arg("height"), py::arg("mass"),
-      py::arg("color") = Color(), py::arg("face_colors") = std::vector<Color>{},
-      R"doc(
-Creates an vertical prism with a convex polygonal base.
-
-Arguments:
-  base (:py:type:`pyenki.Polygon`): 
-    The vertices polygonal base in cm. Must be convex.
-  height (float): The height in cm.
-  mass (float): The mass in kg.
-  color (Color): The color.
-  face_colors (Sequence[Color]): if not empty, defines the colors of each face.
-
-Returns
-  PhysicalObject: A convex prism.
-)doc");
+                    &PhysicalObject::setColor)
+      .def("contains", &PhysicalObject::contains, py::arg("point"),
+           py::arg("tolerance") = 0);
 
   // Robots
 
@@ -926,9 +728,9 @@ Reset the odometry of both wheels.
 
         Attributes:
             scanner_range (float): the range of the scanner. Default is infinite.
-            scanner_distances (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 180 radial distances,
+            scanner_distances (Array1D): An array of 180 radial distances,
                 ordered from -180 degrees to 180 degrees, in centimeters (readonly).
-            scanner_image (numpy.ndarray[tuple[int, int], numpy.dtype[numpy.float64]]): An rgba array between 0 and 1 of shape ``(180, 4)`` (readonly).
+            scanner_image (Array2D): An rgba array between 0 and 1 of shape ``(180, 4)`` (readonly).
       )doc")
       .def(py::init<>())
       .def_property(
@@ -977,7 +779,9 @@ Example::
     >>> world.add_object(epuck)
     >>> epuck.position = (-10, 0)
     >>> epuck.set_led_ring(True)
-    >>> world.add_object(pyenki.CircularObject(2.0, 5.0, -1, pyenki.Color(0.3, 0.7, 0)))
+    >>> obj = pyenki.PhysicalObject(radius=2.0, height=5.0, mass=-1, 
+                                    pyenki.Color(0.3, 0.7, 0))
+    >>> world.add_object(obj)
     >>> world.step(0.1)
     >>> epuck.prox_values
     array([98.52232283,  3.30197324, ...
@@ -986,11 +790,11 @@ Example::
 
 Attributes:
 
-    prox_values (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 8 proximity sensor readings, one for each sensors (readonly).
-    prox_distances (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 8 distances between proximity sensor and nearest obstacles, one for each sensors (readonly).
+    prox_values (Array1D): An array of 8 proximity sensor readings, one for each sensors (readonly).
+    prox_distances (Array1D): An array of 8 distances between proximity sensor and nearest obstacles, one for each sensors (readonly).
         please note that this value would *not* directly be accessible by a real robot (readonly).
-    scan (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 64 radial distances, ordered from -180 degrees to 180 degrees, in centimeters.
-    camera_image (numpy.ndarray[tuple[int, int], numpy.dtype[numpy.float64]]): An rgba array between 0 and 1 of shape ``(60, 4)`` (readonly).
+    scan (Array1D): An array of 64 radial distances, ordered from -180 degrees to 180 degrees, in centimeters.
+    camera_image (Array2D): An rgba array between 0 and 1 of shape ``(60, 4)`` (readonly).
 )doc")
       .def(py::init([](bool proximity = true, bool camera = false,
                        bool scanner = false) {
@@ -1050,36 +854,7 @@ Args:
   value (bool): the desired LED state.
 )doc");
 
-  py::classh<IRCommEvent>(m, "IRCommEvent", R"doc( 
-This event is created each time a message is received by at least one proximity sensor.
-The sensors that do not receive the message, have the corresponding payloads and intensities set to zero.
-
-Attributes:
-    rx_value (int): The received message payload (readonly)
-    payloads (numpy.ndarray[tuple[int], numpy.dtype[numpy.int64]]): An array of 7 integer payloads, one for each sensors (readonly).
-        The first 5 entries are from frontal sensors ordered from left to right.
-        The last two entries are from rear sensors  ordered from left to right.
-    intensities (numpy.ndarray[tuple[int], numpy.dtype[numpy.int64]]): An array of 7 integer intensities, one for each sensors (readonly).
-        The first 5 entries are from frontal sensors ordered from left to right.
-        The last two entries are from rear sensors  ordered from left to right.
-)doc")
-      .def_property(
-          "intensities",
-          [](const IRCommEvent &e) {
-            const auto &vs = e.intensities;
-            return py::array(static_cast<ssize_t>(vs.size()), vs.data());
-          },
-          nullptr)
-      .def_property(
-          "payloads",
-          [](const IRCommEvent &e) {
-            const auto &vs = e.payloads;
-            return py::array(static_cast<ssize_t>(vs.size()), vs.data());
-          },
-          nullptr)
-      .def_readonly("rx_value", &IRCommEvent::rx_value);
-
-  py::classh<Thymio2, PyThymio2, DifferentialWheeled, PhysicalObject>(
+  py::classh<Thymio2, PyThymio2, DifferentialWheeled, PhysicalObject> thymio(
       m, "Thymio2", R"doc( 
 A :py:class:`DifferentialWheeled` Thymio2 robot.
 Attribute names mimic the aseba interface, see http://wiki.thymio.org/en:thymioapi.
@@ -1108,13 +883,13 @@ which uses integers in the same units used by aseba. For example,
   in :py:meth:`set_led_top`.
 
 Attributes:
-    prox_values (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 7 proximity sensor readings, one for each sensors (readonly).
+    prox_values (Array1D): An array of 7 proximity sensor readings, one for each sensors (readonly).
         The first 5 entries are from frontal sensors ordered from left to right.
         The last two entries are from rear sensors  ordered from left to right.
-    prox_values_i (numpy.ndarray[tuple[int], numpy.dtype[numpy.int64]]): An array of 7 proximity sensor readings, one for each sensors (readonly).
+    prox_values_i (IntArray1D): An array of 7 proximity sensor readings, one for each sensors (readonly).
         The first 5 entries are from frontal sensors ordered from left to right.
         The last two entries are from rear sensors  ordered from left to right.
-    prox_distances (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): A list of 7 distances between proximity sensor and nearest obstancle, one for each sensors;
+    prox_distances (Array1D): A list of 7 distances between proximity sensor and nearest obstancle, one for each sensors;
         please note that this value would *not* directly be accessible by a real robot (readonly).
         The first 5 entries are from frontal sensors ordered from left to right.
         The last two entries are from rear sensors  ordered from left to right.
@@ -1122,16 +897,84 @@ Attributes:
         therefore to be compliant we should limit the value between 0 and 2047.
     prox_comm_enabled (bool): Enable/disable proximity communication.
     prox_comm_events (list[IRCommEvent]): A list of events, one for every received message during the last control step (readonly).
-    ground_values (numpy.ndarray[tuple[int], numpy.dtype[numpy.float64]]): An array of 2 ground sensor readings, one for each sensors (readonly)
-    ground_values_i (numpy.ndarray[tuple[int], numpy.dtype[numpy.int64]]): An array of 2 ground sensor readings, one for each sensors (readonly)
+    ground_values (Array1D): An array of 2 ground sensor readings, one for each sensors (readonly)
+    ground_values_i (IntArray1D): An array of 2 ground sensor readings, one for each sensors (readonly)
     left_wheel_target_speed_i (int): The target left wheel speed in ticks per second.
     right_wheel_target_speed_i (int): The target right wheel speed in ticks per second.
     left_wheel_encoder_speed_i (int): The current left wheel speed in ticks per second (readonly).
     right_wheel_encoder_speed_i (int): The current right wheel speed in ticks per second (readonly).
     left_wheel_odometry_i (int): The left wheel odometry integrated from measured wheel speeds in ticks (readonly).
     right_wheel_odometry_i (int): The right wheel odometry integrated from measured wheel speeds in ticks (readonly).
+    button_touch_callback (Callable[[Thymio2, int], None] | None): An optional function called when button touch events happen.
+)doc");
+
+  py::classh<IRCommEvent>(thymio, "IRCommEvent", R"doc( 
+This event is created each time a message is received by at least one proximity sensor.
+The sensors that do not receive the message, have the corresponding payloads and intensities set to zero.
+
+Attributes:
+    rx_value (int): The received message payload (readonly)
+    payloads (IntArray1D): An array of 7 integer payloads, one for each sensors (readonly).
+        The first 5 entries are from frontal sensors ordered from left to right.
+        The last two entries are from rear sensors  ordered from left to right.
+    intensities (IntArray1D): An array of 7 integer intensities, one for each sensors (readonly).
+        The first 5 entries are from frontal sensors ordered from left to right.
+        The last two entries are from rear sensors  ordered from left to right.
 )doc")
-      .def(py::init<>(), "TEST")
+      .def_property(
+          "intensities",
+          [](const IRCommEvent &e) {
+            const auto &vs = e.intensities;
+            return py::array(static_cast<ssize_t>(vs.size()), vs.data());
+          },
+          nullptr)
+      .def_property(
+          "payloads",
+          [](const IRCommEvent &e) {
+            const auto &vs = e.payloads;
+            return py::array(static_cast<ssize_t>(vs.size()), vs.data());
+          },
+          nullptr)
+      .def_readonly("rx_value", &IRCommEvent::rx_value);
+
+  py::native_enum<Thymio2::Button>(thymio, "Button", "enum.Enum", R"doc(
+Identify one of the five touch button of the Thymio2.
+)doc")
+      .value("CENTER", Thymio2::Button::CENTER, R"doc(
+)doc")
+      .value("FORWARD", Thymio2::Button::FORWARD, R"doc(
+)doc")
+      .value("BACKWARD", Thymio2::Button::BACKWARD, R"doc(
+)doc")
+      .value("LEFT", Thymio2::Button::LEFT, R"doc(
+)doc")
+      .value("RIGHT", Thymio2::Button::RIGHT, R"doc(
+)doc")
+      .finalize();
+
+  thymio.def(py::init<>(), "Constructs an instance")
+      .def_property("button_touch_callback", &Thymio2::getButtonTouchCallback,
+                    &Thymio2::setButtonTouchCallback, py::keep_alive<1, 2>())
+      .def(
+          "on_button_touch",
+          [](PyThymio2 &t, Thymio2::Button button) {
+            t.hasTouchedButton(button);
+          },
+          py::arg("index"), R"doc(
+Called after a button is touched.
+
+Can be overridden by sub-classes to react to button touch events. 
+Alternatively, users can assign a callback as :py:attr:`button_touch_callback`.
+
+Arguments:
+  index (int): The button being touched.
+)doc")
+      .def("touch_button", &Thymio2::touchButton, py::arg("button"), R"doc( 
+Touches one of the buttons on top of the robot.
+
+Args:
+    index (int): the index of the button
+)doc")
       .def_property(
           "prox_distances",
           [](const Thymio2 &r) {
@@ -1195,6 +1038,9 @@ Attributes:
       .def_property(
           "prox_comm_events",
           [](const Thymio2 &r) { return r.irComm.get_events(); }, nullptr)
+      .def_property(
+          "led_colors",
+          [](const PyThymio2 &t) { return t.get_led_color_array(); }, nullptr)
       .def(
           "set_led_top",
           [](Thymio2 &r, double red = 0, double green = 0, double blue = 0) {
@@ -1439,7 +1285,7 @@ Args:
     value (int): the desired intensity between 0 and 31.
 )doc");
 
-  py::classh<PyWorld>(m, "World", R"doc(
+  py::classh<PyWorld> world(m, "World", R"doc(
 The world is the container of all objects and robots.
 It is either
 
@@ -1459,9 +1305,9 @@ Args:
     width (float): The rectangular world width in centimeters
     height (float): The rectangular world height in centimeters
     radius (float): The circular world radius in centimeters
-    seed (int): The random seed
     walls_color (Color): Optional wall color, default is ``Color.gray``
-
+    ground_texture (World.GroundTexture | None): Optional ground texture, default is an empty image.
+    seed (int): The random seed
 
 Example::
 
@@ -1470,8 +1316,8 @@ Example::
     world = pyenki.World()
     thymio = Thymio2()
     world.add_object(thymio)
-    wall = pyenki.RectangularObject(l1=10, l2=50, height=5, mass=1,
-                                    color=pyenki.Color(0.5, 0.3, 0.3))
+    wall = pyenki.PhysicalObject(l1=10, l2=50, height=5, mass=1,
+                                 color=pyenki.Color(0.5, 0.3, 0.3))
     world.add_object(wall)
     # Run 100 times a 0.1 s long simulation step
     for _ in range(100):
@@ -1483,14 +1329,95 @@ Attributes:
     robots (list[Robot]): The list of all robots
     static_objects (list[PhysicalObject]): The list of all objects that are not robots
     control_step_callback (Callable[[World, float], None] | None): A function called at each update step.
-    random_seed: The random seed
+    random_seed (numpy.random.Generator): The random seed
+    width (float): the world width [cm]
+    height (float): the world height [cm]
+    radius(float) : the world radius [cm]
+    walls_type (World.WallsType): the type of boundary walls.
+    ground_texture (World.GroundTexture): an optional image to color the ground (readonly). 
+)doc");
+
+  py::classh<World::GroundTexture>(world, "GroundTexture",
+                                   py::buffer_protocol(), R"doc(
+2-D Texture for ground stored as a ARGB array (0xAARRGGBB in little endian).
+Users should access class data using the buffer protocol, i.e.
+
+>>> image = np.zeros((200, 100, 4), dtype=np.uint8)
+>>> gt = World.GroundTexture(image)
+>>> gt.width, gt.height
+(100, 200)
+>>> data = numpy.asarray(gt)
+>>> data.shape, data[0, 0, 0]
+((100, 200, 4), np.uint8(0))
+
+Attributes:
+  
+    width (int): the width
+    height (int): the height
 )doc")
-      .def(py::init<unsigned long>(), py::arg("seed") = 0)
-      .def(py::init<double, double, const Color &, unsigned long>(),
+      .def(py::init<>(), "Creates an empty ground texture")
+      .def(py::init([](const py::array_t<uint8_t, py::array::c_style |
+                                                      py::array::forcecast>
+                           image) {
+             py::buffer_info buf = image.request();
+             if (buf.ndim != 3 || buf.shape[2] != 4) {
+               throw std::runtime_error(
+                   "Buffer must have shape (height, width, 4).");
+             }
+             std::vector<uint32_t> data(buf.shape[1] * buf.shape[0]);
+             std::copy_n(reinterpret_cast<uint8_t *>(buf.ptr),
+                         buf.shape[2] * buf.shape[1] * buf.shape[0],
+                         reinterpret_cast<uint8_t *>(&data[0]));
+
+             return std::make_unique<World::GroundTexture>(
+                 buf.shape[1], buf.shape[0], data.data());
+           }),
+           py::arg("data"), R"doc(
+Creates an ground texture with a copy of the ARGB data
+
+Args:
+  data (ARGBImage): A numpy array of shape ``(height, width, 4)``
+                        and type :py:attr:`numpy.uint8` storing ARGB pixels.
+)doc")
+      .def_buffer([](World::GroundTexture &c) -> py::buffer_info {
+        const std::array<ssize_t, 3> shape{c.height, c.width, 4};
+        const std::array<ssize_t, 3> strides{
+            static_cast<ssize_t>(c.width * 4 * sizeof(uint8_t)),
+            4 * sizeof(uint8_t), sizeof(uint8_t)};
+        // READONLY (for now)
+        return py::buffer_info(c.data.data(), sizeof(uint8_t),
+                               py::format_descriptor<uint8_t>::format(), 3,
+                               shape, strides, true);
+      })
+      .def_readonly("width", &World::GroundTexture::width)
+      .def_readonly("height", &World::GroundTexture::height);
+
+  py::native_enum<World::WallsType>(world, "WallsType", "enum.Enum", R"doc(
+Describes the type of boundary walls.
+)doc")
+      .value("SQUARE", World::WallsType::WALLS_SQUARE, R"doc(
+A rectangular boundary wall of size (:py:attr:`World.width`, :py:attr:`World.height`).
+)doc")
+      .value("CIRCULAR", World::WallsType::WALLS_CIRCULAR, R"doc(
+A circular boundary wall of radius :py:attr:`World.radius`.
+)doc")
+      .value("NONE", World::WallsType::WALLS_NONE, R"doc(
+No boundary walls.
+)doc")
+      .finalize();
+
+  world.def(py::init<unsigned long>(), py::arg("seed") = 0)
+      .def(py::init<double, double, const Color &,
+                    const std::optional<World::GroundTexture> &,
+                    unsigned long>(),
            py::arg("width"), py::arg("height"),
-           py::arg("walls_color") = Color::gray, py::arg("seed") = 0)
-      .def(py::init<double, const Color &, unsigned long>(), py::arg("radius"),
-           py::arg("walls_color") = Color::gray, py::arg("seed") = 0)
+           py::arg("walls_color") = Color::gray,
+           py::arg("ground_texture") = std::nullopt, py::arg("seed") = 0)
+      .def(py::init<double, const Color &,
+                    const std::optional<World::GroundTexture> &,
+                    unsigned long>(),
+           py::arg("radius"), py::arg("walls_color") = Color::gray,
+           py::arg("ground_texture") = std::nullopt, py::arg("seed") = 0)
       .def("step", &World::step, py::arg("time_step"),
            py::arg("physics_oversampling") = 1, R"doc( 
 Simulate a timestep
@@ -1514,8 +1441,30 @@ Remove an object from the simulation.
 Args:
     object (PhysicalObject): the object to remove.
 )doc")
-      // TODO
-      .def("copy_random_generator", &PyWorld::copyRandom, py::arg("world"))
+      .def("copy_random_generator", &PyWorld::copyRandom, py::arg("world"),
+           R"doc( 
+Copy the random generator from another world
+
+Args:
+    world (World): the other world.
+)doc")
+      .def_readonly("radius", &PyWorld::r)
+      .def_readonly("width", &PyWorld::w)
+      .def_readonly("height", &PyWorld::h)
+      .def_readonly("walls_color", &PyWorld::color)
+      .def_readonly("walls_type", &PyWorld::wallsType)
+      .def_readonly("ground_texture", &PyWorld::groundTexture)
+      .def_property("has_ground_texture", &PyWorld::hasGroundTexture, nullptr)
+      .def("get_ground_color", &PyWorld::getGroundColor, py::arg("position"),
+           R"doc( 
+Returns the color of the floor at a given position
+
+Args:
+    position (Vector): the position.
+
+Returns:
+    Color: the color at the position.
+)doc")
       .def_property("random_seed", &PyWorld::getRandomSeed,
                     &PyWorld::setRandomSeed)
       .def_property("random_generator", &PyWorld::getRandom,
@@ -1539,259 +1488,5 @@ Args:
                                 to get a more fine-grained physical simulation compared to the sensor-motor loop.
     termination (Callable[[World], bool] | None): an optional function that terminates the simulation when it returns True.
     callback (Callable[[World], None] | None): An additional callback executed at each simulation step.
-)doc")
-      .def("render", &render, py::arg("camera_reset") = false,
-           py::arg("camera_position") = Vector(0.0, 0.0),
-           py::arg("camera_altitude") = 0.0, py::arg("camera_yaw") = 0.0,
-           py::arg("camera_pitch") = 0.0, py::arg("camera_is_ortho") = false,
-           py::arg("walls_height") = 10.0, py::arg("width") = 640,
-           py::arg("height") = 360, R"doc( 
-Render a world to an RGB image array.
-
-Args:
-    camera_reset (bool): whether to set the camera in the default pose.
-    camera_position (Vector): the horizontal position of the camera.
-    camera_altitude (float): the vertical position of the camera.
-    camera_yaw (float): the camera rotation around the vertical axis.
-    camera_pitch (float): the camera vertical rotation.
-    camera_is_ortho (bool): whether the camera uses an orthographic projection.
-    walls_height (float): the height of the world boundary in cm.
-    width (int): the width of the image in pixels.
-    height (int): the height of the image in pixels.
-
-Returns:
-    numpy.ndarray[tuple[int, int, int], numpy.dtype[numpy.uint8]]: An array of shape ``(height, width, 3)`` and type ``uint8``.
-)doc")
-      .def("save_image", &save_image, py::arg("path"),
-           py::arg("camera_reset") = false,
-           py::arg("camera_position") = Vector(0.0, 0.0),
-           py::arg("camera_altitude") = 0.0, py::arg("camera_yaw") = 0.0,
-           py::arg("camera_pitch") = 0.0, py::arg("camera_is_ortho") = false,
-           py::arg("walls_height") = 10.0, py::arg("width") = 640,
-           py::arg("height") = 360, R"doc( 
-Render a world to an RGB image array.
-
-Args:
-    path (string): The file path where to save the image.
-    camera_reset (bool): whether to set the camera in the default pose.
-    camera_position (Vector): the horizontal position of the camera.
-    camera_altitude (float): the vertical position of the camera.
-    camera_yaw (float): the camera rotation around the vertical axis.
-    camera_pitch (float): the camera vertical rotation.
-    camera_is_ortho (bool): whether the camera uses an orthographic projection.
-    walls_height (float): the height of the world boundary in cm.
-    width (int): the width of the image in pixels.
-    height (int): the height of the image in pixels.
-
-)doc")
-      .def("run_in_viewer", &runInViewer, py::arg("fps") = 30,
-           py::arg("time_step") = 0, py::arg("factor") = 1,
-           py::arg("helpers") = true, py::arg("camera_reset") = false,
-           py::arg("camera_position") = Vector(0.0, 0.0),
-           py::arg("camera_altitude") = 0.0, py::arg("camera_yaw") = 0.0,
-           py::arg("camera_pitch") = 0.0, py::arg("camera_is_ortho") = false,
-           py::arg("walls_height") = 10.0, py::arg("duration") = 0,
-           py::call_guard<py::gil_scoped_release>(), R"doc( 
-Render a world to an RGB image array.
-
-Args:
-    fps (float): The framerate of the viewer in frames per second.
-    time_step (float): The simulation time step in seconds.
-    factor (bool): The real-time factor. If larger than one, the simulation 
-                   will run faster then real-time.
-    helpers (bool): Whether to display the helpers widgets.
-    camera_reset (bool): whether to set the camera in the default pose.
-    camera_position (Vector): the horizontal position of the camera.
-    camera_altitude (float): the vertical position of the camera.
-    camera_yaw (float): the camera rotation around the vertical axis.
-    camera_pitch (float): the camera vertical rotation.
-    camera_is_ortho (bool): whether the camera uses an orthographic projection.
-    walls_height (float): the height of the world boundary in cm.
-    duration (float): duration of the simulation in simulated time. 
-                      Negative values are interpreted as infinite duration.
-
 )doc");
-
-#ifdef QT
-  py::classh<PythonViewer>(m, "WorldView", R"doc( 
-A QOpenGLWidget that displays the world.
-
-Args:
-    world (World | None): The world to display.
-    fps (float): The framerate of the viewer in frames per second.
-    update_world (bool): Whether to trigger world updates before redrawing.
-    time_step (float): The simulation time step in seconds.
-    factor (bool): The real-time factor. If larger than one, the simulation 
-                   will run faster then real-time.
-    helpers (bool): Whether to display the helpers widgets.
-    camera_reset (bool): whether to set the camera in the default pose.
-    camera_position (Vector): the horizontal position of the camera.
-    camera_altitude (float): the vertical position of the camera.
-    camera_yaw (float): the camera rotation around the vertical axis.
-    camera_pitch (float): the camera vertical rotation.
-    camera_is_ortho (bool): whether the camera uses an orthographic projection.
-    walls_height (float): the height of the world boundary in cm.
-
-Example without PyQt::
-
-    >>> import pyenki
-    >>> 
-    >>> world = pyenki.World(radius=100)
-    >>> epuck = pyenki.EPuck(camera=False)
-    >>> epuck.left_wheel_target_speed = 10.0
-    >>> epuck.set_led_ring(True)
-    >>> world.add_object(epuck)
-    >>> # setup Qt: needs to be called before creating the first view
-    >>> pyenki.init_ui()
-    >>> viewer = pyenki.WorldView(world)
-    >>> viewer.show()
-    >>> viewer.start_updating_world(0.1)
-    >>> # executes the Qt runloop for a while
-    >>> pyenki.run_ui(duration=10)
-
-Example with PyQt (composition of two views of the same world)::
-
-    >>> import pyenki
-    >>> from PyQt6.QtCore import QCoreApplication, Qt
-    >>> from PyQt6.QtWidgets import QWidget, QApplication, QHBoxLayout
-    >>> 
-    >>> # replaces pyenki.init_ui(): needs to be called before creating any widget
-    >>> QCoreApplication.setAttribute(Qt.ApplicationAttribute.AA_ShareOpenGLContexts),
-    >>> app = QApplication([])
-    >>> 
-    >>> world = pyenki.World(radius=100)
-    >>> epuck = pyenki.EPuck(camera=False)
-    >>> epuck.left_wheel_target_speed = 10.0
-    >>> epuck.set_led_ring(True)
-    >>> world.add_object(epuck)
-    >>> viewer_1 = pyenki.WorldView(world, camera_position=(-20, -20), camera_altitude=20)
-    >>> viewer_1.point_camera(target_position=(0, 0), target_altitude=5)
-    >>> viewer_2 = pyenki.WorldView(world, helpers=False, camera_altitude=30, camera_is_ortho=True)
-    >>> viewer_2.camera_is_ortho = True
-    >>> window = QWidget()
-    >>> hbox = QHBoxLayout(window)
-    >>> window.resize(960, 320)
-    >>> hbox.addWidget(viewer_1.widget)
-    >>> hbox.addWidget(viewer_2.widget)
-    >>> window.show()
-    >>> viewer_1.start_updating_world(0.1)
-    >>> app.exec()
-
-Attributes:
-    world (World | None): the world to display.
-    camera_position (Vector): The camera horizontal position.
-    camera_altitude (float): The camera vertical position.
-    camera_yaw (float): the camera rotation around the vertical axis.
-    camera_pitch (float): the camera vertical rotation.
-    camera_pose (tuple[Vector, float, float, float]): the camera pose as ``(position, altitude, yaw, pitch)``.
-    camera_is_ortho (bool): whether the camera uses an orthographic projection.
-    walls_height (float): the height of the world boundary in cm (readonly).
-    tracking (bool): whether tracking is active.
-    helpers (bool): whether to display the helpers widgets.
-    image (numpy.ndarray[tuple[int, int, int], numpy.dtype[numpy.uint8]]): the currently rendered image.
-    widget (QOpenGLWidget): this view sip-wrapped so to be manipulable by PyQt.
-)doc")
-      .def(py::init<PyWorld *, double, bool, double, double, bool, bool, Vector,
-                    double, double, double, bool, double>(),
-           py::arg("world") = py::none(), py::arg("fps") = 30,
-           py::arg("update_world") = false, py::arg("time_step") = 0,
-           py::arg("factor") = 1, py::arg("helpers") = true,
-           py::arg("camera_reset") = false,
-           py::arg("camera_position") = Vector(0.0, 0.0),
-           py::arg("camera_altitude") = 0.0, py::arg("camera_yaw") = 0.0,
-           py::arg("camera_pitch") = 0.0, py::arg("camera_is_ortho") = false,
-           py::arg("walls_height") = 10.0)
-      .def("show", &PythonViewer::show, R"doc( 
-Shows the view
-)doc")
-      .def("hide", &PythonViewer::hide, R"doc( 
-Hide the view
-)doc")
-      .def("reset_camera", &PythonViewer::resetCamera, R"doc( 
-Reset the camera pose
-)doc")
-      .def("start_updating_world", &PythonViewer::startUpdatingWorld,
-           py::arg("time_step") = 0, py::arg("factor") = 1, R"doc( 
-Start updating the world before redrawing the view.
-
-Args:
-    time_step (float): The simulation time step in seconds.
-    factor (bool): The real-time factor. If larger than one, the simulation 
-                   will run faster then real-time.
-)doc")
-      .def("stop_updating_world", &PythonViewer::stopUpdatingWorld, R"doc( 
-Stop updating the world before redrawing the view.
-)doc")
-      .def("move_camera", &PythonViewer::moveCamera, py::arg("target_position"),
-           py::arg("target_altitude") = 0, py::arg("target_distance") = 30,
-           py::arg("yaw") = py::none(), py::arg("pitch") = py::none(), R"doc( 
-Move the camera so to point towards the target.
-
-Args:
-    target_position (Vector): The target horizontal position in cm.
-    target_altitude (float): The target vertical position in cm.
-    target_distance (float): The distance to the target.
-    yaw (float | None): Optionally sets the camera yaw.
-    pitch (float | None): Optionally sets the camera pitch.
-)doc")
-      .def("point_camera", &PythonViewer::pointCamera,
-           py::arg("target_position"), py::arg("target_altitude") = 0,
-           py::arg("position") = py::none(), py::arg("altitude") = py::none(),
-           R"doc( 
-Rotate the camera so to point towards the target.
-
-Args:
-    target_position (Vector): The target horizontal position in cm.
-    target_altitude (float): The target vertical position in cm.
-    position (Vector | None): Optionally sets the camera horizontal position in cm.
-    altitude (float | None): Optionally sets the camera vertical position in cm.
-)doc")
-      .def_property("walls_height", &PythonViewer::getWallsHeight, nullptr)
-      .def_property("camera_position", &PythonViewer::getCameraPosition,
-                    &PythonViewer::setCameraPosition)
-      .def_property("camera_altitude", &PythonViewer::getCameraAltitude,
-                    &PythonViewer::setCameraAltitude)
-      .def_property("camera_yaw", &PythonViewer::getCameraYaw,
-                    &PythonViewer::setCameraYaw)
-      .def_property("camera_pitch", &PythonViewer::getCameraPitch,
-                    &PythonViewer::setCameraPitch)
-      .def_property("camera_pose", &PythonViewer::getCameraPose,
-                    &PythonViewer::setCameraPose)
-      .def_property("world", &PythonViewer::getWorld,
-                    [](PythonViewer &v, PyWorld *world) { v.setWorld(world); })
-      .def_readwrite("camera_is_ortho", &PythonViewer::cameraIsOrtho)
-      .def_property("tracking", &PythonViewer::isTrackingActivated,
-                    &PythonViewer::setTracking)
-      .def_readwrite("helpers", &PythonViewer::displayHelpers)
-      .def_property("image", &PythonViewer::getImage, nullptr)
-      .def_property("widget", &PythonViewer::asWidget, nullptr)
-      .def("save_image", &PythonViewer::saveImage, R"doc( 
-Save the image to a file.
-
-Args:
-    path (string): file path where to save the image.
-)doc");
-
-  m.def("init_ui", &EnkiApplication::init, R"doc( 
-Initialize the Qt runtime.
-
-Should be called before creating any py:class:`WorldView`.
-)doc");
-  m.def("run_ui", &EnkiApplication::run, py::arg("duration") = -1,
-        py::call_guard<py::gil_scoped_release>(), R"doc( 
-Run the Qt run-loop for a while.
-
-Args:
-    duration (float): The duration in seconds. 
-                      Negative values are interpreted as infinite duration.
-)doc");
-  m.def("cleanup_ui", &EnkiApplication::cleanup, R"doc( 
-Cleanup the Qt runtime.
-)doc");
-#else
-  struct PythonViewer {};
-  py::classh<PythonViewer>(m, "WorldView", R"doc( 
-Class not available: pyenki built without Qt support!
-)doc");
-#endif // QT
 }

@@ -1,15 +1,17 @@
 import math
 import sys
+from typing import SupportsFloat
 
 import pyenki
+import pyenki.viewer
 
 
-# We sublass `pyenki.Thymio2`. This way, the world update step will automatically call
-# also the Thymio `controlStep`.
+# The world update step will call `control_step` automatically
 class ControlledThymio2(pyenki.Thymio2):
 
     # This is the method we have to overwrite
-    def controlStep(self, dt: float) -> None:
+    # to implement a controller.
+    def control_step(self, time_step: SupportsFloat) -> None:
         # Check if there is an obstacle in front of us
         value = self.prox_values[2]
         if value > 3000:
@@ -20,8 +22,8 @@ class ControlledThymio2(pyenki.Thymio2):
         else:
             speed = 10.0
             self.set_led_top(green=1.0)
-        self.motor_left_target = speed
-        self.motor_right_target = speed
+        self.left_wheel_target_speed = speed
+        self.right_wheel_target_speed = speed
 
 
 def setup() -> pyenki.World:
@@ -34,39 +36,37 @@ def setup() -> pyenki.World:
     thymio.angle = 0
     world.add_object(thymio)
     # and a wall a bit in forward, in front of the Thymio.
-    wall = pyenki.RectangularObject(l1=10,
-                                    l2=50,
-                                    height=5,
-                                    mass=1,
-                                    color=pyenki.Color(0.5, 0.3, 0.3))
+    wall = pyenki.PhysicalObject(l1=10,
+                                 l2=50,
+                                 height=5,
+                                 mass=1,
+                                 color=pyenki.Color(0.5, 0.3, 0.3))
     wall.position = (30, 0)
     world.add_object(wall)
     return world
 
 
-def run(world: pyenki.World,
-        gui: bool = False,
-        T: float = 10,
-        dt: float = 0.1,
-        orthographic: bool = False) -> None:
-
+def main(gui: bool = False,
+         duration: float = 10,
+         dt: float = 0.1,
+         ortho: bool = False) -> None:
+    world = setup()
     if gui:
         # We can either run a simulation [in real-time] inside a Qt application
-        world.run_in_viewer(camera_position=(0, 0),
-                            camera_altitude=70.0,
-                            camera_yaw=0.0,
-                            camera_pitch=-math.pi / 2,
-                            walls_height=10,
-                            camera_is_ortho=orthographic)
+        pyenki.viewer.run_in_viewer(world,
+                                    camera_position=(0, 0),
+                                    camera_altitude=70.0,
+                                    camera_yaw=0.0,
+                                    camera_pitch=-math.pi / 2,
+                                    walls_height=10,
+                                    camera_is_ortho=ortho,
+                                    duration=duration)
     else:
-        # or we can write our own loop that run the simulaion as fast as possible.
-        steps = int(T // dt)
+        # or we can write our own loop that run the simulation as fast as possible.
+        steps = int(duration // dt)
         for _ in range(steps):
             world.step(dt)
 
 
 if __name__ == '__main__':
-    world = setup()
-    run(world,
-        gui='--gui' in sys.argv,
-        orthographic='--orthographic' in sys.argv)
+    main(gui='--gui' in sys.argv, ortho='--ortho' in sys.argv)

@@ -1,30 +1,47 @@
 import pyenki
-from PyQt6.QtCore import QCoreApplication, Qt
-from PyQt6.QtWidgets import QApplication, QHBoxLayout, QWidget
+import pyenki.viewer
 
-# replaces pyenki.init_ui(): needs to be called before creating any widget
-QCoreApplication.setAttribute(Qt.ApplicationAttribute.AA_ShareOpenGLContexts),
-app = QApplication([])
+from world_view import create_world
 
-world = pyenki.World(radius=100)
-epuck = pyenki.EPuck(camera=False)
-epuck.left_wheel_target_speed = 10.0
-epuck.set_led_ring(True)
-world.add_object(epuck)
-viewer_1 = pyenki.WorldView(world,
-                            camera_position=(-20, -20),
-                            camera_altitude=20)
-viewer_1.point_camera(target_position=(0, 0), target_altitude=5)
-viewer_2 = pyenki.WorldView(world,
-                            helpers=False,
-                            camera_altitude=30,
-                            camera_is_ortho=True)
-viewer_2.camera_is_ortho = True
-window = QWidget()
-hbox = QHBoxLayout(window)
-window.resize(960, 320)
-hbox.addWidget(viewer_1.widget)
-hbox.addWidget(viewer_2.widget)
-window.show()
-viewer_1.start_updating_world(0.1)
-app.exec()
+
+def main() -> None:
+
+    # PyQt6 requires the native viewer implemented in C++
+    assert pyenki.viewer.use_native
+
+    from PyQt6.QtCore import QCoreApplication, Qt
+    from PyQt6.QtWidgets import QApplication, QHBoxLayout, QWidget
+
+    # equivalent to pyenki.viewer.init()
+    # needs to be called before creating the first widget
+    QCoreApplication.setAttribute(
+        Qt.ApplicationAttribute.AA_ShareOpenGLContexts),
+    app = QApplication([])
+
+    world = create_world()
+    viewer_1 = pyenki.viewer.WorldView(world=world,
+                                       camera_position=(-20, -20),
+                                       camera_altitude=20)
+    viewer_1.point_camera(target_position=(20, 20), target_altitude=5)
+    viewer_2 = pyenki.viewer.WorldView(world=world,
+                                       helpers=False,
+                                       camera_altitude=30,
+                                       camera_is_ortho=False)
+    viewer_2.move_camera(target_position=(20, 20),
+                         target_altitude=10,
+                         yaw=-1,
+                         pitch=-0.5)
+    window = QWidget()
+    hbox = QHBoxLayout(window)
+    window.resize(960, 320)
+    # Note that we get a PyQt compatible widget
+    # with `pyqt_widget`
+    hbox.addWidget(viewer_1.pyqt_widget)
+    hbox.addWidget(viewer_2.pyqt_widget)
+    window.show()
+    viewer_1.start_updating_world(0.1)
+    app.exec()
+
+
+if __name__ == '__main__':
+    main()

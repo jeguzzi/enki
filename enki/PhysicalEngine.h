@@ -211,6 +211,19 @@ namespace Enki
 			inline const Textures& getTextures() const { return textures; }
 			inline bool isTextured() const { return !textures.empty(); }
 			
+            bool operator==(const Part& rhs) const
+            {
+               return (height == rhs.getHeight())
+               && (shape == rhs.getShape())
+               && (textures == rhs.getTextures());
+            }
+            bool operator!=(const Part& rhs) const
+            {
+              return !operator==(rhs);
+            }
+
+            bool contains(const Vector & position, double tolerance = 0) const; 
+
 		private:
 			friend class PhysicalObject;
 
@@ -264,7 +277,7 @@ namespace Enki
 		std::string name;
 		std::function<void(PhysicalObject *, double)> cb;
 		std::function<void(PhysicalObject *, PhysicalObject *)> collisionCb;
-
+		std::function<void(PhysicalObject *, bool, unsigned, double, double, double)> touchCallback;
 		// Physics
 		
 		//! position before collision, used to compute interlacedDistance
@@ -309,6 +322,8 @@ namespace Enki
 		inline double getMomentOfInertia() const { return momentOfInertia; }
 		inline double getInterlacedDistance() const { return interlacedDistance; }
 		
+		bool contains(const Vector & position, double tolerance = 0) const; 
+
 		// setters
 		
 		//! Make the object cylindric with a given mass
@@ -328,10 +343,27 @@ namespace Enki
 			MOUSE_BUTTON_MIDDLE = 2
 		};
 		//! Called for robot if a mouse button is pressed while pointing to it, point is given in relative coordinates
-		virtual void mousePressEvent(unsigned button, double pointX, double pointY, double pointZ) {};
+		virtual void mousePressEvent(unsigned button, double pointX, double pointY, double pointZ) 
+		{
+			if (touchCallback) {
+				touchCallback(this, true, button, pointX, pointY, pointZ);
+			}
+		};
 		//! Called for a robot if a previously mouse button was pressed and is now released
-		virtual void mouseReleaseEvent(unsigned button) {};
-		
+		virtual void mouseReleaseEvent(unsigned button) 
+		{
+			if (touchCallback) {
+				touchCallback(this, false, button, 0, 0, 0);
+			}
+		}
+    void touchEvent(bool state, unsigned button, double pointX, double pointY, double pointZ) 
+    {                                            
+      if (state) {                                                              
+        mousePressEvent(button, pointX, pointY, pointZ);                        
+      } else {                                                                  
+        mouseReleaseEvent(button);                                              
+      }                                                                         
+    }  
 		void setName(const std::string &value) {
 			name = value;
 		}
@@ -350,9 +382,32 @@ namespace Enki
 		const std::function<void(PhysicalObject *, PhysicalObject *)> & getCollisionCallback() const {
 			return collisionCb;
 		}
-
+		void setTouchCallback(std::function<void(PhysicalObject *, bool, unsigned, double, double, double)> &value) {
+			touchCallback = value;
+		}
+		const std::function<void(PhysicalObject *, bool, unsigned, double, double, double)> & getTouchCallback() const {
+			return touchCallback;
+		}
 		World * getWorld() const {
 			return world;
+		}
+
+		const Vector & getPosition() const {
+			return pos;
+		}
+
+		void setPosition(const Vector & value) {
+			pos = value;
+			computeTransformedShape();
+		}
+
+		double getAngle() const {
+			return angle;
+		}
+
+		void setAngle(double value) {
+			angle = value;
+			computeTransformedShape();
 		}
 
 	private:		// setup methods

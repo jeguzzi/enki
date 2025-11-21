@@ -102,6 +102,13 @@ namespace Enki
 
 			LED_COUNT
 		};
+
+		enum Button
+		{
+			CENTER = 0,
+			FORWARD, BACKWARD, LEFT, RIGHT,
+			BUTTON_COUNT
+		};
 		
 	public:
 		//! Create a Thymio II
@@ -112,9 +119,24 @@ namespace Enki
 		void setLedIntensity(LedIndex ledIndex, double intensity = 1.f);
 		void setLedColor(LedIndex ledIndex, const Color& color = Color(1.,1.,1.,1.));
 		Color getColorLed(LedIndex ledIndex) const;
-
+		void touchButton(Button index);
+		virtual void hasTouchedButton(Button button) {
+			if (buttonTouchCallback) {
+				buttonTouchCallback(this, button);
+			}
+		}
+		void mousePressEvent(unsigned button, double pointX, double pointY, double pointZ) override; 
+		const std::function<void(Thymio2 *, Button button)> & getButtonTouchCallback() const {
+			return buttonTouchCallback;
+		}
+		void setButtonTouchCallback(const std::function<void(Thymio2 *, Button button)> & value) {
+			buttonTouchCallback = value;
+		}
 	protected:
 		Color ledColor[LED_COUNT];
+		std::array<double, 3> buttonPosition[BUTTON_COUNT];
+	private:
+		std::function<void(Thymio2 *, Button button)> buttonTouchCallback;
 	};
 }
 

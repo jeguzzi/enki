@@ -6,6 +6,8 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+from sphinx.addnodes import pending_xref
+
 project = 'pyenki'
 copyright = '2020, Stéphane Magnenat and others'
 author = 'Stéphane Magnenat and others. This version is maintained by Jerome Guzzi.'
@@ -16,21 +18,50 @@ release = '0.0.1'
 
 extensions = [
     'sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.autosectionlabel',
-    'sphinx_toolbox.code'
+    'sphinx_toolbox.code', 'sphinx_tabs.tabs', 'sphinx.ext.intersphinx',
+    # 'sphinx.ext.autosummary', 'autoclasstoc',
+    'enum_tools.autoenum'
 ]
+
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'numpy': ('https://numpy.org/doc/stable', None),
+}
+
+autodoc_default_options = {
+    'members': True,
+    'special-members': False,
+    'private-members': False,
+    'inherited-members': False,
+    'undoc-members': False,
+    'exclude-members': '__weakref__',
+}
+
+autodoc_type_aliases = {
+    'Vector': 'Vector',
+    'Vector3': 'Vector3',
+    'VectorLike': 'VectorLike',
+    'Vector3Like': 'Vector3Like',
+    'Image': 'Image',
+    'Array1D': 'Array1D',
+    'Array2D': 'Array2D',
+    'ARGBImage': 'ARGBImage',
+    'ARGBImageLike': 'ARGBImageLike',
+    'IntArray1D': 'IntArray1D'
+}
 
 highlight_language = 'python'
 
-add_module_names = False
+# add_module_names = False
 autodoc_typehints_format = 'short'
 autodoc_member_order = 'groupwise'
 autodoc_class_signature = 'separated'
-autodoc_inherit_docstrings = True
+# autodoc_inherit_docstrings = True
 autoclass_content = 'class'
 autodoc_docstring_signature = True
 
 autodoc_default_options = {
-    'show-inheritance': True,
+    # 'show-inheritance': False,
     'exclude-members': '__new__'
 }
 
@@ -54,8 +85,41 @@ html_static_path = ['_static']
 
 _replace = {
     "pyenki.pyenki": "pyenki",
-    "pyenki.": "",
+    # "pyenki.": "",
     "collections.abc.": "",
+    "typing.": ""
+}
+
+_types = [
+    'Vector',
+    'VectorLike',
+    'Vector3',
+    'Vector3Like',
+    'Image',
+    'ARGBImage',
+    'ARGBImageLike',
+    'Array1D',
+    'Array2D',
+    'IntArray1D'
+]
+
+_attrs = [
+    'numpy.uint8', 'numpy.float64', 'numpy.float32', 'numpy.int64',
+    'numpy.int32'
+]
+
+_data = ['numpy.typing.NDArray', 'numpy.typing.ArrayLike']
+
+_meths = []
+
+aliases = {
+    "Sequence": "collections.abc.Sequence",
+    "Callable": "collections.abc.Callable",
+    "SupportsFloat": "typing.SupportsFloat",
+    "SupportsInt": "typing.SupportsInt",
+    "Unpack": "typing.Unpack",
+    "Annotated": "typing.Annotated",
+    "Any": "typing.Any",
 }
 
 
@@ -85,6 +149,24 @@ def f_signature(app, what, name, obj, options, signature, return_annotation):
     return (signature, return_annotation)
 
 
+def resolve_internal_aliases(app, doctree):
+    pending_xrefs = doctree.traverse(condition=pending_xref)
+    for node in pending_xrefs:
+        if node['refdomain'] == "py":
+            if node['reftarget'] in _types:
+                node["reftype"] = "type"
+            elif node['reftarget'] in _attrs:
+                node["reftype"] = "attr"
+            elif node['reftarget'] in _data:
+                node["reftype"] = "data"
+            elif node['reftarget'] in _meths:
+                node["reftype"] = "meth"
+        alias = node.get('reftarget', None)
+        if alias is not None and alias in aliases:
+            node['reftarget'] = aliases[alias]
+
+
 def setup(app):
+    app.connect('doctree-read', resolve_internal_aliases)
     app.connect('autodoc-process-docstring', f_docstring)
     app.connect('autodoc-process-signature', f_signature)
