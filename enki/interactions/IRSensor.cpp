@@ -257,13 +257,13 @@ namespace Enki
 					const double c(sqrt(c2));
 					const double alpha(absRayAngles[i] - absPos.angle());
 					const double bp(-c*cos(alpha) + sqrt(r2-c2*sin(alpha)*sin(alpha)));
-					const double bm(-c*cos(alpha) - sqrt(r2-c2*sin(alpha)*sin(alpha)));
-					double dist;
-					if (cos(alpha) < 0)
-						dist = std::min(bp, bm);
-					else
-						dist = std::max(bp, bm);
-					updateRay(i, dist);
+					// const double bm(-c*cos(alpha) - sqrt(r2-c2*sin(alpha)*sin(alpha)));
+					// double dist;
+					// if (cos(alpha) < 0)
+					// 	dist = std::min(bp, bm);
+					// else
+					// 	dist = std::max(bp, bm);
+					updateRay(i, bp);
 				}
 			}
 			break;
