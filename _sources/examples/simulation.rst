@@ -23,10 +23,16 @@ In this example, a Thymio will advance as long as there is not an obstacle (a wa
 .. include:: ../../../examples/python/hello_thymio.py
    :code: Python
 
-Launching it with ``--gui`` will visualize a real-time simulation.
+Launching it with ``--gui`` will visualizes a real-time simulation.
 
 .. figure:: images/hello.png
-   :width: 75%
+   :width: 50%
+
+while running it with the ``--video`` generates this video
+
+.. video:: images/hello_thymio.mp4
+   :width: 100%
+   :align: center
 
 Thymio Buttons
 --------------
@@ -37,4 +43,18 @@ In this example, a Thymio will react to buttons. Try to press any button to chan
    :code: Python
 
 .. figure:: images/buttons.png
-   :width: 75%
+   :width: 50%
+
+Thymio Behaviors
+----------------
+
+In this example, a group of Thymio runs one the controllers, described in :ref:`Behaviors`, that replicate the behaviors implemented in the Thymio firmware.
+
+.. include:: ../../../examples/python/thymio_behaviors.py
+   :code: Python
+
+Running the script with the ``--video`` flag generates this video:
+
+.. video:: images/thymio_behaviors.mp4
+   :width: 100%
+   :align: center

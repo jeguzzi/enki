@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-toolbox-code.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-toolbox-code.css?v=4ee5d529" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -161,9 +161,9 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../visualization/index.html">How to visualize a simulation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../visualization/configuration.html">Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../visualization/rendering.html">Rendering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../visualization/interactive.html">Interactive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/viewer.html">Viewer</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../background/index.html">Background knowledge</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -190,6 +190,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../api/video.html">Video</a></li>
 </ul>
 </details></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/adapters.html">Aseba Adapters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/behaviors.html">Behaviors</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
@@ -344,6 +346,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimal-thymio">Minimal Thymio</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hello-thymio">Hello Thymio</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thymio-buttons">Thymio Buttons</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thymio-behaviors">Thymio Behaviors</a></li>
 </ul>
             </nav>
         </div>
@@ -415,7 +418,6 @@ which we log at each time step. This is the Python equivalent to the <a class="r
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">SupportsFloat</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.viewer</span>
 
 
 <span class="c1"># The world update step will call `control_step` automatically</span>
@@ -458,38 +460,57 @@ which we log at each time step. This is the Python equivalent to the <a class="r
     <span class="k">return</span> <span class="n">world</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">gui</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-         <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-         <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-         <span class="n">ortho</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">gui</span> <span class="o">=</span> <span class="s1">&#39;--gui&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
+    <span class="n">video</span> <span class="o">=</span> <span class="s1">&#39;--video&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
+    <span class="n">ortho</span> <span class="o">=</span> <span class="s1">&#39;--ortho&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
     <span class="n">world</span> <span class="o">=</span> <span class="n">setup</span><span class="p">()</span>
+    <span class="n">camera_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">camera_position</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                         <span class="n">camera_altitude</span><span class="o">=</span><span class="mf">70.0</span><span class="p">,</span>
+                         <span class="n">camera_yaw</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                         <span class="n">camera_pitch</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                         <span class="n">camera_is_ortho</span><span class="o">=</span><span class="n">ortho</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">gui</span><span class="p">:</span>
-        <span class="c1"># We can either run a simulation [in real-time] inside a Qt application</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.viewer</span>
+
+        <span class="c1"># We run a simulation [in real-time] inside a Qt application</span>
         <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">run_in_viewer</span><span class="p">(</span><span class="n">world</span><span class="p">,</span>
-                                    <span class="n">camera_position</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-                                    <span class="n">camera_altitude</span><span class="o">=</span><span class="mf">70.0</span><span class="p">,</span>
-                                    <span class="n">camera_yaw</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-                                    <span class="n">camera_pitch</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                                    <span class="n">time_step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
                                     <span class="n">walls_height</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                                    <span class="n">camera_is_ortho</span><span class="o">=</span><span class="n">ortho</span><span class="p">,</span>
-                                    <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
+                                    <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span>
+                                    <span class="o">**</span><span class="n">camera_config</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">video</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.video</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.viewer</span>
+
+        <span class="c1"># We generate a video</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">video</span><span class="o">.</span><span class="n">make_video</span><span class="p">(</span><span class="n">world</span><span class="p">,</span>
+                                    <span class="n">time_step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                                    <span class="n">walls_height</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                    <span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                    <span class="n">width</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span>
+                                    <span class="n">height</span><span class="o">=</span><span class="mi">720</span><span class="p">,</span>
+                                    <span class="o">**</span><span class="n">camera_config</span><span class="p">)</span>
+        <span class="n">v</span><span class="o">.</span><span class="n">write_videofile</span><span class="p">(</span><span class="s1">&#39;hello_thymio.mp4&#39;</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># or we can write our own loop that run the simulation as fast as possible.</span>
+        <span class="c1"># We write our own loop to run the simulation as fast as possible.</span>
         <span class="n">steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration</span> <span class="o">//</span> <span class="n">dt</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
             <span class="n">world</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">(</span><span class="n">gui</span><span class="o">=</span><span class="s1">&#39;--gui&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">,</span> <span class="n">ortho</span><span class="o">=</span><span class="s1">&#39;--ortho&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">main</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Launching it with <code class="docutils literal notranslate"><span class="pre">--gui</span></code> will visualize a real-time simulation.</p>
+<p>Launching it with <code class="docutils literal notranslate"><span class="pre">--gui</span></code> will visualizes a real-time simulation.</p>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/hello.png"><img alt="../_images/hello.png" src="../_images/hello.png" style="width: 75%;" />
+<a class="reference internal image-reference" href="../_images/hello.png"><img alt="../_images/hello.png" src="../_images/hello.png" style="width: 50%;" />
 </a>
 </figure>
-</section>
+<p>while running it with the <code class="docutils literal notranslate"><span class="pre">--video</span></code> generates this video</p>
+<div  class="sphinx-contrib-video-container align-center"><video controls="True" preload="auto" width="100%"><source src="../_images/hello_thymio.mp4" type="video/mp4"></video></div></section>
 <section id="thymio-buttons">
 <h2>Thymio Buttons<a class="headerlink" href="#thymio-buttons" title="Link to this heading">#</a></h2>
 <p>In this example, a Thymio will react to buttons. Try to press any button to change its color.</p>
@@ -532,10 +553,65 @@ which we log at each time step. This is the Python equivalent to the <a class="r
 </pre></div>
 </div>
 <figure class="align-default">
-<a class="reference internal image-reference" href="../_images/buttons.png"><img alt="../_images/buttons.png" src="../_images/buttons.png" style="width: 75%;" />
+<a class="reference internal image-reference" href="../_images/buttons.png"><img alt="../_images/buttons.png" src="../_images/buttons.png" style="width: 50%;" />
 </a>
 </figure>
 </section>
+<section id="thymio-behaviors">
+<h2>Thymio Behaviors<a class="headerlink" href="#thymio-behaviors" title="Link to this heading">#</a></h2>
+<p>In this example, a group of Thymio runs one the controllers, described in <a class="reference internal" href="../api/behaviors.html#behaviors"><span class="std std-ref">Behaviors</span></a>, that replicate the behaviors implemented in the Thymio firmware.</p>
+<div class="code Python highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyenki</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.viewer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.video</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyenki.behaviors</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">ThymioAccBehavior</span><span class="p">,</span> <span class="n">ThymioExplorerBehavior</span><span class="p">,</span>
+                              <span class="n">ThymioFollowerBehavior</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">make_world</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">:</span>
+    <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">random_generator</span>
+    <span class="n">behaviors</span> <span class="o">=</span> <span class="p">(</span><span class="n">ThymioAccBehavior</span><span class="p">,</span> <span class="n">ThymioExplorerBehavior</span><span class="p">,</span> <span class="n">ThymioFollowerBehavior</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">):</span>
+        <span class="n">thymio</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">()</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">control_step_callback</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">behaviors</span><span class="p">)()</span>
+        <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">world</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+    <span class="n">world</span> <span class="o">=</span> <span class="n">make_world</span><span class="p">()</span>
+    <span class="n">camera_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">camera_altitude</span><span class="o">=</span><span class="mi">55</span><span class="p">,</span>
+                         <span class="n">camera_pitch</span><span class="o">=-</span><span class="mf">0.8</span><span class="p">,</span>
+                         <span class="n">camera_yaw</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+                         <span class="n">camera_position</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">))</span>
+    <span class="k">if</span> <span class="s1">&#39;--video&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">:</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">video</span><span class="o">.</span><span class="n">make_video</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">time_step</span><span class="o">=</span><span class="mf">0.033</span><span class="p">,</span>
+                                    <span class="n">duration</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+                                    <span class="n">width</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span>
+                                    <span class="n">height</span><span class="o">=</span><span class="mi">720</span><span class="p">,</span>
+                                    <span class="n">factor</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                    <span class="o">**</span><span class="n">camera_config</span><span class="p">)</span>
+        <span class="n">v</span><span class="o">.</span><span class="n">write_videofile</span><span class="p">(</span><span class="s1">&#39;thymio_behaviors.mp4&#39;</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">run_in_viewer</span><span class="p">(</span><span class="n">world</span><span class="p">,</span>
+                                    <span class="n">time_step</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
+                                    <span class="n">duration</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                                    <span class="o">**</span><span class="n">camera_config</span><span class="p">)</span>
+    <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Running the script with the <code class="docutils literal notranslate"><span class="pre">--video</span></code> flag generates this video:</p>
+<div  class="sphinx-contrib-video-container align-center"><video controls="True" preload="auto" width="100%"><source src="../_images/thymio_behaviors.mp4" type="video/mp4"></video></div></section>
 </section>
 
 
@@ -586,6 +662,7 @@ which we log at each time step. This is the Python equivalent to the <a class="r
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimal-thymio">Minimal Thymio</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hello-thymio">Hello Thymio</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thymio-buttons">Thymio Buttons</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thymio-behaviors">Thymio Behaviors</a></li>
 </ul>
   </nav></div>
 

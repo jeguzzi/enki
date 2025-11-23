@@ -59,8 +59,3 @@ Add the extra to be able to visualize the simulation in a notebook and to make v
 
    pip install "pyenki[viewer,all] @ git+https://github.com/jeguzzi/enki" --config-settings=cmake.define.WITH_QT=
 
-
-
-
-
-

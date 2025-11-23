@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-toolbox-code.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-toolbox-code.css?v=4ee5d529" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -161,9 +161,9 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../visualization/index.html">How to visualize a simulation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../visualization/configuration.html">Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../visualization/rendering.html">Rendering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../visualization/interactive.html">Interactive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/viewer.html">Viewer</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../background/index.html">Background knowledge</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -190,6 +190,8 @@
 <li class="toctree-l3"><a class="reference internal" href="video.html">Video</a></li>
 </ul>
 </details></li>
+<li class="toctree-l2"><a class="reference internal" href="adapters.html">Aseba Adapters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="behaviors.html">Behaviors</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
@@ -357,42 +359,33 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2"><code class="docutils literal notranslate"><span class="pre">Thymio2</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.prox_values"><code class="docutils literal notranslate"><span class="pre">Thymio2.prox_values</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.prox_values_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.prox_values_i</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.prox_distances"><code class="docutils literal notranslate"><span class="pre">Thymio2.prox_distances</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.prox_comm_tx"><code class="docutils literal notranslate"><span class="pre">Thymio2.prox_comm_tx</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.prox_comm_enabled"><code class="docutils literal notranslate"><span class="pre">Thymio2.prox_comm_enabled</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.prox_comm_events"><code class="docutils literal notranslate"><span class="pre">Thymio2.prox_comm_events</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.ground_values"><code class="docutils literal notranslate"><span class="pre">Thymio2.ground_values</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.ground_values_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.ground_values_i</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.left_wheel_target_speed_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.left_wheel_target_speed_i</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.right_wheel_target_speed_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.right_wheel_target_speed_i</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.left_wheel_encoder_speed_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.left_wheel_encoder_speed_i</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.right_wheel_encoder_speed_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.right_wheel_encoder_speed_i</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.left_wheel_odometry_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.left_wheel_odometry_i</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.right_wheel_odometry_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.right_wheel_odometry_i</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.button_touch_callback"><code class="docutils literal notranslate"><span class="pre">Thymio2.button_touch_callback</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_buttons"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_buttons</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_circle"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_circle</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_prox"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_prox</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_left_red"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_left_red</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_left_blue"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_left_blue</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_right_red"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_right_red</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_right_blue"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_right_blue</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.buttons"><code class="docutils literal notranslate"><span class="pre">Thymio2.buttons</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.__init__"><code class="docutils literal notranslate"><span class="pre">Thymio2.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_bottom_right"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_bottom_right()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_buttons"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_buttons()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_circle"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_circle()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_prox"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_prox()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_top"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_top()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.on_button_touch"><code class="docutils literal notranslate"><span class="pre">Thymio2.on_button_touch()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_bottom_left"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_bottom_left()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_bottom_left_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_bottom_left_i()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_bottom_right"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_bottom_right()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_bottom_right_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_bottom_right_i()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_buttons"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_buttons()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_buttons_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_buttons_i()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_circle"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_circle()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_circle_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_circle_i()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_left_blue"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_left_blue()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_left_blue_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_left_blue_i()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_left_red"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_left_red()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_left_red_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_left_red_i()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_prox"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_prox()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_prox_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_prox_i()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_right_blue"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_right_blue()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_right_blue_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_right_blue_i()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_right_red"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_right_red()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_right_red_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_right_red_i()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_top"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_top()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_top_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_top_i()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.touch_button"><code class="docutils literal notranslate"><span class="pre">Thymio2.touch_button()</span></code></a></li>
 </ul>
 </li>
@@ -489,8 +482,7 @@ The last two entries are from rear sensors  ordered from left to right.</p>
 <dt class="sig sig-object py" id="pyenki.Thymio2">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.</span></span><span class="sig-name descname"><span class="pre">Thymio2</span></span><a class="headerlink" href="#pyenki.Thymio2" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="base.html#pyenki.DifferentialWheeled" title="pyenki.pyenki.DifferentialWheeled"><code class="xref py py-class docutils literal notranslate"><span class="pre">DifferentialWheeled</span></code></a>, <a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.pyenki.PhysicalObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalObject</span></code></a></p>
-<p>A <a class="reference internal" href="base.html#pyenki.DifferentialWheeled" title="pyenki.DifferentialWheeled"><code class="xref py py-class docutils literal notranslate"><span class="pre">DifferentialWheeled</span></code></a> Thymio2 robot.
-Attribute names mimic the aseba interface, see <a class="reference external" href="http://wiki.thymio.org/en:thymioapi">http://wiki.thymio.org/en:thymioapi</a>.</p>
+<p>A <a class="reference internal" href="base.html#pyenki.DifferentialWheeled" title="pyenki.DifferentialWheeled"><code class="xref py py-class docutils literal notranslate"><span class="pre">DifferentialWheeled</span></code></a> Thymio2 robot.</p>
 <p>Example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pyenki</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">()</span>
@@ -505,14 +497,6 @@ Attribute names mimic the aseba interface, see <a class="reference external" hre
 <span class="go">array([   0.        ,    0., ...</span>
 </pre></div>
 </div>
-<p>For some methods and attributes there is an alternative version with the suffix <cite>_i</cite>
-which uses integers in the same units used by aseba. For example,</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#pyenki.Thymio2.left_wheel_target_speed_i" title="pyenki.Thymio2.left_wheel_target_speed_i"><code class="xref py py-attr docutils literal notranslate"><span class="pre">left_wheel_target_speed_i</span></code></a> uses integers in <code class="docutils literal notranslate"><span class="pre">[-500,</span> <span class="pre">500]</span></code>,
-where 500 ticks corresponds to 16.6 cm in <a class="reference internal" href="base.html#pyenki.DifferentialWheeled.left_wheel_target_speed" title="pyenki.DifferentialWheeled.left_wheel_target_speed"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pyenki.DifferentialWheeled.left_wheel_target_speed</span></code></a></p></li>
-<li><p><a class="reference internal" href="#pyenki.Thymio2.set_led_top_i" title="pyenki.Thymio2.set_led_top_i"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_led_top_i()</span></code></a> uses integers in <cite>[0, 31]</cite> where 31 corresponds to full intensity 1.0
-in <a class="reference internal" href="#pyenki.Thymio2.set_led_top" title="pyenki.Thymio2.set_led_top"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_led_top()</span></code></a>.</p></li>
-</ul>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyenki.Thymio2.prox_values">
 <span class="sig-name descname"><span class="pre">prox_values</span></span><a class="headerlink" href="#pyenki.Thymio2.prox_values" title="Link to this definition">#</a></dt>
@@ -522,19 +506,6 @@ The last two entries are from rear sensors  ordered from left to right.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="types.html#pyenki.Array1D" title="pyenki.Array1D">Array1D</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyenki.Thymio2.prox_values_i">
-<span class="sig-name descname"><span class="pre">prox_values_i</span></span><a class="headerlink" href="#pyenki.Thymio2.prox_values_i" title="Link to this definition">#</a></dt>
-<dd><p>An array of 7 proximity sensor readings, one for each sensors (readonly).
-The first 5 entries are from frontal sensors ordered from left to right.
-The last two entries are from rear sensors  ordered from left to right.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="types.html#pyenki.IntArray1D" title="pyenki.IntArray1D">IntArray1D</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -599,83 +570,6 @@ therefore to be compliant we should limit the value between 0 and 2047.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pyenki.Thymio2.ground_values_i">
-<span class="sig-name descname"><span class="pre">ground_values_i</span></span><a class="headerlink" href="#pyenki.Thymio2.ground_values_i" title="Link to this definition">#</a></dt>
-<dd><p>An array of 2 ground sensor readings, one for each sensors (readonly)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="types.html#pyenki.IntArray1D" title="pyenki.IntArray1D">IntArray1D</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyenki.Thymio2.left_wheel_target_speed_i">
-<span class="sig-name descname"><span class="pre">left_wheel_target_speed_i</span></span><a class="headerlink" href="#pyenki.Thymio2.left_wheel_target_speed_i" title="Link to this definition">#</a></dt>
-<dd><p>The target left wheel speed in ticks per second.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyenki.Thymio2.right_wheel_target_speed_i">
-<span class="sig-name descname"><span class="pre">right_wheel_target_speed_i</span></span><a class="headerlink" href="#pyenki.Thymio2.right_wheel_target_speed_i" title="Link to this definition">#</a></dt>
-<dd><p>The target right wheel speed in ticks per second.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyenki.Thymio2.left_wheel_encoder_speed_i">
-<span class="sig-name descname"><span class="pre">left_wheel_encoder_speed_i</span></span><a class="headerlink" href="#pyenki.Thymio2.left_wheel_encoder_speed_i" title="Link to this definition">#</a></dt>
-<dd><p>The current left wheel speed in ticks per second (readonly).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyenki.Thymio2.right_wheel_encoder_speed_i">
-<span class="sig-name descname"><span class="pre">right_wheel_encoder_speed_i</span></span><a class="headerlink" href="#pyenki.Thymio2.right_wheel_encoder_speed_i" title="Link to this definition">#</a></dt>
-<dd><p>The current right wheel speed in ticks per second (readonly).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyenki.Thymio2.left_wheel_odometry_i">
-<span class="sig-name descname"><span class="pre">left_wheel_odometry_i</span></span><a class="headerlink" href="#pyenki.Thymio2.left_wheel_odometry_i" title="Link to this definition">#</a></dt>
-<dd><p>The left wheel odometry integrated from measured wheel speeds in ticks (readonly).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pyenki.Thymio2.right_wheel_odometry_i">
-<span class="sig-name descname"><span class="pre">right_wheel_odometry_i</span></span><a class="headerlink" href="#pyenki.Thymio2.right_wheel_odometry_i" title="Link to this definition">#</a></dt>
-<dd><p>The right wheel odometry integrated from measured wheel speeds in ticks (readonly).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="pyenki.Thymio2.button_touch_callback">
 <span class="sig-name descname"><span class="pre">button_touch_callback</span></span><a class="headerlink" href="#pyenki.Thymio2.button_touch_callback" title="Link to this definition">#</a></dt>
 <dd><p>An optional function called when button touch events happen.</p>
@@ -686,10 +580,153 @@ therefore to be compliant we should limit the value between 0 and 2047.</p>
 </dl>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Thymio2.led_buttons">
+<span class="sig-name descname"><span class="pre">led_buttons</span></span><a class="headerlink" href="#pyenki.Thymio2.led_buttons" title="Link to this definition">#</a></dt>
+<dd><p>list[float]: The intensities of the 4 buttons LEDs.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Thymio2.led_circle">
+<span class="sig-name descname"><span class="pre">led_circle</span></span><a class="headerlink" href="#pyenki.Thymio2.led_circle" title="Link to this definition">#</a></dt>
+<dd><p>list[float]: The intensities of the 8 circle LEDs.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Thymio2.led_prox">
+<span class="sig-name descname"><span class="pre">led_prox</span></span><a class="headerlink" href="#pyenki.Thymio2.led_prox" title="Link to this definition">#</a></dt>
+<dd><p>list[float]: The intensities of the 8 proximity LEDs.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Thymio2.led_left_red">
+<span class="sig-name descname"><span class="pre">led_left_red</span></span><a class="headerlink" href="#pyenki.Thymio2.led_left_red" title="Link to this definition">#</a></dt>
+<dd><p>float: The intensity of the left red LED.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Thymio2.led_left_blue">
+<span class="sig-name descname"><span class="pre">led_left_blue</span></span><a class="headerlink" href="#pyenki.Thymio2.led_left_blue" title="Link to this definition">#</a></dt>
+<dd><p>float: The intensity of the left blue LED.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Thymio2.led_right_red">
+<span class="sig-name descname"><span class="pre">led_right_red</span></span><a class="headerlink" href="#pyenki.Thymio2.led_right_red" title="Link to this definition">#</a></dt>
+<dd><p>float: The intensity of the right red LED.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Thymio2.led_right_blue">
+<span class="sig-name descname"><span class="pre">led_right_blue</span></span><a class="headerlink" href="#pyenki.Thymio2.led_right_blue" title="Link to this definition">#</a></dt>
+<dd><p>float: The intensity of the right blue LED.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.Thymio2.buttons">
+<span class="sig-name descname"><span class="pre">buttons</span></span><a class="headerlink" href="#pyenki.Thymio2.buttons" title="Link to this definition">#</a></dt>
+<dd><p>list[bool]: Whether the buttons are being pressed.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pyenki.Thymio2.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.__init__" title="Link to this definition">#</a></dt>
 <dd><p>Constructs an instance</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.Thymio2.get_led_bottom_right">
+<span class="sig-name descname"><span class="pre">get_led_bottom_right</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'FixedSize(3)'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pyenki.Thymio2.get_led_bottom_right" title="Link to this definition">#</a></dt>
+<dd><p>Reads the bottom left RGB LED color</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the value of the <code class="docutils literal notranslate"><span class="pre">[red,</span> <span class="pre">blue,</span> <span class="pre">green]</span></code> channels</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.Thymio2.get_led_buttons">
+<span class="sig-name descname"><span class="pre">get_led_buttons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.get_led_buttons" title="Link to this definition">#</a></dt>
+<dd><p>Reads one of four button LEDs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the index of the LED (between 0 and 3)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the intensity between 0 and 1.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.Thymio2.get_led_circle">
+<span class="sig-name descname"><span class="pre">get_led_circle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.get_led_circle" title="Link to this definition">#</a></dt>
+<dd><p>Reads one of 8 circle LEDs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the index of the LED (between 0 and 7)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the intensity between 0 and 1.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.Thymio2.get_led_prox">
+<span class="sig-name descname"><span class="pre">get_led_prox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.get_led_prox" title="Link to this definition">#</a></dt>
+<dd><p>Reads one of 8 proximity LEDs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the index of the LED (between 0 and 7)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the intensity between 0 and 1.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.Thymio2.get_led_top">
+<span class="sig-name descname"><span class="pre">get_led_top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.Thymio2.get_led_top" title="Link to this definition">#</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>get_led_top() -&gt; Annotated[list[float], “FixedSize(3)”]</p></li>
+</ol>
+<p>Reads the top RGB LED color</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the value of the <code class="docutils literal notranslate"><span class="pre">[red,</span> <span class="pre">blue,</span> <span class="pre">green]</span></code> channels</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>]</p>
+</dd>
+</dl>
+<ol class="arabic simple" start="2">
+<li><p>get_led_top() -&gt; Annotated[list[float], “FixedSize(3)”]</p></li>
+</ol>
+<p>Reads the bottom left RGB LED color</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the value of the <code class="docutils literal notranslate"><span class="pre">[red,</span> <span class="pre">blue,</span> <span class="pre">green]</span></code> channels</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -721,21 +758,6 @@ Alternatively, users can assign a callback as <a class="reference internal" href
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyenki.Thymio2.set_led_bottom_left_i">
-<span class="sig-name descname"><span class="pre">set_led_bottom_left_i</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">red</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">green</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_bottom_left_i" title="Link to this definition">#</a></dt>
-<dd><p>Control the bottom left RGB LED color</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>red</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the value of the red channel between 0 and 31</p></li>
-<li><p><strong>green</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the value of the green channel between 0 and 31</p></li>
-<li><p><strong>blue</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the value of the blue channel between 0 and 31</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="pyenki.Thymio2.set_led_bottom_right">
 <span class="sig-name descname"><span class="pre">set_led_bottom_right</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">red</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">green</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_bottom_right" title="Link to this definition">#</a></dt>
 <dd><p>Control the bottom right RGB LED color</p>
@@ -745,21 +767,6 @@ Alternatively, users can assign a callback as <a class="reference internal" href
 <li><p><strong>red</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the value of the red channel</p></li>
 <li><p><strong>green</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the value of the green channel</p></li>
 <li><p><strong>blue</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the value of the blue channel</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyenki.Thymio2.set_led_bottom_right_i">
-<span class="sig-name descname"><span class="pre">set_led_bottom_right_i</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">red</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">green</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_bottom_right_i" title="Link to this definition">#</a></dt>
-<dd><p>Control the bottom right RGB LED color</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>red</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the value of the red channel between 0 and 31</p></li>
-<li><p><strong>green</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the value of the green channel between 0 and 31</p></li>
-<li><p><strong>blue</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the value of the blue channel between 0 and 31</p></li>
 </ul>
 </dd>
 </dl>
@@ -780,20 +787,6 @@ Alternatively, users can assign a callback as <a class="reference internal" href
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyenki.Thymio2.set_led_buttons_i">
-<span class="sig-name descname"><span class="pre">set_led_buttons_i</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_buttons_i" title="Link to this definition">#</a></dt>
-<dd><p>Control the four button LEDs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the index of the LED. Set to -1 to control all LEDs.</p></li>
-<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the desired intensity between 0 and 31.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="pyenki.Thymio2.set_led_circle">
 <span class="sig-name descname"><span class="pre">set_led_circle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_circle" title="Link to this definition">#</a></dt>
 <dd><p>Control the 8 circle LEDs</p>
@@ -803,64 +796,6 @@ Alternatively, users can assign a callback as <a class="reference internal" href
 <li><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the index of the LED. Set to -1 to control all LEDs.</p></li>
 <li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the desired intensity between 0 and 1.</p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyenki.Thymio2.set_led_circle_i">
-<span class="sig-name descname"><span class="pre">set_led_circle_i</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_circle_i" title="Link to this definition">#</a></dt>
-<dd><p>Control the 8 circle LEDs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the index of the LED. Set to -1 to control all LEDs.</p></li>
-<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the desired intensity between 0 and 31.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyenki.Thymio2.set_led_left_blue">
-<span class="sig-name descname"><span class="pre">set_led_left_blue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_left_blue" title="Link to this definition">#</a></dt>
-<dd><p>Control the left blue LEDs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the desired intensity between 0 and 1.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyenki.Thymio2.set_led_left_blue_i">
-<span class="sig-name descname"><span class="pre">set_led_left_blue_i</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_left_blue_i" title="Link to this definition">#</a></dt>
-<dd><p>Control the left blue LEDs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the desired intensity between 0 and 31.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyenki.Thymio2.set_led_left_red">
-<span class="sig-name descname"><span class="pre">set_led_left_red</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_left_red" title="Link to this definition">#</a></dt>
-<dd><p>Control the left red LEDs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the desired intensity between 0 and 1.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyenki.Thymio2.set_led_left_red_i">
-<span class="sig-name descname"><span class="pre">set_led_left_red_i</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_left_red_i" title="Link to this definition">#</a></dt>
-<dd><p>Control the left red LEDs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the desired intensity between 0 and 31.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -880,64 +815,6 @@ Alternatively, users can assign a callback as <a class="reference internal" href
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyenki.Thymio2.set_led_prox_i">
-<span class="sig-name descname"><span class="pre">set_led_prox_i</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_prox_i" title="Link to this definition">#</a></dt>
-<dd><p>Control the 8 proximity LEDs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the index of the LED. Set to -1 to control all LEDs.</p></li>
-<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the desired intensity between 0 and 31.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyenki.Thymio2.set_led_right_blue">
-<span class="sig-name descname"><span class="pre">set_led_right_blue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_right_blue" title="Link to this definition">#</a></dt>
-<dd><p>Control the right blue LEDs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the desired intensity between 0 and 1.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyenki.Thymio2.set_led_right_blue_i">
-<span class="sig-name descname"><span class="pre">set_led_right_blue_i</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_right_blue_i" title="Link to this definition">#</a></dt>
-<dd><p>Control the right blue LEDs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the desired intensity between 0 and 31.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyenki.Thymio2.set_led_right_red">
-<span class="sig-name descname"><span class="pre">set_led_right_red</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_right_red" title="Link to this definition">#</a></dt>
-<dd><p>Control the right red LEDs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the desired intensity between 0 and 1.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyenki.Thymio2.set_led_right_red_i">
-<span class="sig-name descname"><span class="pre">set_led_right_red_i</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_right_red_i" title="Link to this definition">#</a></dt>
-<dd><p>Control the right red LEDs</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the desired intensity between 0 and 31.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="pyenki.Thymio2.set_led_top">
 <span class="sig-name descname"><span class="pre">set_led_top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">red</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">green</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_top" title="Link to this definition">#</a></dt>
 <dd><p>Control the top RGB LED color</p>
@@ -947,21 +824,6 @@ Alternatively, users can assign a callback as <a class="reference internal" href
 <li><p><strong>red</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the value of the red channel</p></li>
 <li><p><strong>green</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the value of the green channel</p></li>
 <li><p><strong>blue</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the value of the blue channel</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyenki.Thymio2.set_led_top_i">
-<span class="sig-name descname"><span class="pre">set_led_top_i</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">red</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">green</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsInt" title="(in Python v3.14)"><span class="pre">SupportsInt</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.set_led_top_i" title="Link to this definition">#</a></dt>
-<dd><p>Control the top RGB LED color</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>red</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the value of the red channel between 0 and 31</p></li>
-<li><p><strong>green</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the value of the green channel between 0 and 31</p></li>
-<li><p><strong>blue</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the value of the blue channel between 0 and 31</p></li>
 </ul>
 </dd>
 </dl>
@@ -1043,42 +905,33 @@ Alternatively, users can assign a callback as <a class="reference internal" href
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2"><code class="docutils literal notranslate"><span class="pre">Thymio2</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.prox_values"><code class="docutils literal notranslate"><span class="pre">Thymio2.prox_values</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.prox_values_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.prox_values_i</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.prox_distances"><code class="docutils literal notranslate"><span class="pre">Thymio2.prox_distances</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.prox_comm_tx"><code class="docutils literal notranslate"><span class="pre">Thymio2.prox_comm_tx</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.prox_comm_enabled"><code class="docutils literal notranslate"><span class="pre">Thymio2.prox_comm_enabled</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.prox_comm_events"><code class="docutils literal notranslate"><span class="pre">Thymio2.prox_comm_events</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.ground_values"><code class="docutils literal notranslate"><span class="pre">Thymio2.ground_values</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.ground_values_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.ground_values_i</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.left_wheel_target_speed_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.left_wheel_target_speed_i</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.right_wheel_target_speed_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.right_wheel_target_speed_i</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.left_wheel_encoder_speed_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.left_wheel_encoder_speed_i</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.right_wheel_encoder_speed_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.right_wheel_encoder_speed_i</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.left_wheel_odometry_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.left_wheel_odometry_i</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.right_wheel_odometry_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.right_wheel_odometry_i</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.button_touch_callback"><code class="docutils literal notranslate"><span class="pre">Thymio2.button_touch_callback</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_buttons"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_buttons</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_circle"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_circle</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_prox"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_prox</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_left_red"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_left_red</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_left_blue"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_left_blue</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_right_red"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_right_red</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_right_blue"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_right_blue</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.buttons"><code class="docutils literal notranslate"><span class="pre">Thymio2.buttons</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.__init__"><code class="docutils literal notranslate"><span class="pre">Thymio2.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_bottom_right"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_bottom_right()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_buttons"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_buttons()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_circle"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_circle()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_prox"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_prox()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_top"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_top()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.on_button_touch"><code class="docutils literal notranslate"><span class="pre">Thymio2.on_button_touch()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_bottom_left"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_bottom_left()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_bottom_left_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_bottom_left_i()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_bottom_right"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_bottom_right()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_bottom_right_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_bottom_right_i()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_buttons"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_buttons()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_buttons_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_buttons_i()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_circle"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_circle()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_circle_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_circle_i()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_left_blue"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_left_blue()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_left_blue_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_left_blue_i()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_left_red"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_left_red()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_left_red_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_left_red_i()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_prox"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_prox()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_prox_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_prox_i()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_right_blue"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_right_blue()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_right_blue_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_right_blue_i()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_right_red"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_right_red()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_right_red_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_right_red_i()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_top"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_top()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.set_led_top_i"><code class="docutils literal notranslate"><span class="pre">Thymio2.set_led_top_i()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.touch_button"><code class="docutils literal notranslate"><span class="pre">Thymio2.touch_button()</span></code></a></li>
 </ul>
 </li>
