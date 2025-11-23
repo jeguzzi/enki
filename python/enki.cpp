@@ -184,13 +184,14 @@ void set_thymio_rgb_led(Thymio2 &thymio, Thymio2::LedIndex index, double red,
   thymio.setLedColor(index, Color(red, green, blue, i));
 }
 
-void set_thymio_rgb_led_i(Thymio2 &thymio, Thymio2::LedIndex index, int red,
-                          int green, int blue) {
-  set_thymio_rgb_led(thymio, index, red / 31.0, green / 31.0, blue / 31.0);
+std::array<double, 3> get_thymio_rgb_led(const Thymio2 &thymio,
+                                         Thymio2::LedIndex index) {
+  const auto color = thymio.getColorLed(index);
+  return {color.r() * color.a(), color.g() * color.a(), color.b() * color.a()};
 }
 
-void set_thymio_leds(Thymio2 &thymio, Thymio2::LedIndex first_index, int number,
-                     int index, double value) {
+void set_thymio_led(Thymio2 &thymio, Thymio2::LedIndex first_index, int number,
+                    int index, double value) {
   if (index == -1) {
     for (int i = 0; i < number; ++i) {
       thymio.setLedIntensity(Thymio2::LedIndex(first_index + i), value);
@@ -200,9 +201,31 @@ void set_thymio_leds(Thymio2 &thymio, Thymio2::LedIndex first_index, int number,
   }
 }
 
-void set_thymio_leds_i(Thymio2 &thymio, Thymio2::LedIndex first_index,
-                       int number, int index, int value) {
-  set_thymio_leds(thymio, first_index, number, index, value / 31.0);
+void set_thymio_leds(Thymio2 &thymio, Thymio2::LedIndex first_index, int number,
+                     std::vector<double> values) {
+  if (values.size() != number) {
+    throw std::length_error("Requires " + std::to_string(number) + " values");
+  }
+  for (int i = 0; i < number; ++i) {
+    thymio.setLedIntensity(Thymio2::LedIndex(first_index + i), values[i]);
+  }
+}
+
+double get_thymio_led(const Thymio2 &thymio, Thymio2::LedIndex first_index,
+                      unsigned index, int number) {
+  if (index < number) {
+    return thymio.getLedIntensity(Thymio2::LedIndex(first_index + index));
+  }
+  throw std::out_of_range("No LED at index " + std::to_string(index));
+}
+
+std::vector<double> get_thymio_leds(const Thymio2 &thymio,
+                                    Thymio2::LedIndex first_index, int number) {
+  std::vector<double> rs(number);
+  for (int i = 0; i < number; ++i) {
+    rs[i] = thymio.getLedIntensity(Thymio2::LedIndex(first_index + i));
+  }
+  return rs;
 }
 
 Polygon make_polygon(const std::vector<Vector> &ps) {
@@ -214,15 +237,6 @@ Polygon make_polygon(const std::vector<Vector> &ps) {
     p.assign(ps.rbegin(), ps.rend());
   }
   return p;
-}
-
-static double from_thymio_i(int value) { return 16.6 * value / 500; }
-
-static double l16{std::pow(2, 16)};
-static double l15{std::pow(2, 15)};
-static int to_thymio_i(double value) {
-  const auto fvalue = std::fmod<double>(500 * value / 16.6 + l15, l16) - l15;
-  return static_cast<int>(std::floor(fvalue));
 }
 
 PYBIND11_MAKE_OPAQUE(PhysicalObject::Hull)
@@ -866,7 +880,6 @@ Args:
   py::classh<Thymio2, PyThymio2, DifferentialWheeled, PhysicalObject> thymio(
       m, "Thymio2", R"doc( 
 A :py:class:`DifferentialWheeled` Thymio2 robot.
-Attribute names mimic the aseba interface, see http://wiki.thymio.org/en:thymioapi.
 
 Example::
 
@@ -882,20 +895,8 @@ Example::
     >>> thymio.prox_values
     array([   0.        ,    0., ...
 
-For some methods and attributes there is an alternative version with the suffix `_i`
-which uses integers in the same units used by aseba. For example, 
-
-- :py:attr:`left_wheel_target_speed_i` uses integers in ``[-500, 500]``, 
-  where 500 ticks corresponds to 16.6 cm in :py:attr:`pyenki.DifferentialWheeled.left_wheel_target_speed`
-
-- :py:meth:`set_led_top_i` uses integers in `[0, 31]` where 31 corresponds to full intensity 1.0
-  in :py:meth:`set_led_top`.
-
 Attributes:
     prox_values (Array1D): An array of 7 proximity sensor readings, one for each sensors (readonly).
-        The first 5 entries are from frontal sensors ordered from left to right.
-        The last two entries are from rear sensors  ordered from left to right.
-    prox_values_i (IntArray1D): An array of 7 proximity sensor readings, one for each sensors (readonly).
         The first 5 entries are from frontal sensors ordered from left to right.
         The last two entries are from rear sensors  ordered from left to right.
     prox_distances (Array1D): A list of 7 distances between proximity sensor and nearest obstancle, one for each sensors;
@@ -907,14 +908,15 @@ Attributes:
     prox_comm_enabled (bool): Enable/disable proximity communication.
     prox_comm_events (list[IRCommEvent]): A list of events, one for every received message during the last control step (readonly).
     ground_values (Array1D): An array of 2 ground sensor readings, one for each sensors (readonly)
-    ground_values_i (IntArray1D): An array of 2 ground sensor readings, one for each sensors (readonly)
-    left_wheel_target_speed_i (int): The target left wheel speed in ticks per second.
-    right_wheel_target_speed_i (int): The target right wheel speed in ticks per second.
-    left_wheel_encoder_speed_i (int): The current left wheel speed in ticks per second (readonly).
-    right_wheel_encoder_speed_i (int): The current right wheel speed in ticks per second (readonly).
-    left_wheel_odometry_i (int): The left wheel odometry integrated from measured wheel speeds in ticks (readonly).
-    right_wheel_odometry_i (int): The right wheel odometry integrated from measured wheel speeds in ticks (readonly).
     button_touch_callback (Callable[[Thymio2, int], None] | None): An optional function called when button touch events happen.
+    leds_buttons: list[float]: The intensities of the 4 buttons LEDs.
+    leds_circle: list[float]: The intensities of the 8 circle LEDs.
+    leds_prox: list[float]: The intensities of the 8 proximity LEDs.
+    led_left_red: float: The intensity of the left red LED.
+    led_left_blue: float: The intensity of the left blue LED.
+    led_right_red: float: The intensity of the right red LED.
+    led_right_blue: float: The intensity of the right blue LED.
+    buttons: list[bool]: Whether the buttons are being pressed.
 )doc");
 
   py::classh<IRCommEvent>(thymio, "IRCommEvent", R"doc( 
@@ -985,29 +987,12 @@ Args:
     index (int): the index of the button
 )doc")
       .def_property(
-          "left_wheel_target_speed_i",
-          [](const Thymio2 &r) { return to_thymio_i(r.leftSpeed); },
-          [](Thymio2 &r, int value) {
-            return r.leftSpeed = from_thymio_i(value);
-          })
-      .def_property(
-          "right_wheel_target_speed_i",
-          [](const Thymio2 &r) { return to_thymio_i(r.rightSpeed); },
-          [](Thymio2 &r, int value) {
-            return r.rightSpeed = from_thymio_i(value);
-          })
-      .def_property(
-          "left_wheel_encoder_speed_i",
-          [](const Thymio2 &r) { return to_thymio_i(r.leftEncoder); }, nullptr)
-      .def_property(
-          "right_wheel_encoder_speed_i",
-          [](const Thymio2 &r) { return to_thymio_i(r.rightEncoder); }, nullptr)
-      .def_property(
-          "left_wheel_odometry_i",
-          [](const Thymio2 &r) { return to_thymio_i(r.leftOdometry); }, nullptr)
-      .def_property(
-          "right_wheel_odometry_i",
-          [](const Thymio2 &r) { return to_thymio_i(r.rightOdometry); },
+          "buttons",
+          [](const Thymio2 &r) {
+            std::vector<bool> vs(5);
+            vs.assign(r.getButtonValues(), r.getButtonValues() + 5);
+            return vs;
+          },
           nullptr)
       .def_property(
           "prox_distances",
@@ -1032,33 +1017,10 @@ Args:
           },
           nullptr)
       .def_property(
-          "prox_values_i",
-          [](const Thymio2 &r) {
-            const std::vector<int> vs{
-                static_cast<int>(r.infraredSensor0.getValue()),
-                static_cast<int>(r.infraredSensor1.getValue()),
-                static_cast<int>(r.infraredSensor2.getValue()),
-                static_cast<int>(r.infraredSensor3.getValue()),
-                static_cast<int>(r.infraredSensor4.getValue()),
-                static_cast<int>(r.infraredSensor5.getValue()),
-                static_cast<int>(r.infraredSensor6.getValue())};
-            return py::array(static_cast<ssize_t>(vs.size()), vs.data());
-          },
-          nullptr)
-      .def_property(
           "ground_values",
           [](const Thymio2 &r) {
             const std::vector<double> vs{r.groundSensor0.getValue(),
                                          r.groundSensor0.getValue()};
-            return py::array(static_cast<ssize_t>(vs.size()), vs.data());
-          },
-          nullptr)
-      .def_property(
-          "ground_values_i",
-          [](const Thymio2 &r) {
-            const std::vector<int> vs{
-                static_cast<int>(r.groundSensor0.getValue()),
-                static_cast<int>(r.groundSensor0.getValue())};
             return py::array(static_cast<ssize_t>(vs.size()), vs.data());
           },
           nullptr)
@@ -1089,17 +1051,15 @@ Args:
     blue (float): the value of the blue channel
 )doc")
       .def(
-          "set_led_top_i",
-          [](Thymio2 &r, int red = 0, int green = 0, int blue = 0) {
-            set_thymio_rgb_led_i(r, Thymio2::LedIndex::TOP, red, green, blue);
+          "get_led_top",
+          [](const Thymio2 &r) {
+            return get_thymio_rgb_led(r, Thymio2::LedIndex::TOP);
           },
-          py::arg("red") = 0, py::arg("green") = 0, py::arg("blue") = 0, R"doc(
-Control the top RGB LED color
+          R"doc( 
+Reads the top RGB LED color
 
-Args:
-    red (int): the value of the red channel between 0 and 31
-    green (int): the value of the green channel between 0 and 31
-    blue (int): the value of the blue channel between 0 and 31
+Returns:
+    list[float]: the value of the ``[red, blue, green]`` channels
 )doc")
       .def(
           "set_led_bottom_left",
@@ -1116,18 +1076,15 @@ Args:
     blue (float): the value of the blue channel
 )doc")
       .def(
-          "set_led_bottom_left_i",
-          [](Thymio2 &r, int red = 0, int green = 0, int blue = 0) {
-            set_thymio_rgb_led_i(r, Thymio2::LedIndex::BOTTOM_LEFT, red, green,
-                                 blue);
+          "get_led_top",
+          [](const Thymio2 &r) {
+            return get_thymio_rgb_led(r, Thymio2::LedIndex::BOTTOM_LEFT);
           },
-          py::arg("red") = 0, py::arg("green") = 0, py::arg("blue") = 0, R"doc(
-Control the bottom left RGB LED color
+          R"doc( 
+Reads the bottom left RGB LED color
 
-Args:
-    red (int): the value of the red channel between 0 and 31
-    green (int): the value of the green channel between 0 and 31
-    blue (int): the value of the blue channel between 0 and 31
+Returns:
+    list[float]: the value of the ``[red, blue, green]`` channels
 )doc")
       .def(
           "set_led_bottom_right",
@@ -1144,23 +1101,20 @@ Args:
     blue (float): the value of the blue channel
 )doc")
       .def(
-          "set_led_bottom_right_i",
-          [](Thymio2 &r, int red = 0, int green = 0, int blue = 0) {
-            set_thymio_rgb_led_i(r, Thymio2::LedIndex::BOTTOM_RIGHT, red, green,
-                                 blue);
+          "get_led_bottom_right",
+          [](const Thymio2 &r) {
+            return get_thymio_rgb_led(r, Thymio2::LedIndex::BOTTOM_RIGHT);
           },
-          py::arg("red") = 0, py::arg("green") = 0, py::arg("blue") = 0, R"doc(
-Control the bottom right RGB LED color
+          R"doc( 
+Reads the bottom left RGB LED color
 
-Args:
-    red (int): the value of the red channel between 0 and 31
-    green (int): the value of the green channel between 0 and 31
-    blue (int): the value of the blue channel between 0 and 31
+Returns:
+    list[float]: the value of the ``[red, blue, green]`` channels
 )doc")
       .def(
           "set_led_buttons",
           [](Thymio2 &r, int index, double value) {
-            set_thymio_leds(r, Thymio2::LedIndex::BUTTON_UP, 4, index, value);
+            set_thymio_led(r, Thymio2::LedIndex::BUTTON_UP, 4, index, value);
           },
           py::arg("index"), py::arg("value"), R"doc(
 Control the four button LEDs
@@ -1170,21 +1124,30 @@ Args:
     value (float): the desired intensity between 0 and 1.
 )doc")
       .def(
-          "set_led_buttons_i",
-          [](Thymio2 &r, int index, int value) {
-            set_thymio_leds_i(r, Thymio2::LedIndex::BUTTON_UP, 4, index, value);
+          "get_led_buttons",
+          [](const Thymio2 &r, unsigned index) {
+            return get_thymio_led(r, Thymio2::LedIndex::BUTTON_UP, 4, index);
           },
-          py::arg("index"), py::arg("value"), R"doc(
-Control the four button LEDs
+          py::arg("index"), R"doc(
+Reads one of four button LEDs
 
 Args:
-    index (int): the index of the LED. Set to -1 to control all LEDs.
-    value (int): the desired intensity between 0 and 31.
+    index (int): the index of the LED (between 0 and 3)
+Returns:
+    float: the intensity between 0 and 1.
 )doc")
+      .def_property(
+          "leds_buttons",
+          [](const Thymio2 &r) {
+            get_thymio_leds(r, Thymio2::LedIndex::BUTTON_UP, 4);
+          },
+          [](Thymio2 &r, std::vector<double> values) {
+            set_thymio_leds(r, Thymio2::LedIndex::BUTTON_UP, 4, values);
+          })
       .def(
           "set_led_circle",
           [](Thymio2 &r, int index, double value) {
-            set_thymio_leds(r, Thymio2::LedIndex::RING_0, 8, index, value);
+            set_thymio_led(r, Thymio2::LedIndex::RING_0, 8, index, value);
           },
           py::arg("index"), py::arg("value"), R"doc(
 Control the 8 circle LEDs
@@ -1194,21 +1157,30 @@ Args:
     value (float): the desired intensity between 0 and 1.
 )doc")
       .def(
-          "set_led_circle_i",
-          [](Thymio2 &r, int index, int value) {
-            set_thymio_leds_i(r, Thymio2::LedIndex::RING_0, 8, index, value);
+          "get_led_circle",
+          [](const Thymio2 &r, unsigned index) {
+            return get_thymio_led(r, Thymio2::LedIndex::RING_0, 8, index);
           },
-          py::arg("index"), py::arg("value"), R"doc(
-Control the 8 circle LEDs
+          py::arg("index"), R"doc(
+Reads one of 8 circle LEDs
 
 Args:
-    index (int): the index of the LED. Set to -1 to control all LEDs.
-    value (int): the desired intensity between 0 and 31.
+    index (int): the index of the LED (between 0 and 7)
+Returns:
+    float: the intensity between 0 and 1.
 )doc")
+      .def_property(
+          "leds_circle",
+          [](const Thymio2 &r) {
+            get_thymio_leds(r, Thymio2::LedIndex::RING_0, 8);
+          },
+          [](Thymio2 &r, std::vector<double> values) {
+            set_thymio_leds(r, Thymio2::LedIndex::RING_0, 8, values);
+          })
       .def(
           "set_led_prox",
           [](Thymio2 &r, int index, double value) {
-            set_thymio_leds(r, Thymio2::LedIndex::IR_FRONT_0, 8, index, value);
+            set_thymio_led(r, Thymio2::LedIndex::IR_FRONT_0, 8, index, value);
           },
           py::arg("index"), py::arg("value"), R"doc(
 Control the 8 proximity LEDs
@@ -1218,106 +1190,58 @@ Args:
     value (float): the desired intensity between 0 and 1.
 )doc")
       .def(
-          "set_led_prox_i",
-          [](Thymio2 &r, int index, int value) {
-            set_thymio_leds_i(r, Thymio2::LedIndex::IR_FRONT_0, 8, index,
-                              value);
+          "get_led_prox",
+          [](const Thymio2 &r, unsigned index) {
+            return get_thymio_led(r, Thymio2::LedIndex::IR_FRONT_0, 8, index);
           },
-          py::arg("index"), py::arg("value"), R"doc(
-Control the 8 proximity LEDs
+          py::arg("index"), R"doc(
+Reads one of 8 proximity LEDs
 
 Args:
-    index (int): the index of the LED. Set to -1 to control all LEDs.
-    value (int): the desired intensity between 0 and 31.
+    index (int): the index of the LED (between 0 and 7)
+Returns:
+    float: the intensity between 0 and 1.
 )doc")
-      .def(
-          "set_led_left_red",
+      .def_property(
+          "leds_prox",
+          [](const Thymio2 &r) {
+            get_thymio_leds(r, Thymio2::LedIndex::IR_FRONT_0, 8);
+          },
+          [](Thymio2 &r, std::vector<double> values) {
+            set_thymio_leds(r, Thymio2::LedIndex::IR_FRONT_0, 8, values);
+          })
+      .def_property(
+          "led_left_red",
+          [](const Thymio2 &r) {
+            r.getLedIntensity(Thymio2::LedIndex::LEFT_RED);
+          },
           [](Thymio2 &r, double value) {
             r.setLedIntensity(Thymio2::LedIndex::LEFT_RED, value);
+          })
+      .def_property(
+          "led_left_blue",
+          [](const Thymio2 &r) {
+            r.getLedIntensity(Thymio2::LedIndex::LEFT_BLUE);
           },
-          py::arg("value"), R"doc(
-Control the left red LEDs
-
-Args:
-    value (float): the desired intensity between 0 and 1.
-)doc")
-      .def(
-          "set_led_left_red_i",
-          [](Thymio2 &r, int value) {
-            r.setLedIntensity(Thymio2::LedIndex::LEFT_RED, value / 31.0);
-          },
-          py::arg("value"), R"doc(
-Control the left red LEDs
-
-Args:
-    value (int): the desired intensity between 0 and 31.
-)doc")
-      .def(
-          "set_led_left_blue",
           [](Thymio2 &r, double value) {
             r.setLedIntensity(Thymio2::LedIndex::LEFT_BLUE, value);
+          })
+      .def_property(
+          "led_right_red",
+          [](const Thymio2 &r) {
+            r.getLedIntensity(Thymio2::LedIndex::RIGHT_RED);
           },
-          py::arg("value"), R"doc(
-Control the left blue LEDs
-
-Args:
-    value (float): the desired intensity between 0 and 1.
-)doc")
-      .def(
-          "set_led_left_blue_i",
-          [](Thymio2 &r, int value) {
-            r.setLedIntensity(Thymio2::LedIndex::LEFT_BLUE, value / 31.0);
-          },
-          py::arg("value"), R"doc(
-Control the left blue LEDs
-
-Args:
-    value (int): the desired intensity between 0 and 31.
-)doc")
-      .def(
-          "set_led_right_red",
           [](Thymio2 &r, double value) {
             r.setLedIntensity(Thymio2::LedIndex::RIGHT_RED, value);
+          })
+      .def_property(
+          "led_right_blue",
+          [](const Thymio2 &r) {
+            r.getLedIntensity(Thymio2::LedIndex::RIGHT_BLUE);
           },
-          py::arg("value"), R"doc(
-Control the right red LEDs
-
-Args:
-    value (float): the desired intensity between 0 and 1.
-)doc")
-      .def(
-          "set_led_right_red_i",
-          [](Thymio2 &r, int value) {
-            r.setLedIntensity(Thymio2::LedIndex::RIGHT_RED, value / 31.0);
-          },
-          py::arg("value"), R"doc(
-Control the right red LEDs
-
-Args:
-    value (int): the desired intensity between 0 and 31.
-)doc")
-      .def(
-          "set_led_right_blue",
           [](Thymio2 &r, double value) {
             r.setLedIntensity(Thymio2::LedIndex::RIGHT_BLUE, value);
-          },
-          py::arg("value"), R"doc(
-Control the right blue LEDs
-
-Args:
-    value (float): the desired intensity between 0 and 1.
-)doc")
-      .def(
-          "set_led_right_blue_i",
-          [](Thymio2 &r, int value) {
-            r.setLedIntensity(Thymio2::LedIndex::RIGHT_BLUE, value / 31.0);
-          },
-          py::arg("value"), R"doc(
-Control the right blue LEDs
-
-Args:
-    value (int): the desired intensity between 0 and 31.
-)doc");
+          });
 
   py::classh<PyWorld> world(m, "World", R"doc(
 The world is the container of all objects and robots.

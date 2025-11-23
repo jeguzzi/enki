@@ -156,6 +156,10 @@ namespace Enki
 		buttonPosition[BACKWARD] = {3.3, 0, 5.3};
 		buttonPosition[LEFT] = {4.8, 1.5, 5.3};
 		buttonPosition[RIGHT] = {4.8, -1.5, 5.3};
+        for (int index = 0; index < BUTTON_COUNT; ++index)
+        {
+        	buttonValue[index] = false;
+        }
 		setName("thymio");
 	}
 	
@@ -174,6 +178,13 @@ namespace Enki
 			ledColor[ledIndex].setA(intensity);
 			ledTextureNeedUpdate = true;
 		}
+	}
+
+	double Thymio2::getLedIntensity(LedIndex ledIndex) const
+	{
+		if (ledIndex<0 || ledIndex>=LED_COUNT)
+			throw std::out_of_range("Unknown LED " + std::to_string(ledIndex));
+		return ledColor[ledIndex].a();
 	}
 
 	void Thymio2::setLedColor(LedIndex ledIndex, const Color& color)
@@ -220,10 +231,19 @@ namespace Enki
         	const auto &p = buttonPosition[index];
         	if (distance(pointX, pointY, pointZ, p[0], p[1], p[2]) < 0.65) {
         		hasTouchedButton(Button(index));
+        		buttonValue[index] = true;
         		break;
         	}
         }
 		PhysicalObject::mousePressEvent(button, pointX, pointY, pointZ);
+	}
+
+	void Thymio2::mouseReleaseEvent(unsigned button) {
+        for (int index = 0; index < BUTTON_COUNT; ++index)
+        {
+        	buttonValue[index] = false;
+        }
+		PhysicalObject::mouseReleaseEvent(button);
 	}
 }
 

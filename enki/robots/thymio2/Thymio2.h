@@ -117,6 +117,7 @@ namespace Enki
 		~Thymio2();
 
 		void setLedIntensity(LedIndex ledIndex, double intensity = 1.f);
+		double getLedIntensity(LedIndex ledIndex) const;
 		void setLedColor(LedIndex ledIndex, const Color& color = Color(1.,1.,1.,1.));
 		Color getColorLed(LedIndex ledIndex) const;
 		void touchButton(Button index);
@@ -126,15 +127,20 @@ namespace Enki
 			}
 		}
 		void mousePressEvent(unsigned button, double pointX, double pointY, double pointZ) override; 
+		void mouseReleaseEvent(unsigned button) override; 
 		const std::function<void(Thymio2 *, Button button)> & getButtonTouchCallback() const {
 			return buttonTouchCallback;
 		}
 		void setButtonTouchCallback(const std::function<void(Thymio2 *, Button button)> & value) {
 			buttonTouchCallback = value;
 		}
+		const bool * getButtonValues() const {
+			return buttonValue;
+		}
 	protected:
 		Color ledColor[LED_COUNT];
 		std::array<double, 3> buttonPosition[BUTTON_COUNT];
+		bool buttonValue[BUTTON_COUNT];
 	private:
 		std::function<void(Thymio2 *, Button button)> buttonTouchCallback;
 	};
