@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Physical objects &#8212; pyenki 0.0.1 documentation</title>
+    <title>Physical objects &#8212; pyenki 0.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="../_static/documentation_options.js?v=a1637f0b"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -134,7 +134,7 @@
   
   
   
-    <p class="title logo__title">pyenki 0.0.1 documentation</p>
+    <p class="title logo__title">pyenki 0.1.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -445,14 +445,14 @@ Must be either empty or have contains at least one color for each face.</p>
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.PhysicalObject.Part.__init__" title="Link to this definition">#</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic simple">
-<li><p>__init__(l1: SupportsFloat, l2: SupportsFloat, height: SupportsFloat) -&gt; None</p></li>
+<li><p>__init__(lx: SupportsFloat, ly: SupportsFloat, height: SupportsFloat) -&gt; None</p></li>
 </ol>
 <p>Creates a part with a rectangular base.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>l1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The x dimension [cm]</p></li>
-<li><p><strong>l2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The y dimension [cm]</p></li>
+<li><p><strong>lx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The x dimension [cm]</p></li>
+<li><p><strong>ly</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The y dimension [cm]</p></li>
 <li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The height [cm]</p></li>
 </ul>
 </dd>
@@ -768,14 +768,14 @@ of <code class="docutils literal notranslate"><span class="pre">-k</span> <span 
 </dd>
 </dl>
 <ol class="arabic simple" start="3">
-<li><p>__init__(l1: SupportsFloat, l2: SupportsFloat, height: SupportsFloat, mass: SupportsFloat, color: pyenki.Color = Color(r=0.0, g=0.0, b=0.0, a=1.0)) -&gt; None</p></li>
+<li><p>__init__(lx: SupportsFloat, ly: SupportsFloat, height: SupportsFloat, mass: SupportsFloat, color: pyenki.Color = Color(r=0.0, g=0.0, b=0.0, a=1.0)) -&gt; None</p></li>
 </ol>
 <p>Creates a rectangular prism.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>l1</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the side length in cm (x).</p></li>
-<li><p><strong>l2</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the side length in cm (y).</p></li>
+<li><p><strong>lx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the side length in cm (x).</p></li>
+<li><p><strong>ly</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the side length in cm (y).</p></li>
 <li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The height in cm.</p></li>
 <li><p><strong>mass</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The mass in kg.</p></li>
 <li><p><strong>color</strong> (<a class="reference internal" href="types.html#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – The color.</p></li>

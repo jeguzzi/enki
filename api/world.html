@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>World &#8212; pyenki 0.0.1 documentation</title>
+    <title>World &#8212; pyenki 0.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="../_static/documentation_options.js?v=a1637f0b"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -134,7 +134,7 @@
   
   
   
-    <p class="title logo__title">pyenki 0.0.1 documentation</p>
+    <p class="title logo__title">pyenki 0.1.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -361,8 +361,8 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.static_objects"><code class="docutils literal notranslate"><span class="pre">World.static_objects</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.control_step_callback"><code class="docutils literal notranslate"><span class="pre">World.control_step_callback</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.random_seed"><code class="docutils literal notranslate"><span class="pre">World.random_seed</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.width"><code class="docutils literal notranslate"><span class="pre">World.width</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.height"><code class="docutils literal notranslate"><span class="pre">World.height</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.lx"><code class="docutils literal notranslate"><span class="pre">World.lx</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.ly"><code class="docutils literal notranslate"><span class="pre">World.ly</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.radius"><code class="docutils literal notranslate"><span class="pre">World.radius</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.walls_type"><code class="docutils literal notranslate"><span class="pre">World.walls_type</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.ground_texture"><code class="docutils literal notranslate"><span class="pre">World.ground_texture</span></code></a></li>
@@ -480,17 +480,17 @@ and type <a class="reference external" href="https://numpy.org/doc/stable/refere
 <dd><p>The world is the container of all objects and robots.
 It is either</p>
 <ul>
-<li><p>a rectangular arena with walls at all sides:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">World</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+<li><p>a rectangular arena with walls at the borders:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">World</span><span class="p">(</span><span class="n">lx</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span> <span class="n">ly</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
-<li><p>a circular area with walls:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">World</span><span class="p">(</span><span class="n">width</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+<li><p>a circular area with walls at the borders:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">World</span><span class="p">(</span><span class="n">radius</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
-<li><p>or an infinite surface:</p>
+<li><p>or an infinite surface with no walls:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">World</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -499,8 +499,8 @@ It is either</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The rectangular world width in centimeters</p></li>
-<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The rectangular world height in centimeters</p></li>
+<li><p><strong>lx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The rectangular world x-size in centimeters</p></li>
+<li><p><strong>ly</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The rectangular world y-size in centimeters</p></li>
 <li><p><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The circular world radius in centimeters</p></li>
 <li><p><strong>walls_color</strong> (<a class="reference internal" href="types.html#pyenki.Color" title="pyenki.Color"><em>Color</em></a>) – Optional wall color, default is <code class="docutils literal notranslate"><span class="pre">Color.gray</span></code></p></li>
 <li><p><strong>ground_texture</strong> (<a class="reference internal" href="#pyenki.World.GroundTexture" title="pyenki.World.GroundTexture"><em>World.GroundTexture</em></a><em> | </em><em>None</em>) – Optional ground texture, default is an empty image.</p></li>
@@ -514,7 +514,7 @@ It is either</p>
 <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
 <span class="n">thymio</span> <span class="o">=</span> <span class="n">Thymio2</span><span class="p">()</span>
 <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
-<span class="n">wall</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">PhysicalObject</span><span class="p">(</span><span class="n">l1</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">l2</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mass</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="n">wall</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">PhysicalObject</span><span class="p">(</span><span class="n">lx</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ly</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mass</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                              <span class="n">color</span><span class="o">=</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">))</span>
 <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">wall</span><span class="p">)</span>
 <span class="c1"># Run 100 times a 0.1 s long simulation step</span>
@@ -578,9 +578,9 @@ It is either</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pyenki.World.width">
-<span class="sig-name descname"><span class="pre">width</span></span><a class="headerlink" href="#pyenki.World.width" title="Link to this definition">#</a></dt>
-<dd><p>the world width [cm]</p>
+<dt class="sig sig-object py" id="pyenki.World.lx">
+<span class="sig-name descname"><span class="pre">lx</span></span><a class="headerlink" href="#pyenki.World.lx" title="Link to this definition">#</a></dt>
+<dd><p>the world x-size [cm]</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
@@ -589,9 +589,9 @@ It is either</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pyenki.World.height">
-<span class="sig-name descname"><span class="pre">height</span></span><a class="headerlink" href="#pyenki.World.height" title="Link to this definition">#</a></dt>
-<dd><p>the world height [cm]</p>
+<dt class="sig sig-object py" id="pyenki.World.ly">
+<span class="sig-name descname"><span class="pre">ly</span></span><a class="headerlink" href="#pyenki.World.ly" title="Link to this definition">#</a></dt>
+<dd><p>the world y-size [cm]</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
@@ -638,7 +638,7 @@ It is either</p>
 <dd><p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(seed: SupportsInt = 0) -&gt; None</p></li>
-<li><p>__init__(width: SupportsFloat, height: SupportsFloat, walls_color: pyenki.Color = Color(r=0.5, g=0.5, b=0.5, a=1.0), ground_texture: pyenki.World.GroundTexture | None = None, seed: SupportsInt = 0) -&gt; None</p></li>
+<li><p>__init__(lx: SupportsFloat, ly: SupportsFloat, walls_color: pyenki.Color = Color(r=0.5, g=0.5, b=0.5, a=1.0), ground_texture: pyenki.World.GroundTexture | None = None, seed: SupportsInt = 0) -&gt; None</p></li>
 <li><p>__init__(radius: SupportsFloat, walls_color: pyenki.Color = Color(r=0.5, g=0.5, b=0.5, a=1.0), ground_texture: pyenki.World.GroundTexture | None = None, seed: SupportsInt = 0) -&gt; None</p></li>
 </ol>
 </dd></dl>
@@ -859,8 +859,8 @@ than the sensor-motor loop frequency</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.static_objects"><code class="docutils literal notranslate"><span class="pre">World.static_objects</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.control_step_callback"><code class="docutils literal notranslate"><span class="pre">World.control_step_callback</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.random_seed"><code class="docutils literal notranslate"><span class="pre">World.random_seed</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.width"><code class="docutils literal notranslate"><span class="pre">World.width</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.height"><code class="docutils literal notranslate"><span class="pre">World.height</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.lx"><code class="docutils literal notranslate"><span class="pre">World.lx</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.ly"><code class="docutils literal notranslate"><span class="pre">World.ly</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.radius"><code class="docutils literal notranslate"><span class="pre">World.radius</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.walls_type"><code class="docutils literal notranslate"><span class="pre">World.walls_type</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.ground_texture"><code class="docutils literal notranslate"><span class="pre">World.ground_texture</span></code></a></li>

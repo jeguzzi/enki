@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Basics &#8212; pyenki 0.0.1 documentation</title>
+    <title>Basics &#8212; pyenki 0.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="../_static/documentation_options.js?v=a1637f0b"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -134,7 +134,7 @@
   
   
   
-    <p class="title logo__title">pyenki 0.0.1 documentation</p>
+    <p class="title logo__title">pyenki 0.1.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -425,7 +425,7 @@ document.write(`
 <span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">right_wheel_target_speed</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.2</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="c1"># Switch the top LED yellow</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">PhysicalObject</span><span class="p">(</span><span class="n">l1</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">l2</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">mass</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">PhysicalObject</span><span class="p">(</span><span class="n">lx</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">ly</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">mass</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">prox_values</span>
@@ -470,7 +470,7 @@ document.write(`
 <span class="n">cylinder</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">cylinder</span><span class="p">)</span>
 
-<span class="n">box</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">PhysicalObject</span><span class="p">(</span><span class="n">l1</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">l2</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">mass</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+<span class="n">box</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">PhysicalObject</span><span class="p">(</span><span class="n">lx</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">ly</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">mass</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
                 <span class="n">color</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">))</span>
 <span class="n">box</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>

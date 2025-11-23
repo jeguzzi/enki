@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Simulation &#8212; pyenki 0.0.1 documentation</title>
+    <title>Simulation &#8212; pyenki 0.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=e645c8fa"></script>
+    <script src="../_static/documentation_options.js?v=a1637f0b"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -134,7 +134,7 @@
   
   
   
-    <p class="title logo__title">pyenki 0.0.1 documentation</p>
+    <p class="title logo__title">pyenki 0.1.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -386,7 +386,7 @@ which we log at each time step. This is the Python equivalent to the <a class="r
 
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.1</span>
-    <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+    <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">tx</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
             <span class="nb">zip</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span> <span class="mi">130</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="mi">222</span><span class="p">,</span> <span class="mi">333</span><span class="p">),</span>
                 <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)):</span>
@@ -415,9 +415,12 @@ which we log at each time step. This is the Python equivalent to the <a class="r
 <p>In this example, a Thymio will advance as long as there is not an obstacle (a wall) in front of it, when it will stop and switch the LED color to red from green.</p>
 <div class="code Python highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">SupportsFloat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">SupportsFloat</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pyenki.viewer</span><span class="w"> </span><span class="kn">import</span> <span class="n">CameraConfig</span>
 
 
 <span class="c1"># The world update step will call `control_step` automatically</span>
@@ -450,8 +453,8 @@ which we log at each time step. This is the Python equivalent to the <a class="r
     <span class="n">thymio</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
     <span class="c1"># and a wall a bit in forward, in front of the Thymio.</span>
-    <span class="n">wall</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">PhysicalObject</span><span class="p">(</span><span class="n">l1</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                                 <span class="n">l2</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">wall</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">PhysicalObject</span><span class="p">(</span><span class="n">lx</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                 <span class="n">ly</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
                                  <span class="n">height</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
                                  <span class="n">mass</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                                  <span class="n">color</span><span class="o">=</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">))</span>
@@ -465,11 +468,11 @@ which we log at each time step. This is the Python equivalent to the <a class="r
     <span class="n">video</span> <span class="o">=</span> <span class="s1">&#39;--video&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
     <span class="n">ortho</span> <span class="o">=</span> <span class="s1">&#39;--ortho&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
     <span class="n">world</span> <span class="o">=</span> <span class="n">setup</span><span class="p">()</span>
-    <span class="n">camera_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">camera_position</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-                         <span class="n">camera_altitude</span><span class="o">=</span><span class="mf">70.0</span><span class="p">,</span>
-                         <span class="n">camera_yaw</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-                         <span class="n">camera_pitch</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
-                         <span class="n">camera_is_ortho</span><span class="o">=</span><span class="n">ortho</span><span class="p">)</span>
+    <span class="n">camera_config</span><span class="p">:</span> <span class="n">CameraConfig</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">camera_position</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                                       <span class="n">camera_altitude</span><span class="o">=</span><span class="mf">70.0</span><span class="p">,</span>
+                                       <span class="n">camera_yaw</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                                       <span class="n">camera_pitch</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                                       <span class="n">camera_is_ortho</span><span class="o">=</span><span class="n">ortho</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">gui</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.viewer</span>
 
@@ -562,9 +565,10 @@ which we log at each time step. This is the Python equivalent to the <a class="r
 <p>In this example, a group of Thymio runs one the controllers, described in <a class="reference internal" href="../api/behaviors.html#behaviors"><span class="std std-ref">Behaviors</span></a>, that replicate the behaviors implemented in the Thymio firmware.</p>
 <div class="code Python highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.viewer</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.video</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.viewer</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyenki.behaviors</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">ThymioAccBehavior</span><span class="p">,</span> <span class="n">ThymioExplorerBehavior</span><span class="p">,</span>
                               <span class="n">ThymioFollowerBehavior</span><span class="p">)</span>
 
@@ -572,26 +576,29 @@ which we log at each time step. This is the Python equivalent to the <a class="r
 <span class="k">def</span><span class="w"> </span><span class="nf">make_world</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">:</span>
     <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
     <span class="n">rng</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">random_generator</span>
-    <span class="n">behaviors</span> <span class="o">=</span> <span class="p">(</span><span class="n">ThymioAccBehavior</span><span class="p">,</span> <span class="n">ThymioExplorerBehavior</span><span class="p">,</span> <span class="n">ThymioFollowerBehavior</span><span class="p">)</span>
+    <span class="n">behaviors</span> <span class="o">=</span> <span class="p">(</span><span class="n">ThymioAccBehavior</span><span class="p">,</span> <span class="n">ThymioExplorerBehavior</span><span class="p">,</span>
+                 <span class="n">ThymioFollowerBehavior</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">):</span>
         <span class="n">thymio</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">()</span>
         <span class="n">thymio</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
         <span class="n">thymio</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-        <span class="n">thymio</span><span class="o">.</span><span class="n">control_step_callback</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">behaviors</span><span class="p">)()</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">control_step_callback</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">behaviors</span><span class="p">)()</span>  <span class="c1"># type: ignore[arg-type]</span>
         <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
     <span class="n">world</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">world</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
     <span class="n">world</span> <span class="o">=</span> <span class="n">make_world</span><span class="p">()</span>
-    <span class="n">camera_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">camera_altitude</span><span class="o">=</span><span class="mi">55</span><span class="p">,</span>
-                         <span class="n">camera_pitch</span><span class="o">=-</span><span class="mf">0.8</span><span class="p">,</span>
-                         <span class="n">camera_yaw</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
-                         <span class="n">camera_position</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">))</span>
+    <span class="n">camera_config</span><span class="p">:</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">CameraConfig</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">camera_altitude</span><span class="o">=</span><span class="mi">55</span><span class="p">,</span>
+                                                     <span class="n">camera_pitch</span><span class="o">=-</span><span class="mf">0.8</span><span class="p">,</span>
+                                                     <span class="n">camera_yaw</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+                                                     <span class="n">camera_position</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span>
+                                                                      <span class="o">-</span><span class="mi">50</span><span class="p">))</span>
     <span class="k">if</span> <span class="s1">&#39;--video&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">:</span>
-        <span class="n">v</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">video</span><span class="o">.</span><span class="n">make_video</span><span class="p">(</span><span class="n">world</span><span class="p">,</span> <span class="n">time_step</span><span class="o">=</span><span class="mf">0.033</span><span class="p">,</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">video</span><span class="o">.</span><span class="n">make_video</span><span class="p">(</span><span class="n">world</span><span class="p">,</span>
+                                    <span class="n">time_step</span><span class="o">=</span><span class="mf">0.033</span><span class="p">,</span>
                                     <span class="n">duration</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
                                     <span class="n">width</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span>
                                     <span class="n">height</span><span class="o">=</span><span class="mi">720</span><span class="p">,</span>
