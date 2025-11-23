@@ -33,11 +33,9 @@ class ThymioLEDButtonsBehavior:
     def tick(self, thymio: Thymio2AsebaAdapter, dt: float) -> None:
         steps = dt / self.DT
         values = np.asarray(thymio.thymio.buttons)
-        # print(values)
         self.button_counter[values] = np.minimum(
             32, self.button_counter[values > 0] + 3 * steps)
         self.button_counter[values == 0] = 0
-        # print(self.button_counter)
         bc = self.button_counter.astype(int)
         if bc[0]:
             leds = bc[[0, 0, 0, 0]]

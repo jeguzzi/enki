@@ -152,5 +152,5 @@ _setup_viewer(_get_env_native_viewer())
 __all__ = [
     'init', 'run', 'cleanup', 'render', 'save_image', 'WorldView', 'Camera',
     'use_native', 'get_position_of_pixel', 'run_in_viewer', 'to_3d', 'rotate',
-    'Vector3', 'Vector3Like'
+    'Vector3', 'Vector3Like', 'CameraConfig'
 ]

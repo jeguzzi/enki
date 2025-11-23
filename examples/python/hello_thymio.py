@@ -1,8 +1,11 @@
 import math
 import sys
-from typing import SupportsFloat
+from typing import TYPE_CHECKING, SupportsFloat
 
 import pyenki
+
+if TYPE_CHECKING:
+    from pyenki.viewer import CameraConfig
 
 
 # The world update step will call `control_step` automatically
@@ -35,8 +38,8 @@ def setup() -> pyenki.World:
     thymio.angle = 0
     world.add_object(thymio)
     # and a wall a bit in forward, in front of the Thymio.
-    wall = pyenki.PhysicalObject(l1=10,
-                                 l2=50,
+    wall = pyenki.PhysicalObject(lx=10,
+                                 ly=50,
                                  height=5,
                                  mass=1,
                                  color=pyenki.Color(0.5, 0.3, 0.3))
@@ -50,11 +53,11 @@ def main(duration: float = 10, dt: float = 0.1) -> None:
     video = '--video' in sys.argv
     ortho = '--ortho' in sys.argv
     world = setup()
-    camera_config = dict(camera_position=(0, 0),
-                         camera_altitude=70.0,
-                         camera_yaw=0.0,
-                         camera_pitch=-math.pi / 2,
-                         camera_is_ortho=ortho)
+    camera_config: CameraConfig = dict(camera_position=(0, 0),
+                                       camera_altitude=70.0,
+                                       camera_yaw=0.0,
+                                       camera_pitch=-math.pi / 2,
+                                       camera_is_ortho=ortho)
     if gui:
         import pyenki.viewer
 

@@ -78,7 +78,7 @@ class SquareWorldModel:
         assert self.vao
         f = functions()
         t = QMatrix4x4()
-        t.scale(world.width, world.height, wall_height)
+        t.scale(world.lx, world.ly, wall_height)
         forward_transform(camera * t, program)
         with QOpenGLVertexArrayObject.Binder(self.vao):
             f.glDrawArrays(GL.GL_TRIANGLE_FAN, 0, 4)

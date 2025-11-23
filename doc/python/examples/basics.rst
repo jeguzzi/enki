@@ -72,7 +72,7 @@ Thymio
     >>> thymio.right_wheel_target_speed = -10.2
     >>> # Switch the top LED yellow
     >>> thymio.set_led_top(0.5, 0.5, 0.0)
-    >>> obj = pyenki.PhysicalObject(l1=5.0, l2=5.0, height=5.0, mass=-1, color=pyenki.Color(0.8, 0.3, 0))
+    >>> obj = pyenki.PhysicalObject(lx=5.0, ly=5.0, height=5.0, mass=-1, color=pyenki.Color(0.8, 0.3, 0))
     >>> world.add_object(obj)
     >>> world.step(0.1)
     >>> thymio.prox_values
@@ -118,7 +118,7 @@ Objects
    cylinder.position = (10, 0)
    world.add_object(cylinder)
    
-   box = pyenki.PhysicalObject(l1 = 2.0, l2 = 1.0, height = 1.0, mass = -1,
+   box = pyenki.PhysicalObject(lx = 2.0, ly = 1.0, height = 1.0, mass = -1,
                                color = pyenki.Color(0.2, 0.5, 0.7))
    box.position = (15, 0)
    world.add_object(box)

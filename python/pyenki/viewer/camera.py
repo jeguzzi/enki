@@ -102,8 +102,8 @@ class Camera:
 
         if world:
             self.position = np.array(
-                (world.width * 0.5, max(0, -world.radius * 0.9),
-                 max(world.radius * 2, world.width, world.height)))
+                (world.lx * 0.5, max(0, -world.radius * 0.9),
+                 max(world.radius * 2, world.lx, world.ly)))
         else:
             self.position = cast('Vector3', np.zeros(3))
 

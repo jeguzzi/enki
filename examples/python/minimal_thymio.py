@@ -17,7 +17,7 @@ def log(thymio: pyenki.Thymio2, time: float) -> None:
 
 def main() -> None:
     dt = 0.1
-    world = pyenki.World(2000, 2000)
+    world = pyenki.World()
     for i, (x, theta, tx) in enumerate(
             zip((100, 115, 130), (0, math.pi, 0), (111, 222, 333),
                 strict=True)):

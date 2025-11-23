@@ -10,8 +10,8 @@ world.add_object(thymio)
 thymio.position = (14.1, 7.2)
 thymio.angle = 4.0
 thymio.set_led_top(0.5, 0.5, 0.0)
-obj = pyenki.PhysicalObject(l1=5.0,
-                            l2=5.0,
+obj = pyenki.PhysicalObject(lx=5.0,
+                            ly=5.0,
                             height=5.0,
                             mass=-1,
                             color=pyenki.Color(0.8, 0.3, 0))
@@ -69,8 +69,8 @@ cylinder = pyenki.PhysicalObject(radius=1.0,
 cylinder.position = (10, 0)
 world.add_object(cylinder)
 
-box = pyenki.PhysicalObject(l1=2.0,
-                            l2=1.0,
+box = pyenki.PhysicalObject(lx=2.0,
+                            ly=1.0,
                             height=1.0,
                             mass=-1,
                             color=pyenki.Color(0.2, 0.5, 0.7))

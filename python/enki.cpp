@@ -438,13 +438,13 @@ Attributes:
     textures (Sequence[Sequence[Color]]): A list of textures: each texture is a list of colors for one vertical face of the prism. 
                                           Must be either empty or have contains at least one color for each face.
 )doc")
-      .def(py::init<double, double, double>(), py::arg("l1"), py::arg("l2"),
+      .def(py::init<double, double, double>(), py::arg("lx"), py::arg("ly"),
            py::arg("height"), R"doc(
 Creates a part with a rectangular base.
 
 Arguments:
-  l1 (float): The x dimension [cm]
-  l2 (float): The y dimension [cm]
+  lx (float): The x dimension [cm]
+  ly (float): The y dimension [cm]
   height (float): The height [cm]
 )doc")
       .def(py::init([](const std::vector<Vector> &shape, double height,
@@ -542,13 +542,13 @@ Arguments:
              obj->setColor(color);
              return obj;
            }),
-           py::arg("l1"), py::arg("l2"), py::arg("height"), py::arg("mass"),
+           py::arg("lx"), py::arg("ly"), py::arg("height"), py::arg("mass"),
            py::arg("color") = Color(), R"doc(
 Creates a rectangular prism.
 
 Arguments:
-  l1 (float): the side length in cm (x).
-  l2 (float): the side length in cm (y).
+  lx (float): the side length in cm (x).
+  ly (float): the side length in cm (y).
   height (float): The height in cm.
   mass (float): The mass in kg.
   color (Color): The color.
@@ -1247,21 +1247,21 @@ Returns:
 The world is the container of all objects and robots.
 It is either
 
-- a rectangular arena with walls at all sides::
+- a rectangular arena with walls at the borders::
     
-    World(width: float, height: float, ...)
+    World(lx = ..., ly = ...)
 
-- a circular area with walls::
+- a circular area with walls at the borders::
 
-    World(width: float, ...)
+    World(radius = ...)
 
-- or an infinite surface::
+- or an infinite surface with no walls::
 
     World()
 
 Args:
-    width (float): The rectangular world width in centimeters
-    height (float): The rectangular world height in centimeters
+    lx (float): The rectangular world x-size in centimeters
+    ly (float): The rectangular world y-size in centimeters
     radius (float): The circular world radius in centimeters
     walls_color (Color): Optional wall color, default is ``Color.gray``
     ground_texture (World.GroundTexture | None): Optional ground texture, default is an empty image.
@@ -1274,7 +1274,7 @@ Example::
     world = pyenki.World()
     thymio = Thymio2()
     world.add_object(thymio)
-    wall = pyenki.PhysicalObject(l1=10, l2=50, height=5, mass=1,
+    wall = pyenki.PhysicalObject(lx=10, ly=50, height=5, mass=1,
                                  color=pyenki.Color(0.5, 0.3, 0.3))
     world.add_object(wall)
     # Run 100 times a 0.1 s long simulation step
@@ -1288,8 +1288,8 @@ Attributes:
     static_objects (list[PhysicalObject]): The list of all objects that are not robots
     control_step_callback (Callable[[World, float], None] | None): A function called at each update step.
     random_seed (numpy.random.Generator): The random seed
-    width (float): the world width [cm]
-    height (float): the world height [cm]
+    lx (float): the world x-size [cm]
+    ly (float): the world y-size [cm]
     radius(float) : the world radius [cm]
     walls_type (World.WallsType): the type of boundary walls.
     ground_texture (World.GroundTexture): an optional image to color the ground (readonly). 
@@ -1368,7 +1368,7 @@ No boundary walls.
       .def(py::init<double, double, const Color &,
                     const std::optional<World::GroundTexture> &,
                     unsigned long>(),
-           py::arg("width"), py::arg("height"),
+           py::arg("lx"), py::arg("ly"),
            py::arg("walls_color") = Color::gray,
            py::arg("ground_texture") = std::nullopt, py::arg("seed") = 0)
       .def(py::init<double, const Color &,
@@ -1407,8 +1407,8 @@ Args:
     world (World): the other world.
 )doc")
       .def_readonly("radius", &PyWorld::r)
-      .def_readonly("width", &PyWorld::w)
-      .def_readonly("height", &PyWorld::h)
+      .def_readonly("lx", &PyWorld::w)
+      .def_readonly("ly", &PyWorld::h)
       .def_readonly("walls_color", &PyWorld::color)
       .def_readonly("walls_type", &PyWorld::wallsType)
       .def_readonly("ground_texture", &PyWorld::groundTexture)

@@ -3,6 +3,7 @@ import pyenki.viewer
 from PySide6.QtWidgets import QGridLayout, QWidget
 import numpy as np
 
+
 def rotate(world, time_step):
     for obj in world.objects:
         obj.angle += time_step * 1
@@ -27,13 +28,13 @@ def setup_worlds():
     world = pyenki.World(radius=30, ground_texture=pyenki.World.GroundTexture(gt))
     worlds.append(world)
 
-    world = pyenki.World(width=40, height=40)
+    world = pyenki.World(lx=40, ly=40)
     worlds.append(world)
 
-    world = pyenki.World(width=40, height=40)
+    world = pyenki.World(lx=40, ly=40)
     worlds.append(world)
 
-    world = pyenki.World(width=40, height=40, ground_texture=pyenki.World.GroundTexture(gt))
+    world = pyenki.World(lx=40, ly=40, ground_texture=pyenki.World.GroundTexture(gt))
     worlds.append(world)
 
     world = pyenki.World(radius=30)
@@ -62,8 +63,8 @@ def setup_worlds():
     worlds.append(world)
 
     world = pyenki.World(radius=30)
-    obj = pyenki.PhysicalObject(l1=20,
-                                l2=10,
+    obj = pyenki.PhysicalObject(lx=20,
+                                ly=10,
                                 height=10,
                                 mass=-1,
                                 color=pyenki.Color.red)
