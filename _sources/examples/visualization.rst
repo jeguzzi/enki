@@ -68,7 +68,7 @@ We support visualizing a simulation inside Jupyter notebooks thanks to `jupyter_
 
 .. seealso::
 
-   `Hello Thymio.ipynb <https://github.com/jeguzzi/enki/blob/rolling/examples/python/Hello World.ipynb>`_ and `RemoteBuffer.ipynb <https://github.com/jeguzzi/enki/blob/rolling/examples/python/RemoteBuffer.ipynb>`_
+   `HelloThymio.ipynb <https://github.com/jeguzzi/enki/blob/rolling/examples/python/HelloThymio.ipynb>`_ and `RemoteBuffer.ipynb <https://github.com/jeguzzi/enki/blob/rolling/examples/python/RemoteBuffer.ipynb>`_
 
 Render an image
 ===============
