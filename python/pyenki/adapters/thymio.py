@@ -284,7 +284,7 @@ class Thymio2AsebaAdapter:
         self.thymio.leds_buttons = [from_led_i(value) for value in values]
 
     def call_leds_prox_h(self, *values: int) -> None:
-        self.thymio.leds_prox = [from_led_i(value) for value in values]
+        self.thymio.leds_prox = [from_led_i(value) for value in values[:3] + values[2:]]
 
     def call_leds_prox_v(self, *values: int) -> None:
         warnings.warn("LEDs near ground sensors are not simulated",
