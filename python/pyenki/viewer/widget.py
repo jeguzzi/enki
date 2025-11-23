@@ -218,8 +218,10 @@ class WorldView(QOpenGLWidget, HasCamera):
 
     @staticmethod
     def get_buttons(event: QMouseEvent) -> tuple[bool, bool]:
-        left_button = bool(event.buttons() & Qt.MouseButton.LeftButton)
-        right_button = bool(event.buttons() & Qt.MouseButton.RightButton)
+        left_button = (bool(event.buttons() & Qt.MouseButton.LeftButton)
+                       or event.button() == Qt.MouseButton.LeftButton)
+        right_button = (bool(event.buttons() & Qt.MouseButton.RightButton)
+                        or event.button() == Qt.MouseButton.RightButton)
         return left_button, right_button
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
