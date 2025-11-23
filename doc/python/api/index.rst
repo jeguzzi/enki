@@ -10,6 +10,8 @@ Reference
    robots
    world
    visualization
+   adapters
+   behaviors
    
 
 

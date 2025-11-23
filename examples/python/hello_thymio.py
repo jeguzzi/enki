@@ -3,7 +3,6 @@ import sys
 from typing import SupportsFloat
 
 import pyenki
-import pyenki.viewer
 
 
 # The world update step will call `control_step` automatically
@@ -46,27 +45,45 @@ def setup() -> pyenki.World:
     return world
 
 
-def main(gui: bool = False,
-         duration: float = 10,
-         dt: float = 0.1,
-         ortho: bool = False) -> None:
+def main(duration: float = 10, dt: float = 0.1) -> None:
+    gui = '--gui' in sys.argv
+    video = '--video' in sys.argv
+    ortho = '--ortho' in sys.argv
     world = setup()
+    camera_config = dict(camera_position=(0, 0),
+                         camera_altitude=70.0,
+                         camera_yaw=0.0,
+                         camera_pitch=-math.pi / 2,
+                         camera_is_ortho=ortho)
     if gui:
-        # We can either run a simulation [in real-time] inside a Qt application
+        import pyenki.viewer
+
+        # We run a simulation [in real-time] inside a Qt application
         pyenki.viewer.run_in_viewer(world,
-                                    camera_position=(0, 0),
-                                    camera_altitude=70.0,
-                                    camera_yaw=0.0,
-                                    camera_pitch=-math.pi / 2,
+                                    time_step=0.1,
                                     walls_height=10,
-                                    camera_is_ortho=ortho,
-                                    duration=duration)
+                                    duration=duration,
+                                    **camera_config)
+    elif video:
+        import pyenki.video
+        import pyenki.viewer
+
+        # We generate a video
+        v = pyenki.video.make_video(world,
+                                    time_step=0.1,
+                                    walls_height=10,
+                                    duration=2,
+                                    width=1280,
+                                    height=720,
+                                    **camera_config)
+        v.write_videofile('hello_thymio.mp4', fps=30)
+        pyenki.viewer.cleanup()
     else:
-        # or we can write our own loop that run the simulation as fast as possible.
+        # We write our own loop to run the simulation as fast as possible.
         steps = int(duration // dt)
         for _ in range(steps):
             world.step(dt)
 
 
 if __name__ == '__main__':
-    main(gui='--gui' in sys.argv, ortho='--ortho' in sys.argv)
+    main()

@@ -19,8 +19,7 @@ release = '0.0.1'
 extensions = [
     'sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.autosectionlabel',
     'sphinx_toolbox.code', 'sphinx_tabs.tabs', 'sphinx.ext.intersphinx',
-    # 'sphinx.ext.autosummary', 'autoclasstoc',
-    'enum_tools.autoenum'
+    'enum_tools.autoenum', 'sphinxcontrib.video'
 ]
 
 intersphinx_mapping = {
