@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import math
-from typing import cast
+from typing import SupportsFloat, cast
 
+from .. import Controller, PhysicalObject
 from ..adapters import Thymio2AsebaAdapter
 
 
@@ -27,6 +28,32 @@ def check_grounds(thymio: Thymio2AsebaAdapter, max_value: int = 130) -> None:
     else:
         thymio.call_leds_bottom_left(0, 0, 0)
         thymio.call_leds_bottom_right(0, 0, 0)
+
+
+class Chain:
+    """
+    A sequence of controllers.
+
+    For example,
+
+    >>> robot.control_step_callback = Chain(controller1, controller2, ...)
+
+    will call ::
+
+       controller1(robot, dt)
+       controller2(robot, dt)
+       ...
+
+    at each control step.
+    """
+
+    def __init__(self, *controllers: Controller) -> None:
+        self._controllers = controllers
+
+    def __call__(self, obj: PhysicalObject, dt: SupportsFloat) -> None:
+        """Calls the controllers in sequence"""
+        for c in self._controllers:
+            c(obj, dt)
 
 
 class BodyColorPulse:
