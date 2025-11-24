@@ -7,6 +7,12 @@ Behaviors
 .. autoclass:: Chain
    :members: __call__
 
+.. autoclass:: ThymioLEDProxBehavior
+   :members: __call__
+
+.. autoclass:: ThymioLEDButtonsBehavior
+   :members: __call__
+
 .. autoclass:: ThymioAccBehavior
    :members: __call__
 
@@ -16,8 +22,6 @@ Behaviors
 .. autoclass:: ThymioFollowerBehavior
    :members: __call__
 
-.. autoclass:: ThymioLEDProxBehavior
+.. autoclass:: ThymioLineFollowingBehavior
    :members: __call__
 
-.. autoclass:: ThymioLEDButtonsBehavior
-   :members: __call__

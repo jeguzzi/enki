@@ -22,7 +22,7 @@ class ThymioFollowerBehavior:
     `firmware <https://github.com/Mobsya/aseba-target-thymio2/blob/master/mode.c#L272>`_,
     see ``static void tick_follow(void)``.
 
-    The original behavior ticks at 50Hz.ave enabled IR communication.
+    The original behavior ticks at 50Hz.
     It assumes that other "friendly" robots have enabled proximity communication.
     It should be assigned to a Thymio, like in
 
