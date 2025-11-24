@@ -58,3 +58,17 @@ Running the script with the ``--video`` flag generates this video:
 .. video:: images/thymio_behaviors.mp4
    :width: 100%
    :align: center
+
+Thymio line following
+---------------------
+
+In this example, a Thymio follow a line using :py:class:`pyenki.behaviors.ThymioLineFollowingBehavior` that replicates controllers implemented in the firmware. It also show how to apply a texture to the ground.
+
+.. include:: ../../../examples/python/thymio_line_following.py
+   :code: Python
+
+Running the script with the ``--video`` flag generates this video:
+
+.. video:: images/thymio_line_following.mp4
+   :width: 100%
+   :align: center

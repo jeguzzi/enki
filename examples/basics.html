@@ -161,7 +161,7 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../visualization/index.html">How to visualize a simulation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../visualization/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/introduction.html">Renderers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../visualization/configuration.html">Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../visualization/viewer.html">Viewer</a></li>
 </ul>
@@ -391,7 +391,8 @@ document.write(`
 <h2>Marxbot<a class="headerlink" href="#marxbot" title="Link to this heading">#</a></h2>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="c1"># create a world surrounded by a cylindrical wall.</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">walls_color</span><span class="o">=</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+          <span class="n">walls_color</span><span class="o">=</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">marxbot</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Marxbot</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">marxbot</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="c1"># Spin the robot on itself</span>
@@ -425,7 +426,9 @@ document.write(`
 <span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">right_wheel_target_speed</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.2</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="c1"># Switch the top LED yellow</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">set_led_top</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">PhysicalObject</span><span class="p">(</span><span class="n">lx</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">ly</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">mass</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">PhysicalObject</span><span class="p">(</span>
+        <span class="n">lx</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">ly</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">mass</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">pyenki</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">world</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">thymio</span><span class="o">.</span><span class="n">prox_values</span>

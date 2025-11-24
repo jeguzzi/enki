@@ -161,7 +161,7 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../visualization/index.html">How to visualize a simulation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../visualization/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/introduction.html">Renderers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../visualization/configuration.html">Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../visualization/viewer.html">Viewer</a></li>
 </ul>
@@ -374,6 +374,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_right_blue"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_right_blue</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.buttons"><code class="docutils literal notranslate"><span class="pre">Thymio2.buttons</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.__init__"><code class="docutils literal notranslate"><span class="pre">Thymio2.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_bottom_left"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_bottom_left()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_bottom_right"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_bottom_right()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_buttons"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_buttons()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_circle"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_circle()</span></code></a></li>
@@ -572,10 +573,11 @@ therefore to be compliant we should limit the value between 0 and 2047.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyenki.Thymio2.button_touch_callback">
 <span class="sig-name descname"><span class="pre">button_touch_callback</span></span><a class="headerlink" href="#pyenki.Thymio2.button_touch_callback" title="Link to this definition">#</a></dt>
-<dd><p>An optional function called when button touch events happen.</p>
+<dd><p>An optional function called when button touch events happen
+with the same arguments as <a class="reference internal" href="#pyenki.Thymio2.on_button_touch" title="pyenki.Thymio2.on_button_touch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pyenki.Thymio2.on_button_touch()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)">Callable</a>[[<a class="reference internal" href="#pyenki.Thymio2" title="pyenki.Thymio2">Thymio2</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>], None] | None</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)">Callable</a>[[<a class="reference internal" href="#pyenki.Thymio2" title="pyenki.Thymio2">Thymio2</a>, <a class="reference internal" href="#pyenki.Thymio2.Button" title="pyenki.Thymio2.Button">Thymio2.Button</a>], None] | None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -632,6 +634,20 @@ therefore to be compliant we should limit the value between 0 and 2047.</p>
 <dt class="sig sig-object py" id="pyenki.Thymio2.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.Thymio2.__init__" title="Link to this definition">#</a></dt>
 <dd><p>Constructs an instance</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.Thymio2.get_led_bottom_left">
+<span class="sig-name descname"><span class="pre">get_led_bottom_left</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'FixedSize(3)'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pyenki.Thymio2.get_led_bottom_left" title="Link to this definition">#</a></dt>
+<dd><p>Reads the bottom left RGB LED color</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the value of the <code class="docutils literal notranslate"><span class="pre">[red,</span> <span class="pre">blue,</span> <span class="pre">green]</span></code> channels</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -701,24 +717,8 @@ therefore to be compliant we should limit the value between 0 and 2047.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyenki.Thymio2.get_led_top">
-<span class="sig-name descname"><span class="pre">get_led_top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyenki.Thymio2.get_led_top" title="Link to this definition">#</a></dt>
-<dd><p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>get_led_top() -&gt; Annotated[list[float], “FixedSize(3)”]</p></li>
-</ol>
-<p>Reads the top RGB LED color</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>the value of the <code class="docutils literal notranslate"><span class="pre">[red,</span> <span class="pre">blue,</span> <span class="pre">green]</span></code> channels</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>]</p>
-</dd>
-</dl>
-<ol class="arabic simple" start="2">
-<li><p>get_led_top() -&gt; Annotated[list[float], “FixedSize(3)”]</p></li>
-</ol>
-<p>Reads the bottom left RGB LED color</p>
+<span class="sig-name descname"><span class="pre">get_led_top</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'FixedSize(3)'</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pyenki.Thymio2.get_led_top" title="Link to this definition">#</a></dt>
+<dd><p>Reads the top RGB LED color</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the value of the <code class="docutils literal notranslate"><span class="pre">[red,</span> <span class="pre">blue,</span> <span class="pre">green]</span></code> channels</p>
@@ -920,6 +920,7 @@ Alternatively, users can assign a callback as <a class="reference internal" href
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.led_right_blue"><code class="docutils literal notranslate"><span class="pre">Thymio2.led_right_blue</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.buttons"><code class="docutils literal notranslate"><span class="pre">Thymio2.buttons</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.__init__"><code class="docutils literal notranslate"><span class="pre">Thymio2.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_bottom_left"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_bottom_left()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_bottom_right"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_bottom_right()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_buttons"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_buttons()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.Thymio2.get_led_circle"><code class="docutils literal notranslate"><span class="pre">Thymio2.get_led_circle()</span></code></a></li>

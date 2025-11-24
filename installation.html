@@ -162,7 +162,7 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="visualization/index.html">How to visualize a simulation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="visualization/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization/introduction.html">Renderers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="visualization/configuration.html">Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="visualization/viewer.html">Viewer</a></li>
 </ul>
@@ -375,7 +375,7 @@ document.write(`
 <section id="visualization">
 <h2>Visualization<a class="headerlink" href="#visualization" title="Link to this heading">#</a></h2>
 <p>The package comes with two implementations (one in C++, one in Python) of almost identical visualizations based on OpenGL and Qt. It can be configured to build the C++ implementation and link it against Qt5 or Qt6 shared libraries. Alternatively, it can be built without a C++ visualization and use instead a Python implementation that uses PySide6. The two options can coexist provided that pyenki and PySide6 are linked against the <strong>same</strong> Qt distribution, else it will fail at runtime, complaining about multiple versions for the same symbols (from the different versions of Qt shared libraries).</p>
-<p>We refer to <a class="reference internal" href="visualization/configuration.html"><span class="doc">Configuration</span></a> for a description of the differences between the two implementations. All things being equal, we recommend using the Python implementation as it uses a more modern version of OpenGL, does not require building against Qt, and integrates with the official Qt bindings (PySide6).</p>
+<p>We refer to <a class="reference internal" href="visualization/introduction.html"><span class="doc">Renderers</span></a> for a description of the differences between the two implementations. All things being equal, we recommend using the Python implementation as it uses a more modern version of OpenGL, does not require building against Qt, and integrates with the official Qt bindings (PySide6).</p>
 <section id="python-based">
 <h3>Python-based<a class="headerlink" href="#python-based" title="Link to this heading">#</a></h3>
 <p>To enable visualization using the Python implementation of the renderer, run</p>

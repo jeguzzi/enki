@@ -161,7 +161,7 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../visualization/index.html">How to visualize a simulation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../visualization/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/introduction.html">Renderers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../visualization/configuration.html">Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../visualization/viewer.html">Viewer</a></li>
 </ul>
@@ -347,6 +347,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hello-thymio">Hello Thymio</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thymio-buttons">Thymio Buttons</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thymio-behaviors">Thymio Behaviors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thymio-line-following">Thymio line following</a></li>
 </ul>
             </nav>
         </div>
@@ -569,8 +570,9 @@ which we log at each time step. This is the Python equivalent to the <a class="r
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.video</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.viewer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyenki.behaviors</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">ThymioAccBehavior</span><span class="p">,</span> <span class="n">ThymioExplorerBehavior</span><span class="p">,</span>
-                              <span class="n">ThymioFollowerBehavior</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyenki.behaviors</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">Chain</span><span class="p">,</span> <span class="n">ThymioAccBehavior</span><span class="p">,</span> <span class="n">ThymioExplorerBehavior</span><span class="p">,</span>
+                              <span class="n">ThymioFollowerBehavior</span><span class="p">,</span> <span class="n">ThymioLEDButtonsBehavior</span><span class="p">,</span>
+                              <span class="n">ThymioLEDProxBehavior</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">make_world</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">:</span>
@@ -582,7 +584,10 @@ which we log at each time step. This is the Python equivalent to the <a class="r
         <span class="n">thymio</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">()</span>
         <span class="n">thymio</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
         <span class="n">thymio</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-        <span class="n">thymio</span><span class="o">.</span><span class="n">control_step_callback</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">behaviors</span><span class="p">)()</span>  <span class="c1"># type: ignore[arg-type]</span>
+        <span class="n">behavior_cls</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">behaviors</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
+        <span class="n">thymio</span><span class="o">.</span><span class="n">control_step_callback</span> <span class="o">=</span> <span class="n">Chain</span><span class="p">(</span><span class="n">ThymioLEDProxBehavior</span><span class="p">(),</span>
+                                             <span class="n">ThymioLEDButtonsBehavior</span><span class="p">(),</span>
+                                             <span class="n">behavior_cls</span><span class="p">())</span>
         <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
     <span class="n">world</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">world</span>
@@ -607,7 +612,7 @@ which we log at each time step. This is the Python equivalent to the <a class="r
         <span class="n">v</span><span class="o">.</span><span class="n">write_videofile</span><span class="p">(</span><span class="s1">&#39;thymio_behaviors.mp4&#39;</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">run_in_viewer</span><span class="p">(</span><span class="n">world</span><span class="p">,</span>
-                                    <span class="n">time_step</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
+                                    <span class="n">time_step</span><span class="o">=</span><span class="mf">0.033</span><span class="p">,</span>
                                     <span class="n">duration</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
                                     <span class="o">**</span><span class="n">camera_config</span><span class="p">)</span>
     <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
@@ -619,6 +624,63 @@ which we log at each time step. This is the Python equivalent to the <a class="r
 </div>
 <p>Running the script with the <code class="docutils literal notranslate"><span class="pre">--video</span></code> flag generates this video:</p>
 <div  class="sphinx-contrib-video-container align-center"><video controls="True" preload="auto" width="100%"><source src="../_images/thymio_behaviors.mp4" type="video/mp4"></video></div></section>
+<section id="thymio-line-following">
+<h2>Thymio line following<a class="headerlink" href="#thymio-line-following" title="Link to this heading">#</a></h2>
+<p>In this example, a Thymio follow a line using <a class="reference internal" href="../api/behaviors.html#pyenki.behaviors.ThymioLineFollowingBehavior" title="pyenki.behaviors.ThymioLineFollowingBehavior"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyenki.behaviors.ThymioLineFollowingBehavior</span></code></a> that replicates controllers implemented in the firmware. It also show how to apply a texture to the ground.</p>
+<div class="code Python highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL.Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyenki</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.video</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.viewer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyenki.behaviors</span><span class="w"> </span><span class="kn">import</span> <span class="n">ThymioLineFollowingBehavior</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">make_world</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">:</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;line_following_ground.png&#39;</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGBA&#39;</span><span class="p">))</span>
+    <span class="n">ground_texture</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="o">.</span><span class="n">GroundTexture</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+    <span class="n">world</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">World</span><span class="p">(</span><span class="n">lx</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">ly</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">ground_texture</span><span class="o">=</span><span class="n">ground_texture</span><span class="p">)</span>
+    <span class="n">thymio</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">()</span>
+    <span class="n">thymio</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">110</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">thymio</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">thymio</span><span class="o">.</span><span class="n">control_step_callback</span> <span class="o">=</span> <span class="n">ThymioLineFollowingBehavior</span><span class="p">()</span>
+    <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">world</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+    <span class="n">world</span> <span class="o">=</span> <span class="n">make_world</span><span class="p">()</span>
+    <span class="n">camera_config</span><span class="p">:</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">CameraConfig</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">camera_altitude</span><span class="o">=</span><span class="mi">105</span><span class="p">,</span>
+                                                     <span class="n">camera_pitch</span><span class="o">=-</span><span class="mf">1.15</span><span class="p">,</span>
+                                                     <span class="n">camera_yaw</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                                                     <span class="n">camera_position</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+    <span class="k">if</span> <span class="s1">&#39;--video&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">:</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">video</span><span class="o">.</span><span class="n">make_video</span><span class="p">(</span><span class="n">world</span><span class="p">,</span>
+                                    <span class="n">time_step</span><span class="o">=</span><span class="mf">0.033</span><span class="p">,</span>
+                                    <span class="n">duration</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+                                    <span class="n">width</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span>
+                                    <span class="n">height</span><span class="o">=</span><span class="mi">720</span><span class="p">,</span>
+                                    <span class="n">factor</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                    <span class="o">**</span><span class="n">camera_config</span><span class="p">)</span>
+        <span class="n">v</span><span class="o">.</span><span class="n">write_videofile</span><span class="p">(</span><span class="s1">&#39;thymio_line_following.mp4&#39;</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">run_in_viewer</span><span class="p">(</span><span class="n">world</span><span class="p">,</span>
+                                    <span class="n">time_step</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
+                                    <span class="n">duration</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                                    <span class="o">**</span><span class="n">camera_config</span><span class="p">)</span>
+    <span class="n">pyenki</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Running the script with the <code class="docutils literal notranslate"><span class="pre">--video</span></code> flag generates this video:</p>
+<div  class="sphinx-contrib-video-container align-center"><video controls="True" preload="auto" width="100%"><source src="../_images/thymio_line_following.mp4" type="video/mp4"></video></div></section>
 </section>
 
 
@@ -670,6 +732,7 @@ which we log at each time step. This is the Python equivalent to the <a class="r
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hello-thymio">Hello Thymio</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thymio-buttons">Thymio Buttons</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thymio-behaviors">Thymio Behaviors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thymio-line-following">Thymio line following</a></li>
 </ul>
   </nav></div>
 

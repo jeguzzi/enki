@@ -161,7 +161,7 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../visualization/index.html">How to visualize a simulation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../visualization/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/introduction.html">Renderers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../visualization/configuration.html">Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../visualization/viewer.html">Viewer</a></li>
 </ul>
@@ -558,7 +558,10 @@ It is either</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyenki.World.control_step_callback">
 <span class="sig-name descname"><span class="pre">control_step_callback</span></span><a class="headerlink" href="#pyenki.World.control_step_callback" title="Link to this definition">#</a></dt>
-<dd><p>A function called at each update step.</p>
+<dd><p>A function called at each update step</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">callback</span><span class="p">(</span><span class="n">World</span><span class="p">:</span> <span class="n">world</span><span class="p">,</span> <span class="n">time_step</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)">Callable</a>[[<a class="reference internal" href="#pyenki.World" title="pyenki.World">World</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>], None] | None</p>
@@ -728,7 +731,11 @@ It is either</p>
 <li><p><strong>time_step</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – the time step.</p></li>
 <li><p><strong>physics_oversampling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – the number of times the physics is updated per step
 to get a more fine-grained physical simulation compared to the sensor-motor loop.</p></li>
-<li><p><strong>termination</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)"><em>Callable</em></a><em>[</em><em>[</em><a class="reference internal" href="#pyenki.World" title="pyenki.World"><em>World</em></a><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>] </em><em>| </em><em>None</em>) – an optional function that terminates the simulation when it returns True.</p></li>
+<li><p><strong>termination</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)"><em>Callable</em></a><em>[</em><em>[</em><a class="reference internal" href="#pyenki.World" title="pyenki.World"><em>World</em></a><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>] </em><em>| </em><em>None</em>) – <p>an optional function that makes the simulation terminate when it returns True</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">termination</span><span class="p">(</span><span class="n">World</span><span class="p">:</span> <span class="n">world</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span> <span class="o">...</span>
+</pre></div>
+</div>
+</p></li>
 <li><p><strong>callback</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)"><em>Callable</em></a><em>[</em><em>[</em><a class="reference internal" href="#pyenki.World" title="pyenki.World"><em>World</em></a><em>]</em><em>, </em><em>None</em><em>] </em><em>| </em><em>None</em>) – An additional callback executed at each simulation step.</p></li>
 </ul>
 </dd>

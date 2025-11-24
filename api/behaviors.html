@@ -161,7 +161,7 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../visualization/index.html">How to visualize a simulation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../visualization/introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization/introduction.html">Renderers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../visualization/configuration.html">Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../visualization/viewer.html">Viewer</a></li>
 </ul>
@@ -348,6 +348,16 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.Chain.__init__"><code class="docutils literal notranslate"><span class="pre">Chain.__init__()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDProxBehavior"><code class="docutils literal notranslate"><span class="pre">ThymioLEDProxBehavior</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDProxBehavior.__call__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDProxBehavior.__call__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDProxBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDProxBehavior.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDButtonsBehavior"><code class="docutils literal notranslate"><span class="pre">ThymioLEDButtonsBehavior</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDButtonsBehavior.__call__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDButtonsBehavior.__call__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDButtonsBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDButtonsBehavior.__init__()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioAccBehavior"><code class="docutils literal notranslate"><span class="pre">ThymioAccBehavior</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioAccBehavior.__call__"><code class="docutils literal notranslate"><span class="pre">ThymioAccBehavior.__call__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioAccBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">ThymioAccBehavior.__init__()</span></code></a></li>
@@ -363,14 +373,9 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioFollowerBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">ThymioFollowerBehavior.__init__()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDProxBehavior"><code class="docutils literal notranslate"><span class="pre">ThymioLEDProxBehavior</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDProxBehavior.__call__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDProxBehavior.__call__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDProxBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDProxBehavior.__init__()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDButtonsBehavior"><code class="docutils literal notranslate"><span class="pre">ThymioLEDButtonsBehavior</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDButtonsBehavior.__call__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDButtonsBehavior.__call__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDButtonsBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDButtonsBehavior.__init__()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLineFollowingBehavior"><code class="docutils literal notranslate"><span class="pre">ThymioLineFollowingBehavior</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLineFollowingBehavior.__call__"><code class="docutils literal notranslate"><span class="pre">ThymioLineFollowingBehavior.__call__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLineFollowingBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">ThymioLineFollowingBehavior.__init__()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -410,6 +415,54 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="pyenki.behaviors.Chain.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">controllers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.14)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><span class="pre">PhysicalObject</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.behaviors.Chain.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLEDProxBehavior">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.behaviors.</span></span><span class="sig-name descname"><span class="pre">ThymioLEDProxBehavior</span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLEDProxBehavior" title="Link to this definition">#</a></dt>
+<dd><p>Thymio LED prox behavior ported from the
+<a class="reference external" href="https://github.com/Mobsya/aseba-target-thymio2/blob/master/behavior.c#L243">firmware</a>,
+see <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">void</span> <span class="pre">behavior_leds_prox(void)</span></code>.</p>
+<p>The original behavior ticks at 50Hz.
+It should be assigned to a Thymio, like in</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">control_step_callback</span> <span class="o">=</span> <span class="n">ThymioLEDProxBehavior</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLEDProxBehavior.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thymio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><span class="pre">PhysicalObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLEDProxBehavior.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Executes the behavior</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLEDProxBehavior.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLEDProxBehavior.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLEDButtonsBehavior">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.behaviors.</span></span><span class="sig-name descname"><span class="pre">ThymioLEDButtonsBehavior</span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLEDButtonsBehavior" title="Link to this definition">#</a></dt>
+<dd><p>Thymio LED prox behavior ported from the
+<a class="reference external" href="https://github.com/Mobsya/aseba-target-thymio2/blob/master/behavior.c#L182">firmware</a>,
+see <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">void</span> <span class="pre">behavior_leds_buttons(void)</span></code>.</p>
+<p>The original behavior ticks at 50Hz.
+It should be assigned to a Thymio, like in</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">control_step_callback</span> <span class="o">=</span> <span class="n">ThymioLEDButtonsBehavior</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLEDButtonsBehavior.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thymio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><span class="pre">PhysicalObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLEDButtonsBehavior.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Executes the behavior</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLEDButtonsBehavior.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLEDButtonsBehavior.__init__" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -477,7 +530,7 @@ which is too reactive in simulation.</p>
 <dd><p>Thymio Follower behavior ported from the
 <a class="reference external" href="https://github.com/Mobsya/aseba-target-thymio2/blob/master/mode.c#L272">firmware</a>,
 see <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">void</span> <span class="pre">tick_follow(void)</span></code>.</p>
-<p>The original behavior ticks at 50Hz.ave enabled IR communication.
+<p>The original behavior ticks at 50Hz.
 It assumes that other “friendly” robots have enabled proximity communication.
 It should be assigned to a Thymio, like in</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">prox_comm_enabled</span> <span class="o">=</span> <span class="kc">True</span>
@@ -498,50 +551,35 @@ It should be assigned to a Thymio, like in</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLEDProxBehavior">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.behaviors.</span></span><span class="sig-name descname"><span class="pre">ThymioLEDProxBehavior</span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLEDProxBehavior" title="Link to this definition">#</a></dt>
-<dd><p>Thymio LED prox behavior ported from the
-<a class="reference external" href="https://github.com/Mobsya/aseba-target-thymio2/blob/master/behavior.c#L243">firmware</a>,
-see <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">void</span> <span class="pre">behavior_leds_prox(void)</span></code>.</p>
+<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLineFollowingBehavior">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.behaviors.</span></span><span class="sig-name descname"><span class="pre">ThymioLineFollowingBehavior</span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLineFollowingBehavior" title="Link to this definition">#</a></dt>
+<dd><p>Thymio line following behavior ported from the
+<a class="reference external" href="https://github.com/Mobsya/aseba-target-thymio2/blob/master/mode.c#L687">firmware</a>,
+see <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">void</span> <span class="pre">tick_line(void)</span></code>.</p>
 <p>The original behavior ticks at 50Hz.
 It should be assigned to a Thymio, like in</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">control_step_callback</span> <span class="o">=</span> <span class="n">ThymioLEDProxBehavior</span><span class="p">()</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">control_step_callback</span> <span class="o">=</span> <span class="n">ThymioLineBehavior</span><span class="p">()</span>
 </pre></div>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLEDProxBehavior.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thymio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><span class="pre">PhysicalObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLEDProxBehavior.__call__" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLineFollowingBehavior.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thymio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><span class="pre">PhysicalObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLineFollowingBehavior.__call__" title="Link to this definition">#</a></dt>
 <dd><p>Executes the behavior</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLEDProxBehavior.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLEDProxBehavior.__init__" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
+<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLineFollowingBehavior.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">black</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">600</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLineFollowingBehavior.__init__" title="Link to this definition">#</a></dt>
+<dd><p>Constructs a new instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>black</strong> – The ground sensors black threshold</p></li>
+<li><p><strong>white</strong> – The ground sensors white threshold</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLEDButtonsBehavior">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.behaviors.</span></span><span class="sig-name descname"><span class="pre">ThymioLEDButtonsBehavior</span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLEDButtonsBehavior" title="Link to this definition">#</a></dt>
-<dd><p>Thymio LED prox behavior ported from the
-<a class="reference external" href="https://github.com/Mobsya/aseba-target-thymio2/blob/master/behavior.c#L182">firmware</a>,
-see <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">void</span> <span class="pre">behavior_leds_buttons(void)</span></code>.</p>
-<p>The original behavior ticks at 50Hz.
-It should be assigned to a Thymio, like in</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">thymio</span><span class="o">.</span><span class="n">control_step_callback</span> <span class="o">=</span> <span class="n">ThymioLEDButtonsBehavior</span><span class="p">()</span>
-</pre></div>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLEDButtonsBehavior.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thymio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><span class="pre">PhysicalObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.SupportsFloat" title="(in Python v3.14)"><span class="pre">SupportsFloat</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLEDButtonsBehavior.__call__" title="Link to this definition">#</a></dt>
-<dd><p>Executes the behavior</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyenki.behaviors.ThymioLEDButtonsBehavior.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.behaviors.ThymioLEDButtonsBehavior.__init__" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
@@ -597,6 +635,16 @@ It should be assigned to a Thymio, like in</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.Chain.__init__"><code class="docutils literal notranslate"><span class="pre">Chain.__init__()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDProxBehavior"><code class="docutils literal notranslate"><span class="pre">ThymioLEDProxBehavior</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDProxBehavior.__call__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDProxBehavior.__call__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDProxBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDProxBehavior.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDButtonsBehavior"><code class="docutils literal notranslate"><span class="pre">ThymioLEDButtonsBehavior</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDButtonsBehavior.__call__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDButtonsBehavior.__call__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDButtonsBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDButtonsBehavior.__init__()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioAccBehavior"><code class="docutils literal notranslate"><span class="pre">ThymioAccBehavior</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioAccBehavior.__call__"><code class="docutils literal notranslate"><span class="pre">ThymioAccBehavior.__call__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioAccBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">ThymioAccBehavior.__init__()</span></code></a></li>
@@ -612,14 +660,9 @@ It should be assigned to a Thymio, like in</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioFollowerBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">ThymioFollowerBehavior.__init__()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDProxBehavior"><code class="docutils literal notranslate"><span class="pre">ThymioLEDProxBehavior</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDProxBehavior.__call__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDProxBehavior.__call__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDProxBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDProxBehavior.__init__()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDButtonsBehavior"><code class="docutils literal notranslate"><span class="pre">ThymioLEDButtonsBehavior</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDButtonsBehavior.__call__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDButtonsBehavior.__call__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLEDButtonsBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">ThymioLEDButtonsBehavior.__init__()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLineFollowingBehavior"><code class="docutils literal notranslate"><span class="pre">ThymioLineFollowingBehavior</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLineFollowingBehavior.__call__"><code class="docutils literal notranslate"><span class="pre">ThymioLineFollowingBehavior.__call__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.behaviors.ThymioLineFollowingBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">ThymioLineFollowingBehavior.__init__()</span></code></a></li>
 </ul>
 </li>
 </ul>
