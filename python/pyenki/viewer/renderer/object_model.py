@@ -39,7 +39,7 @@ class ObjectModel:
             if key in self.parts:
                 self.parts[key].destroy()
                 del self.parts[key]
-                print('removed part model')
+                # print('removed part model')
 
     def add_world(self, world: World) -> None:
         for obj in world.static_objects:

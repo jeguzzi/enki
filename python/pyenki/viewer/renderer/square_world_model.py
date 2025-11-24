@@ -41,7 +41,7 @@ def square_world_data() -> NDArray[np.float32]:
     textures_face = np.array([[0, 0], [0, 1], [1, 0], [1, 0], [0, 1], [1, 1]],
                              dtype=np.float32)
     textures_top = np.zeros((10, 2), dtype=np.float32)
-    print(textures_bottom.shape, textures_face.shape, textures_top.shape)
+    # print(textures_bottom.shape, textures_face.shape, textures_top.shape)
     textures = np.concatenate([
         textures_bottom, textures_face, textures_face, textures_face,
         textures_face, textures_top
