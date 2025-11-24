@@ -1020,7 +1020,7 @@ Args:
           "ground_values",
           [](const Thymio2 &r) {
             const std::vector<double> vs{r.groundSensor0.getValue(),
-                                         r.groundSensor0.getValue()};
+                                         r.groundSensor1.getValue()};
             return py::array(static_cast<ssize_t>(vs.size()), vs.data());
           },
           nullptr)
