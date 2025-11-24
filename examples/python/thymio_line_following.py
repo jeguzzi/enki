@@ -1,12 +1,12 @@
+import pathlib as pl
 import sys
 
+import numpy as np
+import PIL.Image
 import pyenki
 import pyenki.video
 import pyenki.viewer
 from pyenki.behaviors import ThymioLineFollowingBehavior
-import PIL.Image
-import numpy as np
-import pathlib as pl
 
 
 def make_world() -> pyenki.World:
@@ -28,8 +28,7 @@ def main() -> None:
     camera_config: pyenki.viewer.CameraConfig = dict(camera_altitude=105,
                                                      camera_pitch=-1.15,
                                                      camera_yaw=0.0,
-                                                     camera_position=(50,
-                                                                      100))
+                                                     camera_position=(50, 100))
     if '--video' in sys.argv:
         v = pyenki.video.make_video(world,
                                     time_step=0.033,

@@ -424,9 +424,23 @@ Attributes:
     angle (float): The orientation in the world frame in radians
     velocity (Vector): The velocity in the world frame in centimeters per second
     angular_speed (float): The angular speed in the world frame in radians per second
-    collision_callback (Callable[[PhysicalObject, PhysicalObject], None] | None): An optional function called when the object perform a control step. 
-    control_step_callback (Callable[[PhysicalObject, float], None] | None): An optional function called when the object collides. 
-    touch_callback (Callable[[PhysicalObject], None] | None): An optional function called when touch events happen.
+    collision_callback (Callable[[PhysicalObject, PhysicalObject], None] | None): An optional function called when the object collides ::
+
+          def callback(PhysicalObject: obj1, PhysicalObject: obj2) -> None: ...
+
+      where ``obj1`` and ``obj2`` are the two objects that have just collided.
+
+    control_step_callback (Callable[[PhysicalObject, float], None] | None): An optional function called when the object perform a control step ::
+
+          def callback(PhysicalObject: obj, time_step: bool) -> None: ...
+
+      with the same arguments as :py:meth:`pyenki.PhysicalObject.control_step`.
+
+    touch_callback (Callable[[PhysicalObject, bool, int, float, float, float], None] | None): An optional function called when touch events happen ::
+
+          def callback(PhysicalObject: obj, state: bool, button: int, x: float, y: float, z: float) -> None: ...
+
+      with the same arguments as :py:meth:`pyenki.PhysicalObject.on_touch`.
 )doc");
 
   py::classh<PhysicalObject::Part>(po, "Part", py::dynamic_attr(), R"doc(
@@ -908,7 +922,8 @@ Attributes:
     prox_comm_enabled (bool): Enable/disable proximity communication.
     prox_comm_events (list[IRCommEvent]): A list of events, one for every received message during the last control step (readonly).
     ground_values (Array1D): An array of 2 ground sensor readings, one for each sensors (readonly)
-    button_touch_callback (Callable[[Thymio2, int], None] | None): An optional function called when button touch events happen.
+    button_touch_callback (Callable[[Thymio2, Thymio2.Button], None] | None): An optional function called when button touch events happen
+        with the same arguments as :py:meth:`pyenki.Thymio2.on_button_touch`.
     leds_buttons: list[float]: The intensities of the 4 buttons LEDs.
     leds_circle: list[float]: The intensities of the 8 circle LEDs.
     leds_prox: list[float]: The intensities of the 8 proximity LEDs.
@@ -1076,7 +1091,7 @@ Args:
     blue (float): the value of the blue channel
 )doc")
       .def(
-          "get_led_top",
+          "get_led_bottom_left",
           [](const Thymio2 &r) {
             return get_thymio_rgb_led(r, Thymio2::LedIndex::BOTTOM_LEFT);
           },
@@ -1286,7 +1301,10 @@ Attributes:
     objects (list[PhysicalObject]): The list of all objects
     robots (list[Robot]): The list of all robots
     static_objects (list[PhysicalObject]): The list of all objects that are not robots
-    control_step_callback (Callable[[World, float], None] | None): A function called at each update step.
+    control_step_callback (Callable[[World, float], None] | None): A function called at each update step ::
+
+        def callback(World: world, time_step: bool) -> None: ...
+
     random_seed (numpy.random.Generator): The random seed
     lx (float): the world x-size [cm]
     ly (float): the world y-size [cm]
@@ -1444,7 +1462,10 @@ Args:
     time_step (float): the time step.
     physics_oversampling (int): the number of times the physics is updated per step 
                                 to get a more fine-grained physical simulation compared to the sensor-motor loop.
-    termination (Callable[[World], bool] | None): an optional function that terminates the simulation when it returns True.
+    termination (Callable[[World], bool] | None): an optional function that makes the simulation terminate when it returns True ::
+
+      def termination(World: world) -> bool: ...
+
     callback (Callable[[World], None] | None): An additional callback executed at each simulation step.
 )doc");
 }

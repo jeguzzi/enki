@@ -37,7 +37,8 @@ Marxbot
 
     >>> import pyenki
     >>> # create a world surrounded by a cylindrical wall.
-    >>> world = pyenki.World(radius=20, walls_color=pyenki.Color(0.4, 0.1, 0.1))
+    >>> world = pyenki.World(radius=20, 
+                  walls_color=pyenki.Color(0.4, 0.1, 0.1))
     >>> marxbot = pyenki.Marxbot()
     >>> world.add_object(marxbot)
     >>> # Spin the robot on itself
@@ -72,7 +73,9 @@ Thymio
     >>> thymio.right_wheel_target_speed = -10.2
     >>> # Switch the top LED yellow
     >>> thymio.set_led_top(0.5, 0.5, 0.0)
-    >>> obj = pyenki.PhysicalObject(lx=5.0, ly=5.0, height=5.0, mass=-1, color=pyenki.Color(0.8, 0.3, 0))
+    >>> obj = pyenki.PhysicalObject(
+                lx=5.0, ly=5.0, height=5.0, mass=-1, 
+                color=pyenki.Color(0.8, 0.3, 0))
     >>> world.add_object(obj)
     >>> world.step(0.1)
     >>> thymio.prox_values

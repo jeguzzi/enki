@@ -1,6 +1,6 @@
-============
-Introduction
-============
+=========
+Renderers
+=========
 
 pyenki comes with two implementation of a Qt-based world renderer.
 
