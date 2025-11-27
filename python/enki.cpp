@@ -1305,7 +1305,8 @@ Attributes:
 
         def callback(World: world, time_step: bool) -> None: ...
 
-    random_seed (numpy.random.Generator): The random seed
+    random_generator (numpy.random.Generator): The random generator
+    random_seed (int): The random seed
     lx (float): the world x-size [cm]
     ly (float): the world y-size [cm]
     radius(float) : the world radius [cm]
@@ -1372,10 +1373,10 @@ Args:
 Describes the type of boundary walls.
 )doc")
       .value("SQUARE", World::WallsType::WALLS_SQUARE, R"doc(
-A rectangular boundary wall of size (:py:attr:`World.width`, :py:attr:`World.height`).
+A rectangular boundary wall of size (:py:attr:`pyenki.World.lx`, :py:attr:`pyenki.World.ly`).
 )doc")
       .value("CIRCULAR", World::WallsType::WALLS_CIRCULAR, R"doc(
-A circular boundary wall of radius :py:attr:`World.radius`.
+A circular boundary wall of radius :py:attr:`pyenki.World.radius`.
 )doc")
       .value("NONE", World::WallsType::WALLS_NONE, R"doc(
 No boundary walls.

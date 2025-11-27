@@ -49,6 +49,15 @@ Aliases
 
    Anything that can be converted to a :py:type:`ARGBImage`.
 
+.. py:type:: Controller
+   :canonical: collections.abc.Callable[[pyenki.PhysicalObject, SupportsFloat], None]
+
+   The type of callbacks that can be assigned to :py:attr:`pyenki.PhysicalObject.control_step_callback` ::
+
+      def callback(PhysicalObject: obj, time_step: float) -> None: ...
+
+   The first argument is the object to control, the second the time step (in seconds).
+
 .. currentmodule:: pyenki.viewer
 
 .. py:type:: Vector3
@@ -61,14 +70,7 @@ Aliases
 
    Anything that can be converted to a :py:type:`Vector3`.
 
-.. py:type:: Controller
-   :canonical: collections.abc.Callable[[pyenki.PhysicalObject, SupportsFloat], None]
 
-   The type of callbacks that can be assigned to :py:attr:`pyenki.PhysicalObject.control_step_callback` ::
-
-      def callback(PhysicalObject: obj, time_step: float) -> None: ...
-
-   The first argument is the object to control, the second the time step (in seconds).
 
 
 Color
