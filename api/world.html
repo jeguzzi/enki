@@ -360,6 +360,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.robots"><code class="docutils literal notranslate"><span class="pre">World.robots</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.static_objects"><code class="docutils literal notranslate"><span class="pre">World.static_objects</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.control_step_callback"><code class="docutils literal notranslate"><span class="pre">World.control_step_callback</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.random_generator"><code class="docutils literal notranslate"><span class="pre">World.random_generator</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.random_seed"><code class="docutils literal notranslate"><span class="pre">World.random_seed</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.lx"><code class="docutils literal notranslate"><span class="pre">World.lx</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.ly"><code class="docutils literal notranslate"><span class="pre">World.ly</span></code></a></li>
@@ -399,13 +400,13 @@ document.write(`
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyenki.World.WallsType.SQUARE">
 <span class="sig-name descname"><span class="pre">SQUARE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;WallsType.SQUARE:</span> <span class="pre">0&gt;</span></em><a class="headerlink" href="#pyenki.World.WallsType.SQUARE" title="Link to this definition">#</a></dt>
-<dd><p>A rectangular boundary wall of size (<code class="xref py py-attr docutils literal notranslate"><span class="pre">World.width</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">World.height</span></code>).</p>
+<dd><p>A rectangular boundary wall of size (<a class="reference internal" href="#pyenki.World.lx" title="pyenki.World.lx"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pyenki.World.lx</span></code></a>, <a class="reference internal" href="#pyenki.World.ly" title="pyenki.World.ly"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pyenki.World.ly</span></code></a>).</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyenki.World.WallsType.CIRCULAR">
 <span class="sig-name descname"><span class="pre">CIRCULAR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;WallsType.CIRCULAR:</span> <span class="pre">1&gt;</span></em><a class="headerlink" href="#pyenki.World.WallsType.CIRCULAR" title="Link to this definition">#</a></dt>
-<dd><p>A circular boundary wall of radius <code class="xref py py-attr docutils literal notranslate"><span class="pre">World.radius</span></code>.</p>
+<dd><p>A circular boundary wall of radius <a class="reference internal" href="#pyenki.World.radius" title="pyenki.World.radius"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pyenki.World.radius</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -570,12 +571,23 @@ It is either</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="pyenki.World.random_generator">
+<span class="sig-name descname"><span class="pre">random_generator</span></span><a class="headerlink" href="#pyenki.World.random_generator" title="Link to this definition">#</a></dt>
+<dd><p>The random generator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator" title="(in NumPy v2.3)">numpy.random.Generator</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="pyenki.World.random_seed">
 <span class="sig-name descname"><span class="pre">random_seed</span></span><a class="headerlink" href="#pyenki.World.random_seed" title="Link to this definition">#</a></dt>
 <dd><p>The random seed</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html#numpy.random.Generator" title="(in NumPy v2.3)">numpy.random.Generator</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -865,6 +877,7 @@ than the sensor-motor loop frequency</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.robots"><code class="docutils literal notranslate"><span class="pre">World.robots</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.static_objects"><code class="docutils literal notranslate"><span class="pre">World.static_objects</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.control_step_callback"><code class="docutils literal notranslate"><span class="pre">World.control_step_callback</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.random_generator"><code class="docutils literal notranslate"><span class="pre">World.random_generator</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.random_seed"><code class="docutils literal notranslate"><span class="pre">World.random_seed</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.lx"><code class="docutils literal notranslate"><span class="pre">World.lx</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.World.ly"><code class="docutils literal notranslate"><span class="pre">World.ly</span></code></a></li>
