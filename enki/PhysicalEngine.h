@@ -553,7 +553,7 @@ namespace Enki
 		//! Current ground texture
 		const GroundTexture groundTexture;
 		
-		typedef std::set<PhysicalObject *> Objects;
+		typedef std::vector<PhysicalObject *> Objects;
 		typedef Objects::iterator ObjectsIterator;
 		
 		//! Whether the world should delete the objects upon destruction, true by default
@@ -618,21 +618,21 @@ namespace Enki
 			return cb;
 		}
 
-  		std::vector<PhysicalObject *> get_robots() const {
-    		std::vector<PhysicalObject *> rs;
-    		std::copy_if(
-        		objects.begin(), objects.end(), std::back_inserter(rs),
-        		[](PhysicalObject *o) { return dynamic_cast<Robot *>(o) != nullptr; });
-    		return rs;
-  		}
+  	std::vector<PhysicalObject *> get_robots() const {
+    	std::vector<PhysicalObject *> rs;
+    	std::copy_if(
+      		objects.begin(), objects.end(), std::back_inserter(rs),
+      		[](PhysicalObject *o) { return dynamic_cast<Robot *>(o) != nullptr; });
+    	return rs;
+  	}
 
-        std::vector<PhysicalObject *> get_static_objects() const {
-          	std::vector<PhysicalObject *> rs;
-          	std::copy_if(
-              	objects.begin(), objects.end(), std::back_inserter(rs),
-              	[](PhysicalObject *o) { return dynamic_cast<Robot *>(o) == nullptr; });
-          	return rs;
-        }
+    std::vector<PhysicalObject *> get_static_objects() const {
+      	std::vector<PhysicalObject *> rs;
+      	std::copy_if(
+          	objects.begin(), objects.end(), std::back_inserter(rs),
+          	[](PhysicalObject *o) { return dynamic_cast<Robot *>(o) == nullptr; });
+      	return rs;
+    }
 
 	private:
 		std::function<void(World *, double)> cb;

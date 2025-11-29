@@ -1179,13 +1179,16 @@ namespace Enki
 	
 	void World::addObject(PhysicalObject *o)
 	{
-		objects.insert(o);
+		if (std::find(objects.begin(), objects.end(), o) != objects.end()) {
+			return;
+		}
+		objects.push_back(o);
 		o->world = this;
 	}
 
 	void World::removeObject(PhysicalObject *o)
 	{
-		objects.erase(o);
+		objects.erase(std::remove(objects.begin(), objects.end(), o), objects.end());
 		o->world = nullptr;
 	}
 	
