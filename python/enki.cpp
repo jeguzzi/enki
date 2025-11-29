@@ -393,7 +393,7 @@ Returns:
 
   // Physical objects
 
-  py::classh<PhysicalObject, PyPhysicalObject> po(m, "PhysicalObject", R"doc(
+  py::classh<PhysicalObject, PyPhysicalObject> po(m, "PhysicalObject", py::dynamic_attr(), R"doc(
 The superclass of objects that can be simulated.
 
 Attributes:
@@ -1258,7 +1258,7 @@ Returns:
             r.setLedIntensity(Thymio2::LedIndex::RIGHT_BLUE, value);
           });
 
-  py::classh<PyWorld> world(m, "World", R"doc(
+  py::classh<PyWorld> world(m, "World", py::dynamic_attr(), R"doc(
 The world is the container of all objects and robots.
 It is either
 
