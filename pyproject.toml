@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "pyenki"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
   "numpy>=1.21",
   'typing-extensions; python_version<"3.11"'
