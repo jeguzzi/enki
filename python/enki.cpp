@@ -393,7 +393,8 @@ Returns:
 
   // Physical objects
 
-  py::classh<PhysicalObject, PyPhysicalObject> po(m, "PhysicalObject", py::dynamic_attr(), R"doc(
+  py::classh<PhysicalObject, PyPhysicalObject> po(m, "PhysicalObject",
+                                                  py::dynamic_attr(), R"doc(
 The superclass of objects that can be simulated.
 
 Attributes:
@@ -634,13 +635,15 @@ Arguments:
       .def_readwrite("velocity", &PhysicalObject::speed)
       .def_readwrite("angular_speed", &PhysicalObject::angSpeed)
       .def_property("collision_callback", &PhysicalObject::getCollisionCallback,
-                    &PhysicalObject::setCollisionCallback,
-                    py::keep_alive<1, 2>())
+                    py::cpp_function(&PhysicalObject::setCollisionCallback,
+                                     py::keep_alive<1, 2>()))
       .def_property("control_step_callback",
                     &PhysicalObject::getControlCallback,
-                    &PhysicalObject::setControlCallback, py::keep_alive<1, 2>())
+                    py::cpp_function(&PhysicalObject::setControlCallback,
+                                     py::keep_alive<1, 2>()))
       .def_property("touch_callback", &PhysicalObject::getTouchCallback,
-                    &PhysicalObject::setTouchCallback, py::keep_alive<1, 2>())
+                    py::cpp_function(&PhysicalObject::setTouchCallback,
+                                     py::keep_alive<1, 2>()))
       .def(
           "control_step",
           [](PyPhysicalObject &o, double dt) { o.controlStep(dt); },
@@ -980,7 +983,8 @@ Identify one of the five touch button of the Thymio2.
 
   thymio.def(py::init<>(), "Constructs an instance")
       .def_property("button_touch_callback", &Thymio2::getButtonTouchCallback,
-                    &Thymio2::setButtonTouchCallback, py::keep_alive<1, 2>())
+                    py::cpp_function(&Thymio2::setButtonTouchCallback,
+                                     py::keep_alive<1, 2>()))
       .def(
           "on_button_touch",
           [](PyThymio2 &t, Thymio2::Button button) {
@@ -1387,8 +1391,7 @@ No boundary walls.
       .def(py::init<double, double, const Color &,
                     const std::optional<World::GroundTexture> &,
                     unsigned long>(),
-           py::arg("lx"), py::arg("ly"),
-           py::arg("walls_color") = Color::gray,
+           py::arg("lx"), py::arg("ly"), py::arg("walls_color") = Color::gray,
            py::arg("ground_texture") = std::nullopt, py::arg("seed") = 0)
       .def(py::init<double, const Color &,
                     const std::optional<World::GroundTexture> &,
@@ -1449,8 +1452,9 @@ Returns:
       .def_property("robots", &World::get_robots, nullptr)
       .def_property("static_objects", &World::get_static_objects, nullptr)
       .def_readonly("objects", &World::objects)
-      .def_property("control_step_callback", &World::getControlCallback,
-                    &World::setControlCallback, py::keep_alive<1, 2>())
+      .def_property(
+          "control_step_callback", &World::getControlCallback,
+          py::cpp_function(&World::setControlCallback, py::keep_alive<1, 2>()))
       .def("run", &PyWorld::run, py::arg("steps") = 1,
            py::arg("time_step") = 1.0 / 30.0,
            py::arg("physics_oversampling") = 3,
