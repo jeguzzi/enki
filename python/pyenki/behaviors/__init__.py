@@ -6,10 +6,11 @@ from .explorer import ThymioExplorerBehavior
 from .follower import ThymioFollowerBehavior
 from .line import ThymioLineFollowingBehavior
 from .prox import ThymioLEDProxBehavior
+from .prox_comm import ThymioLEDProxCommBehavior
 from .utils import Chain
 
 __all__ = [
     'Chain', 'ThymioLineFollowingBehavior', 'ThymioLEDProxBehavior',
     'ThymioLEDButtonsBehavior', 'ThymioAccBehavior', 'ThymioExplorerBehavior',
-    'ThymioFollowerBehavior'
+    'ThymioFollowerBehavior', 'ThymioLEDProxCommBehavior'
 ]
