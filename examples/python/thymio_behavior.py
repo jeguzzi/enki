@@ -4,24 +4,24 @@ import sys
 import pyenki
 import pyenki.video
 import pyenki.viewer
-from pyenki.behaviors import (Chain, ThymioAccBehavior, ThymioExplorerBehavior,
-                              ThymioFollowerBehavior, ThymioLEDButtonsBehavior,
-                              ThymioLEDProxBehavior)
+from pyenki.adapters import make_controller_from_thymio_behavior
+
+from thymio_behaviors import (AccBehavior, Chain, ExplorerBehavior,
+                              FollowerBehavior, LEDButtonsBehavior,
+                              LEDProxBehavior)
 
 
 def make_world() -> pyenki.World:
     world = pyenki.World(radius=50, seed=4)
     rng = world.random_generator
-    behaviors = (ThymioAccBehavior, ThymioExplorerBehavior,
-                 ThymioFollowerBehavior)
+    behaviors = (AccBehavior, ExplorerBehavior, FollowerBehavior)
     for _ in range(7):
         thymio = pyenki.Thymio2()
         thymio.position = (rng.uniform(-30, 30), rng.uniform(-30, 30))
         thymio.angle = rng.uniform(0, 2 * math.pi)
         behavior_cls = rng.choice(behaviors)  # type: ignore[arg-type]
-        thymio.control_step_callback = Chain(ThymioLEDProxBehavior(),
-                                             ThymioLEDButtonsBehavior(),
-                                             behavior_cls())
+        thymio.control_step_callback = make_controller_from_thymio_behavior(
+            thymio, Chain(LEDProxBehavior(), LEDButtonsBehavior(), behavior_cls()))
         world.add_object(thymio)
     world.run(2, 0.033)
     return world
@@ -43,7 +43,7 @@ def main() -> None:
                                     height=720,
                                     factor=2,
                                     **camera_config)
-        v.write_videofile('thymio_behaviors.mp4', fps=30)
+        v.write_videofile('thymio_behavior.mp4', fps=30)
     else:
         pyenki.viewer.run_in_viewer(world,
                                     time_step=0.033,

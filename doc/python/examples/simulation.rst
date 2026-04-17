@@ -50,12 +50,12 @@ Thymio Behaviors
 
 In this example, a group of Thymio runs one the controllers, described in :ref:`Behaviors`, that replicate the behaviors implemented in the Thymio firmware.
 
-.. include:: ../../../examples/python/thymio_behaviors.py
+.. include:: ../../../examples/python/thymio_behavior.py
    :code: Python
 
 Running the script with the ``--video`` flag generates this video:
 
-.. video:: images/thymio_behaviors.mp4
+.. video:: images/thymio_behavior.mp4
    :width: 100%
    :align: center
 

@@ -13,11 +13,15 @@ dependencies = [
 [project.optional-dependencies]
 all = [
   "moviepy>=2",
-  "jupyter_rfb"
+  "jupyter_rfb",
+  "thymio_behaviors @ git+https://github.com/jeguzzi/thymio-python-behaviors"
 ]
 viewer = [
   "PySide6",
   "PyOpenGL"
+]
+behaviors = [
+  "thymio_behaviors @ git+https://github.com/jeguzzi/thymio-python-behaviors"
 ]
 
 [tool.scikit-build]

@@ -6,7 +6,8 @@ import PIL.Image
 import pyenki
 import pyenki.video
 import pyenki.viewer
-from pyenki.behaviors import ThymioLineFollowingBehavior
+from pyenki.adapters import make_controller_from_thymio_behavior
+from thymio_behaviors import LineFollowingBehavior
 
 
 def make_world() -> pyenki.World:
@@ -17,7 +18,8 @@ def make_world() -> pyenki.World:
     thymio = pyenki.Thymio2()
     thymio.position = (110, 100)
     thymio.angle = 0
-    thymio.control_step_callback = ThymioLineFollowingBehavior()
+    thymio.control_step_callback = make_controller_from_thymio_behavior(
+        thymio, LineFollowingBehavior())
     world.add_object(thymio)
     return world
 

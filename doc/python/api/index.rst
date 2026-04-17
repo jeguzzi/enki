@@ -11,7 +11,6 @@ Reference
    world
    visualization
    adapters
-   behaviors
    
 
 
