@@ -84,8 +84,10 @@ def main(duration: float = 10, dt: float = 0.1) -> None:
     else:
         # We write our own loop to run the simulation as fast as possible.
         steps = int(duration // dt)
+        print(f'Simulating {steps} steps')
         for _ in range(steps):
             world.step(dt)
+        print('Finished simulating')
 
 
 if __name__ == '__main__':
