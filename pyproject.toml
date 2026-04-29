@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "pyenki"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
   "numpy>=1.21",
   'typing-extensions; python_version<"3.11"'
@@ -14,14 +14,14 @@ dependencies = [
 all = [
   "moviepy>=2",
   "jupyter_rfb",
-  "thymio_behaviors @ git+https://github.com/jeguzzi/thymio-python-behaviors"
+  "thymio-behaviors"
 ]
 viewer = [
   "PySide6",
   "PyOpenGL"
 ]
 behaviors = [
-  "thymio_behaviors @ git+https://github.com/jeguzzi/thymio-python-behaviors"
+  "thymio-behaviors"
 ]
 
 [tool.scikit-build]
