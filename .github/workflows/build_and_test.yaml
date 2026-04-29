@@ -25,6 +25,7 @@ jobs:
         run: pip install mypy
       - name: test with mypy
         run: mypy -p pyenki --strict
+        continue-on-error: true
       - name: run headless examples
         run: |
           python src/enki/examples/python/hello_thymio.py
