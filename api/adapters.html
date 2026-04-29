@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Aseba Adapters &#8212; pyenki 0.1 documentation</title>
+    <title>Aseba Adapters &#8212; pyenki 0.2.0 documentation</title>
   
   
   
@@ -16,39 +16,42 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-toolbox-code.css?v=4ee5d529" />
-    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=e1a75a79"></script>
+    <script src="../_static/documentation_options.js?v=7f7c277e"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/adapters';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Behaviors" href="behaviors.html" />
+    <link rel="next" title="Changelog" href="../changelog.html" />
     <link rel="prev" title="Video" href="video.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -64,19 +67,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -84,7 +76,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -92,8 +83,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -109,7 +100,8 @@
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -134,20 +126,16 @@
   
   
   
-    <p class="title logo__title">pyenki 0.1 documentation</p>
+    <p class="title logo__title">pyenki 0.2.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -191,7 +179,6 @@
 </ul>
 </details></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Aseba Adapters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="behaviors.html">Behaviors</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
@@ -203,9 +190,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -302,24 +294,16 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
+</button>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -343,11 +327,11 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.make_controller_from_thymio_behavior"><code class="docutils literal notranslate"><span class="pre">make_controller_from_thymio_behavior()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.__init__"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_comm_enable"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_comm_enable()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_led_sound"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_led_sound()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_led_temperature"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_led_temperature()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.actuate"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.actuate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call__leds_set"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call__leds_set()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_bottom_left"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_bottom_left()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_bottom_right"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_bottom_right()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_buttons"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_buttons()</span></code></a></li>
@@ -355,37 +339,18 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_prox_h"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_prox_h()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_prox_v"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_prox_v()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_rc"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_rc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_sound"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_sound()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_temperature"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_temperature()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_top"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_top()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.acc"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.acc</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.acc__tap"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.acc__tap</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.button_backward"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.button_backward</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.button_center"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.button_center</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.button_forward"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.button_forward</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.button_left"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.button_left</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.button_right"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.button_right</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.leds_bottom_left"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.leds_bottom_left</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.leds_bottom_right"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.leds_bottom_right</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.leds_circle"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.leds_circle</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.leds_top"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.leds_top</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.mic__mean"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.mic__mean</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.mic_intensity"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.mic_intensity</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_left_pwm"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.motor_left_pwm</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_left_speed"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.motor_left_speed</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_left_target"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.motor_left_target</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_right_pwm"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.motor_right_pwm</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_right_speed"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.motor_right_speed</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_right_target"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.motor_right_target</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_comm_rx</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx__intensities"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_comm_rx__intensities</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx__payloads"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_comm_rx__payloads</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_tx"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_comm_tx</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_ground_ambiant"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_ground_ambiant</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_ground_delta"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_ground_delta</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_ground_reflected"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_ground_reflected</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_horizontal"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_horizontal</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.r5_address"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.r5_address</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.r5_command"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.r5_command</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.temperature"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.temperature</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_prox_comm_enable"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_prox_comm_enable()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_duration"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_duration()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_freq"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_freq()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_play"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_play()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_record"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_record()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_replay"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_replay()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_system"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_system()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.update"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_buffer"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_comm_buffer</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -401,6 +366,11 @@ document.write(`
                   
   <section id="aseba-adapters">
 <h1>Aseba Adapters<a class="headerlink" href="#aseba-adapters" title="Link to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyenki.adapters.make_controller_from_thymio_behavior">
+<span class="sig-prename descclassname"><span class="pre">pyenki.adapters.</span></span><span class="sig-name descname"><span class="pre">make_controller_from_thymio_behavior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thymio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><span class="pre">PhysicalObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Behavior</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Controller</span></span></span><a class="headerlink" href="#pyenki.adapters.make_controller_from_thymio_behavior" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.adapters.</span></span><span class="sig-name descname"><span class="pre">Thymio2AsebaAdapter</span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter" title="Link to this definition">#</a></dt>
@@ -433,41 +403,47 @@ which, although structurally different, can be functionally equivalent.</p>
 <span class="n">thymio</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">()</span>
 <span class="c1"># Wrap it in the Aseba-like interface</span>
 <span class="n">aseba</span> <span class="o">=</span> <span class="n">Thymio2AsebaAdapter</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
-<span class="c1"># Use a similar API</span>
 
+<span class="n">aseba</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+<span class="c1"># Use a similar API</span>
 <span class="n">aseba</span><span class="o">.</span><span class="n">call_leds_top</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">aseba</span><span class="o">.</span><span class="n">prox_horizontal</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2000</span><span class="p">:</span>
     <span class="n">aseba</span><span class="o">.</span><span class="n">motor_left_target</span> <span class="o">=</span> <span class="mi">123</span>
 <span class="k">else</span>
     <span class="n">aseba</span><span class="o">.</span><span class="n">motor_left_target</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">end</span>
+
+<span class="n">aseba</span><span class="o">.</span><span class="n">actuate</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The exception are variables related to proximity communication.
-While aseba keeps only the most-recent received
-message in <code class="docutils literal notranslate"><span class="pre">prox.comm.rx._payloads</span></code>, <code class="docutils literal notranslate"><span class="pre">prox.comm.rx._intensities</span></code>
-and <code class="docutils literal notranslate"><span class="pre">prox.comm.rx</span></code> and generate an event each time a message is received,
-this adapter returns a <strong>list</strong> of messages received in the last update steps,
-in <a class="reference internal" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx__payloads" title="pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx__payloads"><code class="xref py py-attr docutils literal notranslate"><span class="pre">prox_comm_rx__payloads</span></code></a>, <a class="reference internal" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx__intensities" title="pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx__intensities"><code class="xref py py-attr docutils literal notranslate"><span class="pre">prox_comm_rx__intensities</span></code></a>,
-and <a class="reference internal" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx" title="pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx"><code class="xref py py-attr docutils literal notranslate"><span class="pre">prox_comm_rx</span></code></a>.</p>
+<p>Like Aseba, it keeps the most-recent received
+proximity communication message in <code class="docutils literal notranslate"><span class="pre">prox.comm.rx._payloads</span></code>,
+<code class="docutils literal notranslate"><span class="pre">prox.comm.rx._intensities</span></code>, and <code class="docutils literal notranslate"><span class="pre">prox.comm.rx</span></code>.
+In addition, it records in <a class="reference internal" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_buffer" title="pyenki.adapters.Thymio2AsebaAdapter.prox_comm_buffer"><code class="xref py py-attr docutils literal notranslate"><span class="pre">prox_comm_buffer</span></code></a>
+the <strong>list</strong> of messages received in the last update step.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thymio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="thymio.html#pyenki.Thymio2" title="pyenki.Thymio2"><span class="pre">Thymio2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.__init__" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Constructs a new instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>thymio</strong> – The robot</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.call_comm_enable">
-<span class="sig-name descname"><span class="pre">call_comm_enable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_comm_enable" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.actuate">
+<span class="sig-name descname"><span class="pre">actuate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.actuate" title="Link to this definition">#</a></dt>
+<dd><p>Forwards the commands to the robots.
+Should be called after setting Aseba variables
+in a control step.</p>
+</dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.call_led_sound">
-<span class="sig-name descname"><span class="pre">call_led_sound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_led_sound" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.call_led_temperature">
-<span class="sig-name descname"><span class="pre">call_led_temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_led_temperature" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.call__leds_set">
+<span class="sig-name descname"><span class="pre">call__leds_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call__leds_set" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -502,7 +478,17 @@ and <a class="reference internal" href="#pyenki.adapters.Thymio2AsebaAdapter.pro
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.call_leds_rc">
-<span class="sig-name descname"><span class="pre">call_leds_rc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_rc" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">call_leds_rc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_rc" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.call_leds_sound">
+<span class="sig-name descname"><span class="pre">call_leds_sound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_sound" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.call_leds_temperature">
+<span class="sig-name descname"><span class="pre">call_leds_temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_temperature" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -510,154 +496,51 @@ and <a class="reference internal" href="#pyenki.adapters.Thymio2AsebaAdapter.pro
 <span class="sig-name descname"><span class="pre">call_leds_top</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_top" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.acc">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.acc" title="Link to this definition">#</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.call_prox_comm_enable">
+<span class="sig-name descname"><span class="pre">call_prox_comm_enable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_prox_comm_enable" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.acc__tap">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acc__tap</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.acc__tap" title="Link to this definition">#</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.call_sound_duration">
+<span class="sig-name descname"><span class="pre">call_sound_duration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_duration" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.button_backward">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">button_backward</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.button_backward" title="Link to this definition">#</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.call_sound_freq">
+<span class="sig-name descname"><span class="pre">call_sound_freq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_freq" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.button_center">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">button_center</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.button_center" title="Link to this definition">#</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.call_sound_play">
+<span class="sig-name descname"><span class="pre">call_sound_play</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_play" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.button_forward">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">button_forward</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.button_forward" title="Link to this definition">#</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.call_sound_record">
+<span class="sig-name descname"><span class="pre">call_sound_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_record" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.button_left">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">button_left</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.button_left" title="Link to this definition">#</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.call_sound_replay">
+<span class="sig-name descname"><span class="pre">call_sound_replay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_replay" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.button_right">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">button_right</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.button_right" title="Link to this definition">#</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.call_sound_system">
+<span class="sig-name descname"><span class="pre">call_sound_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_system" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.leds_bottom_left">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">leds_bottom_left</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.leds_bottom_left" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.update" title="Link to this definition">#</a></dt>
+<dd><p>Updates the Aseba variables. Should be called before
+reading them in a control step.</p>
+</dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.leds_bottom_right">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">leds_bottom_right</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.leds_bottom_right" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.leds_circle">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">leds_circle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.leds_circle" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.leds_top">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">leds_top</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.leds_top" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.mic__mean">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mic__mean</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.mic__mean" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.mic_intensity">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mic_intensity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.mic_intensity" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.motor_left_pwm">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">motor_left_pwm</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_left_pwm" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.motor_left_speed">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">motor_left_speed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_left_speed" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.motor_left_target">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">motor_left_target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_left_target" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.motor_right_pwm">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">motor_right_pwm</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_right_pwm" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.motor_right_speed">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">motor_right_speed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_right_speed" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.motor_right_target">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">motor_right_target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_right_target" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prox_comm_rx</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx__intensities">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prox_comm_rx__intensities</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx__intensities" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx__payloads">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prox_comm_rx__payloads</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx__payloads" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.prox_comm_tx">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prox_comm_tx</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_tx" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.prox_ground_ambiant">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prox_ground_ambiant</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_ground_ambiant" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.prox_ground_delta">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prox_ground_delta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_ground_delta" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.prox_ground_reflected">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prox_ground_reflected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_ground_reflected" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.prox_horizontal">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prox_horizontal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_horizontal" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.r5_address">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">r5_address</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.r5_address" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.r5_command">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">r5_command</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.r5_command" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.temperature">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">temperature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.temperature" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.prox_comm_buffer">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">prox_comm_buffer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_buffer" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -685,11 +568,11 @@ and <a class="reference internal" href="#pyenki.adapters.Thymio2AsebaAdapter.pro
       </div>
     </a>
     <a class="right-next"
-       href="behaviors.html"
+       href="../changelog.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Behaviors</p>
+        <p class="prev-next-title">Changelog</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -700,7 +583,8 @@ and <a class="reference internal" href="#pyenki.adapters.Thymio2AsebaAdapter.pro
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -709,11 +593,11 @@ and <a class="reference internal" href="#pyenki.adapters.Thymio2AsebaAdapter.pro
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.make_controller_from_thymio_behavior"><code class="docutils literal notranslate"><span class="pre">make_controller_from_thymio_behavior()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.__init__"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_comm_enable"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_comm_enable()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_led_sound"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_led_sound()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_led_temperature"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_led_temperature()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.actuate"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.actuate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call__leds_set"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call__leds_set()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_bottom_left"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_bottom_left()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_bottom_right"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_bottom_right()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_buttons"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_buttons()</span></code></a></li>
@@ -721,37 +605,18 @@ and <a class="reference internal" href="#pyenki.adapters.Thymio2AsebaAdapter.pro
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_prox_h"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_prox_h()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_prox_v"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_prox_v()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_rc"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_rc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_sound"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_sound()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_temperature"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_temperature()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_top"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_top()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.acc"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.acc</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.acc__tap"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.acc__tap</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.button_backward"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.button_backward</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.button_center"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.button_center</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.button_forward"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.button_forward</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.button_left"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.button_left</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.button_right"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.button_right</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.leds_bottom_left"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.leds_bottom_left</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.leds_bottom_right"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.leds_bottom_right</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.leds_circle"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.leds_circle</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.leds_top"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.leds_top</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.mic__mean"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.mic__mean</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.mic_intensity"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.mic_intensity</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_left_pwm"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.motor_left_pwm</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_left_speed"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.motor_left_speed</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_left_target"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.motor_left_target</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_right_pwm"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.motor_right_pwm</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_right_speed"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.motor_right_speed</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.motor_right_target"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.motor_right_target</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_comm_rx</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx__intensities"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_comm_rx__intensities</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx__payloads"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_comm_rx__payloads</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_tx"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_comm_tx</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_ground_ambiant"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_ground_ambiant</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_ground_delta"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_ground_delta</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_ground_reflected"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_ground_reflected</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_horizontal"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_horizontal</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.r5_address"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.r5_address</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.r5_command"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.r5_command</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.temperature"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.temperature</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_prox_comm_enable"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_prox_comm_enable()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_duration"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_duration()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_freq"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_freq()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_play"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_play()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_record"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_record()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_replay"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_replay()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_system"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_system()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.update"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.update()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_buffer"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_comm_buffer</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -802,8 +667,8 @@ By Stéphane Magnenat and others. This version is maintained by Jerome Guzzi.
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

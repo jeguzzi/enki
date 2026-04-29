@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; pyenki 0.1 documentation</title>
+    <title>Index &#8212; pyenki 0.2.0 documentation</title>
   
   
   
@@ -15,38 +15,40 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-toolbox-code.css?v=4ee5d529" />
-    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
   
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=e1a75a79"></script>
+    <script src="_static/documentation_options.js?v=7f7c277e"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/tabs.js?v=3030b3cb"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -62,19 +64,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -82,7 +73,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -90,8 +80,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -109,7 +99,8 @@
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -134,20 +125,16 @@
   
   
   
-    <p class="title logo__title">pyenki 0.1 documentation</p>
+    <p class="title logo__title">pyenki 0.2.0 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
@@ -191,7 +178,6 @@
 </ul>
 </details></li>
 <li class="toctree-l2"><a class="reference internal" href="api/adapters.html">Aseba Adapters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/behaviors.html">Behaviors</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
@@ -203,9 +189,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -254,24 +245,16 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
+</button>
 
 </div></div>
       
@@ -329,39 +312,9 @@ document.write(`
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/behaviors.html#pyenki.behaviors.Chain.__call__">__call__() (pyenki.behaviors.Chain method)</a>
-
-      <ul>
-        <li><a href="api/behaviors.html#pyenki.behaviors.ThymioAccBehavior.__call__">(pyenki.behaviors.ThymioAccBehavior method)</a>
-</li>
-        <li><a href="api/behaviors.html#pyenki.behaviors.ThymioExplorerBehavior.__call__">(pyenki.behaviors.ThymioExplorerBehavior method)</a>
-</li>
-        <li><a href="api/behaviors.html#pyenki.behaviors.ThymioFollowerBehavior.__call__">(pyenki.behaviors.ThymioFollowerBehavior method)</a>
-</li>
-        <li><a href="api/behaviors.html#pyenki.behaviors.ThymioLEDButtonsBehavior.__call__">(pyenki.behaviors.ThymioLEDButtonsBehavior method)</a>
-</li>
-        <li><a href="api/behaviors.html#pyenki.behaviors.ThymioLEDProxBehavior.__call__">(pyenki.behaviors.ThymioLEDProxBehavior method)</a>
-</li>
-        <li><a href="api/behaviors.html#pyenki.behaviors.ThymioLineFollowingBehavior.__call__">(pyenki.behaviors.ThymioLineFollowingBehavior method)</a>
-</li>
-      </ul></li>
       <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.__init__">__init__() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
 
       <ul>
-        <li><a href="api/behaviors.html#pyenki.behaviors.Chain.__init__">(pyenki.behaviors.Chain method)</a>
-</li>
-        <li><a href="api/behaviors.html#pyenki.behaviors.ThymioAccBehavior.__init__">(pyenki.behaviors.ThymioAccBehavior method)</a>
-</li>
-        <li><a href="api/behaviors.html#pyenki.behaviors.ThymioExplorerBehavior.__init__">(pyenki.behaviors.ThymioExplorerBehavior method)</a>
-</li>
-        <li><a href="api/behaviors.html#pyenki.behaviors.ThymioFollowerBehavior.__init__">(pyenki.behaviors.ThymioFollowerBehavior method)</a>
-</li>
-        <li><a href="api/behaviors.html#pyenki.behaviors.ThymioLEDButtonsBehavior.__init__">(pyenki.behaviors.ThymioLEDButtonsBehavior method)</a>
-</li>
-        <li><a href="api/behaviors.html#pyenki.behaviors.ThymioLEDProxBehavior.__init__">(pyenki.behaviors.ThymioLEDProxBehavior method)</a>
-</li>
-        <li><a href="api/behaviors.html#pyenki.behaviors.ThymioLineFollowingBehavior.__init__">(pyenki.behaviors.ThymioLineFollowingBehavior method)</a>
-</li>
         <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer.__init__">(pyenki.buffer.EnkiRemoteFrameBuffer method)</a>
 </li>
         <li><a href="api/epuck.html#pyenki.EPuck.__init__">(pyenki.EPuck method)</a>
@@ -391,9 +344,7 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/types.html#pyenki.Color.a">a (pyenki.Color attribute)</a>
 </li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.acc">acc (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.acc__tap">acc__tap (pyenki.adapters.Thymio2AsebaAdapter property)</a>
+      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.actuate">actuate() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
 </li>
       <li><a href="api/world.html#pyenki.World.add_object">add_object() (pyenki.World method)</a>
 </li>
@@ -423,19 +374,9 @@ document.write(`
 </li>
       <li><a href="api/types.html#pyenki.Color.black">black (pyenki.Color attribute)</a>
 </li>
-      <li><a href="api/types.html#pyenki.Color.blue">blue (pyenki.Color attribute)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.button_backward">button_backward (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.button_center">button_center (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.button_forward">button_forward (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.button_left">button_left (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.button_right">button_right (pyenki.adapters.Thymio2AsebaAdapter property)</a>
+      <li><a href="api/types.html#pyenki.Color.blue">blue (pyenki.Color attribute)</a>
 </li>
       <li><a href="api/thymio.html#pyenki.Thymio2.button_touch_callback">button_touch_callback (pyenki.Thymio2 attribute)</a>
 </li>
@@ -447,11 +388,7 @@ document.write(`
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_comm_enable">call_comm_enable() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_led_sound">call_led_sound() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_led_temperature">call_led_temperature() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
+      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call__leds_set">call__leds_set() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
 </li>
       <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_leds_bottom_left">call_leds_bottom_left() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
 </li>
@@ -467,7 +404,25 @@ document.write(`
 </li>
       <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_leds_rc">call_leds_rc() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
 </li>
+      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_leds_sound">call_leds_sound() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
+</li>
+      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_leds_temperature">call_leds_temperature() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
+</li>
       <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_leds_top">call_leds_top() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
+</li>
+      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_prox_comm_enable">call_prox_comm_enable() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
+</li>
+      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_sound_duration">call_sound_duration() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
+</li>
+      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_sound_freq">call_sound_freq() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
+</li>
+      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_sound_play">call_sound_play() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
+</li>
+      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_sound_record">call_sound_record() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
+</li>
+      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_sound_replay">call_sound_replay() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
+</li>
+      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.call_sound_system">call_sound_system() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
 </li>
       <li><a href="api/camera.html#pyenki.viewer.Camera">Camera (class in pyenki.viewer)</a>
 </li>
@@ -489,6 +444,8 @@ document.write(`
       </ul></li>
       <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.camera_matrix">camera_matrix (pyenki.viewer.camera.HasCamera property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.camera_pitch">camera_pitch (pyenki.viewer.camera.HasCamera property)</a>
 
       <ul>
@@ -501,8 +458,6 @@ document.write(`
         <li><a href="api/camera.html#pyenki.viewer.CameraConfig.camera_position">(pyenki.viewer.CameraConfig attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.camera_projection">camera_projection (pyenki.viewer.camera.HasCamera property)</a>
 </li>
       <li><a href="api/camera.html#pyenki.viewer.CameraConfig.camera_reset">camera_reset (pyenki.viewer.CameraConfig attribute)</a>
@@ -516,8 +471,6 @@ document.write(`
       <li><a href="api/camera.html#pyenki.viewer.CameraConfig">CameraConfig (class in pyenki.viewer)</a>
 </li>
       <li><a href="api/thymio.html#pyenki.Thymio2.Button.CENTER">CENTER (pyenki.Thymio2.Button attribute)</a>
-</li>
-      <li><a href="api/behaviors.html#pyenki.behaviors.Chain">Chain (class in pyenki.behaviors)</a>
 </li>
       <li><a href="api/world.html#pyenki.World.WallsType.CIRCULAR">CIRCULAR (pyenki.World.WallsType attribute)</a>
 </li>
@@ -703,28 +656,18 @@ document.write(`
 </li>
       <li><a href="api/thymio.html#pyenki.Thymio2.led_right_red">led_right_red (pyenki.Thymio2 attribute)</a>
 </li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.leds_bottom_left">leds_bottom_left (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.leds_bottom_right">leds_bottom_right (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
       <li><a href="api/thymio.html#pyenki.Thymio2.leds_buttons">leds_buttons (pyenki.Thymio2 attribute)</a>
 </li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.leds_circle">leds_circle (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-
-      <ul>
-        <li><a href="api/thymio.html#pyenki.Thymio2.leds_circle">(pyenki.Thymio2 attribute)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.leds_circle">leds_circle (pyenki.Thymio2 attribute)</a>
 </li>
-      </ul></li>
       <li><a href="api/thymio.html#pyenki.Thymio2.leds_prox">leds_prox (pyenki.Thymio2 attribute)</a>
 </li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.leds_top">leds_top (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/thymio.html#pyenki.Thymio2.Button.LEFT">LEFT (pyenki.Thymio2.Button attribute)</a>
 </li>
       <li><a href="api/camera.html#pyenki.viewer.Camera.left">left (pyenki.viewer.Camera attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/base.html#pyenki.DifferentialWheeled.left_wheel_encoder_speed">left_wheel_encoder_speed (pyenki.DifferentialWheeled attribute)</a>
 </li>
       <li><a href="api/base.html#pyenki.DifferentialWheeled.left_wheel_odometry">left_wheel_odometry (pyenki.DifferentialWheeled attribute)</a>
@@ -751,6 +694,8 @@ document.write(`
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/adapters.html#pyenki.adapters.make_controller_from_thymio_behavior">make_controller_from_thymio_behavior() (in module pyenki.adapters)</a>
+</li>
       <li><a href="api/video.html#pyenki.video.make_video">make_video() (in module pyenki.video)</a>
 </li>
       <li><a href="api/marxbot.html#pyenki.Marxbot">Marxbot (class in pyenki)</a>
@@ -759,10 +704,8 @@ document.write(`
 </li>
       <li><a href="api/base.html#pyenki.DifferentialWheeled.max_wheel_speed">max_wheel_speed (pyenki.DifferentialWheeled attribute)</a>
 </li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.mic__mean">mic__mean (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.mic_intensity">mic_intensity (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     module
 
@@ -772,21 +715,7 @@ document.write(`
         <li><a href="api/video.html#module-pyenki.video">pyenki.video</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/object.html#pyenki.PhysicalObject.moment_of_inertia">moment_of_inertia (pyenki.PhysicalObject attribute)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.motor_left_pwm">motor_left_pwm (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.motor_left_speed">motor_left_speed (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.motor_left_target">motor_left_target (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.motor_right_pwm">motor_right_pwm (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.motor_right_speed">motor_right_speed (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.motor_right_target">motor_right_target (pyenki.adapters.Thymio2AsebaAdapter property)</a>
 </li>
       <li><a href="api/camera.html#pyenki.viewer.Camera.move">move() (pyenki.viewer.Camera method)</a>
 </li>
@@ -850,38 +779,22 @@ document.write(`
         <li><a href="api/camera.html#pyenki.viewer.Camera.position">(pyenki.viewer.Camera attribute)</a>
 </li>
       </ul></li>
+      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_buffer">prox_comm_buffer (pyenki.adapters.Thymio2AsebaAdapter property)</a>
+</li>
       <li><a href="api/thymio.html#pyenki.Thymio2.prox_comm_enabled">prox_comm_enabled (pyenki.Thymio2 attribute)</a>
-</li>
-      <li><a href="api/thymio.html#pyenki.Thymio2.prox_comm_events">prox_comm_events (pyenki.Thymio2 attribute)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx">prox_comm_rx (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx__intensities">prox_comm_rx__intensities (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_rx__payloads">prox_comm_rx__payloads (pyenki.adapters.Thymio2AsebaAdapter property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_tx">prox_comm_tx (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-
-      <ul>
-        <li><a href="api/thymio.html#pyenki.Thymio2.prox_comm_tx">(pyenki.Thymio2 attribute)</a>
+      <li><a href="api/thymio.html#pyenki.Thymio2.prox_comm_events">prox_comm_events (pyenki.Thymio2 attribute)</a>
 </li>
-      </ul></li>
+      <li><a href="api/thymio.html#pyenki.Thymio2.prox_comm_tx">prox_comm_tx (pyenki.Thymio2 attribute)</a>
+</li>
       <li><a href="api/epuck.html#pyenki.EPuck.prox_distances">prox_distances (pyenki.EPuck attribute)</a>
 
       <ul>
         <li><a href="api/thymio.html#pyenki.Thymio2.prox_distances">(pyenki.Thymio2 attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.prox_ground_ambiant">prox_ground_ambiant (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.prox_ground_delta">prox_ground_delta (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.prox_ground_reflected">prox_ground_reflected (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.prox_horizontal">prox_horizontal (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
       <li><a href="api/epuck.html#pyenki.EPuck.prox_values">prox_values (pyenki.EPuck attribute)</a>
 
       <ul>
@@ -922,10 +835,6 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/types.html#pyenki.Color.r">r (pyenki.Color attribute)</a>
 </li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.r5_address">r5_address (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.r5_command">r5_command (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
       <li><a href="api/object.html#pyenki.PhysicalObject.radius">radius (pyenki.PhysicalObject attribute)</a>
 
       <ul>
@@ -954,10 +863,10 @@ document.write(`
 </li>
       <li><a href="api/base.html#pyenki.DifferentialWheeled.reset_encoders">reset_encoders() (pyenki.DifferentialWheeled method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer.resize">resize() (pyenki.buffer.EnkiRemoteFrameBuffer method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/thymio.html#pyenki.Thymio2.Button.RIGHT">RIGHT (pyenki.Thymio2.Button attribute)</a>
 </li>
       <li><a href="api/base.html#pyenki.DifferentialWheeled.right_wheel_encoder_speed">right_wheel_encoder_speed (pyenki.DifferentialWheeled attribute)</a>
@@ -1048,8 +957,6 @@ document.write(`
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.temperature">temperature (pyenki.adapters.Thymio2AsebaAdapter property)</a>
-</li>
       <li><a href="api/object.html#pyenki.PhysicalObject.Part.textures">textures (pyenki.PhysicalObject.Part attribute)</a>
 </li>
       <li><a href="api/types.html#pyenki.Color.threshold">threshold() (pyenki.Color method)</a>
@@ -1058,24 +965,12 @@ document.write(`
 </li>
       <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter">Thymio2AsebaAdapter (class in pyenki.adapters)</a>
 </li>
-      <li><a href="api/behaviors.html#pyenki.behaviors.ThymioAccBehavior">ThymioAccBehavior (class in pyenki.behaviors)</a>
-</li>
-      <li><a href="api/behaviors.html#pyenki.behaviors.ThymioExplorerBehavior">ThymioExplorerBehavior (class in pyenki.behaviors)</a>
-</li>
-      <li><a href="api/behaviors.html#pyenki.behaviors.ThymioFollowerBehavior">ThymioFollowerBehavior (class in pyenki.behaviors)</a>
-</li>
-      <li><a href="api/behaviors.html#pyenki.behaviors.ThymioLEDButtonsBehavior">ThymioLEDButtonsBehavior (class in pyenki.behaviors)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/behaviors.html#pyenki.behaviors.ThymioLEDProxBehavior">ThymioLEDProxBehavior (class in pyenki.behaviors)</a>
-</li>
-      <li><a href="api/behaviors.html#pyenki.behaviors.ThymioLineFollowingBehavior">ThymioLineFollowingBehavior (class in pyenki.behaviors)</a>
-</li>
       <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer.tick">tick() (pyenki.buffer.EnkiRemoteFrameBuffer method)</a>
 </li>
       <li><a href="api/notebook.html#pyenki.buffer.EnkiRemoteFrameBuffer.tick_async">tick_async() (pyenki.buffer.EnkiRemoteFrameBuffer method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/camera.html#pyenki.viewer.to_3d">to_3d() (in module pyenki.viewer)</a>
 </li>
       <li><a href="api/types.html#pyenki.Color.toGray">toGray() (pyenki.Color method)</a>
@@ -1100,6 +995,8 @@ document.write(`
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/adapters.html#pyenki.adapters.Thymio2AsebaAdapter.update">update() (pyenki.adapters.Thymio2AsebaAdapter method)</a>
+</li>
       <li><a href="api/camera.html#pyenki.viewer.camera.HasCamera.update_camera_config">update_camera_config() (pyenki.viewer.camera.HasCamera method)</a>
 </li>
       <li><a href="api/viewer.html#pyenki.viewer.use_native">use_native (in module pyenki.viewer)</a>
@@ -1243,8 +1140,8 @@ By Stéphane Magnenat and others. This version is maintained by Jerome Guzzi.
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>
