@@ -56,6 +56,29 @@ def run(duration: typing.SupportsFloat = -1) -> None:
             app.exec()
 
 
+def run_loop(duration: typing.SupportsFloat = -1) -> QEventLoop | QCoreApplication | None:
+    """
+    Return the Qt run-loop configured for the given duration
+
+    Args:
+        duration (float): The duration in seconds.
+                          Negative values are interpreted as infinite duration.
+    Returns:
+        An executable object (an app or a loop) or
+        None if the app is not available.
+    """
+    app = QApplication.instance()
+    if app:
+        duration = float(duration)
+        if duration >= 0:
+            loop = QEventLoop()
+            QTimer.singleShot(int(1000 * duration), loop, loop.quit)
+            return loop
+        else:
+            return app
+    return None
+
+
 def cleanup() -> None:
     """
     Cleans up the Qt runtime.

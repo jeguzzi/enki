@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+from collections.abc import Callable
 from typing import TYPE_CHECKING, SupportsFloat
 
 if sys.version_info >= (3, 11):
@@ -18,7 +19,7 @@ from .camera import HasCamera
 from .renderer import Renderer
 from .types import CameraConfig, Pixel, Vector3
 from .ui import UI
-from .utils import get_position_of_pixel, init, run
+from .utils import get_position_of_pixel, init, run_loop
 
 if TYPE_CHECKING:
     from PySide6.QtCore import QEvent
@@ -80,6 +81,8 @@ class WorldView(QOpenGLWidget, HasCamera):
                  update_world: bool = False,
                  time_step: SupportsFloat = 0.0,
                  factor: SupportsFloat = 1.0,
+                 physics_oversampling: int = 3,
+                 callback: Callable[[World], None] | None = None,
                  helpers: bool = True,
                  walls_height: SupportsFloat = 10.0,
                  **camera_config: Unpack[CameraConfig]) -> None:
@@ -93,6 +96,10 @@ class WorldView(QOpenGLWidget, HasCamera):
             time_step (float): The simulation time step in seconds.
             factor (bool): The real-time factor. If larger than one, the simulation
                            will run faster then real-time.
+            physics_oversampling (int):  The number of times the physics is updated per step
+                                         to get a more fine-grained physical simulation
+                                         compared to the sensor-motor loop.
+            callback (Callable[[World], None] | None): An optional callback executed at each simulation step.
             helpers (bool): Whether to display the helpers widgets.
             walls_height (float): the height of the world boundary in cm.
             **camera_config (CameraConfig): the camera configuration.
@@ -110,6 +117,8 @@ class WorldView(QOpenGLWidget, HasCamera):
         self._world_time_step = 0.0
         self._timer_period = 0.0
         self._rt_factor = 1.0
+        self.physics_oversampling = physics_oversampling
+        self.callback = callback
         self.cursor_position: Vector3 | None = None
         fps = float(fps)
         if fps > 0:
@@ -189,7 +198,10 @@ class WorldView(QOpenGLWidget, HasCamera):
         if self._update_world and self.world:
             self._next_update_time -= self._rt_factor * self._timer_period
             while self._next_update_time < 0:
-                self.world.step(self._world_time_step, 3)
+                self.world.step(self._world_time_step,
+                                self.physics_oversampling)
+                if self.callback:
+                    self.callback(self.world)
                 self._next_update_time += self._world_time_step
         self.update()
 
@@ -280,6 +292,9 @@ def run_in_viewer(world: World,
                   fps: SupportsFloat = 30,
                   time_step: SupportsFloat = 0,
                   factor: SupportsFloat = 1,
+                  physics_oversampling: int = 3,
+                  callback: Callable[[World], None] | None = None,
+                  termination: Callable[[World], bool] | None = None,
                   helpers: bool = True,
                   walls_height: SupportsFloat = 10,
                   duration: SupportsFloat = -1,
@@ -293,6 +308,12 @@ def run_in_viewer(world: World,
         time_step (float): The simulation time step in seconds.
         factor (bool): The real-time factor. If larger than one, the simulation
                        will run faster then real-time.
+        physics_oversampling (int):  The number of times the physics is updated per step
+                                     to get a more fine-grained physical simulation
+                                     compared to the sensor-motor loop.
+        callback (Callable[[World], None] | None): An optional callback executed at each simulation step.
+        termination (Callable[[World], bool] | None): An optional function that makes
+            the simulation terminate when it returns True
         helpers (bool): Whether to display the helpers widgets.
         walls_height (float): the height of the world boundary in cm.
         duration (float): duration of the simulation in simulated time.
@@ -300,14 +321,27 @@ def run_in_viewer(world: World,
         **camera_config (CameraConfig): the camera configuration.
     """
     init()
+    loop = run_loop(float(duration) / float(factor))
+    if not loop:
+        return
+    cb = callback
+    if termination:
+        def cb(world: World) -> None:
+            if callback:
+                callback(world)
+            if termination(world):
+                loop.quit()
+
     viewer = WorldView(world=world,
                        fps=fps,
                        update_world=True,
                        time_step=time_step,
                        factor=factor,
+                       physics_oversampling=physics_oversampling,
+                       callback=cb,
                        helpers=helpers,
                        walls_height=walls_height,
                        **camera_config)
     viewer.setWindowTitle("PyEnki Viewer")
     viewer.show()
-    run(float(duration) / float(factor))
+    loop.exec()

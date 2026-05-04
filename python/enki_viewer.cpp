@@ -44,6 +44,7 @@
 #include <pybind11/stl.h>
 #include <pybind11/stl/filesystem.h>
 #include <pybind11/stl_bind.h>
+#include <pybind11/warnings.h>
 #include <stdexcept>
 
 #include "../viewer/Viewer.h"
@@ -236,15 +237,23 @@ struct PythonViewer : public ViewerWidget {
 };
 
 void runInViewer(PyWorld *world, double fps = 30, double worldTimeStep = 0,
-                 double realTimeFactor = 1, bool helpers = true,
-                 double wallsHeight = 10.0, double duration = -1,
-                 Vector camPos = Vector(0.0, 0.0), double camAltitude = 0.0,
-                 double camYaw = 0.0, double camPitch = 0.0, bool ortho = false,
+                 double realTimeFactor = 1, int physics_oversampling = 3,
+                 const std::function<void(World *)> &callback = nullptr,
+                 const std::function<bool(World *)> &termination = nullptr,
+                 bool helpers = true, double wallsHeight = 10.0,
+                 double duration = -1, Vector camPos = Vector(0.0, 0.0),
+                 double camAltitude = 0.0, double camYaw = 0.0,
+                 double camPitch = 0.0, bool ortho = false,
                  bool camReset = false) {
   EnkiApplication::init();
   PythonViewer viewer(world, fps, true, worldTimeStep, realTimeFactor, helpers,
                       wallsHeight, camPos, camAltitude, camYaw, camPitch, ortho,
                       camReset);
+  viewer.setPhysicsOversampling(physics_oversampling);
+  viewer.setCallback(callback);
+  if (termination) {
+    py::warnings::warn("Termination is not supported by native viewer");
+  }
   viewer.setWindowTitle("PyEnki Viewer");
   viewer.show();
   EnkiApplication::run(duration / realTimeFactor);
@@ -499,8 +508,10 @@ Args:
 )doc");
   m.def("run_in_viewer", &runInViewer, py::arg("world"), py::kw_only(),
         py::arg("fps") = 30, py::arg("time_step") = 0, py::arg("factor") = 1,
-        py::arg("helpers") = true, py::arg("walls_height") = 10.0,
-        py::arg("duration") = 0, py::arg("camera_position") = Vector(0.0, 0.0),
+        py::arg("physics_oversampling") = 3, py::arg("callback") = nullptr,
+        py::arg("termination") = nullptr, py::arg("helpers") = true,
+        py::arg("walls_height") = 10.0, py::arg("duration") = 0,
+        py::arg("camera_position") = Vector(0.0, 0.0),
         py::arg("camera_altitude") = 0.0, py::arg("camera_yaw") = 0.0,
         py::arg("camera_pitch") = 0.0, py::arg("camera_is_ortho") = false,
         py::arg("camera_reset") = false,
@@ -513,6 +524,12 @@ Args:
     time_step (float): The simulation time step in seconds.
     factor (bool): The real-time factor. If larger than one, the simulation 
                    will run faster then real-time.
+    physics_oversampling (int):  The number of times the physics is updated per step
+                                 to get a more fine-grained physical simulation
+                                 compared to the sensor-motor loop.
+    callback (Callable[[World], None] | None): An optional callback executed at each simulation step.
+    termination (Callable[[World], bool] | None): An optional function that makes
+        the simulation terminate when it returns True
     helpers (bool): Whether to display the helpers widgets.
     walls_height (float): the height of the world boundary in cm.
     duration (float): duration of the simulation in simulated time. 
@@ -523,7 +540,6 @@ Args:
     camera_pitch (float): the camera vertical rotation.
     camera_is_ortho (bool): whether the camera uses an orthographic projection.
     camera_reset (bool): whether to set the camera in the default pose.
-
 )doc");
 
   py::classh<PythonViewer>(m, "WorldView", R"doc( 
@@ -590,6 +606,10 @@ Attributes:
     image (Image): the currently rendered image (readonly).
     qt_widget (QOpenGLWidget): a PyQt-compatible widget (readonly).
     pyside_widget (QOpenGLWidget): a PySide-compatible widget (readonly).
+    physics_oversampling (int):  The number of times the physics is updated per step
+                                 to get a more fine-grained physical simulation
+                                 compared to the sensor-motor loop.
+    callback (Callable[[World], None] | None): An optional callback executed at each simulation step.
 )doc")
       .def(py::init<PyWorld *, double, bool, double, double, bool, double,
                     Vector, double, double, double, bool, bool>(),
@@ -652,6 +672,11 @@ Args:
     position (Vector | None): Optionally sets the camera horizontal position in cm.
     altitude (float | None): Optionally sets the camera vertical position in cm.
 )doc")
+      .def_property("physics_oversampling",
+                    &PythonViewer::getPhysicsOversampling,
+                    &PythonViewer::setPhysicsOversampling)
+      .def_property("callback", &PythonViewer::getCallback,
+                    &PythonViewer::setCallback)
       .def_property("walls_height", &PythonViewer::getWallsHeight, nullptr)
       .def_property("selected_object", &PythonViewer::getSelectedObject,
                     &PythonViewer::setSelectedObject)
