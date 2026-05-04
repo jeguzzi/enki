@@ -2,8 +2,16 @@ from __future__ import annotations
 
 import math
 import warnings
+from typing import TYPE_CHECKING, SupportsFloat
 
-from ... import Array1D, Thymio2
+from ... import Array1D, Controller, PhysicalObject, Thymio2
+
+if TYPE_CHECKING:
+    from typing import ParamSpec
+
+    from thymio_behaviors import Behavior, Callback
+
+    P = ParamSpec('P')
 
 
 def smod(value: int, n: int) -> int:
@@ -263,9 +271,7 @@ class Thymio2AsebaAdapter:
     def call_leds_prox_h(self, *values: int) -> None:
         if len(values) != 8:
             raise ValueError("Requires 8 values")
-        self.thymio.leds_prox = [
-            from_led_i(value) for value in values
-        ]
+        self.thymio.leds_prox = [from_led_i(value) for value in values]
 
     def call_leds_prox_v(self, *values: int) -> None:
         warnings.warn("LEDs near ground sensors are not simulated",
@@ -309,3 +315,21 @@ class Thymio2AsebaAdapter:
 
     def call_sound_system(self, *args: int) -> None:
         ...
+
+    def apply(self, control: Callback[P], *args: P.args,
+              **kwargs: P.kwargs) -> None:
+        self.update()
+        control(self, *args, **kwargs)
+        self.actuate()
+
+    def make_controller(self, behavior: Behavior) -> Controller:
+
+        def control(obj: PhysicalObject, dt: SupportsFloat) -> None:
+            """Executes the behavior"""
+            assert obj is self.thymio
+            self.apply(behavior, float(dt))
+
+        return control
+
+    def set_behavior(self, behavior: Behavior) -> None:
+        self.thymio.control_step_callback = self.make_controller(behavior)
