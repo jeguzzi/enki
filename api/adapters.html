@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Aseba Adapters &#8212; pyenki 0.2.0 documentation</title>
+    <title>Aseba Adapters &#8212; pyenki 0.2.1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=7f7c277e"></script>
+    <script src="../_static/documentation_options.js?v=c480a563"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">pyenki 0.2.0 documentation</p>
+    <p class="title logo__title">pyenki 0.2.1 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -327,10 +327,10 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.make_controller_from_thymio_behavior"><code class="docutils literal notranslate"><span class="pre">make_controller_from_thymio_behavior()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.__init__"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.actuate"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.actuate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.apply"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.apply()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call__leds_set"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call__leds_set()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_bottom_left"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_bottom_left()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_bottom_right"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_bottom_right()</span></code></a></li>
@@ -349,6 +349,8 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_record"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_record()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_replay"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_replay()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_system"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_system()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.make_controller"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.make_controller()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.set_behavior"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.set_behavior()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.update"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.update()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_buffer"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_comm_buffer</span></code></a></li>
 </ul>
@@ -366,11 +368,6 @@
                   
   <section id="aseba-adapters">
 <h1>Aseba Adapters<a class="headerlink" href="#aseba-adapters" title="Link to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="pyenki.adapters.make_controller_from_thymio_behavior">
-<span class="sig-prename descclassname"><span class="pre">pyenki.adapters.</span></span><span class="sig-name descname"><span class="pre">make_controller_from_thymio_behavior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thymio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="object.html#pyenki.PhysicalObject" title="pyenki.PhysicalObject"><span class="pre">PhysicalObject</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Behavior</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Controller</span></span></span><a class="headerlink" href="#pyenki.adapters.make_controller_from_thymio_behavior" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyenki.adapters.</span></span><span class="sig-name descname"><span class="pre">Thymio2AsebaAdapter</span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter" title="Link to this definition">#</a></dt>
@@ -439,6 +436,22 @@ the <strong>list</strong> of messages received in the last update step.</p>
 <dd><p>Forwards the commands to the robots.
 Should be called after setting Aseba variables
 in a control step.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callback</span><span class="p"><span class="pre">[</span></span><span class="pre">P</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">P.args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">P.kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.apply" title="Link to this definition">#</a></dt>
+<dd><p>Applies a control, preceding with <a class="reference internal" href="#pyenki.adapters.Thymio2AsebaAdapter.update" title="pyenki.adapters.Thymio2AsebaAdapter.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">update()</span></code></a>
+and postponing with <a class="reference internal" href="#pyenki.adapters.Thymio2AsebaAdapter.actuate" title="pyenki.adapters.Thymio2AsebaAdapter.actuate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">actuate()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>control</strong> – The control</p></li>
+<li><p><strong>args</strong> – The control arguments</p></li>
+<li><p><strong>kwargs</strong> – The control keywords arguments</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -532,6 +545,32 @@ in a control step.</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.make_controller">
+<span class="sig-name descname"><span class="pre">make_controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Behavior</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Controller</span></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.make_controller" title="Link to this definition">#</a></dt>
+<dd><p>Creates a controller that applies a behavior using <a class="reference internal" href="#pyenki.adapters.Thymio2AsebaAdapter.apply" title="pyenki.adapters.Thymio2AsebaAdapter.apply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">apply()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>behavior</strong> – The behavior</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The controller</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.set_behavior">
+<span class="sig-name descname"><span class="pre">set_behavior</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Behavior</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.set_behavior" title="Link to this definition">#</a></dt>
+<dd><p>Creates a controller with <a class="reference internal" href="#pyenki.adapters.Thymio2AsebaAdapter.make_controller" title="pyenki.adapters.Thymio2AsebaAdapter.make_controller"><code class="xref py py-meth docutils literal notranslate"><span class="pre">make_controller()</span></code></a>
+and sets the robot’s <a class="reference internal" href="object.html#pyenki.PhysicalObject.control_step_callback" title="pyenki.PhysicalObject.control_step_callback"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pyenki.PhysicalObject.control_step_callback</span></code></a> to it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>behavior</strong> (<em>Behavior</em>) – The behavior</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyenki.adapters.Thymio2AsebaAdapter.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#pyenki.adapters.Thymio2AsebaAdapter.update" title="Link to this definition">#</a></dt>
 <dd><p>Updates the Aseba variables. Should be called before
@@ -593,10 +632,10 @@ reading them in a control step.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.make_controller_from_thymio_behavior"><code class="docutils literal notranslate"><span class="pre">make_controller_from_thymio_behavior()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.__init__"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.actuate"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.actuate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.apply"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.apply()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call__leds_set"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call__leds_set()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_bottom_left"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_bottom_left()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_leds_bottom_right"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_leds_bottom_right()</span></code></a></li>
@@ -615,6 +654,8 @@ reading them in a control step.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_record"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_record()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_replay"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_replay()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.call_sound_system"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.call_sound_system()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.make_controller"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.make_controller()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.set_behavior"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.set_behavior()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.update"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.update()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pyenki.adapters.Thymio2AsebaAdapter.prox_comm_buffer"><code class="docutils literal notranslate"><span class="pre">Thymio2AsebaAdapter.prox_comm_buffer</span></code></a></li>
 </ul>

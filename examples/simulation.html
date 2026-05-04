@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Simulation &#8212; pyenki 0.2.0 documentation</title>
+    <title>Simulation &#8212; pyenki 0.2.1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=7f7c277e"></script>
+    <script src="../_static/documentation_options.js?v=c480a563"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">pyenki 0.2.0 documentation</p>
+    <p class="title logo__title">pyenki 0.2.1 documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -484,8 +484,10 @@ which we log at each time step. This is the Python equivalent to the <a class="r
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># We write our own loop to run the simulation as fast as possible.</span>
         <span class="n">steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">duration</span> <span class="o">//</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Simulating </span><span class="si">{</span><span class="n">steps</span><span class="si">}</span><span class="s1"> steps&#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
             <span class="n">world</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Finished simulating&#39;</span><span class="p">)</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
@@ -554,7 +556,7 @@ which we log at each time step. This is the Python equivalent to the <a class="r
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.video</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.viewer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyenki.adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_controller_from_thymio_behavior</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyenki.adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">Thymio2AsebaAdapter</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">thymio_behaviors</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">AccBehavior</span><span class="p">,</span> <span class="n">Chain</span><span class="p">,</span> <span class="n">ExplorerBehavior</span><span class="p">,</span>
                               <span class="n">FollowerBehavior</span><span class="p">,</span> <span class="n">LEDButtonsBehavior</span><span class="p">,</span>
@@ -570,8 +572,11 @@ which we log at each time step. This is the Python equivalent to the <a class="r
         <span class="n">thymio</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
         <span class="n">thymio</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
         <span class="n">behavior_cls</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">behaviors</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
-        <span class="n">thymio</span><span class="o">.</span><span class="n">control_step_callback</span> <span class="o">=</span> <span class="n">make_controller_from_thymio_behavior</span><span class="p">(</span>
-            <span class="n">thymio</span><span class="p">,</span> <span class="n">Chain</span><span class="p">(</span><span class="n">LEDProxBehavior</span><span class="p">(),</span> <span class="n">LEDButtonsBehavior</span><span class="p">(),</span> <span class="n">behavior_cls</span><span class="p">()))</span>
+        <span class="n">behavior</span> <span class="o">=</span> <span class="n">Chain</span><span class="p">(</span><span class="n">LEDProxBehavior</span><span class="p">(),</span> <span class="n">LEDButtonsBehavior</span><span class="p">(),</span> <span class="n">behavior_cls</span><span class="p">())</span>
+        <span class="n">aseba</span> <span class="o">=</span> <span class="n">Thymio2AsebaAdapter</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
+        <span class="n">aseba</span><span class="o">.</span><span class="n">set_behavior</span><span class="p">(</span><span class="n">behavior</span><span class="p">)</span>
+        <span class="c1"># last line is equivalent to</span>
+        <span class="c1"># thymio.control_step_callback = aseba.make_controller(behavior)</span>
         <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
     <span class="n">world</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.033</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">world</span>
@@ -619,7 +624,7 @@ which we log at each time step. This is the Python equivalent to the <a class="r
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.video</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyenki.viewer</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyenki.adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_controller_from_thymio_behavior</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyenki.adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">Thymio2AsebaAdapter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">thymio_behaviors</span><span class="w"> </span><span class="kn">import</span> <span class="n">LineFollowingBehavior</span>
 
 
@@ -631,8 +636,10 @@ which we log at each time step. This is the Python equivalent to the <a class="r
     <span class="n">thymio</span> <span class="o">=</span> <span class="n">pyenki</span><span class="o">.</span><span class="n">Thymio2</span><span class="p">()</span>
     <span class="n">thymio</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">110</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
     <span class="n">thymio</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">thymio</span><span class="o">.</span><span class="n">control_step_callback</span> <span class="o">=</span> <span class="n">make_controller_from_thymio_behavior</span><span class="p">(</span>
-        <span class="n">thymio</span><span class="p">,</span> <span class="n">LineFollowingBehavior</span><span class="p">())</span>
+    <span class="n">aseba</span> <span class="o">=</span> <span class="n">Thymio2AsebaAdapter</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
+    <span class="n">aseba</span><span class="o">.</span><span class="n">set_behavior</span><span class="p">(</span><span class="n">LineFollowingBehavior</span><span class="p">())</span>
+    <span class="c1"># last line is equivalent to</span>
+    <span class="c1"># thymio.control_step_callback = aseba.make_controller(LineFollowingBehavior())</span>
     <span class="n">world</span><span class="o">.</span><span class="n">add_object</span><span class="p">(</span><span class="n">thymio</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">world</span>
 
