@@ -76,6 +76,7 @@ namespace Enki
 		Q_OBJECT
 	
 	public:
+		using Callback = std::function<void(World *)>;
 		const int timerPeriodMs;
 		
 		class ViewerUserData : public PhysicalObject::UserData
@@ -199,11 +200,17 @@ namespace Enki
 		double nextUpdateTime;
 		double worldTimeStep;
 		double rtFactor;
+
+		Callback callback;
+		unsigned physicsOversampling;
 		
 		double getEffectiveCameraPitch() const {
 			if(cameraIsOrtho) return -M_PI/2;
 			return camera.pitch;
 		}
+
+
+
 
 	public:
 		ViewerWidget(World *world, QWidget *parent = 0, int timerPeriod=30, bool updateWorld = true, double worldTimeStep = 0, double realTimeFactor = 1, bool helpers = true);
@@ -231,6 +238,12 @@ namespace Enki
     		const QImage fb = grabFramebuffer();
     		fb.save(QString::fromStdString(path));
   		}
+
+  		const Callback & getCallback() const { return callback; }
+		void setCallback(const Callback & cb) { callback = cb; }
+
+  		unsigned getPhysicsOversampling() const { return physicsOversampling; }
+		void setPhysicsOversampling(unsigned value) { physicsOversampling = value; }
 
 	public slots:
 		void setCamera(const QPointF& pos, double altitude, double yaw, double pitch);

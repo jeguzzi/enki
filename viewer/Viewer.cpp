@@ -263,6 +263,8 @@ namespace Enki
 		mouseLeftButtonRobot(0),
 		mouseRightButtonRobot(0),
 		mouseMiddleButtonRobot(0),
+		callback(nullptr),
+		physicsOversampling(3),
 		cameraIsOrtho(false),
 		displayHelpers(helpers),
 		updateWorld(false)
@@ -1580,7 +1582,10 @@ namespace Enki
 		if (world && updateWorld) {
 			nextUpdateTime -= rtFactor * double(timerPeriodMs)/1000.;
 			while (nextUpdateTime < 0) {
-				world->step(worldTimeStep, 3);
+				world->step(worldTimeStep, physicsOversampling);
+				if(callback) {
+					callback(world);
+				}
 				nextUpdateTime += worldTimeStep;
 			}
 		}
