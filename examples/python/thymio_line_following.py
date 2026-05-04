@@ -6,7 +6,7 @@ import PIL.Image
 import pyenki
 import pyenki.video
 import pyenki.viewer
-from pyenki.adapters import make_controller_from_thymio_behavior
+from pyenki.adapters import Thymio2AsebaAdapter
 from thymio_behaviors import LineFollowingBehavior
 
 
@@ -18,8 +18,10 @@ def make_world() -> pyenki.World:
     thymio = pyenki.Thymio2()
     thymio.position = (110, 100)
     thymio.angle = 0
-    thymio.control_step_callback = make_controller_from_thymio_behavior(
-        thymio, LineFollowingBehavior())
+    aseba = Thymio2AsebaAdapter(thymio)
+    aseba.set_behavior(LineFollowingBehavior())
+    # last line is equivalent to
+    # thymio.control_step_callback = aseba.make_controller(LineFollowingBehavior())
     world.add_object(thymio)
     return world
 

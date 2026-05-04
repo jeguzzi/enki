@@ -4,7 +4,7 @@ import sys
 import pyenki
 import pyenki.video
 import pyenki.viewer
-from pyenki.adapters import make_controller_from_thymio_behavior
+from pyenki.adapters import Thymio2AsebaAdapter
 
 from thymio_behaviors import (AccBehavior, Chain, ExplorerBehavior,
                               FollowerBehavior, LEDButtonsBehavior,
@@ -20,8 +20,11 @@ def make_world() -> pyenki.World:
         thymio.position = (rng.uniform(-30, 30), rng.uniform(-30, 30))
         thymio.angle = rng.uniform(0, 2 * math.pi)
         behavior_cls = rng.choice(behaviors)  # type: ignore[arg-type]
-        thymio.control_step_callback = make_controller_from_thymio_behavior(
-            thymio, Chain(LEDProxBehavior(), LEDButtonsBehavior(), behavior_cls()))
+        behavior = Chain(LEDProxBehavior(), LEDButtonsBehavior(), behavior_cls())
+        aseba = Thymio2AsebaAdapter(thymio)
+        aseba.set_behavior(behavior)
+        # last line is equivalent to
+        # thymio.control_step_callback = aseba.make_controller(behavior)
         world.add_object(thymio)
     world.run(2, 0.033)
     return world
