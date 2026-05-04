@@ -318,11 +318,27 @@ class Thymio2AsebaAdapter:
 
     def apply(self, control: Callback[P], *args: P.args,
               **kwargs: P.kwargs) -> None:
+        """
+        Applies a control, preceding with :py:meth:`update`
+        and postponing with :py:meth:`actuate`.
+
+        :param      control:         The control
+        :param      args:            The control arguments
+        :param      kwargs:          The control keywords arguments
+
+        """
         self.update()
         control(self, *args, **kwargs)
         self.actuate()
 
     def make_controller(self, behavior: Behavior) -> Controller:
+        """
+        Creates a controller that applies a behavior using :py:meth:`apply`.
+
+        :param      behavior:        The behavior
+
+        :returns:   The controller
+        """
 
         def control(obj: PhysicalObject, dt: SupportsFloat) -> None:
             """Executes the behavior"""
@@ -332,4 +348,11 @@ class Thymio2AsebaAdapter:
         return control
 
     def set_behavior(self, behavior: Behavior) -> None:
+        """
+        Creates a controller with :py:meth:`make_controller`
+        and sets the robot's :py:attr:`pyenki.PhysicalObject.control_step_callback` to it.
+
+        :param      behavior:  The behavior
+        :type       behavior:  Behavior
+        """
         self.thymio.control_step_callback = self.make_controller(behavior)
